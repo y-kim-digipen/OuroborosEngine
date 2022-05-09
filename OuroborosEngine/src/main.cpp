@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "engine/engine.h"
+
 int SetupContextWindow()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -54,10 +56,19 @@ int SetupContextWindow()
 
 int main()
 {
-    SetupContextWindow();
-
-
+    //SetupContextWindow();
+    OE::Engine::Get().Init();
 
     std::cout << "Hello World!" << std::endl;
+
+    while(true)
+    {
+        OE::Engine::Get().PreUpdate(0.0);
+        OE::Engine::Get().Update(0.0);
+        OE::Engine::Get().PostUpdate(0.0);
+    }
+
+    OE::Engine::Get().CleanUp();
+    OE::Engine::Get().ShutDown();
     return 0;
 }
