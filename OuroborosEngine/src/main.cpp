@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "engine/engine.h"
+#include <vulkan.h>
 
 int SetupContextWindow()
 {
@@ -67,6 +68,10 @@ int main()
         OE::Engine::Get().Update(0.0);
         OE::Engine::Get().PostUpdate(0.0);
     }
+    VkInstance instance;
+    VkInstanceCreateInfo create_info{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
+    
+    vkCreateInstance(&create_info, nullptr, &instance);
 
     OE::Engine::Get().CleanUp();
     OE::Engine::Get().ShutDown();
