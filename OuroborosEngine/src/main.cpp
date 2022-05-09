@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <vulkan.h>
+
 int SetupContextWindow()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -56,7 +58,10 @@ int main()
 {
     SetupContextWindow();
 
-
+    VkInstance instance;
+    VkInstanceCreateInfo create_info{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
+    
+    vkCreateInstance(&create_info, nullptr, &instance);
 
     std::cout << "Hello World!" << std::endl;
     return 0;
