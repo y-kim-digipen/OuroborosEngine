@@ -11,16 +11,27 @@
     <Filter Include="engine\modules">
       <UniqueIdentifier>{53fb722a-4952-45df-9973-ec8e344f05d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\ecs">
+      <UniqueIdentifier>{f16786f5-88ad-40f1-bf3d-6c82714eae92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="engine.h">
+    <ClInclude Include="src\engine\engine.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager.h">
+    <ClInclude Include="src\engine\modules\resource_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
+    <ClInclude Include="ecs_base.h">
+      <Filter>engine\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\common.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
