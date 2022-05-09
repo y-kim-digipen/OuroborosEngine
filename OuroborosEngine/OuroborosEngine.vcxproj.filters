@@ -8,6 +8,9 @@
     <Filter Include="engine">
       <UniqueIdentifier>{e9838a83-39a4-4bce-b108-926c37d2cc68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\modules">
+      <UniqueIdentifier>{53fb722a-4952-45df-9973-ec8e344f05d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -15,6 +18,9 @@
   <ItemGroup>
     <ClInclude Include="engine.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager.h">
+      <Filter>engine\modules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
