@@ -6,7 +6,7 @@
 namespace Renderer {
 	class Vulkan_Context : public Context {
 	public:
-
+		void Init();
 	private:
 		
 	};
