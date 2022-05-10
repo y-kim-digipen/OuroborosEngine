@@ -1,4 +1,7 @@
-#pragma once
+#ifndef CONTEXT_H
+#define CONTEXT_H
+
+
 #define GLFW_INCLUDE_VULKAN 
 #include <string>
 #include <vulkan.h>
@@ -11,11 +14,10 @@ namespace Renderer
 	class Context
 	{
 	public:
-		static void SetupOpenGLVersion(int major, int minor);
 		static void SetupVulkan(int major, int minor, std::string application_name, std::string engine_name = "Ouroboros");
 
 		Context(GLFWwindow* glfwwindow);
-		virtual void Init(int major, int minor);
+		virtual void Init(int major, int minor) = 0;
 		void SwapBuffer();
 
 	protected:
@@ -24,3 +26,5 @@ namespace Renderer
 
 
 }
+
+#endif // !CONTEXT_H

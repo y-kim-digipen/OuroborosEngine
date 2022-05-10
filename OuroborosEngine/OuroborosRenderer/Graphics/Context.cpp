@@ -10,12 +10,6 @@
 
 namespace Renderer
 {
-	void Context::SetupOpenGLVersion(int major, int minor)
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	}
 
 	void Context::SetupVulkan(int major, int minor, std::string application_name, std::string engine_name)
 	{

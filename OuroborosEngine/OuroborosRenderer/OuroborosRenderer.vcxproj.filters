@@ -46,6 +46,9 @@
     <ClCompile Include="vulkan_context.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\opengl\opengl_context.cpp">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vulkan_type.inl">
