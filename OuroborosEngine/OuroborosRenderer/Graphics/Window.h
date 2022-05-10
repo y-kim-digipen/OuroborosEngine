@@ -1,4 +1,6 @@
-#pragma once
+#ifndef WINDOW_H
+#define WINDOW_H
+
 #define GLFW_INCLUDE_VULKAN
 #include "Context.h"
 #include <vulkan.h>
@@ -49,3 +51,5 @@ namespace Renderer
 
 
 }
+
+#endif // !WINDOW_H

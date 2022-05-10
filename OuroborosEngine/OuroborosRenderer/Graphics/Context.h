@@ -1,4 +1,7 @@
-#pragma once
+#ifndef CONTEXT_H
+#define CONTEXT_H
+
+
 #define GLFW_INCLUDE_VULKAN 
 #include <string>
 #include <GLFW/glfw3.h>
@@ -11,7 +14,7 @@ namespace Renderer
 	{
 	public:
 		Context(GLFWwindow* glfwwindow);
-		virtual void Init(int major, int minor);
+		virtual void Init(int major, int minor) = 0;
 		void SwapBuffer();
 
 	protected:
@@ -20,3 +23,5 @@ namespace Renderer
 
 
 }
+
+#endif // !CONTEXT_H

@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp" />
+    <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
     <ClCompile Include="vulkan_context.cpp" />

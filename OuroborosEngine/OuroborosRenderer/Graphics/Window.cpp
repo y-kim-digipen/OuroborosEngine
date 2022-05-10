@@ -43,14 +43,7 @@ namespace Renderer
 			//set gl version
 			if (IsSuccess)
 			{
-				if(is_vulkan)
-				{
-					Context::SetupVulkan(1,2, window_data.title);
-				}
-				else
-				{
-					Context::SetupOpenGLVersion(4, 0);
-				}
+		
 			}
 			else
 			{
@@ -60,17 +53,25 @@ namespace Renderer
 			GLFW_IsInit = true;
 		}
 
+		window_data.RenderContextData = std::make_shared<Context>(window_data.window);
+
+		if(is_vulkan)
+		{
+			window_data.RenderContextData->Init(1,2);
+		}
+		else
+		{
+			window_data.RenderContextData->Init(4,5);
+		}
+
 		window_data.window = glfwCreateWindow(window_data.width, window_data.height, window_data.title.c_str(), nullptr, nullptr);
 
 		if (window_data.window == NULL)
 		{
 			std::cout << "failed to Create window\n";
 		}
-		window_data.RenderContextData = std::make_shared<Context>(window_data.window);
-		window_data.RenderContextData->Init();
 
 
-		
 		//to get the glfw callback
 		glfwSetWindowUserPointer(window_data.window, &window_data);
 	}
