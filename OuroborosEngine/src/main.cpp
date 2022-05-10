@@ -2,8 +2,11 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <vulkan.h>
+
+
+#define GLFW_INCLUDE_VULKAN
+
 
 int SetupContextWindow()
 {
@@ -53,16 +56,24 @@ int SetupContextWindow()
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     return 0;
 }
+#include <Graphics/Window.h>
+std::unique_ptr<Renderer::Window> window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Project"));
 
 int main()
 {
-    SetupContextWindow();
+
+    std::cout << "Hello World!" << std::endl;
+
+    while(!glfwWindowShouldClose(window->GetWindowData().window))
+    {
+        window->Update();
+    }
+    /*SetupContextWindow();
 
     VkInstance instance;
     VkInstanceCreateInfo create_info{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
     
-    vkCreateInstance(&create_info, nullptr, &instance);
+    vkCreateInstance(&create_info, nullptr, &instance);*/
 
-    std::cout << "Hello World!" << std::endl;
     return 0;
 }
