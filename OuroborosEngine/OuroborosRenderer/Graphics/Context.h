@@ -17,19 +17,8 @@ namespace Renderer
 		Context(GLFWwindow* glfwwindow);
 		void Init();
 		void SwapBuffer();
-		VkInstance GetVulkanInstance() const { return instance; }
-		VkSurfaceKHR GetVulkanSurface() const { return vk_surface; }
-	private:
-		struct VulkanInfo
-		{
-			VkApplicationInfo vk_application_info;
-			VkInstanceCreateInfo vk_instance_create_info;
-		};
-
+	protected:
 		GLFWwindow* window;
-		VkInstance instance;
-		VkSurfaceKHR vk_surface;
-		static VulkanInfo vulkan_info;
 	};
 
 

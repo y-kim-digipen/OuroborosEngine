@@ -165,12 +165,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\Context.h" />
-    <ClInclude Include="Graphics\Window.h" />
+    <ClInclude Include="Graphics\context.h" />
+    <ClInclude Include="Graphics\window.h" />
+    <ClInclude Include="Graphics\opengl\opengl_context.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\Context.cpp" />
-    <ClCompile Include="Graphics\Window.cpp" />
+    <ClCompile Include="Graphics\context.cpp" />
+    <ClCompile Include="Graphics\window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

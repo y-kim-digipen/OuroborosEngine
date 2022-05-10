@@ -10,9 +10,6 @@
 
 namespace Renderer
 {
-
-	Context::VulkanInfo Context::vulkan_info{};
-
 	void Context::SetupOpenGLVersion(int major, int minor)
 	{
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);

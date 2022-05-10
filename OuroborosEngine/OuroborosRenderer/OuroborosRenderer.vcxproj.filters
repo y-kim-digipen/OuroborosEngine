@@ -19,20 +19,32 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{4277fd8b-a44c-4477-a4c8-08a221a875b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\vulkan">
+      <UniqueIdentifier>{785cbdba-69eb-4b2a-ae18-f96c5031e2c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\opengl">
+      <UniqueIdentifier>{ea61091d-ee2e-4264-9d6f-2e4f3e9c1269}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\Context.h">
+    <ClInclude Include="Graphics\context.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Window.h">
+    <ClInclude Include="Graphics\window.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\opengl\opengl_context.h">
+      <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\Context.cpp">
+    <ClCompile Include="Graphics\context.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Window.cpp">
+    <ClCompile Include="Graphics\window.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
