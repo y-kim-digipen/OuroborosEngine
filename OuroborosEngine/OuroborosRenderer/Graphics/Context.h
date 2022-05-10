@@ -15,8 +15,9 @@ namespace Renderer
 		static void SetupVulkan(int major, int minor, std::string application_name, std::string engine_name = "Ouroboros");
 
 		Context(GLFWwindow* glfwwindow);
-		void Init();
+		virtual void Init(int major, int minor);
 		void SwapBuffer();
+
 	protected:
 		GLFWwindow* window;
 	};
