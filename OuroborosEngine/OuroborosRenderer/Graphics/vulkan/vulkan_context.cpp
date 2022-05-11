@@ -2,10 +2,12 @@
 #include "vulkan_type.inl"
 
 #include <iostream>
-
 #include <optional>
-#include <GLFW/glfw3.h>
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 namespace Renderer 
 {
@@ -69,6 +71,15 @@ namespace Renderer
         PickPhysicalDevice();
         CreateLogicalDevice();
 	}
+
+    void Vulkan_Context::CreateSurface()
+    {
+        VkWin32SurfaceCreateInfoKHR create_info{ VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR };
+        create_info.hinstance = GetModuleHandle(nullptr);
+        create_info.hwnd = glfwGetWin32Window(window);
+
+        VK_CHECK(vkCreateWin32SurfaceKHR(vulkan_type.instance, &create_info, 0, &vulkan_type.surface));
+    }
 
     int CreateInstance(int major, int minor)
     {
@@ -144,15 +155,6 @@ namespace Renderer
 
         VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     }
-
-    int CreateSurface()
-    {
-
-
-
-        return 0;
-    }
-
 
     int PickPhysicalDevice()
     {

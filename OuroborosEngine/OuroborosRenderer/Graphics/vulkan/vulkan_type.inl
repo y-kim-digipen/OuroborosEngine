@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vulkan.h>
+#include <vulkan_win32.h>
 
 #include <vector>
 #include <cassert>
@@ -27,4 +28,5 @@ struct Vulkan_type
 	
 	VkInstance instance;
 	Vulkan_Device device;
+	VkSurfaceKHR surface;
 };
