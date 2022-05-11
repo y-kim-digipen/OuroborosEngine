@@ -80,7 +80,9 @@ namespace Renderer
 	{
 		if(is_vulkan)
 		{
+			
 			vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
+			
 
 			glfwDestroyWindow(window_data.window);
 		}

@@ -181,6 +181,19 @@ namespace Renderer
             throw std::runtime_error("failed to find a suitable GPU!");
         }
 
+    	VkPhysicalDeviceProperties physicalProperties = {};
+    	vkGetPhysicalDeviceProperties(physicalDevice, &physicalProperties);
+
+    	fprintf(stdout, "Device Name:    %s\n", physicalProperties.deviceName);
+    	fprintf(stdout, "Device Type:    %d\n", physicalProperties.deviceType);
+    	fprintf(stdout, "Driver Version: %d\n", physicalProperties.driverVersion);
+
+    	fprintf(stdout, "API Version:    %d.%d.%d\n",
+                VK_VERSION_MAJOR(physicalProperties.apiVersion),
+                VK_VERSION_MINOR(physicalProperties.apiVersion),
+                VK_VERSION_PATCH(physicalProperties.apiVersion));
+        
+
         return 0;
     }
 

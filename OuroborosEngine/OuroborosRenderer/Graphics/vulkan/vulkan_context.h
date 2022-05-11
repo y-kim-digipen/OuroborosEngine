@@ -6,6 +6,7 @@
 namespace Renderer {
 	class Vulkan_Context : public Context {
 	public:
+
 		void Init(int major, int minor) override;
 	private:
 		
