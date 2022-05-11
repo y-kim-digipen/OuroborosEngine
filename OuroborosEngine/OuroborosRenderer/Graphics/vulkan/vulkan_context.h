@@ -8,6 +8,7 @@ namespace Renderer {
 	public:
 		Vulkan_Context(GLFWwindow* window) :Context(window) {}
 		void Init(int major, int minor) override;
+		void Shutdown() override;
 	private:
 		void CreateSurface();
 

@@ -70,7 +70,12 @@ namespace Renderer
         CreateDebugUtilMessage();
         PickPhysicalDevice();
         CreateLogicalDevice();
+        CreateSurface();
 	}
+
+    void Vulkan_Context::Shutdown()
+    {
+    }
 
     void Vulkan_Context::CreateSurface()
     {

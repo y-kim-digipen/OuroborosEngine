@@ -13,6 +13,7 @@ namespace Renderer
 		Context(GLFWwindow* glfwwindow);
 		virtual void Init(int major, int minor) = 0;
 		void SwapBuffer();
+		virtual void Shutdown() = 0;
 
 	protected:
 		GLFWwindow* window;
