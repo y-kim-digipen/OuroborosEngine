@@ -181,7 +181,7 @@ namespace Renderer
             throw std::runtime_error("failed to find a suitable GPU!");
         }
 
-
+        return 0;
     }
 
 
@@ -263,6 +263,7 @@ namespace Renderer
 
         vkGetDeviceQueue(vulkan_type.device.handle, indices.graphicsFamily.value(), 0, &vulkan_type.device.graphicsQueue);
 
+        return 0;
 
     }
 }
