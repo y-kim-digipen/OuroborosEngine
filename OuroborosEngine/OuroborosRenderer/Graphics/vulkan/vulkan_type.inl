@@ -16,7 +16,8 @@ struct Vulkan_Device
 {
 	VkPhysicalDevice physical_device;
 	VkDevice handle;
-	VkQueue graphicsQueue;
+	VkQueue graphics_queue;
+	VkQueue present_queue;
 };
 
 struct Vulkan_type
