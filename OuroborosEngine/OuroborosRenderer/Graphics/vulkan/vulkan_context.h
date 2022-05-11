@@ -6,7 +6,7 @@
 namespace Renderer {
 	class Vulkan_Context : public Context {
 	public:
-
+		Vulkan_Context(GLFWwindow* window) :Context(window) {}
 		void Init(int major, int minor) override;
 	private:
 		

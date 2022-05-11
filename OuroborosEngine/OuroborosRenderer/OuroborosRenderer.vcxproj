@@ -168,19 +168,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\context.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Graphics\opengl\opengl_context.h" />
-    <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
-    <ClCompile Include="vulkan_context.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="vulkan_type.inl" />
+    <None Include="Graphics\vulkan\vulkan_type.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

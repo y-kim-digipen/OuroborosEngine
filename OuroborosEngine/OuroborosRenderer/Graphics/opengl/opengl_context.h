@@ -3,13 +3,14 @@
 
 #include "../context.h"
 
+
 namespace Renderer
 {
 	class OpenGL_Context : public Context
 	{
 	public:
 		OpenGL_Context(GLFWwindow* glfwwindow) : Context(glfwwindow) {}
-		void Init(int major, int minor) override;
+		void Init(int major, int minor)  override;
 	private:
 
 

@@ -2,11 +2,8 @@
 #define CONTEXT_H
 
 
-#define GLFW_INCLUDE_VULKAN 
-#include <string>
-#include <GLFW/glfw3.h>
-
 static bool is_vulkan = true;
+struct GLFWwindow;
 
 namespace Renderer
 {
