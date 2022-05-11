@@ -11,12 +11,19 @@
 		assert(result_ == VK_SUCCESS); \
 	} while(0)
 
+struct Vulkan_Device
+{
+	VkPhysicalDevice physical_device;
+	VkDevice handle;
+};
 
-struct Vulkan_type {
+struct Vulkan_type
+{
 
 #if defined(_DEBUG)
 	VkDebugUtilsMessengerEXT debug_messenger;
 #endif
-
+	
 	VkInstance instance;
+	Vulkan_Device device;
 };
