@@ -1,6 +1,6 @@
 #include "VulkanContext.h"
 #include "vulkan_type.inl"
-
+#include <vulkan_core.h>
 
 #include <iostream>
 #include <optional>
@@ -243,8 +243,16 @@ namespace Renderer
             | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
         debugCreateInfo.pfnUserCallback = (PFN_vkDebugUtilsMessengerCallbackEXT)debugCallback;
         debugCreateInfo.pUserData = 0;
+        ;
+        //vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger);
 
-        VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
+
+        //because of the static library
+        PFN_vkCreateDebugUtilsMessengerEXT myvkCreateDebugUtilsMessengerEXT = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(vulkan_type.instance, "vkCreateDebugUtilsMessengerEXT"));
+
+
+        myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger);
+    	//VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     }
 
     int PickPhysicalDevice()
@@ -319,22 +327,29 @@ namespace Renderer
 
         std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
-
-        //vkGetPhysicalDeviceSurfaceSupportKHR()
+        
 
         int index = 0;
         for (const auto& queue_family : queue_families) 
         {
-            VkBool32 present_support = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
-
-            if (present_support) {
-                indices.present_family = index;
-            }
 
             if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
             {
                 indices.graphics_family = index;
+            }
+
+            VkBool32 present_support = false;
+
+            auto temp_pointer = vkGetInstanceProcAddr(vulkan_type.instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
+
+            PFN_vkGetPhysicalDeviceSurfaceSupportKHR myvkGetPhysicalDeviceSurfaceSupportKHR = (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)temp_pointer;
+            myvkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
+
+            //vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
+
+            if (present_support) 
+            {
+                indices.present_family = index;
             }
 
             if (indices.isComplete()) 
@@ -373,7 +388,7 @@ namespace Renderer
         createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         
         createInfo.pQueueCreateInfos = queue_create_infos.data();
-        createInfo.queueCreateInfoCount = queue_create_infos.size();
+        createInfo.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
 
         createInfo.pEnabledFeatures = &deviceFeatures;
 
@@ -427,7 +442,7 @@ namespace Renderer
             }
         }
 
-
+        return 0;
     }
 
 
