@@ -168,14 +168,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\context.h" />
-    <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
+    <ClInclude Include="Graphics\vulkan\VulkanContext.h" />
     <ClInclude Include="Graphics\window.h" />
-    <ClInclude Include="Graphics\opengl\opengl_context.h" />
+    <ClInclude Include="Graphics\opengl\OpenglContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp" />
-    <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
-    <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
+    <ClCompile Include="Graphics\opengl\OpenglContext.cpp" />
+    <ClCompile Include="Graphics\vulkan\VulkanContext.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "Window.h"
 #include "iostream"
-#include "../Graphics/vulkan/vulkan_context.h"
+#include "../Graphics/vulkan/VulkanContext.h"
 
 namespace Renderer
 {
@@ -53,7 +53,7 @@ namespace Renderer
 			GLFW_IsInit = true;
 		}
 
-		window_data.RenderContextData = std::make_shared<Vulkan_Context>(window_data.window);
+		window_data.RenderContextData = std::make_shared<VulkanContext>(window_data.window);
 
 		if(is_vulkan)
 		{

@@ -6,10 +6,10 @@
 
 namespace Renderer
 {
-	class OpenGL_Context : public Context
+	class OpenglContext : public Context
 	{
 	public:
-		OpenGL_Context(GLFWwindow* glfwwindow) : Context(glfwwindow) {}
+		OpenglContext(GLFWwindow* glfwwindow) : Context(glfwwindow) {}
 		void Init(int major, int minor)  override;
 		void Shutdown() override;
 	private:

@@ -33,6 +33,8 @@ namespace Renderer
 		unsigned int GetHeight() { return window_data.height; }
 		void Update();
 		void Shutdown();
+		void OnResize();
+
 
 	private:
 		void Init(const WindowProperties& window_properties);

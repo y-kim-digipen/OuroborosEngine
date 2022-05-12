@@ -1,4 +1,4 @@
-#include "opengl_context.h"
+#include "OpenglContext.h"
 
 #include <iostream>
 #include <GL/glew.h>
@@ -7,7 +7,7 @@
 
 namespace Renderer
 {
-	void OpenGL_Context::Init(int major, int minor)
+	void OpenglContext::Init(int major, int minor)
 	{
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
@@ -25,7 +25,7 @@ namespace Renderer
 		std::cout << "OpenGL Renderer:" << glGetString(GL_RENDERER) << std::endl;
 		std::cout << "-------------------------------------------------" << std::endl;
 	}
-	void OpenGL_Context::Shutdown()
+	void OpenglContext::Shutdown()
 	{
 	}
 }

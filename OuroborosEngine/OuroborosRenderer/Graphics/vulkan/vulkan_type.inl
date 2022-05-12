@@ -1,10 +1,11 @@
 #pragma once
 
 #include <vulkan.h>
-#include <vulkan_win32.h>
+//#include <vulkan_win32.h>
 
 #include <vector>
 #include <cassert>
+#include <optional>
 
 #define VK_CHECK(call) \
 	do {	\
@@ -12,13 +13,46 @@
 		assert(result_ == VK_SUCCESS); \
 	} while(0)
 
-struct Vulkan_Device
+
+struct VulkanDevice
 {
 	VkPhysicalDevice physical_device;
 	VkDevice handle;
 	VkQueue graphics_queue;
 	VkQueue present_queue;
 };
+
+struct SwapChainSupportDetails
+{
+	VkSurfaceCapabilitiesKHR capabilities;
+	std::vector<VkSurfaceFormatKHR> formats;
+	std::vector<VkPresentModeKHR> present_modes;
+};
+
+struct VulkanSwapChain
+{
+
+	SwapChainSupportDetails detail;
+
+	VkFormat swap_chain_image_format;
+	VkExtent2D swap_chain_extent;
+	VkSwapchainKHR handle;
+	std::vector<VkImage> swap_chain_images;
+
+};
+
+
+
+struct QueueFamilyIndices
+{
+	std::optional<uint32_t> graphics_family;
+	std::optional<uint32_t> present_family;
+	bool isComplete()
+	{
+		return graphics_family.has_value() && present_family.has_value();
+	}
+};
+
 
 struct Vulkan_type
 {
@@ -28,6 +62,7 @@ struct Vulkan_type
 #endif
 	
 	VkInstance instance;
-	Vulkan_Device device;
+	VulkanDevice device;
 	VkSurfaceKHR surface;
+	VulkanSwapChain swap_chain;
 };

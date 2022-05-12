@@ -26,10 +26,10 @@
     <ClInclude Include="Graphics\window.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\opengl\opengl_context.h">
+    <ClInclude Include="Graphics\opengl\OpenglContext.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\vulkan\vulkan_context.h">
+    <ClInclude Include="Graphics\vulkan\VulkanContext.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,10 +40,10 @@
     <ClCompile Include="Graphics\window.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\opengl\opengl_context.cpp">
+    <ClCompile Include="Graphics\opengl\OpenglContext.cpp">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\vulkan\vulkan_context.cpp">
+    <ClCompile Include="Graphics\vulkan\VulkanContext.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
