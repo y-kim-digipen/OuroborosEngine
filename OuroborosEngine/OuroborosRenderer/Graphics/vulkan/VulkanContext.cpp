@@ -83,9 +83,9 @@ namespace Renderer
 	{
         CreateInstance(major, minor);
         CreateDebugUtilMessage();
+        CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
-        CreateSurface();
         CreateSwapChain();
 
 	}
@@ -106,7 +106,8 @@ namespace Renderer
 
     void VulkanContext::CreateSurface()
     {
-        if (glfwCreateWindowSurface(vulkan_type.instance, window, nullptr, &vulkan_type.surface) != VK_SUCCESS) {
+        if (glfwCreateWindowSurface(vulkan_type.instance, window, nullptr, &vulkan_type.surface) != VK_SUCCESS) 
+        {
             throw std::runtime_error("failed to create window surface!");
         }
     }
@@ -169,6 +170,7 @@ namespace Renderer
 
     int CreateInstance(int major, int minor)
     {
+       
         VkApplicationInfo app_info{ VK_STRUCTURE_TYPE_APPLICATION_INFO };
         app_info.pApplicationName = "Ouroboros-engine";
         app_info.applicationVersion = VK_MAKE_VERSION(major, minor, 0);
