@@ -42,6 +42,7 @@ namespace Renderer
     int CreateSurface();
     int PickPhysicalDevice();
     int CreateLogicalDevice();
+    int CreateImageView();
 
 
     bool IsDevicesSuitable(VkPhysicalDevice device);
@@ -86,10 +87,16 @@ namespace Renderer
         CreateLogicalDevice();
         CreateSurface();
         CreateSwapChain();
+
 	}
 
     void VulkanContext::Shutdown()
     {
+
+        for (auto image_view : vulkan_type.swap_chain.swap_chain_image_views) 
+        {
+            vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
+        }
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swap_chain.handle, nullptr);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
@@ -290,16 +297,16 @@ namespace Renderer
         QueueFamilyIndices indices = FindQueueFamilies(device);
 
         bool extensions_supported = CheckDeviceExtensionSupport(device);
-        bool swapChainAdequate = false;
+        bool swap_chain_adequate = false;
 
         if (extensions_supported) 
         {
             SwapChainSupportDetails swap_chain_support = querySwapChainSupport(device);
-            swapChainAdequate = !swap_chain_support.formats.empty() && !swap_chain_support.present_modes.empty();
+            swap_chain_adequate = !swap_chain_support.formats.empty() && !swap_chain_support.present_modes.empty();
         }
 
 
-        return indices.isComplete() && extensions_supported && swapChainAdequate;
+        return indices.isComplete() && extensions_supported && swap_chain_adequate;
 
     }
 
@@ -307,25 +314,25 @@ namespace Renderer
     {
         QueueFamilyIndices indices;
 
-        uint32_t queueFamilyCount = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+        uint32_t queue_family_count = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, nullptr);
 
-        std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+        std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
 
         //vkGetPhysicalDeviceSurfaceSupportKHR()
 
         int index = 0;
-        for (const auto& queueFamily : queueFamilies) 
+        for (const auto& queue_family : queue_families) 
         {
-            VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &presentSupport);
+            VkBool32 present_support = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
 
-            if (presentSupport) {
+            if (present_support) {
                 indices.present_family = index;
             }
 
-            if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
+            if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
             {
                 indices.graphics_family = index;
             }
@@ -394,6 +401,34 @@ namespace Renderer
         return 0;
     }
 
+    int CreateImageView()
+    {
+    	vulkan_type.swap_chain.swap_chain_image_views.resize(vulkan_type.swap_chain.swap_chain_images.size());
+
+        for (size_t i = 0; i < vulkan_type.swap_chain.swap_chain_images.size(); i++) {
+            VkImageViewCreateInfo createInfo{};
+            createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            createInfo.image = vulkan_type.swap_chain.swap_chain_images[i];
+            createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            createInfo.format = vulkan_type.swap_chain.swap_chain_image_format;
+            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            createInfo.subresourceRange.baseMipLevel = 0;
+            createInfo.subresourceRange.levelCount = 1;
+            createInfo.subresourceRange.baseArrayLayer = 0;
+            createInfo.subresourceRange.layerCount = 1;
+
+            if (vkCreateImageView(vulkan_type.device.handle, &createInfo, nullptr, &vulkan_type.swap_chain.swap_chain_image_views[i]) != VK_SUCCESS)
+            {
+                throw std::runtime_error("failed to create image views!");
+            }
+        }
+
+
+    }
 
 
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device)
@@ -457,11 +492,11 @@ namespace Renderer
 
     VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& available_present_modes)
 	{
-        for (const auto& availablePresentMode : available_present_modes) 
+        for (const auto& available_present_mode : available_present_modes) 
         {
-            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) 
+            if (available_present_mode == VK_PRESENT_MODE_MAILBOX_KHR) 
             {
-                return availablePresentMode;
+                return available_present_mode;
             }
         }
 
@@ -480,16 +515,16 @@ namespace Renderer
             int width, height;
             glfwGetFramebufferSize(window, &width, &height);
 
-            VkExtent2D actualExtent =
+            VkExtent2D actual_extent =
             {
                 static_cast<uint32_t>(width),
                 static_cast<uint32_t>(height)
             };
 
-            actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-            actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+            actual_extent.width = std::clamp(actual_extent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+            actual_extent.height = std::clamp(actual_extent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
 
-            return actualExtent;
+            return actual_extent;
         }
     }
 
