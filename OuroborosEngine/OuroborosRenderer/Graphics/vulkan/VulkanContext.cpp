@@ -20,12 +20,6 @@ namespace Renderer
 {
     static Vulkan_type vulkan_type;
 
-
- 
-
-
-
-
 #ifdef NDEBUG
     const bool enable_validation_layers = false;
 #else
@@ -77,7 +71,9 @@ namespace Renderer
 	void VulkanContext::Init(int major, int minor) 
 	{
         CreateInstance(major, minor);
+#if defined(_DEBUG)
         CreateDebugUtilMessage();
+#endif //_DEBUG
         CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
@@ -231,7 +227,7 @@ namespace Renderer
         VK_CHECK(vkCreateInstance(&instance_create_info, 0, &vulkan_type.instance));
         return 0;
     }
-
+#if defined(_DEBUG)
     void CreateDebugUtilMessage()
     {
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{ VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT };
@@ -249,9 +245,10 @@ namespace Renderer
         PFN_vkCreateDebugUtilsMessengerEXT myvkCreateDebugUtilsMessengerEXT = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(vulkan_type.instance, "vkCreateDebugUtilsMessengerEXT"));
 
 
-        myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger);
+        VK_CHECK(myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     	//VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     }
+#endif
 
     int PickPhysicalDevice()
     {
