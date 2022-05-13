@@ -18,6 +18,9 @@
     <Filter Include="Source Files\Graphics\opengl">
       <UniqueIdentifier>{ea61091d-ee2e-4264-9d6f-2e4f3e9c1269}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\vulkan\spirv">
+      <UniqueIdentifier>{2ae28a5f-c983-479d-92e5-c424047e2123}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\context.h">
@@ -31,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\VulkanContext.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\spirv_helper.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

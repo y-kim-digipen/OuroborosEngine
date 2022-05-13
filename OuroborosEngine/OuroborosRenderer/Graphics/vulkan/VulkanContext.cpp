@@ -7,6 +7,7 @@
 #include <set>
 #include <limits> 
 
+#include "spirv_helper.h"
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -20,16 +21,10 @@ namespace Renderer
     static Vulkan_type vulkan_type;
 
 
-    const std::vector<const char*> device_extensions = 
-    {
-	  VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
+ 
 
 
-    const std::vector<const char*> validation_layers =
-    {
-        "VK_LAYER_KHRONOS_validation"
-	};
+
 
 #ifdef NDEBUG
     const bool enable_validation_layers = false;
@@ -88,6 +83,7 @@ namespace Renderer
         CreateLogicalDevice();
         CreateSwapChain();
 
+        SpirvHelper::Init();
 	}
 
     void VulkanContext::Shutdown()
@@ -100,7 +96,7 @@ namespace Renderer
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swap_chain.handle, nullptr);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
-
+        SpirvHelper::Finalize();
 
     }
 
@@ -260,6 +256,11 @@ namespace Renderer
     int PickPhysicalDevice()
     {
         VkPhysicalDevice physical_device = VK_NULL_HANDLE;
+
+        //auto physical_device = vulkan_type.device.physical_device;
+
+        physical_device = VK_NULL_HANDLE;
+
         uint32_t device_count = 0;
         vkEnumeratePhysicalDevices(vulkan_type.instance, &device_count, nullptr);
 
@@ -276,6 +277,7 @@ namespace Renderer
             if (IsDevicesSuitable(device)) 
             {
                 physical_device = device;
+                vulkan_type.device.physical_device = physical_device;
                 break;
             }
         }
@@ -329,6 +331,7 @@ namespace Renderer
 
         std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
+     
         
 
         int index = 0;
@@ -342,9 +345,10 @@ namespace Renderer
 
             VkBool32 present_support = false;
 
-            auto temp_pointer = vkGetInstanceProcAddr(vulkan_type.instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
+            auto function = vkGetInstanceProcAddr(vulkan_type.instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
 
-            PFN_vkGetPhysicalDeviceSurfaceSupportKHR myvkGetPhysicalDeviceSurfaceSupportKHR = (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)temp_pointer;
+            PFN_vkGetPhysicalDeviceSurfaceSupportKHR myvkGetPhysicalDeviceSurfaceSupportKHR = (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)function;
+           
             myvkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
 
             //vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkan_type.surface, &present_support);
@@ -368,13 +372,15 @@ namespace Renderer
     {
         QueueFamilyIndices indices = FindQueueFamilies(vulkan_type.device.physical_device);
         
-        std::set<uint32_t> unique_queue_indices = {
+        std::set<uint32_t> unique_queue_indices = 
+        {
             indices.graphics_family.value(), indices.present_family.value()
         };
 
         std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
 
-        for (uint32_t queue_family : unique_queue_indices) {
+        for (uint32_t queue_family : unique_queue_indices) 
+        {
             VkDeviceQueueCreateInfo queue_create_info{};
             queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queue_create_info.queueFamilyIndex = queue_family;
@@ -386,28 +392,39 @@ namespace Renderer
         }
         VkPhysicalDeviceFeatures deviceFeatures{};
 
-        VkDeviceCreateInfo createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        VkDeviceCreateInfo create_info{};
+        create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         
-        createInfo.pQueueCreateInfos = queue_create_infos.data();
-        createInfo.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
+        create_info.pQueueCreateInfos = queue_create_infos.data();
+        create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
 
-        createInfo.pEnabledFeatures = &deviceFeatures;
+        create_info.pEnabledFeatures = &deviceFeatures;
 
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
-        createInfo.ppEnabledExtensionNames = device_extensions.data();
-        
+
+        const std::vector<const char*> device_extensions =
+        {
+          VK_KHR_SWAPCHAIN_EXTENSION_NAME
+        };
+
+        create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
+        create_info.ppEnabledExtensionNames = device_extensions.data();
+
+        const std::vector<const char*> validation_layers =
+        {
+            "VK_LAYER_KHRONOS_validation"
+        };
+
         if (enable_validation_layers)
         {
-            createInfo.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
-            createInfo.ppEnabledLayerNames = validation_layers.data();
+            create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
+            create_info.ppEnabledLayerNames = validation_layers.data();
         }
         else 
         {
-            createInfo.enabledLayerCount = 0;
+            create_info.enabledLayerCount = 0;
         }
 
-        if (vkCreateDevice(vulkan_type.device.physical_device, &createInfo, nullptr, &vulkan_type.device.handle) != VK_SUCCESS) 
+        if (vkCreateDevice(vulkan_type.device.physical_device, &create_info, nullptr, &vulkan_type.device.handle) != VK_SUCCESS) 
         {
             throw std::runtime_error("failed to create logical device!");
         }
@@ -422,7 +439,8 @@ namespace Renderer
     {
     	vulkan_type.swap_chain.swap_chain_image_views.resize(vulkan_type.swap_chain.swap_chain_images.size());
 
-        for (size_t i = 0; i < vulkan_type.swap_chain.swap_chain_images.size(); i++) {
+        for (size_t i = 0; i < vulkan_type.swap_chain.swap_chain_images.size(); i++) 
+        {
             VkImageViewCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
             createInfo.image = vulkan_type.swap_chain.swap_chain_images[i];
@@ -483,6 +501,10 @@ namespace Renderer
 
         std::vector<VkExtensionProperties> available_extensions(extension_count);
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extension_count, available_extensions.data());
+        const std::vector<const char*> device_extensions =
+        {
+          VK_KHR_SWAPCHAIN_EXTENSION_NAME
+        };
 
         std::set<std::string> requiredExtensions(device_extensions.begin(), device_extensions.end());
 
