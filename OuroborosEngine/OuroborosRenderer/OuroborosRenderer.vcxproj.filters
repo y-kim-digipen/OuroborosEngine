@@ -38,6 +38,12 @@
     <ClInclude Include="Graphics\vulkan\spirv_helper.h">
       <Filter>Source Files\Graphics\vulkan\spirv</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_shader.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\shader.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -51,6 +57,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\VulkanContext.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

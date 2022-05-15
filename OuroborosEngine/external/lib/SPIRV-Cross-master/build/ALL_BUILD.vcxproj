@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5CD4C518-6E2A-3FB7-9A56-A8C73D304B39}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master -BC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build --check-stamp-file C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\cmake\gitversion.in.h;D:\CMAKE\share\cmake-3.22\Modules\CMakeCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeRCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindGit.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPythonInterp.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master -BC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build --check-stamp-file C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\cmake\gitversion.in.h;D:\CMAKE\share\cmake-3.22\Modules\CMakeCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeRCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindGit.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPythonInterp.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master -BC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build --check-stamp-file C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\cmake\gitversion.in.h;D:\CMAKE\share\cmake-3.22\Modules\CMakeCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeRCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindGit.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPythonInterp.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master -BC:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build --check-stamp-file C:/Users/82106/Desktop/2022-summer/SPIRV-Cross-master/SPIRV-Cross-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\cmake\gitversion.in.h;D:\CMAKE\share\cmake-3.22\Modules\CMakeCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeRCInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindGit.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPythonInterp.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\CMAKE\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\ZERO_CHECK.vcxproj">
+      <Project>{5346F068-D2EE-33CE-83D8-564DB8B32C8D}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross.vcxproj">
+      <Project>{783054DD-4CF4-3EEB-AF41-411EE3AB9B83}</Project>
+      <Name>spirv-cross</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-c.vcxproj">
+      <Project>{B1EB9521-D75F-35F5-BE3E-CDC520ECE73C}</Project>
+      <Name>spirv-cross-c</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-core.vcxproj">
+      <Project>{BD054EAF-B72C-3B25-8181-8F8B212A5A95}</Project>
+      <Name>spirv-cross-core</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-cpp.vcxproj">
+      <Project>{9F380571-0390-36BF-A176-35D6FEB4F552}</Project>
+      <Name>spirv-cross-cpp</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-glsl.vcxproj">
+      <Project>{97D92530-A990-3F69-9474-08FA63AFE377}</Project>
+      <Name>spirv-cross-glsl</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-hlsl.vcxproj">
+      <Project>{4424767D-7084-3759-830D-F85A7DCE01E6}</Project>
+      <Name>spirv-cross-hlsl</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-msl.vcxproj">
+      <Project>{B6B3102C-FB65-3B00-B6ED-1C5A14EA6787}</Project>
+      <Name>spirv-cross-msl</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-reflect.vcxproj">
+      <Project>{9C280846-AA0B-3D6E-A4F5-9A33B939905E}</Project>
+      <Name>spirv-cross-reflect</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\82106\Desktop\2022-summer\SPIRV-Cross-master\SPIRV-Cross-master\build\spirv-cross-util.vcxproj">
+      <Project>{622D2D1D-3C0C-3535-AC69-57DDBB5F4407}</Project>
+      <Name>spirv-cross-util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

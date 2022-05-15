@@ -66,3 +66,7 @@ struct Vulkan_type
 	VkSurfaceKHR surface;
 	VulkanSwapChain swap_chain;
 };
+
+namespace Renderer {
+	static Vulkan_type vulkan_type;
+}

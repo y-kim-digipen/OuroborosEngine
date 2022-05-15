@@ -18,7 +18,6 @@
 
 namespace Renderer 
 {
-    static Vulkan_type vulkan_type;
 
 #ifdef NDEBUG
     const bool enable_validation_layers = false;
