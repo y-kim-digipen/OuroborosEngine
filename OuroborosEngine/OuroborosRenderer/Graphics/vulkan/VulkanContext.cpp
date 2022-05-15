@@ -383,11 +383,11 @@ namespace Renderer
             queue_create_info.queueFamilyIndex = queue_family;
             queue_create_info.queueCount = 1;
 
-            float queuePriority = 1.0f;
-            queue_create_info.pQueuePriorities = &queuePriority;
+            float queue_priority = 1.0f;
+            queue_create_info.pQueuePriorities = &queue_priority;
             queue_create_infos.push_back(queue_create_info);
         }
-        VkPhysicalDeviceFeatures deviceFeatures{};
+        VkPhysicalDeviceFeatures device_features{};
 
         VkDeviceCreateInfo create_info{};
         create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -395,7 +395,7 @@ namespace Renderer
         create_info.pQueueCreateInfos = queue_create_infos.data();
         create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_create_infos.size());
 
-        create_info.pEnabledFeatures = &deviceFeatures;
+        create_info.pEnabledFeatures = &device_features;
 
 
         const std::vector<const char*> device_extensions =
@@ -438,22 +438,22 @@ namespace Renderer
 
         for (size_t i = 0; i < vulkan_type.swap_chain.swap_chain_images.size(); i++) 
         {
-            VkImageViewCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = vulkan_type.swap_chain.swap_chain_images[i];
-            createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format = vulkan_type.swap_chain.swap_chain_image_format;
-            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
-            createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
+            VkImageViewCreateInfo create_info{};
+            create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            create_info.image = vulkan_type.swap_chain.swap_chain_images[i];
+            create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            create_info.format = vulkan_type.swap_chain.swap_chain_image_format;
+            create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            create_info.subresourceRange.baseMipLevel = 0;
+            create_info.subresourceRange.levelCount = 1;
+            create_info.subresourceRange.baseArrayLayer = 0;
+            create_info.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(vulkan_type.device.handle, &createInfo, nullptr, &vulkan_type.swap_chain.swap_chain_image_views[i]) != VK_SUCCESS)
+            if (vkCreateImageView(vulkan_type.device.handle, &create_info, nullptr, &vulkan_type.swap_chain.swap_chain_image_views[i]) != VK_SUCCESS)
             {
                 throw std::runtime_error("failed to create image views!");
             }
