@@ -65,6 +65,8 @@ struct Vulkan_type
 	VulkanDevice device;
 	VkSurfaceKHR surface;
 	VulkanSwapChain swap_chain;
+	VkRenderPass render_pass;
+	VkPipelineLayout pipeline_layout;
 };
 
 namespace Renderer {
