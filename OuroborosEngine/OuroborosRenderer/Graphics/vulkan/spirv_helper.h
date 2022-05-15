@@ -163,12 +163,16 @@ namespace Renderer
 				puts(shader.getInfoDebugLog());
 				return false;  // something didn't work
 			}
+			
+
 
 			program.addShader(&shader);
 
 			//
 			// Program-level processing...
 			//
+
+
 
 			if (!program.link(messages)) 
 			{

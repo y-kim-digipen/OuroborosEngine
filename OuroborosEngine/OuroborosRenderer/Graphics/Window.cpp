@@ -89,8 +89,8 @@ namespace Renderer
 			//vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
 			
 
-			glfwDestroyWindow(window_data.window);
 		}
+			glfwDestroyWindow(window_data.window);
 
 		glfwTerminate();
 	}
