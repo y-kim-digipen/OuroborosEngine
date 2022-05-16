@@ -171,7 +171,6 @@ namespace Renderer
 			//
 
 
-
 			if (!program.link(messages)) 
 			{
 				puts(shader.getInfoLog());

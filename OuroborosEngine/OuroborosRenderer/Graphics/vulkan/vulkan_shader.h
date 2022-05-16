@@ -15,6 +15,8 @@ namespace Renderer {
 
 	private:
 		VulkanDevice* device;
+
+
 	};
 }
 #endif // !VULKAN_SHADER_H

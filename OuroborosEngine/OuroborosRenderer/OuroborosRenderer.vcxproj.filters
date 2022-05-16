@@ -53,6 +53,9 @@
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.h">
       <Filter>Source Files\Graphics\vulkan\spirv</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -78,6 +81,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c">
       <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
