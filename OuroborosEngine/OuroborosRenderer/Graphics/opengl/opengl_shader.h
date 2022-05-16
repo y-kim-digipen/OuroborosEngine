@@ -22,9 +22,6 @@ namespace Renderer
 
 
 
-
-
-
 }
 
 

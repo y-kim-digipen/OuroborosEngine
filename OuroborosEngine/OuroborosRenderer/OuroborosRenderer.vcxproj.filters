@@ -47,6 +47,9 @@
     <ClInclude Include="Graphics\opengl\opengl_shader.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -69,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp">
       <Filter>Source Files\Graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

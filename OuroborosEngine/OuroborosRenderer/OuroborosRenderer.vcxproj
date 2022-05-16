@@ -179,6 +179,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\VulkanContext.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Graphics\opengl\OpenglContext.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\VulkanContext.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
   </ItemGroup>
