@@ -44,6 +44,9 @@
     <ClInclude Include="Graphics\shader.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\opengl\opengl_shader.h">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -63,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\shader.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\opengl\opengl_shader.cpp">
+      <Filter>Source Files\Graphics\opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

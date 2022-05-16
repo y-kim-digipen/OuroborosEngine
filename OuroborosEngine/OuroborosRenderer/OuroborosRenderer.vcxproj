@@ -172,6 +172,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\context.h" />
+    <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\vulkan\spirv_helper.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -185,6 +186,7 @@
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\opengl\OpenglContext.cpp" />
+    <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\VulkanContext.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />

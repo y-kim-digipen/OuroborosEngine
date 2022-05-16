@@ -1,5 +1,5 @@
-#ifndef SPIRV_HELPER
-#define SPIRV_HELPER
+#ifndef SPIRV_HELPER_H
+#define SPIRV_HELPER_H
 
 #include <glslang/SPIRV/GlslangToSpv.h>
 #include <vulkan_core.h>
