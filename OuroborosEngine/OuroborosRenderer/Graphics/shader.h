@@ -26,6 +26,8 @@ namespace Renderer {
 	class Shader {
 	public:
 		Shader();
+		Shader(const Shader& shader) = delete;
+		Shader(Shader&& shader) = delete;
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
 	private:

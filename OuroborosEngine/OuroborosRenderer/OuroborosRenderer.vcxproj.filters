@@ -47,6 +47,12 @@
     <ClInclude Include="Graphics\opengl\opengl_shader.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -69,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp">
       <Filter>Source Files\Graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
