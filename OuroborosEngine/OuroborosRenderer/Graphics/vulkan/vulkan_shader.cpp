@@ -3,6 +3,7 @@
 #include "vulkan_type.inl"
 #include "spirv_helper.h"
 
+#include <SPIRV-Reflect/spirv_reflect.h>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -26,6 +27,7 @@ namespace Renderer {
 	}
 
 	int CreateShaderModule(VkShaderModule* out_shader_module, const char* file_path, VkShaderStageFlagBits shader_type);
+
 
 	VulkanShader::VulkanShader() : Shader()
 	{
@@ -79,16 +81,22 @@ namespace Renderer {
 
 		const char* pshader = ReadFile(full_path).data();
 
+
 		std::vector<unsigned> shader_binary_code;
 
 		if (!SpirvHelper::GLSLtoSPV(shader_type, pshader, shader_binary_code)) {
 			std::cout << "Failed to convert GLSL to Spriv\n";
 			return -1;
 		}
+
+		
+
 		
 		VkShaderModuleCreateInfo create_info{ VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
 		create_info.codeSize = shader_binary_code.size();
 		create_info.pCode = shader_binary_code.data();
+
+
 
 		return 0;
 	}

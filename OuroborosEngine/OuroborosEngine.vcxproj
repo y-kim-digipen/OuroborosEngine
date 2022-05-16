@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;;$(SolutionDir)external\lib\vulkan\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
