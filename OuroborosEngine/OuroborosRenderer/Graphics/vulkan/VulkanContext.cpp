@@ -549,10 +549,10 @@ namespace Renderer
         pipeline_layout_info.setLayoutCount = 0;
         pipeline_layout_info.pushConstantRangeCount = 0;
 
-        if (vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_info, nullptr, &vulkan_type.pipeline_layout) != VK_SUCCESS)
+     /*   if (vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_info, nullptr, &vulkan_type.pipeline_layout) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create pipeline layout!");
-        }
+        }*/
 
         //VkGraphicsPipelineCreateInfo pipelineInfo{};
         //pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;

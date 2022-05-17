@@ -71,7 +71,6 @@ struct Vulkan_type
 	VkSurfaceKHR surface;
 	VulkanSwapChain swap_chain;
 	VkRenderPass render_pass;
-	VkPipelineLayout pipeline_layout;
 	VulkanCommand command;
 	VkPipeline graphic_pipeline;
 };

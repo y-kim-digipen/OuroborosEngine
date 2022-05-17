@@ -19,7 +19,6 @@ namespace Renderer
         VkPipelineMultisampleStateCreateInfo multisampling;
         VkPipelineLayout pipeline_layout;
         VkPipelineDepthStencilStateCreateInfo depth_stencil;
-
 	};
 
 
