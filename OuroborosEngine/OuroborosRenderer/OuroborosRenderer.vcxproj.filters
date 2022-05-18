@@ -56,6 +56,9 @@
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -84,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
