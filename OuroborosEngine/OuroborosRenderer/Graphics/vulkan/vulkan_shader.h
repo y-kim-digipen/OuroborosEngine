@@ -9,7 +9,8 @@ struct VulkanDevice;
 
 
 namespace Renderer {
-	class VulkanShader : public Shader {
+	class VulkanShader : public Shader
+	{
 	public:
 		VulkanShader();
 		~VulkanShader() override;

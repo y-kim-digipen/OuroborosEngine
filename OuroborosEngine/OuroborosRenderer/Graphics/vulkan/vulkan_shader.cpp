@@ -2,7 +2,7 @@
 
 #include "vulkan_type.inl"
 #include "spirv_helper.h"
-
+#include "vulkan_pipeline.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 #include <string>
 #include <iostream>
@@ -70,10 +70,38 @@ namespace Renderer {
 		}
 
 
+		////
+		Vulkan_PipelineBuilder pipeline_builder;
+
+
+		//TODO: Description need to implement
+
+		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
+		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+		pipeline_builder.vertex_input_info = VulkanInitializer::PipelineVertexInputStageCreateInfo();
+		pipeline_builder.multisampling =  VulkanInitializer::PipelineMultisampleStateCreateInfo();
+		pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
+		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);
+
+		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type.swap_chain.swap_chain_extent.width)
+									, .height = static_cast<float>(vulkan_type.swap_chain.swap_chain_extent.height) };
+
+		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type.swap_chain.swap_chain_extent };
+
+
+		//build pipeline
+		pipeline = pipeline_builder.BuildPipeLine(vulkan_type.device.handle, vulkan_type.render_pass);
+
+
+
+		////
+
 		for (uint32_t i = 0; i < E_StageType::MAX_VALUE; ++i) {
 			if (shader_stage_create_infos[i].module != VK_NULL_HANDLE)
 				vkDestroyShaderModule(vulkan_type.device.handle, shader_stage_create_infos[i].module, 0);
 		}
+
+
 	}
 
 	int CreateShaderModule(VkShaderModule* out_shader_module, std::string& file_name, VkShaderStageFlagBits shader_type)
