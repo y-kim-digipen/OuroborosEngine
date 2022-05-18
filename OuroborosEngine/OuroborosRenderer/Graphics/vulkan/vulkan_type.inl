@@ -85,7 +85,6 @@ struct VulkanInitializer
 	static VkPipelineColorBlendAttachmentState  PipelineColorBlendAttachmentState();
 	static VkPipelineLayoutCreateInfo PipelineLayoutCreateInfo();
 	static VkPipelineDepthStencilStateCreateInfo DepthStencilCreateInfo(bool b_depth_test, bool b_depth_write, VkCompareOp compare_op);
-
 };
 
 inline VkPipelineShaderStageCreateInfo VulkanInitializer::PipelineShaderStageCreateInfo(VkShaderStageFlagBits stage,
