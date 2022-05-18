@@ -12,7 +12,7 @@ namespace Renderer
 		OpenglShader();
 		~OpenglShader() override;
 		void Init(ShaderConfig* config) override;
-
+		void Bind() override;
 
 	private:
 		unsigned int shader_id;

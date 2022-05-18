@@ -104,6 +104,11 @@ namespace Renderer {
 
 	}
 
+	void VulkanShader::Bind()
+	{
+
+	}
+
 	int CreateShaderModule(VkShaderModule* out_shader_module, std::string& file_name, VkShaderStageFlagBits shader_type)
 	{
 		std::string full_path = "shaders/";

@@ -99,6 +99,11 @@ namespace Renderer
 		LinkShader(shaders);
 	}
 
+	void OpenglShader::Bind()
+	{
+
+	}
+
 	void OpenglShader::LinkShader(std::vector<unsigned> shader_ids)
 	{
 		for (auto& shader : shader_ids)

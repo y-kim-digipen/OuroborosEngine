@@ -30,6 +30,7 @@ namespace Renderer {
 		Shader(Shader&& shader) = delete;
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
+		virtual void Bind() = 0;
 	private:
 	};
 }

@@ -16,7 +16,7 @@ namespace Renderer {
 		~VulkanShader() override;
 
 		void Init(ShaderConfig* config) override;
-
+		void Bind() override;
 	private:
 		VulkanDevice* device;
 
@@ -24,8 +24,6 @@ namespace Renderer {
 
 		VkPipelineLayout pipeline_layout;
 		VkPipeline pipeline;
-
-
 	};
 }
 #endif // !VULKAN_SHADER_H
