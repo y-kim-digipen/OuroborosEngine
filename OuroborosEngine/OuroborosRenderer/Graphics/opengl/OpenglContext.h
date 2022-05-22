@@ -12,6 +12,8 @@ namespace Renderer
 		OpenglContext(GLFWwindow* glfwwindow) : Context(glfwwindow) {}
 		void Init(int major, int minor)  override;
 		void Shutdown() override;
+		int AddShader(ShaderConfig* config) override;
+
 	private:
 
 

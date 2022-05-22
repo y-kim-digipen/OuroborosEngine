@@ -1,12 +1,16 @@
 #pragma once
+
+#include "vulkan_type.inl"
+
 #include <vector>
-#include <vulkan_core.h>
+
 
 namespace Renderer
 {
 	struct Vulkan_PipelineBuilder
 	{
         VkPipeline BuildPipeLine(VkDevice device, VkRenderPass render_pass);
+        VkPipelineLayout BuildPipeLineLayout(VkDevice device, VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count);
 
         std::vector<VkPipelineShaderStageCreateInfo> shader_stages;
         VkPipelineVertexInputStateCreateInfo vertex_input_info;

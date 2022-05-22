@@ -7,6 +7,8 @@ struct GLFWwindow;
 
 namespace Renderer
 {
+	struct ShaderConfig;
+
 	class Context
 	{
 	public:
@@ -14,6 +16,7 @@ namespace Renderer
 		virtual void Init(int major, int minor) = 0;
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
+		virtual int AddShader(ShaderConfig* config) = 0;
 
 	protected:
 		GLFWwindow* window;

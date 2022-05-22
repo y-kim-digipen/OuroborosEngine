@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vulkan.h>
+#include <vulkan_core.h>
 //#include <vulkan_win32.h>
 
 #include <vector>
@@ -22,27 +23,25 @@ struct VulkanDevice
 	VkQueue present_queue;
 };
 
-struct SwapChainSupportDetails
+struct SwapchainSupportDetails
 {
 	VkSurfaceCapabilitiesKHR capabilities;
 	std::vector<VkSurfaceFormatKHR> formats;
 	std::vector<VkPresentModeKHR> present_modes;
 };
 
-struct VulkanSwapChain
+struct VulkanSwapchain
 {
 
-	SwapChainSupportDetails detail;
+	SwapchainSupportDetails detail;
 
-	VkFormat swap_chain_image_format;
-	VkExtent2D swap_chain_extent;
+	VkFormat image_format;
+	VkExtent2D extent;
 	VkSwapchainKHR handle;
-	std::vector<VkImage> swap_chain_images;
-	std::vector<VkImageView> swap_chain_image_views;
-	std::vector<VkFramebuffer> swap_chain_framebuffers;
+	std::vector<VkImage> images;
+	std::vector<VkImageView> image_views;
+	std::vector<VkFramebuffer> framebuffers;
 };
-
-
 
 struct QueueFamilyIndices
 {
@@ -69,10 +68,10 @@ struct Vulkan_type
 	VkInstance instance;
 	VulkanDevice device;
 	VkSurfaceKHR surface;
-	VulkanSwapChain swap_chain;
+	VulkanSwapchain swapchain;
 	VkRenderPass render_pass;
 	VulkanCommand command;
-	VkPipeline graphic_pipeline;
+	VkPipeline graphic_pipeline; //TODO: start_frame(),  end_frame(), draw call and pass vulkan_shader to draw func
 };
 
 struct VulkanInitializer
@@ -83,7 +82,7 @@ struct VulkanInitializer
 	static VkPipelineRasterizationStateCreateInfo  PipelineRasterizationStateCreateInfo(VkPolygonMode polygon_mode);
 	static VkPipelineMultisampleStateCreateInfo PipelineMultisampleStateCreateInfo();
 	static VkPipelineColorBlendAttachmentState  PipelineColorBlendAttachmentState();
-	static VkPipelineLayoutCreateInfo PipelineLayoutCreateInfo();
+	static VkPipelineLayoutCreateInfo PipelineLayoutCreateInfo(VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count);
 	static VkPipelineDepthStencilStateCreateInfo DepthStencilCreateInfo(bool b_depth_test, bool b_depth_write, VkCompareOp compare_op);
 };
 
@@ -162,15 +161,16 @@ inline VkPipelineColorBlendAttachmentState VulkanInitializer::PipelineColorBlend
 	return pipeline_color_blend_attachment_state;
 }
 
-inline VkPipelineLayoutCreateInfo VulkanInitializer::PipelineLayoutCreateInfo()
+inline VkPipelineLayoutCreateInfo VulkanInitializer::PipelineLayoutCreateInfo(VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
 {
 	VkPipelineLayoutCreateInfo pipeline_layout_create_info{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
 
 	pipeline_layout_create_info.flags = 0;
-	pipeline_layout_create_info.setLayoutCount = 0;
-	pipeline_layout_create_info.pSetLayouts = nullptr;
-	pipeline_layout_create_info.pushConstantRangeCount = 0;
-	pipeline_layout_create_info.pPushConstantRanges = nullptr;
+	pipeline_layout_create_info.setLayoutCount = layout_count;
+	pipeline_layout_create_info.pSetLayouts = p_set_layouts;
+	pipeline_layout_create_info.pushConstantRangeCount = constant_count;
+	pipeline_layout_create_info.pPushConstantRanges = p_constant_ranges;
+
 
 	return pipeline_layout_create_info;
 }
@@ -191,8 +191,4 @@ inline VkPipelineDepthStencilStateCreateInfo VulkanInitializer::DepthStencilCrea
 	info.stencilTestEnable = VK_FALSE;
 
 	return info;
-}
-
-namespace Renderer {
-	static Vulkan_type vulkan_type;
 }

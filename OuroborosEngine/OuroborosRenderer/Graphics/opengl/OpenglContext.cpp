@@ -28,4 +28,8 @@ namespace Renderer
 	void OpenglContext::Shutdown()
 	{
 	}
+	int OpenglContext::AddShader(ShaderConfig* config)
+	{
+		return 0;
+	}
 }
