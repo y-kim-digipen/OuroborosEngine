@@ -2,8 +2,10 @@
 #include <GLFW/glfw3.h>
 #include "Window.h"
 #include "iostream"
-#include "../Graphics/vulkan/VulkanContext.h"
+#include "vulkan/VulkanContext.h"
 #include "opengl/OpenglContext.h"
+
+#include "shader.h"
 
 namespace Renderer
 {
@@ -11,6 +13,11 @@ namespace Renderer
 	{
 			// make unique pointer
 			Init(window_properties);
+	}
+
+	Window::~Window()
+	{
+		Shutdown();
 	}
 
 	void Window::Update()
@@ -76,6 +83,17 @@ namespace Renderer
 			std::cout << "failed to Create window\n";
 		}
 
+
+		ShaderConfig shader_config{
+			"shader",
+			{
+				E_StageType::VERTEX_SHADER,
+				E_StageType::FRAGMENT_SHADER
+			},
+			2
+		};
+
+		window_data.RenderContextData->AddShader(&shader_config);
 
 		//to get the glfw callback
 		glfwSetWindowUserPointer(window_data.window, &window_data);

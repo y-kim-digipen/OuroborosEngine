@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 
-#include <vulkan.h>
 #include "Context.h"
 
 #include <cassert>
@@ -8,6 +7,7 @@
 #include <vector>
 #include <GLFW/glfw3.h>
 
+#include "shader.h"
 
 namespace Renderer
 {
@@ -18,6 +18,7 @@ namespace Renderer
 	{
 		glfwSwapBuffers(window);
 	}
-
-
+	Context::~Context()
+	{
+	}
 }

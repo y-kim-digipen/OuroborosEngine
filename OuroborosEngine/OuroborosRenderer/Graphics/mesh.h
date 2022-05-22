@@ -19,7 +19,7 @@ struct Mesh {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 
-	bool load_asset(const char* file_name);
+	bool LoadAsset(const char* file_name);
 };
 
 #endif // !MESH_H

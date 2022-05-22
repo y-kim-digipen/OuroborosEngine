@@ -12,21 +12,6 @@ int main()
 
     std::cout << "Hello World!" << std::endl;
 
-    //TODO: instead use renderer->AddShader(ShaderConfig)
-    //std::unique_ptr<Renderer::Shader> shader = std::make_unique<Renderer::VulkanShader>();
-
-    Renderer::ShaderConfig shader_config{
-        "shader",
-        {
-            Renderer::E_StageType::VERTEX_SHADER,
-            Renderer::E_StageType::FRAGMENT_SHADER
-        },
-        2
-    };
-
-    //TODO: call this from shader_system(?)
-    //shader->Init(&shader_config);
-
     while(!glfwWindowShouldClose(window->GetWindowData().window))
     {
         window->Update();

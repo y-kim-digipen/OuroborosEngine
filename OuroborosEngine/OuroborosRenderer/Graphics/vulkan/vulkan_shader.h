@@ -39,4 +39,3 @@ namespace Renderer {
 	};
 }
 #endif // !VULKAN_SHADER_H
-

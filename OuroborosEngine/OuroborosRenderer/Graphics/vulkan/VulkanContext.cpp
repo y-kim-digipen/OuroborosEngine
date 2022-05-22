@@ -1,5 +1,6 @@
 #include "VulkanContext.h"
 #include "vulkan_type.inl"
+#include "vulkan_shader.h"
 
 #include <iostream>
 #include <optional>
@@ -116,8 +117,12 @@ namespace Renderer
 
     int VulkanContext::AddShader(ShaderConfig* config)
     {
-       
-
+        if (shader_map.find(config->name) != shader_map.end())
+            return -1;
+        else {
+            shader_map[config->name] = std::make_unique<VulkanShader>(&vulkan_type);
+            shader_map[config->name]->Init(config);
+        }
 
         return 0;
     }

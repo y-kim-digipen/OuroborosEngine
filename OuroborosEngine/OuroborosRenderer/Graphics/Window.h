@@ -26,6 +26,7 @@ namespace Renderer
 	public:
 		Window() = delete;
 		Window(const WindowProperties& window_properties);
+		~Window();
 	
 
 		WindowData GetWindowData() { return window_data; }

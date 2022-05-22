@@ -32,9 +32,7 @@ struct SwapchainSupportDetails
 
 struct VulkanSwapchain
 {
-
 	SwapchainSupportDetails detail;
-
 	VkFormat image_format;
 	VkExtent2D extent;
 	VkSwapchainKHR handle;
