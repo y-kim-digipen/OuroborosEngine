@@ -1,30 +1,41 @@
 #ifndef VULKAN_SHADER_H
 #define VULKAN_SHADER_H
 
-#include <vulkan_core.h>
+#include "vulkan_type.inl"
 
+#include <unordered_map>
 #include "../shader.h"
 
-struct VulkanDevice;
-
-
 namespace Renderer {
+
+	struct DescriptorSetBindingData {
+		uint32_t set;
+		uint32_t binding;
+		uint32_t count;
+		VkDescriptorType type;
+	};
+
 	class VulkanShader : public Shader
 	{
 	public:
-		VulkanShader();
+		VulkanShader() = delete;
+		VulkanShader(Vulkan_type* vulkan_type);
 		~VulkanShader() override;
 
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
 	private:
+
+		int CreateShaderModule(VkShaderModule* out_shader_module,  const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);
+
 		VulkanDevice* device;
+		Vulkan_type* vulkan_type;
 
-		VkDescriptorSetLayout descriptor_set_layout;
-
+		VkDescriptorSetLayout descriptor_set_layouts[4];
 		VkPipelineLayout pipeline_layout;
 		VkPipeline pipeline;
+
+		std::unordered_map<const char*, DescriptorSetBindingData> descriptor_data;
 	};
 }
 #endif // !VULKAN_SHADER_H
-

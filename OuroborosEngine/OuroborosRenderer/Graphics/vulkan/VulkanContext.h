@@ -3,14 +3,14 @@
 
 #include "../context.h"
 
-struct Vulkan_type;
-
 namespace Renderer {
+
 	class VulkanContext : public Context {
 	public:
 		VulkanContext(GLFWwindow* window) :Context(window) {}
 		void Init(int major, int minor) override;
 		void Shutdown() override;
+		int AddShader(ShaderConfig* config) override;
 
 	private:
 		void CreateSurface();
