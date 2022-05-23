@@ -200,6 +200,7 @@
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\VulkanContext.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />
     <ClCompile Include="Graphics\window.cpp" />

@@ -9,26 +9,36 @@ namespace Renderer
 	};
 
 
-
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(float* vertices, unsigned size);
-		~VertexBuffer() = default;
-		virtual void Bind() const;
+		VertexBuffer() = default;
+		virtual ~VertexBuffer() = default;
+		virtual void Bind() const = 0;
 		virtual void UnBind() const {}
 	};
 
 	class IndexBuffer
 	{
-		IndexBuffer();
-		~IndexBuffer() = default;
-		virtual void Bind() const;
+	public:
+		IndexBuffer() = default;
+		virtual ~IndexBuffer() = default;
+		virtual void Bind() const = 0;
+		virtual void UnBind() const {}
+	};
+
+	class UniformBuffer
+	{
+	public:
+		UniformBuffer() = default;
+		virtual ~UniformBuffer() = default;
+		virtual void Bind() const = 0;
 		virtual void UnBind() const {}
 	};
 
 	class VertexArray
 	{
+	public:
 		VertexArray();
 		~VertexArray();
 

@@ -17,7 +17,7 @@
 
 namespace Renderer 
 {
-    static Vulkan_type vulkan_type;
+  
 
 #ifdef NDEBUG
     const bool enable_validation_layers = false;
@@ -837,7 +837,26 @@ namespace Renderer
 
     void CleanupSwapChain()
     {
-		
+        for(auto& framebuffer : vulkan_type.swapchain.framebuffers )
+        {
+            vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
+        }
+
+        for(auto& frame : vulkan_type.frame_data)
+        {
+            vkFreeCommandBuffers(vulkan_type.device.handle, vulkan_type.command_pool, 1, &frame.command_buffer);
+        }
+
+        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
+
+        for(auto image_view : vulkan_type.swapchain.image_views)
+        {
+            vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
+        }
+
+        //TODO :need to implement depthimage clear
+        //TODO : need to destory descriptorPool
+        
 
     }
 

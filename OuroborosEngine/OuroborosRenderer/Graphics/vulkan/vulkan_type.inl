@@ -7,6 +7,7 @@
 #include <vector>
 #include <cassert>
 #include <optional>
+#include <vk_mem_alloc.h>
 
 #define VK_CHECK(call) \
 	do {	\
@@ -91,6 +92,7 @@ struct Vulkan_type
 	VulkanSwapchain swapchain;
 	VkRenderPass render_pass;
 
+	VmaAllocator allocator;
 	VkPipeline graphic_pipeline;
 	VulkanFrameData frame_data[MAX_FRAMES_IN_FLIGHT];
 
@@ -99,6 +101,11 @@ struct Vulkan_type
 	VkCommandPool command_pool;
 
 };
+
+namespace Renderer
+{
+	static Vulkan_type vulkan_type;
+}
 
 struct VulkanInitializer
 {

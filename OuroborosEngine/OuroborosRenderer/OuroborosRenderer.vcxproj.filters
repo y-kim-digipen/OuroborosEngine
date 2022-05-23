@@ -97,6 +97,9 @@
     <ClCompile Include="Graphics\mesh.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\vulkan\vulkan_type.inl">
