@@ -780,7 +780,7 @@ namespace Renderer
         vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX);
         vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence);
 
-        vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swap_chain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore,VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
+        vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore,VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
 
         vkResetCommandBuffer(frame_data.command_buffer, 0);
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
@@ -816,7 +816,7 @@ namespace Renderer
 
         VkPresentInfoKHR present_info_khr{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
         present_info_khr.swapchainCount     = 1;
-        present_info_khr.pSwapchains        = &vulkan_type.swap_chain.handle;
+        present_info_khr.pSwapchains        = &vulkan_type.swapchain.handle;
         present_info_khr.waitSemaphoreCount = 1;
         present_info_khr.pWaitSemaphores    = &semaphore.render_finished_semaphore;
         present_info_khr.pImageIndices      = &frame_data.swap_chain_image_index;
