@@ -49,7 +49,7 @@ namespace Renderer {
 
 			if (config->stages[i].type == VERTEX_SHADER) {
 				shader_name.append(".vert");
-				if (CreateShaderModule(&shader_module, shader_name.c_str(), VK_SHADER_STAGE_VERTEX_BIT, push_constant_ranges, layout_bindings_set)) {
+				if (!CreateShaderModule(&shader_module, shader_name.c_str(), VK_SHADER_STAGE_VERTEX_BIT, push_constant_ranges, layout_bindings_set)) {
 					shader_stage_create_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
 					shader_stage_create_info.module = shader_module;
 					shader_stage_create_info.pName = "main";
@@ -57,7 +57,7 @@ namespace Renderer {
 			}
 			else if (config->stages[i].type == FRAGMENT_SHADER) {
 				shader_name.append(".frag");
-				if (CreateShaderModule(&shader_module, shader_name.c_str(), VK_SHADER_STAGE_FRAGMENT_BIT, push_constant_ranges, layout_bindings_set)) {
+				if (!CreateShaderModule(&shader_module, shader_name.c_str(), VK_SHADER_STAGE_FRAGMENT_BIT, push_constant_ranges, layout_bindings_set)) {
 					shader_stage_create_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
 					shader_stage_create_info.module = shader_module;
 					shader_stage_create_info.pName = "main";
@@ -69,6 +69,7 @@ namespace Renderer {
 
 		////
 		Vulkan_PipelineBuilder pipeline_builder;
+		uint32_t descriptor_set_layout_count = 0;
 		
 		for (uint32_t i = 0; i < 4; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
@@ -83,6 +84,7 @@ namespace Renderer {
 
 			if (binding_count != 0) {
 				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
+				++descriptor_set_layout_count;
 			}
 			else {
 				descriptor_set_layouts[i] = VK_NULL_HANDLE;
@@ -101,9 +103,9 @@ namespace Renderer {
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, 4, push_constant_ranges.data(), push_constant_ranges.size());
+		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, descriptor_set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
-		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass);
+		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
 
 		for (uint32_t i = 0; i < E_StageType::MAX_VALUE; ++i) {
 			if (shader_stage_create_infos[i].module != VK_NULL_HANDLE)

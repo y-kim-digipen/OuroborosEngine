@@ -4,7 +4,7 @@
 
 namespace Renderer
 {
-	VkPipeline Vulkan_PipelineBuilder::BuildPipeLine(VkDevice device, VkRenderPass render_pass)
+	VkPipeline Vulkan_PipelineBuilder::BuildPipeLine(VkDevice device, VkRenderPass render_pass, std::vector<VkPipelineShaderStageCreateInfo>& shader_stage_create_infos)
 	{
         VkPipelineViewportStateCreateInfo viewport_state{ VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
         viewport_state.viewportCount     = 1;
@@ -19,8 +19,8 @@ namespace Renderer
         color_blend_state_create_info.pAttachments      = &color_blend_attachment;
 
         VkGraphicsPipelineCreateInfo pipeline_create_info{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
-        pipeline_create_info.stageCount           = static_cast<uint32_t>(shader_stages.size());
-        pipeline_create_info.pStages              = shader_stages.data();
+        pipeline_create_info.stageCount           = static_cast<uint32_t>(shader_stage_create_infos.size());
+        pipeline_create_info.pStages              = shader_stage_create_infos.data();
         pipeline_create_info.pVertexInputState    = &vertex_input_info;
         pipeline_create_info.pInputAssemblyState  = &input_assembly;
         pipeline_create_info.pViewportState       = &viewport_state;

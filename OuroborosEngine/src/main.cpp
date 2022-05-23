@@ -16,12 +16,6 @@ int main()
     {
         window->Update();
     }
-    /*SetupContextWindow();
-
-    VkInstance instance;
-    VkInstanceCreateInfo create_info{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
-    
-    vkCreateInstance(&create_info, nullptr, &instance);*/
 
     return 0;
 }
