@@ -13,6 +13,19 @@ namespace Renderer
 	{
 			// make unique pointer
 			Init(window_properties);
+
+			ShaderConfig shader_config{
+			"shader",
+			{
+				E_StageType::VERTEX_SHADER,
+				E_StageType::FRAGMENT_SHADER
+			},
+			2
+			};
+
+		window_data.RenderContextData->AddShader(&shader_config);
+
+
 	}
 
 	Window::~Window()
@@ -83,17 +96,6 @@ namespace Renderer
 			std::cout << "failed to Create window\n";
 		}
 
-
-		ShaderConfig shader_config{
-			"shader",
-			{
-				E_StageType::VERTEX_SHADER,
-				E_StageType::FRAGMENT_SHADER
-			},
-			2
-		};
-
-		window_data.RenderContextData->AddShader(&shader_config);
 
 		//to get the glfw callback
 		glfwSetWindowUserPointer(window_data.window, &window_data);

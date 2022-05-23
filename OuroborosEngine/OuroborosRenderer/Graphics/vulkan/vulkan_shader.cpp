@@ -69,10 +69,7 @@ namespace Renderer {
 
 		////
 		Vulkan_PipelineBuilder pipeline_builder;
-		//TODO: Description need to implement
 		
-		
-
 		for (uint32_t i = 0; i < 4; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
 
@@ -91,9 +88,6 @@ namespace Renderer {
 				descriptor_set_layouts[i] = VK_NULL_HANDLE;
 			}
 		}
-
-
-
 
 		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
 		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
