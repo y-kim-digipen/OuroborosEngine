@@ -13,7 +13,7 @@ namespace Renderer
 		~OpenglShader() override;
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
-
+		void UnBind();
 	private:
 		unsigned int shader_id;
 		void LinkShader(std::vector<unsigned> ids);

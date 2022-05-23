@@ -101,7 +101,12 @@ namespace Renderer
 
 	void OpenglShader::Bind()
 	{
+		glUseProgram(shader_id);
+	}
 
+	void OpenglShader::UnBind()
+	{
+		glUseProgram(0);
 	}
 
 	void OpenglShader::LinkShader(std::vector<unsigned> shader_ids)

@@ -15,7 +15,7 @@ namespace Renderer {
 	private:
 		void CreateSurface();
 		void CreateSwapChain();
-
+		void RecreateSwapChain();
 	};
 }
 

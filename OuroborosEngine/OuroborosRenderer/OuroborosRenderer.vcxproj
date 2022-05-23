@@ -175,6 +175,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\buffer.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
@@ -185,6 +186,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\VulkanContext.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
     <ClInclude Include="Graphics\window.h" />
