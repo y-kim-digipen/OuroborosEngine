@@ -37,7 +37,7 @@ namespace Renderer
     int CreateCommandBuffer();
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
     int CreateSyncObjects();
-
+    int CreateDescriptorPool();
 	void BeginFrame();
     void EndFrame();
 
@@ -96,7 +96,7 @@ namespace Renderer
         CreateRenderPass();
         CreateGraphicPipline();
         CreateFrameBuffers();
-
+        CreateDescriptorPool();
 
 	}
 
@@ -772,6 +772,36 @@ namespace Renderer
                 throw std::runtime_error("Failed to create semaphores!");
             }
         }
+    }
+
+    int CreateDescriptorPool()
+    {
+        
+
+        std::vector<VkDescriptorPoolSize> pool_sizes{
+                {VK_DESCRIPTOR_TYPE_SAMPLER , 1000},
+    {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,1000} ,
+    {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,1000} ,
+    {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,1000} ,
+    {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,1000} ,
+    {VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,1000} ,
+    {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,1000} ,
+    {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,1000} ,
+    {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,1000} ,
+    {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,1000} ,
+    {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,1000}
+        };
+
+
+        VkDescriptorPoolCreateInfo descriptor_pool_create_info{};
+        descriptor_pool_create_info.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        descriptor_pool_create_info.poolSizeCount = pool_sizes.size();
+        descriptor_pool_create_info.pPoolSizes    = pool_sizes.data();
+        descriptor_pool_create_info.maxSets       = 1000;
+
+        VK_CHECK(vkCreateDescriptorPool(vulkan_type.device.handle, &descriptor_pool_create_info, nullptr, &vulkan_type.descriptor_pool));
+
+        return 0;
     }
 
     void BeginFrame()

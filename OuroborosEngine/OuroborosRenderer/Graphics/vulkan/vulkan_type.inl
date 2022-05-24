@@ -92,6 +92,7 @@ struct Vulkan_type
 	VulkanSwapchain swapchain;
 	VkRenderPass render_pass;
 
+	VkDescriptorPool descriptor_pool;
 	VmaAllocator allocator;
 	VkPipeline graphic_pipeline;
 	VulkanFrameData frame_data[MAX_FRAMES_IN_FLIGHT];

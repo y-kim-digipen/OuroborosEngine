@@ -6,6 +6,8 @@
 #define VMA_IMPLEMENTATION
 #include <vk_mem_alloc.h>
 
+struct VulkanDevice;
+
 namespace Renderer
 {
 	class VulkanBuffer
@@ -58,6 +60,7 @@ namespace Renderer
 		uint64_t count = 0;
 	};
 
+
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
@@ -65,8 +68,13 @@ namespace Renderer
 		~VulkanUniformBuffer() override;
 		void Bind() const override;
 		void UnBind() const override;
+		void AddData(void* data, uint32_t size, uint32_t offset);
+
+		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
+
 	private:
 		VkDescriptorSet descriptor_set{ VK_NULL_HANDLE };
+
 		uint64_t buffer_size;
 		std::shared_ptr<VulkanBuffer> buffer;
 

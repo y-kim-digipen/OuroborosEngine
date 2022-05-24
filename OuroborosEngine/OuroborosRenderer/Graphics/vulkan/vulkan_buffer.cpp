@@ -14,7 +14,6 @@ namespace Renderer
 		VmaAllocationCreateInfo vma_allocation_create_info{};
 		vma_allocation_create_info.usage = vma_usage;
 
-	
 		auto result = vmaCreateBuffer(*allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
 		if(result != VK_SUCCESS)
 		{
@@ -168,4 +167,10 @@ namespace Renderer
 		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
 	}
 
+	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
+	{
+
+
+
+	}
 }
