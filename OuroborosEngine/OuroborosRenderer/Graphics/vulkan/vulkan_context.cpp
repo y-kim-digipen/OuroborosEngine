@@ -40,7 +40,7 @@ namespace Renderer
     int CreateSyncObjects();
     int CreateDescriptorPool();
     void CleanupSwapChain();
-
+    int CreateVMAallocator();
 
 
     bool IsDevicesSuitable(VkPhysicalDevice device);
@@ -91,9 +91,12 @@ namespace Renderer
         CreateImageView();
         CreateRenderPass();
         CreateFrameBuffers();
-        CreateSyncObjects();
+        CreateCommandPool();
+        CreateCommandBuffer();
+        CreateVMAallocator();
+    	CreateSyncObjects();
         CreateDescriptorPool();
-
+        
 	}
 
     void VulkanContext::Shutdown()
@@ -919,6 +922,17 @@ namespace Renderer
         //TODO : need to destory descriptorPool
         
 
+    }
+
+    int CreateVMAallocator()
+    {
+        VmaAllocatorCreateInfo allocatorInfo = {};
+        allocatorInfo.physicalDevice = vulkan_type.device.physical_device;
+        allocatorInfo.device = vulkan_type.device.handle;
+        allocatorInfo.instance = vulkan_type.instance;
+        VK_CHECK(vmaCreateAllocator(&allocatorInfo, &vulkan_type.allocator));
+
+        return 0;
     }
 
 
