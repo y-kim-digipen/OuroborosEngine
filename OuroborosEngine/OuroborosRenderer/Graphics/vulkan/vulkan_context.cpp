@@ -1,4 +1,6 @@
 #include "vulkan_context.h"
+
+#define VMA_IMPLEMENTATION
 #include "vulkan_type.inl"
 #include "vulkan_shader.h"
 #include "vulkan_mesh.h"
@@ -16,9 +18,10 @@
 //#define GLFW_EXPOSE_NATIVE_WIN32s
 //#include <GLFW/glfw3native.h>
 
+static Vulkan_type vulkan_type;
+
 namespace Renderer 
 {
-  
 
 #ifdef NDEBUG
     const bool enable_validation_layers = false;
@@ -150,7 +153,7 @@ namespace Renderer
             return -1;
         }
 
-        mesh_map[mesh_name] = std::make_unique<VulkanMesh>();
+        mesh_map[mesh_name] = std::make_unique<VulkanMesh>(&vulkan_type);
         if (!mesh_map[mesh_name]->LoadAsset(mesh_name)) {
             std::cout << mesh_name << " loading failed\n";
             return -1;
@@ -291,7 +294,6 @@ namespace Renderer
         submit.pCommandBuffers      = &frame_data.command_buffer;
 
         vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
-
 
         VkPresentInfoKHR present_info_khr{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
         present_info_khr.swapchainCount     = 1;
@@ -838,7 +840,7 @@ namespace Renderer
         render_pass_info.renderArea.offset = { 0,0 };
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
-        VkClearValue clear_color         = { {{0.0f,0.0f, 0.0f, 1.0f}} };
+        VkClearValue clear_color         = { {{0.2f,0.3f, 0.1f, 1.0f}} };
         render_pass_info.clearValueCount = 1;
         render_pass_info.pClearValues    = &clear_color;
 
@@ -927,6 +929,7 @@ namespace Renderer
     int CreateVMAallocator()
     {
         VmaAllocatorCreateInfo allocatorInfo = {};
+        allocatorInfo.vulkanApiVersion = VK_API_VERSION_1_3;
         allocatorInfo.physicalDevice = vulkan_type.device.physical_device;
         allocatorInfo.device = vulkan_type.device.handle;
         allocatorInfo.instance = vulkan_type.instance;
@@ -962,7 +965,6 @@ namespace Renderer
 
         return details;
     }
-
 
     bool CheckDeviceExtensionSupport(VkPhysicalDevice device)
     {

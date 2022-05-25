@@ -1,16 +1,11 @@
-#define VMA_IMPLEMENTATION
-
 #include "vulkan_buffer.h"
 
-
-
-
+#include "vulkan_type.inl"
 
 namespace Renderer
 {
-	VulkanBuffer::VulkanBuffer(VmaAllocator* allocator_, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
-		VmaMemoryUsage vma_usage) : allocator(&vulkan_type.allocator)
-	{
+	VulkanBuffer::VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
+		VmaMemoryUsage vma_usage) : vulkan_type(vulkan_type) ,size(buffer_size) {
 		VkBufferCreateInfo buffer_create_info{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
 		buffer_create_info.size = buffer_size;
 		buffer_create_info.usage = buffer_usage;
@@ -19,7 +14,8 @@ namespace Renderer
 		VmaAllocationCreateInfo vma_allocation_create_info{};
 		vma_allocation_create_info.usage = vma_usage;
 
-		auto result = vmaCreateBuffer(vulkan_type.allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
+		
+		VkResult result = vmaCreateBuffer(vulkan_type->allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
 		if(result != VK_SUCCESS)
 		{
 			//Error handling
@@ -29,27 +25,27 @@ namespace Renderer
 
 	VulkanBuffer::~VulkanBuffer()
 	{
-		vmaDestroyBuffer(*allocator, buffer, allocation);
+		vmaDestroyBuffer(vulkan_type->allocator, buffer, allocation);
 	}
 
 	void VulkanBuffer::UploadData(void* data, uint64_t buffer_size)
 	{
 		void* temp_data = nullptr;
 
-		vmaMapMemory(*allocator, allocation, &temp_data);
+		vmaMapMemory(vulkan_type->allocator, allocation, & temp_data);
 		memcpy(temp_data, data, buffer_size);
-		vmaUnmapMemory(*allocator, allocation);
+		vmaUnmapMemory(vulkan_type->allocator, allocation);
 	}
 
-	void VulkanBuffer::CopyBuffer(VkQueue* queue, VulkanBuffer* src_buffer, VulkanBuffer* dst_buffer, VkDeviceSize size)
+	void VulkanBuffer::CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer)
 	{
 		VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
 		allocate_info.level			     = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocate_info.commandPool        = vulkan_type.command_pool;
+		allocate_info.commandPool        = vulkan_type->command_pool;
 		allocate_info.commandBufferCount = 1;
 
 		VkCommandBuffer command_buffer;
-		vkAllocateCommandBuffers(vulkan_type.device.handle, &allocate_info, &command_buffer);
+		vkAllocateCommandBuffers(vulkan_type->device.handle, &allocate_info, &command_buffer);
 
 
 		VkCommandBufferBeginInfo commandBufferBeginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
@@ -64,17 +60,17 @@ namespace Renderer
 			.size	   = size
 		};
 
-		vkCmdCopyBuffer(command_buffer, src_buffer->buffer, dst_buffer->buffer, 1, &copyRegion);
+		vkCmdCopyBuffer(command_buffer, src_buffer->buffer, buffer, 1, &copyRegion);
 		vkEndCommandBuffer(command_buffer);
 
 		VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers    = &command_buffer;
 
-		vkQueueSubmit(*queue, 1, &submitInfo, VK_NULL_HANDLE);
-		vkQueueWaitIdle(*queue);
+		vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+		vkQueueWaitIdle(queue);
 
-		vkFreeCommandBuffers(vulkan_type.device.handle, vulkan_type.command_pool, 1, &command_buffer);
+		vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
 
 	}
 
@@ -95,18 +91,18 @@ namespace Renderer
 		vkCmdCopyBufferToImage(cmd, src_buffer->buffer, *dst_image, dst_image_layout, 1, &copyRegion);
 	}
 
-	VulkanVertexBuffer::VulkanVertexBuffer(const std::vector<Vertex>& vertices)
+	VulkanVertexBuffer::VulkanVertexBuffer(Vulkan_type* vulkan_type, const std::vector<Vertex>& vertices) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ vertices.size() * sizeof(Vertex) };
 		buffer_size = new_buffer_size;
 		count = static_cast<uint64_t>(vertices.size());
 
-		buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+		buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 
-		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
-		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
 	}
 
 	VulkanVertexBuffer::~VulkanVertexBuffer()
@@ -120,7 +116,7 @@ namespace Renderer
 		if(buffer != nullptr)
 		{
 			VkDeviceSize offset = 0;
-			auto& frame = vulkan_type.frame_data[vulkan_type.current_frame % MAX_FRAMES_IN_FLIGHT];
+			auto& frame = vulkan_type->frame_data[vulkan_type->current_frame];
 			vkCmdBindVertexBuffers(frame.command_buffer, 0, 1, &buffer->buffer, &offset);
 		}
 	}
@@ -138,27 +134,27 @@ namespace Renderer
 			buffer_size = new_buffer_size;
 			count = static_cast<uint64_t>(vertices.size());
 
-			buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+			buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 
 		}
 
-		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
-		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
 	}
 
-	VulkanIndexBuffer::VulkanIndexBuffer(const std::vector<uint32_t>& data)
+	VulkanIndexBuffer::VulkanIndexBuffer(Vulkan_type* vulkan_type ,const std::vector<uint32_t>& data) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ data.size() * sizeof(uint32_t) };
 		buffer_size = new_buffer_size;
 		count = static_cast<uint64_t>(data.size());
-		buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+		buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 
-		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
-		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
 	}
 
 	VulkanIndexBuffer::~VulkanIndexBuffer()
@@ -172,7 +168,7 @@ namespace Renderer
 		if(buffer != nullptr)
 		{
 			VkDeviceSize offset = 0;
-			auto& frame = vulkan_type.frame_data[vulkan_type.current_frame % MAX_FRAMES_IN_FLIGHT];
+			auto& frame = vulkan_type->frame_data[vulkan_type->current_frame];
 			vkCmdBindIndexBuffer(frame.command_buffer, buffer->buffer, offset, VK_INDEX_TYPE_UINT32);
 		}
 	}
@@ -190,13 +186,13 @@ namespace Renderer
 
 			buffer_size = new_buffer_size;
 			count = static_cast<uint64_t>(data.size());
-			buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+			buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 		}
 
-		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
-		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
 	}
 
 
@@ -225,7 +221,7 @@ namespace Renderer
 		allocate_info.descriptorSetCount = set_count;
 		allocate_info.pSetLayouts = layouts;
 
-		VK_CHECK(vkAllocateDescriptorSets(vulkan_type.device.handle, &allocate_info, out_sets));
+		VK_CHECK(vkAllocateDescriptorSets(device->handle, &allocate_info, out_sets));
 
 
 	}

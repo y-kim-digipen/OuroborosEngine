@@ -102,11 +102,6 @@ struct Vulkan_type
 
 };
 
-namespace Renderer
-{
-	static Vulkan_type vulkan_type;
-}
-
 struct VulkanInitializer
 {
 	static VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo(VkShaderStageFlagBits stage, VkShaderModule shader_module);

@@ -4,7 +4,9 @@
 #include "vulkan_buffer.h"
 
 namespace Renderer {
-
+    VulkanMesh::VulkanMesh(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+    {
+    }
     VulkanMesh::~VulkanMesh()
     {
     }
@@ -14,15 +16,15 @@ namespace Renderer {
         if (!Mesh::LoadAsset(file_name))
             return false;
 
-        p_vertex_buffer = std::make_unique<VulkanVertexBuffer>(vertices);
-        p_index_buffer = std::make_unique<VulkanIndexBuffer>(indices);
+        p_vertex_buffer = std::make_unique<VulkanVertexBuffer>(vulkan_type,vertices);
+        p_index_buffer = std::make_unique<VulkanIndexBuffer>(vulkan_type,indices);
 
         return true;
     }
 
     void VulkanMesh::Draw()
     {
-        VkCommandBuffer& command_buffer = vulkan_type.frame_data[vulkan_type.current_frame].command_buffer;
+        VkCommandBuffer& command_buffer = vulkan_type->frame_data[vulkan_type->current_frame].command_buffer;
 
         p_index_buffer->Bind();
         p_vertex_buffer->Bind();

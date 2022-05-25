@@ -8,6 +8,8 @@
 #include <fstream>
 #include <algorithm>
 
+#include "../mesh.h"
+
 namespace Renderer {
 
 	void ReadFile(std::string& buffer,const std::string& filename) {
@@ -95,7 +97,40 @@ namespace Renderer {
 
 		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
 		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-		pipeline_builder.vertex_input_info = VulkanInitializer::PipelineVertexInputStageCreateInfo();
+
+		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
+
+		//TODO: put in vertex_mesh class as a static
+		VkVertexInputBindingDescription input_binding_description;
+		input_binding_description.binding = 0;
+		input_binding_description.stride = sizeof(Vertex);
+		input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions(3);
+
+		input_attribute_descriptions[0].binding = 0;
+		input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+		input_attribute_descriptions[0].location = 0;
+		input_attribute_descriptions[0].offset = offsetof(Vertex, position);
+
+		input_attribute_descriptions[1].binding = 0;
+		input_attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		input_attribute_descriptions[1].location = 1;
+		input_attribute_descriptions[1].offset = offsetof(Vertex, normal);
+
+		input_attribute_descriptions[2].binding = 0;
+		input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+		input_attribute_descriptions[2].location = 2;
+		input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
+
+
+
+		pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
+		pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
+		pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
+		pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
+
+		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling =  VulkanInitializer::PipelineMultisampleStateCreateInfo();
 		pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
 		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);

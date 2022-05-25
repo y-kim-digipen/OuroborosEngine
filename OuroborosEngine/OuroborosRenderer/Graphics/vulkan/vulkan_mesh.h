@@ -5,6 +5,8 @@
 #include "vulkan_buffer.h"
 #include <memory>
 
+struct Vulkan_type;
+
 namespace Renderer {
 
 	//class VulkanVertexBuffer;
@@ -12,7 +14,7 @@ namespace Renderer {
 
 	class VulkanMesh : public Mesh {
 	public:
-		VulkanMesh() = default;
+		VulkanMesh(Vulkan_type* vulkan_type);
 		~VulkanMesh() override;
 
 		bool LoadAsset(const char* file_name) override;
@@ -20,6 +22,8 @@ namespace Renderer {
 
 		std::unique_ptr<VulkanVertexBuffer> p_vertex_buffer;
 		std::unique_ptr<VulkanIndexBuffer> p_index_buffer;
+	private:
+		Vulkan_type* vulkan_type;
 	};
 }
 
