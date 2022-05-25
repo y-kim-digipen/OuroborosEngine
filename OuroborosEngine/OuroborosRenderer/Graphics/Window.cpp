@@ -92,6 +92,7 @@ namespace Renderer
 		};
 
 		window_data.RenderContextData->AddShader(&shader_config);
+		window_data.RenderContextData->AddMesh("cube");
 
 
 

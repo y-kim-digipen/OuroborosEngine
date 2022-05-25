@@ -5,22 +5,31 @@
 #include <vec3.hpp>
 #include <vec2.hpp>
 
-struct Vertex {
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 uv;
+namespace Renderer {
+	struct Vertex {
+		glm::vec3 position;
+		glm::vec3 normal;
+		glm::vec2 uv;
 
-	bool operator==(const Vertex& other) const {
-		return position == other.position && normal == other.normal && uv == other.uv;
-	}
+		bool operator==(const Vertex& other) const {
+			return position == other.position && normal == other.normal && uv == other.uv;
+		}
+	};
+
+	class Mesh {
+
+	public:
+		Mesh() = default;
+		virtual ~Mesh() = 0 {};
+
+		virtual bool LoadAsset(const char* file_name);
+		virtual void Draw() = 0;
+
+	protected:
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
+
+	};
 };
-
-struct Mesh {
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-
-	bool LoadAsset(const char* file_name);
-};
-
 #endif // !MESH_H
 

@@ -1,5 +1,4 @@
 #include "vulkan_buffer.h"
-#include "vulkan_type.inl"
 
 namespace Renderer
 {

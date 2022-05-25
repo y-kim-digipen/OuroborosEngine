@@ -1,10 +1,9 @@
 #ifndef VULKAN_BUFFER_H
 #define VULKAN_BUFFER_H
+#include "vulkan_type.inl"
+
 #include "../buffer.h"
-#include <vulkan_core.h>
 #include "../mesh.h"
-#define VMA_IMPLEMENTATION
-#include <vk_mem_alloc.h>
 
 struct VulkanDevice;
 

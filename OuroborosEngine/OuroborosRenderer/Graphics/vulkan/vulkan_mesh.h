@@ -10,13 +10,16 @@ namespace Renderer {
 	class VulkanVertexBuffer;
 	class VulkanIndexBuffer;
 
-	struct VulkanMesh : Mesh {
+	class VulkanMesh : public Mesh {
+	public:
+		VulkanMesh() = default;
+		~VulkanMesh() override;
+
+		bool LoadAsset(const char* file_name) override;
+		void Draw() override;
 
 		std::unique_ptr<VulkanVertexBuffer> p_vertex_buffer;
 		std::unique_ptr<VulkanIndexBuffer> p_index_buffer;
-
-
-
 	};
 }
 

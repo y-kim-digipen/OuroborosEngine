@@ -1,6 +1,7 @@
 #include "vulkan_context.h"
 #include "vulkan_type.inl"
 #include "vulkan_shader.h"
+#include "vulkan_mesh.h"
 
 #include <iostream>
 #include <optional>
@@ -37,7 +38,7 @@ namespace Renderer
     int CreateCommandBuffer();
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
     int CreateSyncObjects();
-
+    int CreateDescriptorPool();
     void CleanupSwapChain();
 
 
@@ -139,6 +140,22 @@ namespace Renderer
         return 0;
     }
 
+    int VulkanContext::AddMesh(const char* mesh_name)
+    {
+        if (mesh_map.find(mesh_name) != mesh_map.end()) {
+            std::cout << mesh_name << " already exists\n";
+            return -1;
+        }
+
+        mesh_map[mesh_name] = std::make_unique<VulkanMesh>();
+        if (!mesh_map[mesh_name]->LoadAsset(mesh_name)) {
+            std::cout << mesh_name << " loading failed\n";
+            return -1;
+        }
+
+        return 0;
+    }
+
     void VulkanContext::DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name)
     {
 
@@ -149,6 +166,13 @@ namespace Renderer
             shader_map[shaders_name[i]]->Bind();
 
         }
+    }
+
+    void VulkanContext::DrawMesh(const char* shader_name, const char* mesh_name)
+    {
+        shader_map[shader_name]->Bind();
+
+        mesh_map[mesh_name]->Draw();
     }
 
     void VulkanContext::CreateSurface()

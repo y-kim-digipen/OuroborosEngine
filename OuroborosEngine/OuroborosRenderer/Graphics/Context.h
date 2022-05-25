@@ -11,6 +11,7 @@ namespace Renderer
 {
 	struct ShaderConfig;
 	class Shader;
+	class Mesh;
 
 	class Context
 	{
@@ -20,6 +21,7 @@ namespace Renderer
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
 		virtual int AddShader(ShaderConfig* config) = 0;
+		virtual int AddMesh(const char* mesh_name) = 0;
 		virtual int BeginFrame();
 		virtual void DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name) = 0;
 		virtual void DrawMesh(const char* shader_name, const char* mesh_name) = 0;
