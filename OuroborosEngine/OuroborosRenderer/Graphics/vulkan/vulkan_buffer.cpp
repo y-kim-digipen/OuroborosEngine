@@ -8,8 +8,8 @@
 
 namespace Renderer
 {
-	VulkanBuffer::VulkanBuffer(VmaAllocator* allocator, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
-		VmaMemoryUsage vma_usage) : allocator(allocator)
+	VulkanBuffer::VulkanBuffer(VmaAllocator* allocator_, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
+		VmaMemoryUsage vma_usage) : allocator(&vulkan_type.allocator)
 	{
 		VkBufferCreateInfo buffer_create_info{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
 		buffer_create_info.size = buffer_size;
@@ -19,7 +19,7 @@ namespace Renderer
 		VmaAllocationCreateInfo vma_allocation_create_info{};
 		vma_allocation_create_info.usage = vma_usage;
 
-		auto result = vmaCreateBuffer(*allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
+		auto result = vmaCreateBuffer(vulkan_type.allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
 		if(result != VK_SUCCESS)
 		{
 			//Error handling
