@@ -6,6 +6,12 @@ layout(location = 2) in vec2 uv;
 
 layout(location = 0) out vec3 fragColor;
 
+layout(set = 0, binding = 0) global_ubo {
+    mat4 projection;
+    mat4 view;
+    float depth;
+};
+
 vec2 positions[3] = vec2[](
     vec2(0.0, -0.5),
     vec2(0.5, 0.5),

@@ -185,21 +185,22 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Graphics\vulkan\VulkanContext.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
     <ClInclude Include="Graphics\window.h" />
-    <ClInclude Include="Graphics\opengl\OpenglContext.h" />
+    <ClInclude Include="Graphics\opengl\opengl_context.h" />
     <ClInclude Include="Graphics\mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp" />
-    <ClCompile Include="Graphics\opengl\OpenglContext.cpp" />
+    <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
-    <ClCompile Include="Graphics\vulkan\VulkanContext.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />

@@ -1,4 +1,4 @@
-#include "OpenglContext.h"
+#include "opengl_context.h"
 
 #include <iostream>
 #include <GL/glew.h>

@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 #include "Window.h"
 #include "iostream"
-#include "vulkan/VulkanContext.h"
-#include "opengl/OpenglContext.h"
+#include "vulkan/vulkan_context.h"
+#include "opengl/opengl_context.h"
 
 #include "shader.h"
 
@@ -25,6 +25,7 @@ namespace Renderer
 		glfwPollEvents();
 
 		window_data.RenderContextData->BeginFrame();
+		window_data.RenderContextData->DrawMesh("shader", "cube");
 		window_data.RenderContextData->EndFrame();
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))

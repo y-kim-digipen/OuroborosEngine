@@ -12,8 +12,11 @@ namespace Renderer {
 		uint32_t set;
 		uint32_t binding;
 		uint32_t count;
-		VkDescriptorType type;
-		
+		VkDescriptorType type;	
+	};
+
+	struct UniformBufferObjectData {
+
 	};
 
 	class VulkanShader : public Shader
@@ -38,6 +41,11 @@ namespace Renderer {
 		VkPipeline pipeline;
 
 		std::unordered_map<const char*, DescriptorSetBindingData> descriptor_data;
+		//std::unordered_map<const char*,
 	};
 }
 #endif // !VULKAN_SHADER_H
+
+// uniform buffer
+// total size
+// member type, size, name, offset

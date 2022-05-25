@@ -1,4 +1,4 @@
-#include "VulkanContext.h"
+#include "vulkan_context.h"
 #include "vulkan_type.inl"
 #include "vulkan_shader.h"
 
@@ -37,11 +37,6 @@ namespace Renderer
     int CreateCommandBuffer();
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
     int CreateSyncObjects();
-
-	void BeginFrame();
-    void EndFrame();
-
-
 
     void CleanupSwapChain();
 

@@ -29,10 +29,10 @@
     <ClInclude Include="Graphics\window.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\opengl\OpenglContext.h">
+    <ClInclude Include="Graphics\opengl\opengl_context.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\vulkan\VulkanContext.h">
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\spirv_helper.h">
@@ -65,6 +65,9 @@
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_mesh.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -73,10 +76,10 @@
     <ClCompile Include="Graphics\window.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\opengl\OpenglContext.cpp">
+    <ClCompile Include="Graphics\opengl\opengl_context.cpp">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\vulkan\VulkanContext.cpp">
+    <ClCompile Include="Graphics\vulkan\vulkan_context.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp">

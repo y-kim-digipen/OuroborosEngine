@@ -22,6 +22,7 @@ namespace Renderer
 		virtual int AddShader(ShaderConfig* config) = 0;
 		virtual int BeginFrame();
 		virtual void DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name) = 0;
+		virtual void DrawMesh(const char* shader_name, const char* mesh_name) = 0;
 		virtual int EndFrame();
 
 		virtual ~Context();
@@ -29,6 +30,7 @@ namespace Renderer
 	protected:
 		GLFWwindow* window;
 		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
+		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
 	};
 
 
