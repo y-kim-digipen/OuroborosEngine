@@ -76,7 +76,6 @@ struct VulkanFrameData
 
 
 	uint32_t swap_chain_image_index{ 0 };
-
 };
 
 struct Vulkan_type

@@ -31,6 +31,7 @@ namespace Renderer {
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
 		virtual void Bind() = 0;
+		//virtual int 
 	private:
 	};
 }

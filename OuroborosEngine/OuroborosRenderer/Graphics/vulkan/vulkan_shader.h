@@ -13,6 +13,7 @@ namespace Renderer {
 		uint32_t binding;
 		uint32_t count;
 		VkDescriptorType type;
+		
 	};
 
 	class VulkanShader : public Shader
@@ -32,6 +33,7 @@ namespace Renderer {
 		Vulkan_type* vulkan_type;
 
 		VkDescriptorSetLayout descriptor_set_layouts[4];
+		uint32_t set_layout_count;
 		VkPipelineLayout pipeline_layout;
 		VkPipeline pipeline;
 

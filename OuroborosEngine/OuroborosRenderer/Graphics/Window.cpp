@@ -23,11 +23,9 @@ namespace Renderer
 	void Window::Update()
 	{
 		glfwPollEvents();
-		if(!is_vulkan)
-		{
-			window_data.RenderContextData->SwapBuffer();
-		}
 
+		window_data.RenderContextData->BeginFrame();
+		window_data.RenderContextData->EndFrame();
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
 		{

@@ -26,6 +26,7 @@ namespace Renderer {
 
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
+		set_layout_count = 0;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -69,7 +70,7 @@ namespace Renderer {
 
 		////
 		Vulkan_PipelineBuilder pipeline_builder;
-		uint32_t descriptor_set_layout_count = 0;
+		set_layout_count = 0;
 		
 		for (uint32_t i = 0; i < 4; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
@@ -84,7 +85,7 @@ namespace Renderer {
 
 			if (binding_count != 0) {
 				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
-				++descriptor_set_layout_count;
+				++set_layout_count;
 			}
 			else {
 				descriptor_set_layouts[i] = VK_NULL_HANDLE;
@@ -103,7 +104,7 @@ namespace Renderer {
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, descriptor_set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
+		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
 		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
 
@@ -115,7 +116,8 @@ namespace Renderer {
 
 	void VulkanShader::Bind()
 	{
-		//vkCmdBindPipeline()
+		uint32_t current_frame = vulkan_type->current_frame;
+		vkCmdBindPipeline(vulkan_type->frame_data[current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
@@ -174,6 +176,8 @@ namespace Renderer {
 						(VkShaderStageFlags)refl_module.shader_stage,
 						0,
 					};
+
+					//refl_binding.resource_type
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
 				}

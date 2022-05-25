@@ -18,6 +18,15 @@ namespace Renderer
 	{
 		glfwSwapBuffers(window);
 	}
+	int Context::BeginFrame()
+	{
+		return 0;
+	}
+
+	int Context::EndFrame()
+	{
+		return 0;
+	}
 	Context::~Context()
 	{
 	}

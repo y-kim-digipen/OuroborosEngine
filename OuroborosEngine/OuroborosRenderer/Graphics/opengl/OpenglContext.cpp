@@ -32,4 +32,17 @@ namespace Renderer
 	{
 		return 0;
 	}
+	void OpenglContext::DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name)
+	{
+	}
+	int OpenglContext::BeginFrame()
+	{
+		return 0;
+	}
+	int OpenglContext::EndFrame()
+	{
+		glfwSwapBuffers(window);
+
+		return 0;
+	}
 }

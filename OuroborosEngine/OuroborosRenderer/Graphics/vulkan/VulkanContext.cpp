@@ -37,7 +37,7 @@ namespace Renderer
     int CreateCommandBuffer();
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
     int CreateSyncObjects();
-    int CreateDescriptorPool();
+
 	void BeginFrame();
     void EndFrame();
 
@@ -144,6 +144,18 @@ namespace Renderer
         return 0;
     }
 
+    void VulkanContext::DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name)
+    {
+
+        uint32_t mesh_name_count = meshes_name.size();
+
+        for (uint32_t i = 0; i < mesh_name_count; ++i) {
+            
+            shader_map[shaders_name[i]]->Bind();
+
+        }
+    }
+
     void VulkanContext::CreateSurface()
     {
         if (glfwCreateWindowSurface(vulkan_type.instance, window, nullptr, &vulkan_type.surface) != VK_SUCCESS) 
@@ -218,6 +230,67 @@ namespace Renderer
         CreateRenderPass();
         CreateFrameBuffers();
     }
+
+   int VulkanContext::BeginFrame()
+    {
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
+
+        VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore,VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
+
+        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+
+        return 0;
+    }
+
+    int VulkanContext::EndFrame()
+    {
+
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        vkCmdEndRenderPass(frame_data.command_buffer);
+        vkEndCommandBuffer(frame_data.command_buffer);
+
+        auto& semaphore = frame_data.semaphore;
+        VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+
+        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        submit.pWaitDstStageMask    = &wait_stage;
+
+        //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
+    	submit.waitSemaphoreCount   = 1;
+        submit.pWaitSemaphores      = &semaphore.image_available_semaphore;
+
+        submit.signalSemaphoreCount = 1;
+        submit.pSignalSemaphores    = &semaphore.render_finished_semaphore;
+
+        submit.commandBufferCount   = 1;
+        submit.pCommandBuffers      = &frame_data.command_buffer;
+
+        vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+
+
+        VkPresentInfoKHR present_info_khr{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
+        present_info_khr.swapchainCount     = 1;
+        present_info_khr.pSwapchains        = &vulkan_type.swapchain.handle;
+        present_info_khr.waitSemaphoreCount = 1;
+        present_info_khr.pWaitSemaphores    = &semaphore.render_finished_semaphore;
+        present_info_khr.pImageIndices      = &frame_data.swap_chain_image_index;
+
+        auto result = vkQueuePresentKHR(vulkan_type.device.graphics_queue, &present_info_khr);
+
+        if(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+        {
+            // TODO : need to implement : RecreateSwapChain() 
+            //RecreateSwapChain();
+        }
+
+        vulkan_type.current_frame = (vulkan_type.current_frame+1) % MAX_FRAMES_IN_FLIGHT;
+
+        return  0;
+    }
+
 
     int CreateInstance(int major, int minor)
     {
@@ -776,7 +849,7 @@ namespace Renderer
 
     int CreateDescriptorPool()
     {
-        
+
 
         std::vector<VkDescriptorPoolSize> pool_sizes{
                 {VK_DESCRIPTOR_TYPE_SAMPLER , 1000},
@@ -794,75 +867,14 @@ namespace Renderer
 
 
         VkDescriptorPoolCreateInfo descriptor_pool_create_info{};
-        descriptor_pool_create_info.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        descriptor_pool_create_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         descriptor_pool_create_info.poolSizeCount = pool_sizes.size();
-        descriptor_pool_create_info.pPoolSizes    = pool_sizes.data();
-        descriptor_pool_create_info.maxSets       = 1000;
+        descriptor_pool_create_info.pPoolSizes = pool_sizes.data();
+        descriptor_pool_create_info.maxSets = 1000;
 
         VK_CHECK(vkCreateDescriptorPool(vulkan_type.device.handle, &descriptor_pool_create_info, nullptr, &vulkan_type.descriptor_pool));
 
         return 0;
-    }
-
-    void BeginFrame()
-    {
-        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX);
-        vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence);
-
-        vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore,VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
-
-        vkResetCommandBuffer(frame_data.command_buffer, 0);
-        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
-
-    }
-
-
-    void EndFrame()
-    {
-
-        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        vkCmdEndRenderPass(frame_data.command_buffer);
-        vkEndCommandBuffer(frame_data.command_buffer);
-
-        auto& semaphore = frame_data.semaphore;
-        VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-
-        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        submit.pWaitDstStageMask    = &wait_stage;
-
-        //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
-    	submit.waitSemaphoreCount   = 1;
-        submit.pWaitSemaphores      = &semaphore.image_available_semaphore;
-
-        submit.signalSemaphoreCount = 1;
-        submit.pSignalSemaphores    = &semaphore.render_finished_semaphore;
-
-        submit.commandBufferCount   = 1;
-        submit.pCommandBuffers      = &frame_data.command_buffer;
-
-        vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
-
-
-        VkPresentInfoKHR present_info_khr{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
-        present_info_khr.swapchainCount     = 1;
-        present_info_khr.pSwapchains        = &vulkan_type.swapchain.handle;
-        present_info_khr.waitSemaphoreCount = 1;
-        present_info_khr.pWaitSemaphores    = &semaphore.render_finished_semaphore;
-        present_info_khr.pImageIndices      = &frame_data.swap_chain_image_index;
-
-
-        auto result = vkQueuePresentKHR(vulkan_type.device.graphics_queue, &present_info_khr);
-
-        if(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
-        {
-            // TODO : need to implement : RecreateSwapChain() 
-            //RecreateSwapChain();
-
-        }
-
-        vulkan_type.current_frame = (vulkan_type.current_frame+1) % MAX_FRAMES_IN_FLIGHT;
-
     }
 
     void CleanupSwapChain()

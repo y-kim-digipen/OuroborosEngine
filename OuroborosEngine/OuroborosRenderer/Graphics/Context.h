@@ -20,6 +20,9 @@ namespace Renderer
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
 		virtual int AddShader(ShaderConfig* config) = 0;
+		virtual int BeginFrame();
+		virtual void DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name) = 0;
+		virtual int EndFrame();
 
 		virtual ~Context();
 
