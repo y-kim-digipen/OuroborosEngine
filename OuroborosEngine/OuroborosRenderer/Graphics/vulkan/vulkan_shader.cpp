@@ -31,6 +31,7 @@ namespace Renderer {
 
 	VulkanShader::~VulkanShader()
 	{
+
 	}
 
 	void VulkanShader::Init(ShaderConfig* config)

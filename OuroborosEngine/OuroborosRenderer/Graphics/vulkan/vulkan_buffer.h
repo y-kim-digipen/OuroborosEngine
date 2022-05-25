@@ -30,7 +30,7 @@ namespace Renderer
 	class VulkanVertexBuffer : public VertexBuffer
 	{
 	public:
-		VulkanVertexBuffer() = default;
+		VulkanVertexBuffer(const std::vector<Vertex>& vertices);
 		~VulkanVertexBuffer() override;
 		void Bind() const override;
 		void UnBind() const override {};
@@ -47,7 +47,7 @@ namespace Renderer
 	class VulkanIndexBuffer : public IndexBuffer
 	{
 	public:
-		VulkanIndexBuffer() =default;
+		VulkanIndexBuffer(const std::vector<uint32_t>& data);
 		~VulkanIndexBuffer() override;
 		void Bind() const override;
 		void UnBind() const override;
@@ -69,9 +69,9 @@ namespace Renderer
 		void Bind() const override;
 		void UnBind() const override;
 		void AddData(void* data, uint32_t size, uint32_t offset);
-
+		void SetupDescriptorSet();
 		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
-
+		
 	private:
 		VkDescriptorSet descriptor_set{ VK_NULL_HANDLE };
 

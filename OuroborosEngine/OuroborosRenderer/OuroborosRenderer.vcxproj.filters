@@ -68,6 +68,9 @@
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\ImguiManager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">

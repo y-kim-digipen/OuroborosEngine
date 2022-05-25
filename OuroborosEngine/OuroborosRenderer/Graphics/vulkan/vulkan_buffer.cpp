@@ -90,6 +90,20 @@ namespace Renderer
 		vkCmdCopyBufferToImage(cmd, src_buffer->buffer, *dst_image, dst_image_layout, 1, &copyRegion);
 	}
 
+	VulkanVertexBuffer::VulkanVertexBuffer(const std::vector<Vertex>& vertices)
+	{
+		uint64_t new_buffer_size{ vertices.size() * sizeof(Vertex) };
+		buffer_size = new_buffer_size;
+		count = static_cast<uint64_t>(vertices.size());
+
+		buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
+		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
+
+		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+	}
+
 	VulkanVertexBuffer::~VulkanVertexBuffer()
 	{
 		buffer.reset();
@@ -125,6 +139,19 @@ namespace Renderer
 
 		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
+
+		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
+	}
+
+	VulkanIndexBuffer::VulkanIndexBuffer(const std::vector<uint32_t>& data)
+	{
+		uint64_t new_buffer_size{ data.size() * sizeof(uint32_t) };
+		buffer_size = new_buffer_size;
+		count = static_cast<uint64_t>(data.size());
+		buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
+		auto staging_buffer = std::make_shared<VulkanBuffer>(&vulkan_type.allocator, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
 		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
 	}
@@ -167,9 +194,33 @@ namespace Renderer
 		VulkanBuffer::CopyBuffer(&vulkan_type.device.graphics_queue, staging_buffer.get(), buffer.get(), buffer_size);
 	}
 
+
 	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
 	{
 
+
+
+	}
+
+	void VulkanUniformBuffer::SetupDescriptorSet( )
+	{
+		//VkWriteDescriptorSet writes[2];
+		
+
+
+		//vkUpdateDescriptorSets()
+	}
+
+	void VulkanUniformBuffer::AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool,
+	                                                VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets)
+	{
+		//TODO : 
+		VkDescriptorSetAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+		allocate_info.descriptorPool = pool;
+		allocate_info.descriptorSetCount = set_count;
+		allocate_info.pSetLayouts = layouts;
+
+		VK_CHECK(vkAllocateDescriptorSets(vulkan_type.device.handle, &allocate_info, out_sets));
 
 
 	}

@@ -8,7 +8,8 @@
 
 namespace Renderer {
 
-	struct DescriptorSetBindingData {
+	struct DescriptorSetBindingData
+	{
 		uint32_t set;
 		uint32_t binding;
 		uint32_t count;

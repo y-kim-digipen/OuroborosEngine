@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="Graphics\buffer.h" />
     <ClInclude Include="Graphics\context.h" />
+    <ClInclude Include="Graphics\ImguiManager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h" />
