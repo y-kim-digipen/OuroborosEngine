@@ -1,5 +1,7 @@
 #ifndef VULKAN_BUFFER_H
 #define VULKAN_BUFFER_H
+#include <memory>
+
 #include "vulkan_type.inl"
 
 #include "../buffer.h"
@@ -49,7 +51,7 @@ namespace Renderer
 		VulkanIndexBuffer(const std::vector<uint32_t>& data);
 		~VulkanIndexBuffer() override;
 		void Bind() const override;
-		void UnBind() const override;
+		void UnBind() const override {}
 
 		void AddData(const std::vector<uint32_t>& data);
 		uint64_t GetCount() { return count; }

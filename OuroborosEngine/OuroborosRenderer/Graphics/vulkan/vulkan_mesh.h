@@ -2,13 +2,13 @@
 #define VULKAN_MESH_H
 
 #include "../mesh.h"
-
+#include "vulkan_buffer.h"
 #include <memory>
 
 namespace Renderer {
 
-	class VulkanVertexBuffer;
-	class VulkanIndexBuffer;
+	//class VulkanVertexBuffer;
+	//class VulkanIndexBuffer;
 
 	class VulkanMesh : public Mesh {
 	public:

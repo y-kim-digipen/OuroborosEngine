@@ -20,10 +20,10 @@ namespace Renderer {
 
 	public:
 		Mesh() = default;
-		virtual ~Mesh() = 0 {};
+		virtual ~Mesh() =default;
 
 		virtual bool LoadAsset(const char* file_name);
-		virtual void Draw() = 0;
+		virtual void Draw() {}
 
 	protected:
 		std::vector<Vertex> vertices;

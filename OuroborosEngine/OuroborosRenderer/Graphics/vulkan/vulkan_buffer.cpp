@@ -1,4 +1,10 @@
+#define VMA_IMPLEMENTATION
+
 #include "vulkan_buffer.h"
+
+
+
+
 
 namespace Renderer
 {

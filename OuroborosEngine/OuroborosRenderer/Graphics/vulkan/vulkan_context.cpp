@@ -90,8 +90,8 @@ namespace Renderer
         CreateSwapChain();
         CreateImageView();
         CreateRenderPass();
-        CreateGraphicPipline();
         CreateFrameBuffers();
+        CreateSyncObjects();
         CreateDescriptorPool();
 
 	}
