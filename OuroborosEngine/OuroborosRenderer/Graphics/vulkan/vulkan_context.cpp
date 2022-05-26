@@ -315,6 +315,11 @@ namespace Renderer
         return  0;
     }
 
+    Vulkan_type* VulkanContext::GetVulkanType()
+    {
+        return &vulkan_type;
+    }
+
 
     int CreateInstance(int major, int minor)
     {
@@ -818,7 +823,6 @@ namespace Renderer
 
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index)
     {
-       
 
         VkCommandBufferBeginInfo begin_info{};
         begin_info.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

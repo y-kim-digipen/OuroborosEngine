@@ -3,6 +3,8 @@
 
 #include "../context.h"
 
+struct Vulkan_type;
+
 namespace Renderer {
 
 	class VulkanContext : public Context {
@@ -16,7 +18,7 @@ namespace Renderer {
 		void DrawMesh(const char* shader_name, const char* mesh_name) override;
 		int BeginFrame() override;
 		int EndFrame() override;
-
+		Vulkan_type* GetVulkanType();
 	private:
 		void CreateSurface();
 		void CreateSwapChain();

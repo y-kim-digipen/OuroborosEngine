@@ -177,9 +177,17 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imconfig.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imgui.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imgui_internal.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_rectpack.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h" />
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h" />
     <ClInclude Include="Graphics\buffer.h" />
     <ClInclude Include="Graphics\context.h" />
-    <ClInclude Include="Graphics\ImguiManager.h" />
+    <ClInclude Include="Graphics\imgui_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h" />
@@ -190,6 +198,7 @@
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
@@ -198,13 +207,22 @@
     <ClInclude Include="Graphics\mesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\imgui.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_demo.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp" />
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
+    <ClCompile Include="Graphics\imgui_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />

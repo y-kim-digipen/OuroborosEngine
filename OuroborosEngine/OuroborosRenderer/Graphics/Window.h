@@ -4,6 +4,7 @@
 #include "Context.h"
 #include <memory>
 #include <string>
+#include "../Graphics/vulkan/vulkan_imgui_manager.h"
 
 struct GLFWwindow;
 
@@ -35,8 +36,8 @@ namespace Renderer
 		void Update();
 		void Shutdown();
 		void OnResize();
-
-
+		
+		VulkanImguiManager vulkan_imgui_manager;
 	private:
 		void Init(const WindowProperties& window_properties);
 

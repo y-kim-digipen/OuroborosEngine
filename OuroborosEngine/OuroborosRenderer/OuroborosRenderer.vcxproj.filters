@@ -21,6 +21,9 @@
     <Filter Include="Source Files\Graphics\vulkan\spirv">
       <UniqueIdentifier>{2ae28a5f-c983-479d-92e5-c424047e2123}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Imgui">
+      <UniqueIdentifier>{62dca757-12a0-423e-a29b-233228828358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\context.h">
@@ -68,8 +71,35 @@
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\ImguiManager.h">
+    <ClInclude Include="Graphics\imgui_manager.h">
       <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imgui.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imconfig.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imgui_internal.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_rectpack.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h">
+      <Filter>Source Files\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +138,33 @@
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\imgui_manager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_demo.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp">
+      <Filter>Source Files\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
