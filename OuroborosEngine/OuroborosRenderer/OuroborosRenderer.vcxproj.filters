@@ -101,6 +101,9 @@
     <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h">
       <Filter>Source Files\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_image.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -165,6 +168,9 @@
     </ClCompile>
     <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp">
       <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_image.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

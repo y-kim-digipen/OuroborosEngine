@@ -27,9 +27,7 @@ namespace Renderer
 		glfwPollEvents();
 		
 		window_data.RenderContextData->BeginFrame();
-		//vulkan_imgui_manager.Update();
-		window_data.RenderContextData->DrawMesh("shader", "cube");
-		//vulkan_imgui_manager.EndFrame();
+		window_data.RenderContextData->DrawMesh("shader", "suzanne");
 		window_data.RenderContextData->EndFrame();
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
@@ -98,7 +96,7 @@ namespace Renderer
 		};
 
 		window_data.RenderContextData->AddShader(&shader_config);
-		window_data.RenderContextData->AddMesh("cube");
+		window_data.RenderContextData->AddMesh("suzanne");
 
 
 

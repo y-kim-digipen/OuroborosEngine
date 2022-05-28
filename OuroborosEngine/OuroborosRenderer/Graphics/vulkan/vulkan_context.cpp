@@ -2,6 +2,7 @@
 
 #define VMA_IMPLEMENTATION
 #include "vulkan_type.inl"
+#include "vulkan_image.h"
 #include "vulkan_shader.h"
 #include "vulkan_mesh.h"
 
@@ -33,8 +34,8 @@ namespace Renderer
     void CreateDebugUtilMessage();
     int PickPhysicalDevice();
     int CreateLogicalDevice();
-    int CreateImageView();
-    int CreateGraphicPipline();
+	int CreateVMAallocator();
+    int CreateSwapchainImageView();
     int CreateRenderPass();
     int CreateFrameBuffers();
     int CreateCommandPool();
@@ -43,7 +44,7 @@ namespace Renderer
     int CreateSyncObjects();
     int CreateDescriptorPool();
     void CleanupSwapChain();
-    int CreateVMAallocator();
+    
 
 
     bool IsDevicesSuitable(VkPhysicalDevice device);
@@ -53,7 +54,8 @@ namespace Renderer
     VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& available_formats);
     VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& available_present_modes);
     VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window);
-
+    VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+    VkFormat FindDepthFormat();
 
 
 
@@ -90,13 +92,13 @@ namespace Renderer
         CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
+		CreateVMAallocator();
         CreateSwapChain();
-        CreateImageView();
+        CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
         CreateCommandPool();
         CreateCommandBuffer();
-        CreateVMAallocator();
     	CreateSyncObjects();
         CreateDescriptorPool();
         
@@ -243,6 +245,8 @@ namespace Renderer
 
         vulkan_type.swapchain.image_format = surface_format.format;
         vulkan_type.swapchain.extent = extent;
+
+        
     }
 
     void VulkanContext::RecreateSwapChain()
@@ -251,7 +255,7 @@ namespace Renderer
         CleanupSwapChain();
 
     	CreateSwapChain();
-        CreateImageView();
+        CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
     }
@@ -593,7 +597,7 @@ namespace Renderer
         return 0;
     }
 
-    int CreateImageView()
+    int CreateSwapchainImageView()
     {
     	vulkan_type.swapchain.image_views.resize(vulkan_type.swapchain.images.size());
 
@@ -620,104 +624,18 @@ namespace Renderer
             }
         }
 
-        return 0;
-    }
+		vulkan_type.swapchain.depth_image.format = FindDepthFormat();
 
-    int CreateGraphicPipline()
-    {
-        //Shaders
-
-        //
-        VkPipelineVertexInputStateCreateInfo vertex_input_info{};
-        vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertex_input_info.vertexBindingDescriptionCount = 0;
-        vertex_input_info.vertexAttributeDescriptionCount = 0;
-
-        VkPipelineInputAssemblyStateCreateInfo input_assembly{};
-        input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        input_assembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-        input_assembly.primitiveRestartEnable = VK_FALSE;
-
-        VkViewport viewport{};
-        viewport.x = 0.0f;
-        viewport.y = 0.0f;
-        viewport.width = (float)vulkan_type.swapchain.extent.width;
-        viewport.height = (float)vulkan_type.swapchain.extent.height;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-
-        VkRect2D scissor{};
-        scissor.offset = { 0, 0 };
-        scissor.extent = vulkan_type.swapchain.extent;
-
-        VkPipelineViewportStateCreateInfo viewport_state{};
-        viewport_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        viewport_state.viewportCount = 1;
-        viewport_state.pViewports = &viewport;
-        viewport_state.scissorCount = 1;
-        viewport_state.pScissors = &scissor;
-
-        VkPipelineRasterizationStateCreateInfo rasterizer{};
-        rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        rasterizer.depthClampEnable = VK_FALSE;
-        rasterizer.rasterizerDiscardEnable = VK_FALSE;
-        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-        rasterizer.lineWidth = 1.0f;
-        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
-        rasterizer.depthBiasEnable = VK_FALSE;
-
-        VkPipelineMultisampleStateCreateInfo multisampling{};
-        multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-        multisampling.sampleShadingEnable = VK_FALSE;
-        multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-        VkPipelineColorBlendAttachmentState color_blend_attachment{};
-        color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-        color_blend_attachment.blendEnable = VK_FALSE;
-
-        VkPipelineColorBlendStateCreateInfo color_blending{};
-        color_blending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-        color_blending.logicOpEnable = VK_FALSE;
-        color_blending.logicOp = VK_LOGIC_OP_COPY;
-        color_blending.attachmentCount = 1;
-        color_blending.pAttachments = &color_blend_attachment;
-        color_blending.blendConstants[0] = 0.0f;
-        color_blending.blendConstants[1] = 0.0f;
-        color_blending.blendConstants[2] = 0.0f;
-        color_blending.blendConstants[3] = 0.0f;
-
-        VkPipelineLayoutCreateInfo pipeline_layout_info{};
-        pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipeline_layout_info.setLayoutCount = 0;
-        pipeline_layout_info.pushConstantRangeCount = 0;
-
-     /*   if (vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_info, nullptr, &vulkan_type.pipeline_layout) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to create pipeline layout!");
-        }*/
-
-        //VkGraphicsPipelineCreateInfo pipelineInfo{};
-        //pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        //pipelineInfo.stageCount = 2;
-        //pipelineInfo.pStages = shader_stage;
-        //pipelineInfo.pVertexInputState = &vertexInputInfo;
-        //pipelineInfo.pInputAssemblyState = &inputAssembly;
-        //pipelineInfo.pViewportState = &viewportState;
-        //pipelineInfo.pRasterizationState = &rasterizer;
-        //pipelineInfo.pMultisampleState = &multisampling;
-        //pipelineInfo.pColorBlendState = &colorBlending;
-        //pipelineInfo.layout = pipelineLayout;
-        //pipelineInfo.renderPass = renderPass;
-        //pipelineInfo.subpass = 0;
-        //pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-        //if (vkCreateGraphicsPipelines(vulkan_type.device.handle, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &vulkan_type.graphic_pipeline) != VK_SUCCESS)
-        //{
-        //    throw std::runtime_error("failed to create graphics pipeline!");
-        //}
-
-
+        CreateImage(&vulkan_type, &vulkan_type.swapchain.depth_image,
+            VK_IMAGE_TYPE_2D,
+            vulkan_type.swapchain.extent.width,
+            vulkan_type.swapchain.extent.height,
+            vulkan_type.swapchain.depth_image.format,
+            VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+            VK_IMAGE_TILING_OPTIMAL,
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+            true,
+            VK_IMAGE_ASPECT_DEPTH_BIT);
 
         return 0;
     }
@@ -738,17 +656,62 @@ namespace Renderer
         colorAttachmentRef.attachment   = 0;
         colorAttachmentRef.layout       = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+        VkAttachmentDescription depth_attachment{};
+	    depth_attachment.format = vulkan_type.swapchain.depth_image.format;
+		depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+		depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		depth_attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        VkAttachmentReference depth_attachment_ref{};
+        depth_attachment_ref.attachment = 1;
+        depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
         VkSubpassDescription subpass{};
         subpass.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
         subpass.colorAttachmentCount    = 1;
         subpass.pColorAttachments       = &colorAttachmentRef;
+        subpass.pDepthStencilAttachment = &depth_attachment_ref;
+
+        const uint32_t attachment_count = 2;
+        VkAttachmentDescription attachment[attachment_count] = {
+            color_attachment,
+            depth_attachment
+        };
+
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+
+        VkSubpassDependency depth_dependency{};
+        depth_dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        depth_dependency.dstSubpass = 0;
+        depth_dependency.srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        depth_dependency.dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        depth_dependency.srcAccessMask = 0;
+        depth_dependency.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        
+        const uint32_t dependency_count = 2;
+        VkSubpassDependency dependencies[dependency_count] = {
+            dependency,
+            depth_dependency
+        };
 
         VkRenderPassCreateInfo render_pass_info{};
         render_pass_info.sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        render_pass_info.attachmentCount = 1;
-        render_pass_info.pAttachments    = &color_attachment;
+        render_pass_info.attachmentCount = attachment_count;
+        render_pass_info.pAttachments    = attachment;
         render_pass_info.subpassCount    = 1;
         render_pass_info.pSubpasses      = &subpass;
+        render_pass_info.dependencyCount = dependency_count;
+        render_pass_info.pDependencies = dependencies;
 
         if (vkCreateRenderPass(vulkan_type.device.handle, &render_pass_info, nullptr, &vulkan_type.render_pass) != VK_SUCCESS) 
         {
@@ -765,13 +728,13 @@ namespace Renderer
 
         for (size_t idx = 0; idx < swapchain.image_views.size(); idx++)
         {
-            VkImageView attachments[] = { swapchain.image_views.at(idx) };
+            VkImageView attachments[] = { swapchain.image_views.at(idx), swapchain.depth_image.image_view };
 
             VkFramebufferCreateInfo framebuffer_info{};
 
             framebuffer_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
             framebuffer_info.renderPass      = vulkan_type.render_pass;
-            framebuffer_info.attachmentCount = 1;
+            framebuffer_info.attachmentCount = 2;
             framebuffer_info.pAttachments    = attachments;
             framebuffer_info.width           = swapchain.extent.width;
             framebuffer_info.height          = swapchain.extent.height;
@@ -823,7 +786,6 @@ namespace Renderer
 
     void RecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index)
     {
-
         VkCommandBufferBeginInfo begin_info{};
         begin_info.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         begin_info.flags            = 0;
@@ -844,9 +806,12 @@ namespace Renderer
         render_pass_info.renderArea.offset = { 0,0 };
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
-        VkClearValue clear_color         = { {{0.2f,0.3f, 0.1f, 1.0f}} };
-        render_pass_info.clearValueCount = 1;
-        render_pass_info.pClearValues    = &clear_color;
+        VkClearValue clear_color[] = {
+            {{0.2f,0.3f, 0.1f, 1.0f}},
+            {{1.0f, 0.0f}}
+        };
+        render_pass_info.clearValueCount = 2;
+        render_pass_info.pClearValues    = clear_color;
 
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -1041,6 +1006,32 @@ namespace Renderer
 
             return actual_extent;
         }
+    }
+
+    VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+    {
+        for (VkFormat format : candidates) {
+            VkFormatProperties props;
+            vkGetPhysicalDeviceFormatProperties(vulkan_type.device.physical_device, format, &props);
+
+            if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
+                return format;
+            }
+            else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+                return format;
+            }
+        }
+
+        assert(false, "failed to find supported format!"); 
+    }
+
+    VkFormat FindDepthFormat()
+    {
+        return FindSupportedFormat(
+            { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+            VK_IMAGE_TILING_OPTIMAL,
+            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+            );
     }
 
 }
