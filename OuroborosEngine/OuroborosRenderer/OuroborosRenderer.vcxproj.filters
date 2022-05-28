@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{4277fd8b-a44c-4477-a4c8-08a221a875b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\vulkan">
+      <UniqueIdentifier>{785cbdba-69eb-4b2a-ae18-f96c5031e2c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\opengl">
+      <UniqueIdentifier>{ea61091d-ee2e-4264-9d6f-2e4f3e9c1269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\vulkan\spirv">
+      <UniqueIdentifier>{2ae28a5f-c983-479d-92e5-c424047e2123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Imgui">
+      <UniqueIdentifier>{62dca757-12a0-423e-a29b-233228828358}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\context.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\window.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\opengl\opengl_context.h">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_context.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\spirv_helper.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_shader.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\shader.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\opengl\opengl_shader.h">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.h">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\mesh.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\buffer.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_buffer.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_mesh.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\imgui_manager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imgui.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imconfig.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imgui_internal.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_rectpack.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h">
+      <Filter>Source Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_image.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Graphics\context.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\window.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\opengl\opengl_context.cpp">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_context.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\opengl\opengl_shader.cpp">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c">
+      <Filter>Source Files\Graphics\vulkan\spirv</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\imgui_manager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_demo.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp">
+      <Filter>Source Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_image.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\vulkan\vulkan_type.inl">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </None>
+  </ItemGroup>
+</Project>

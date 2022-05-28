@@ -28,6 +28,7 @@
     <ClInclude Include="src\engine\common.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
