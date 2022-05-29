@@ -254,7 +254,6 @@ namespace Renderer
     {
         vkDeviceWaitIdle(vulkan_type.device.handle);
         CleanupSwapChain();
-
         CreateSwapChain();
         CreateSwapchainImageView();
         CreateRenderPass();
@@ -805,7 +804,7 @@ namespace Renderer
     {
         VkCommandBufferBeginInfo begin_info{};
         begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        begin_info.flags = 0;
+        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         begin_info.pInheritanceInfo = nullptr;
 
         if (vkBeginCommandBuffer(command_buffer, &begin_info) != VK_SUCCESS)

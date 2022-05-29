@@ -24,6 +24,8 @@ namespace Renderer
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 		ImGui::StyleColorsDark();
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 
 		VkDescriptorPoolSize pool_sizes[] =
 		{
@@ -56,7 +58,7 @@ namespace Renderer
 		init_info.Instance			= vulkan_type->instance;
 		init_info.PhysicalDevice	= vulkan_type->device.physical_device;
 		init_info.Device			= vulkan_type->device.handle;
-		init_info.Queue				= vulkan_type->device.graphics_queue;
+		init_info.Queue				= vulkan_type->device.present_queue;
 		init_info.DescriptorPool	= imguiPool;
 		init_info.MinImageCount		= 3;
 		init_info.ImageCount		= 3;
@@ -82,7 +84,6 @@ namespace Renderer
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments	 = &color_attachment;
 
-
 		VkSubpassDependency dependency = {};
 		dependency.srcSubpass		 = VK_SUBPASS_EXTERNAL;
 		dependency.dstSubpass		 = 0;
@@ -100,13 +101,7 @@ namespace Renderer
 		info.dependencyCount = 1;
 		info.pDependencies	 = &dependency;
 
-
-		if (vkCreateRenderPass(vulkan_type->device.handle, &info, nullptr, &imgui_render_pass) != VK_SUCCESS) 
-		{
-			throw std::runtime_error("Could not create Dear ImGui's render pass");
-		}
-
-		ImGui_ImplVulkan_Init(&init_info, imgui_render_pass);
+		ImGui_ImplVulkan_Init(&init_info, vulkan_type->render_pass);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType				 = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -160,6 +155,8 @@ namespace Renderer
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 		}
+	
+
 	}
 
 	void VulkanImguiManager::Shutdown()
