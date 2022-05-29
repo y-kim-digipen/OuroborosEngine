@@ -31,8 +31,6 @@
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
 </Project>

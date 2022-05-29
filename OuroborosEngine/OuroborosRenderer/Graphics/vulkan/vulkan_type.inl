@@ -32,6 +32,13 @@ struct SwapchainSupportDetails
 	std::vector<VkPresentModeKHR> present_modes;
 };
 
+struct VulkanImage {
+	VmaAllocation allocation;
+	VkImage image;
+	VkImageView image_view;
+	VkFormat format;
+};
+
 struct VulkanSwapchain
 {
 	SwapchainSupportDetails detail;
@@ -40,6 +47,7 @@ struct VulkanSwapchain
 	VkSwapchainKHR handle;
 	std::vector<VkImage> images;
 	std::vector<VkImageView> image_views;
+	VulkanImage depth_image;
 	std::vector<VkFramebuffer> framebuffers;
 };
 
@@ -93,7 +101,6 @@ struct Vulkan_type
 
 	VkDescriptorPool descriptor_pool;
 	VmaAllocator allocator;
-	VkPipeline graphic_pipeline;
 	VulkanFrameData frame_data[MAX_FRAMES_IN_FLIGHT];
 
 	uint32_t current_frame = 0;

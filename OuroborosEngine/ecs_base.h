@@ -1,6 +1,10 @@
 #pragma once
+#include "src/engine/common.h"
 
-struct entity
+namespace OE
 {
-	
-};
+	struct entity
+	{
+		ecs_ID ID;
+	};
+}
