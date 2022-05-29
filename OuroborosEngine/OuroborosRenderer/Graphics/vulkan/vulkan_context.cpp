@@ -434,6 +434,8 @@ namespace Renderer
         std::vector<VkPhysicalDevice> devices(device_count);
         VK_CHECK(vkEnumeratePhysicalDevices(vulkan_type.instance, &device_count, devices.data()));
 
+        vulkan_type.device.physical_device = devices[0];
+
     	for (const auto& device : devices)
         {
             if (IsDevicesSuitable(device)) 
@@ -468,6 +470,13 @@ namespace Renderer
 
     bool IsDevicesSuitable(VkPhysicalDevice device)
 	{
+        VkPhysicalDeviceProperties device_property;
+        vkGetPhysicalDeviceProperties(device, &device_property);
+        
+        if (device_property.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+            return false;
+        }
+
         QueueFamilyIndices indices = FindQueueFamilies(device);
 
         bool extensions_supported = CheckDeviceExtensionSupport(device);
