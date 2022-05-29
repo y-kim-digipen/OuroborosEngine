@@ -29,7 +29,7 @@ namespace Renderer
 		window_data.RenderContextData->BeginFrame();
 		vulkan_imgui_manager.BeginFrame();
 		vulkan_imgui_manager.Update();
-		window_data.RenderContextData->DrawMesh("shader", "suzanne");
+		//window_data.RenderContextData->DrawMesh("shader", "suzanne");
 		vulkan_imgui_manager.EndFrame();
 		window_data.RenderContextData->EndFrame();
 		//TODO : make close
@@ -89,17 +89,17 @@ namespace Renderer
 			std::cout << "failed to Create window\n";
 		}
 
-		ShaderConfig shader_config{
-			"shader",
-			{
-				E_StageType::VERTEX_SHADER,
-				E_StageType::FRAGMENT_SHADER
-			},
-			2
-		};
+		//ShaderConfig shader_config{
+		//	"shader",
+		//	{
+		//		E_StageType::VERTEX_SHADER,
+		//		E_StageType::FRAGMENT_SHADER
+		//	},
+		//	2
+		//};
 
-		window_data.RenderContextData->AddShader(&shader_config);
-		window_data.RenderContextData->AddMesh("suzanne");
+		//window_data.RenderContextData->AddShader(&shader_config);
+		//window_data.RenderContextData->AddMesh("suzanne");
 
 
 
