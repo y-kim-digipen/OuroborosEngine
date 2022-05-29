@@ -45,7 +45,6 @@ namespace Renderer
     void CleanupSwapChain();
     int CreateVMAallocator();
 
-
     bool IsDevicesSuitable(VkPhysicalDevice device);
     QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
     bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
@@ -130,6 +129,8 @@ namespace Renderer
 
 
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
+
+        
         SpirvHelper::Finalize();
 
     }

@@ -188,6 +188,7 @@
     <ClInclude Include="Graphics\buffer.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
+    <ClInclude Include="Graphics\opengl\opengl_imgui_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
+    <ClCompile Include="Graphics\opengl\opengl_imgui_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />

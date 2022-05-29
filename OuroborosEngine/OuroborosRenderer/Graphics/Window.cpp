@@ -25,11 +25,12 @@ namespace Renderer
 	void Window::Update()
 	{
 		glfwPollEvents();
-		
+	
 		window_data.RenderContextData->BeginFrame();
-		//vulkan_imgui_manager.Update();
+		vulkan_imgui_manager.BeginFrame();
 		window_data.RenderContextData->DrawMesh("shader", "cube");
-		//vulkan_imgui_manager.EndFrame();
+		vulkan_imgui_manager.Update();
+		vulkan_imgui_manager.EndFrame();
 		window_data.RenderContextData->EndFrame();
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
@@ -72,8 +73,8 @@ namespace Renderer
 			window_data.window = glfwCreateWindow(window_data.width, window_data.height, window_data.title.c_str(), nullptr, nullptr);
 			window_data.RenderContextData = std::make_shared<VulkanContext>(window_data.window);
 			window_data.RenderContextData->Init(1,2);
-		/*	vulkan_imgui_manager.VulkanInit(dynamic_cast<VulkanContext*>(window_data.RenderContextData.get())->GetVulkanType());
-			vulkan_imgui_manager.Init(window_data.window);*/
+			vulkan_imgui_manager.VulkanInit(dynamic_cast<VulkanContext*>(window_data.RenderContextData.get())->GetVulkanType());
+			vulkan_imgui_manager.Init(window_data.window);
 		}
 		else
 		{
@@ -110,7 +111,7 @@ namespace Renderer
 	{
 		if(is_vulkan)
 		{
-			
+			//window_data.RenderContextData->Shutdown();
 			//vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
 			
 

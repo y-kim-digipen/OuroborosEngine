@@ -12,17 +12,20 @@ namespace Renderer
 	{
 	public:
 		VulkanImguiManager();
-		void Draw() override;
+
 		void Init(GLFWwindow* window) override;
 		void VulkanInit(Vulkan_type* vulkan_type);
-		void EndFrame();
+		void BeginFrame() override;
+		void EndFrame() override;
 		void Shutdown() override;
 		void Update() override;
-
 	private:
 		Vulkan_type* vulkan_type;
 		VkRenderPass imgui_render_pass;
+
 	};
+
+
 }
 
 

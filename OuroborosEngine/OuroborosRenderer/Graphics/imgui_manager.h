@@ -10,9 +10,9 @@ namespace Renderer
 		ImguiManager() = default;
 		virtual void Init(GLFWwindow* window) =0;
 		virtual void Update() =0;
-		virtual void Draw() =0;
 		virtual void Shutdown() =0;
-
+		virtual void BeginFrame() = 0;
+		virtual void EndFrame() = 0;
 	protected:
 		GLFWwindow* window_ = nullptr;
 	};
