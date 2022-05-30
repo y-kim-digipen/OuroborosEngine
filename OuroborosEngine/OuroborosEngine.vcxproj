@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -124,11 +124,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -146,13 +146,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -174,8 +174,13 @@
     <ClInclude Include="ecs_base.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
+    <ClInclude Include="src\engine\ecs\components.h" />
+    <ClInclude Include="src\engine\ecs\component_manager.h" />
+    <ClInclude Include="src\engine\ecs\ecs_base.h" />
+    <ClInclude Include="src\engine\ecs\entity_mananger.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\modules\resource_manager.h" />
+    <ClInclude Include="src\type_list\type_list.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

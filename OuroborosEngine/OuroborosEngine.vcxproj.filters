@@ -11,8 +11,14 @@
     <Filter Include="engine\modules">
       <UniqueIdentifier>{53fb722a-4952-45df-9973-ec8e344f05d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\ecs">
+    <Filter Include="engine\scene">
+      <UniqueIdentifier>{851a97b0-2ed8-42aa-8022-30868a3010c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\scene\ecs">
       <UniqueIdentifier>{f16786f5-88ad-40f1-bf3d-6c82714eae92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="type_list">
+      <UniqueIdentifier>{1cc6edd1-de9c-4a46-8a7b-5bcde24cf469}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,12 +28,25 @@
     <ClInclude Include="src\engine\modules\resource_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
-    <ClInclude Include="ecs_base.h">
-      <Filter>engine\ecs</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\common.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\ecs\component_manager.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\ecs_base.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\entity_mananger.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\type_list\type_list.h">
+      <Filter>type_list</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\components.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_base.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
