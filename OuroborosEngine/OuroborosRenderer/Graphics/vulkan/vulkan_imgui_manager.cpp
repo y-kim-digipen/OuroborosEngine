@@ -25,7 +25,7 @@ namespace Renderer
 
 		ImGui::StyleColorsDark();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		VkDescriptorPoolSize pool_sizes[] =
 		{
@@ -101,6 +101,11 @@ namespace Renderer
 		info.dependencyCount = 1;
 		info.pDependencies	 = &dependency;
 
+		/*if (vkCreateRenderPass(vulkan_type->device.handle, &info, nullptr, &imgui_render_pass) != VK_SUCCESS)
+		{
+			throw std::runtime_error("Could not create Dear ImGui's render pass");
+		}*/
+
 		ImGui_ImplVulkan_Init(&init_info, vulkan_type->render_pass);
 
 		VkCommandBufferAllocateInfo allocInfo{};
@@ -169,6 +174,10 @@ namespace Renderer
 	void VulkanImguiManager::Update()
 	{
 		ImGui::ShowDemoWindow();
+
+		ImGui::Begin("d");
+
+		ImGui::End();
 
 	}
 

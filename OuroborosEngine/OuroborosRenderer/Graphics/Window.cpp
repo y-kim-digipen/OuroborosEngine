@@ -32,6 +32,7 @@ namespace Renderer
 		window_data.RenderContextData->DrawMesh("shader", "suzanne");
 		vulkan_imgui_manager.EndFrame();
 		window_data.RenderContextData->EndFrame();
+		
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
 		{

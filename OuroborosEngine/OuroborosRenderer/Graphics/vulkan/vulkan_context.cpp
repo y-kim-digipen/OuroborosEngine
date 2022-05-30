@@ -268,6 +268,18 @@ namespace Renderer
 
         VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore, VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
 
+        if(result == VK_ERROR_OUT_OF_DATE_KHR)
+        {
+            RecreateSwapChain();
+        }
+        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+        {
+            throw std::runtime_error("Failed to acquire swap chain image!");
+        }
+            
+
+
+
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
 
@@ -907,7 +919,7 @@ namespace Renderer
 
         //TODO :need to implement depthimage clear
         //TODO : need to destory descriptorPool
-
+        vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
 
     }
 
