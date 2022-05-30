@@ -15,7 +15,7 @@
 std::unique_ptr<Renderer::Window> window;
 int main()
 {
-    //window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Project"));
+    window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Project"));
 
     OE::Engine::Get().Init();
 
