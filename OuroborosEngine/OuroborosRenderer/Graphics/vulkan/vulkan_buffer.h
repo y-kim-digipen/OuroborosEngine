@@ -67,12 +67,12 @@ namespace Renderer
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
-		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, VkDescriptorSetLayout layout);
+		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size);
 		~VulkanUniformBuffer() override;
 		void Bind() const override;
 		void UnBind() const override;
 		void AddData(void* data, uint32_t size, uint32_t offset);
-		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count);
+		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout);
 		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
 		
 	private:

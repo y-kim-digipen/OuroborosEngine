@@ -44,7 +44,6 @@ namespace Renderer {
 		Vulkan_type* vulkan_type;
 
 		VkDescriptorSetLayout descriptor_set_layouts[4];
-		std::unordered_map<std::string, DescriptorSetLayoutData> descriptor_set_layouts_data[4];
 
 		uint32_t set_layout_count;
 		VkPipelineLayout pipeline_layout;
