@@ -216,6 +216,17 @@ namespace Renderer
 		
 	}
 
+	void VulkanUniformBuffer::Bind() const
+	{
+
+	}
+
+	void VulkanUniformBuffer::UnBind() const
+	{
+
+		UniformBuffer::UnBind();
+	}
+
 	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
 	{
 		void* temp_data;

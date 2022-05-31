@@ -5,7 +5,7 @@
 #include "vulkan_buffer.h"
 
 #include "SPIRV-Reflect/spirv_reflect.h"
-#include <glm/gtx/transform.hpp>
+#include <glm/matrix.hpp>
 
 #include <string>
 #include <iostream>
