@@ -2,7 +2,11 @@
 
 #include "spirv_helper.h"
 #include "vulkan_pipeline.h"
+#include "vulkan_buffer.h"
+
 #include "SPIRV-Reflect/spirv_reflect.h"
+#include <glm/gtx/transform.hpp>
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -29,6 +33,7 @@ namespace Renderer {
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
 		set_layout_count = 0;
+		use_global_data = false;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -70,6 +75,9 @@ namespace Renderer {
 
 			shader_stage_create_infos.push_back(shader_stage_create_info);
 		}
+
+		//descriptor_set_layouts_data
+		
 
 		////
 		Vulkan_PipelineBuilder pipeline_builder;
@@ -122,8 +130,6 @@ namespace Renderer {
 		input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
 		input_attribute_descriptions[2].location = 2;
 		input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
-
-
 
 		pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
 		pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
@@ -185,9 +191,6 @@ namespace Renderer {
 		for (uint32_t i_set = 0; i_set < desciptor_set_count; ++i_set) {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
-
-			struct DescriptorSetLayoutData;
-			VkDescriptorSetLayout set_layout{};
 	
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
 				
@@ -204,7 +207,6 @@ namespace Renderer {
 						descriptor_count *= refl_binding.array.dims[i_dim];
 					}
 
-
 					layout_bindings_set[refl_set.set][refl_binding.binding] = {
 						refl_binding.binding,
 						(VkDescriptorType)refl_binding.descriptor_type,
@@ -213,7 +215,58 @@ namespace Renderer {
 						0,
 					};
 
-					//refl_binding.resource_type
+					// buffer
+					// total size
+					// member name
+					// member type
+
+					//uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size, ))
+
+
+					for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
+
+						auto& layout_data = descriptor_set_layouts_data[refl_set.set];
+
+						if (layout_data.find(refl_binding.block.members[i].name) == layout_data.end()) {
+
+							layout_data[refl_binding.block.members[i].name].name = refl_binding.block.members[i].name;
+							layout_data[refl_binding.block.members[i].name].offset = refl_binding.block.members[i].offset;
+							layout_data[refl_binding.block.members[i].name].size = refl_binding.block.members[i].size;
+
+							DataType data_type = DataType::NONE;
+
+							switch (refl_binding.block.members[i].type_description->op) {
+							case SpvOp::SpvOpTypeMatrix:
+								if (refl_binding.block.members[i].size == sizeof(glm::mat4))
+									data_type = DataType::MAT4;
+								else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
+									data_type = DataType::MAT3;
+
+								break;
+							case SpvOp::SpvOpTypeVector:
+
+								if (refl_binding.block.members[i].size == sizeof(glm::vec4))
+									data_type = DataType::FLOAT4;
+								else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
+									data_type = DataType::FLOAT3;
+								else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
+									data_type = DataType::FLOAT2;
+
+								break;
+							case SpvOp::SpvOpTypeFloat:
+								data_type = DataType::FLOAT;
+								break;
+							case SpvOp::SpvOpTypeInt:
+								data_type = DataType::INT;
+								break;
+							case SpvOp::SpvOpTypeBool:
+								data_type = DataType::BOOL;
+								break;
+							default:
+								DataType::NONE;
+							}
+						}
+					}
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
 				}

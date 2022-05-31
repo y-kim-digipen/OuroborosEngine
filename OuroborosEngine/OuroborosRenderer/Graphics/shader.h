@@ -2,6 +2,8 @@
 #define SHADER_H
 
 #include <vector>
+#include <memory>
+#include "buffer.h"
 
 namespace Renderer {
 
@@ -31,10 +33,33 @@ namespace Renderer {
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
 		virtual void Bind() = 0;
-		//virtual int 
-	private:
+
+	protected:
+		std::vector<std::unique_ptr<UniformBuffer>> uniform_buffer_objects;
 	};
 }
+
+/*
+
+camera
+
+1. shader uniform layout, member, type
+	- read
+	- 값을 지정
+
+	projection, view 
+
+global descriptor set = set 0
+
+- projection
+- view
+
+push constant 
+- model
+
+
+*/
+
 
 #endif // !SHADER_H
 

@@ -4,9 +4,13 @@
 #include "vulkan_type.inl"
 
 #include <unordered_map>
+#include <string>
+
 #include "../shader.h"
 
 namespace Renderer {
+
+	enum class DataType;
 
 	struct DescriptorSetBindingData
 	{
@@ -16,8 +20,11 @@ namespace Renderer {
 		VkDescriptorType type;	
 	};
 
-	struct UniformBufferObjectData {
-
+	struct DescriptorSetLayoutData {
+		std::string name;
+		DataType type;
+		uint32_t size;
+		uint32_t offset;
 	};
 
 	class VulkanShader : public Shader
@@ -37,12 +44,15 @@ namespace Renderer {
 		Vulkan_type* vulkan_type;
 
 		VkDescriptorSetLayout descriptor_set_layouts[4];
+		std::unordered_map<std::string, DescriptorSetLayoutData> descriptor_set_layouts_data[4];
+
 		uint32_t set_layout_count;
 		VkPipelineLayout pipeline_layout;
 		VkPipeline pipeline;
 
-		std::unordered_map<const char*, DescriptorSetBindingData> descriptor_data;
-		//std::unordered_map<const char*,
+		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
+
+		bool use_global_data;
 	};
 }
 #endif // !VULKAN_SHADER_H

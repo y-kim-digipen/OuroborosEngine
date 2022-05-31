@@ -2,15 +2,10 @@
 #define VULKAN_BUFFER_H
 #include <memory>
 
-#include <vulkan.h>
-#include <vulkan_core.h>
-#include <vk_mem_alloc.h>
+#include "vulkan_type.inl"
 
 #include "../buffer.h"
 #include "../mesh.h"
-
-struct VulkanDevice;
-struct Vulkan_type;
 
 namespace Renderer
 {
@@ -25,9 +20,9 @@ namespace Renderer
 
 		VkBuffer buffer = nullptr;
 		VmaAllocation allocation = nullptr;
+		uint64_t size;
 	private:
 		Vulkan_type* vulkan_type;
-		uint64_t size;
 	};
 
 
@@ -68,22 +63,24 @@ namespace Renderer
 	};
 
 
+	//TODO: make buffer for each frame 
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
-		VulkanUniformBuffer() = default;
+		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, VkDescriptorSetLayout layout);
 		~VulkanUniformBuffer() override;
 		void Bind() const override;
 		void UnBind() const override;
 		void AddData(void* data, uint32_t size, uint32_t offset);
-		void SetupDescriptorSet();
+		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count);
 		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
 		
 	private:
-		VkDescriptorSet descriptor_set{ VK_NULL_HANDLE };
+		Vulkan_type* vulkan_type;
+		VkDescriptorSet descriptor_set[MAX_FRAMES_IN_FLIGHT];
 
 		uint64_t buffer_size;
-		std::shared_ptr<VulkanBuffer> buffer;
+		std::shared_ptr<VulkanBuffer> buffer[MAX_FRAMES_IN_FLIGHT];
 
 	};
 
