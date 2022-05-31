@@ -178,6 +178,9 @@
     <ClCompile Include="Graphics\vulkan\vulkan_image.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\vulkan\vulkan_type.inl">

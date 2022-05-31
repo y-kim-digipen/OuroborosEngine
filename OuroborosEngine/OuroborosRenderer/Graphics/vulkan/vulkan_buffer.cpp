@@ -194,26 +194,24 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, VkDescriptorSetLayout layout) : vulkan_type(vulkan_type)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type)
 	{
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
-			
-			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
-			alloc_info.descriptorSetCount = 1;
-			alloc_info.pSetLayouts = &layout;
-
-			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));
+			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);			
 		}
-
-
-
 	}
 
 	VulkanUniformBuffer::~VulkanUniformBuffer()
 	{
 		
+	}
+
+	void VulkanUniformBuffer::Bind() const
+	{
+	}
+
+	void VulkanUniformBuffer::UnBind() const
+	{
 	}
 
 	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
@@ -226,9 +224,17 @@ namespace Renderer
 		vmaUnmapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation);
 	}
 
-	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count)
+	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout)
 	{
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+
+			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+			alloc_info.descriptorSetCount = 1;
+			alloc_info.pSetLayouts = &layout;
+	
+			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));
+
 			VkDescriptorBufferInfo buffer_info{};
 			buffer_info.buffer = buffer[i]->buffer;
 			buffer_info.offset = 0;
@@ -243,16 +249,5 @@ namespace Renderer
 
 			vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
 		}
-	}
-
-	void VulkanUniformBuffer::AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool,
-	                                                VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets)
-	{
-		VkDescriptorSetAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-		allocate_info.descriptorPool = pool;
-		allocate_info.descriptorSetCount = set_count;
-		allocate_info.pSetLayouts = layouts;
-
-		VK_CHECK(vkAllocateDescriptorSets(device->handle, &allocate_info, out_sets));
 	}
 }

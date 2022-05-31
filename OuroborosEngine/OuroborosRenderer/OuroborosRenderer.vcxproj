@@ -216,6 +216,7 @@
     <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp" />
     <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp" />
     <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp" />
+    <ClCompile Include="Graphics\buffer.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_context.cpp" />

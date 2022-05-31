@@ -1,6 +1,9 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#include <unordered_map>
+#include <string>
+
 namespace Renderer
 {
 	enum class DataType
@@ -27,6 +30,13 @@ namespace Renderer
 		virtual void UnBind() const {}
 	};
 
+	struct UniformBufferMember {
+		std::string name;
+		DataType type;
+		uint32_t size;
+		uint32_t offset;
+	};
+
 	class UniformBuffer
 	{
 	public:
@@ -34,6 +44,11 @@ namespace Renderer
 		virtual ~UniformBuffer() = default;
 		virtual void Bind() const = 0;
 		virtual void UnBind() const {}
+		void AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset);
+
+		std::unordered_map<std::string, UniformBufferMember> member_vars;
+		// members
+		// member name, type, size, offset
 	};
 
 	class VertexArray

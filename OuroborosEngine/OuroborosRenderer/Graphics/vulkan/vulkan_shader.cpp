@@ -5,7 +5,9 @@
 #include "vulkan_buffer.h"
 
 #include "SPIRV-Reflect/spirv_reflect.h"
-#include <glm/gtx/transform.hpp>
+
+#include <glm/matrix.hpp>
+#include <glm/vector_relational.hpp>
 
 #include <string>
 #include <iostream>
@@ -76,10 +78,6 @@ namespace Renderer {
 			shader_stage_create_infos.push_back(shader_stage_create_info);
 		}
 
-		//descriptor_set_layouts_data
-		
-
-		////
 		Vulkan_PipelineBuilder pipeline_builder;
 		set_layout_count = 0;
 		
@@ -220,52 +218,50 @@ namespace Renderer {
 					// member name
 					// member type
 
-					//uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size, ))
-
+					uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size));
 
 					for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
-						auto& layout_data = descriptor_set_layouts_data[refl_set.set];
+						DataType data_type = DataType::NONE;
 
-						if (layout_data.find(refl_binding.block.members[i].name) == layout_data.end()) {
+						switch (refl_binding.block.members[i].type_description->op) {
+						case SpvOp::SpvOpTypeMatrix:
+							if (refl_binding.block.members[i].size == sizeof(glm::mat4))
+								data_type = DataType::MAT4;
+							else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
+								data_type = DataType::MAT3;
 
-							layout_data[refl_binding.block.members[i].name].name = refl_binding.block.members[i].name;
-							layout_data[refl_binding.block.members[i].name].offset = refl_binding.block.members[i].offset;
-							layout_data[refl_binding.block.members[i].name].size = refl_binding.block.members[i].size;
+							break;
+						case SpvOp::SpvOpTypeVector:
 
-							DataType data_type = DataType::NONE;
+							if (refl_binding.block.members[i].size == sizeof(glm::vec4))
+								data_type = DataType::FLOAT4;
+							else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
+								data_type = DataType::FLOAT3;
+							else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
+								data_type = DataType::FLOAT2;
 
-							switch (refl_binding.block.members[i].type_description->op) {
-							case SpvOp::SpvOpTypeMatrix:
-								if (refl_binding.block.members[i].size == sizeof(glm::mat4))
-									data_type = DataType::MAT4;
-								else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
-									data_type = DataType::MAT3;
-
-								break;
-							case SpvOp::SpvOpTypeVector:
-
-								if (refl_binding.block.members[i].size == sizeof(glm::vec4))
-									data_type = DataType::FLOAT4;
-								else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
-									data_type = DataType::FLOAT3;
-								else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
-									data_type = DataType::FLOAT2;
-
-								break;
-							case SpvOp::SpvOpTypeFloat:
-								data_type = DataType::FLOAT;
-								break;
-							case SpvOp::SpvOpTypeInt:
-								data_type = DataType::INT;
-								break;
-							case SpvOp::SpvOpTypeBool:
-								data_type = DataType::BOOL;
-								break;
-							default:
-								DataType::NONE;
-							}
+							break;
+						case SpvOp::SpvOpTypeFloat:
+							data_type = DataType::FLOAT;
+							break;
+						case SpvOp::SpvOpTypeInt:
+							data_type = DataType::INT;
+							break;
+						case SpvOp::SpvOpTypeBool:
+							data_type = DataType::BOOL;
+							break;
+						default:
+							DataType::NONE;
 						}
+
+						uniform_buffer_objects.back()->AddMember(
+							refl_binding.block.members[i].name,
+							data_type,
+							refl_binding.block.members[i].offset,
+							refl_binding.block.members[i].size
+							);
+						
 					}
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
