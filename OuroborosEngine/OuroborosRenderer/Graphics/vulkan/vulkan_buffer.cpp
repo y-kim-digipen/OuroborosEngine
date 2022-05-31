@@ -215,8 +215,11 @@ namespace Renderer
 
 		UniformBuffer::UnBind();
 
+		
 	}
 
+	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
+	{
 		void* temp_data;
 		vmaMapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation, &temp_data);
 
