@@ -16,6 +16,8 @@
 #include <GLFW/glfw3.h>
 
 #include <algorithm>
+
+#include "backends/imgui_impl_vulkan.h"
 //#define GLFW_EXPOSE_NATIVE_WIN32s
 //#include <GLFW/glfw3native.h>
 
@@ -105,6 +107,8 @@ namespace Renderer
 
     void VulkanContext::Shutdown()
     {
+        vkDeviceWaitIdle(vulkan_type.device.handle);
+
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
         {
             auto& frame_data = vulkan_type.frame_data[i];
@@ -264,19 +268,11 @@ namespace Renderer
     {
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
         VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
-        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
 
         VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore, VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
 
-        if(result == VK_ERROR_OUT_OF_DATE_KHR)
-        {
-            RecreateSwapChain();
-        }
-        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-        {
-            throw std::runtime_error("Failed to acquire swap chain image!");
-        }
             
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
 
 
 
@@ -322,8 +318,7 @@ namespace Renderer
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
         {
-            // TODO : need to implement : RecreateSwapChain() 
-            //RecreateSwapChain();
+            RecreateSwapChain();
         }
 
         vulkan_type.current_frame = (vulkan_type.current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -905,10 +900,10 @@ namespace Renderer
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
 
-        for (auto& frame : vulkan_type.frame_data)
+  /*      for (auto& frame : vulkan_type.frame_data)
         {
             vkFreeCommandBuffers(vulkan_type.device.handle, vulkan_type.command_pool, 1, &frame.command_buffer);
-        }
+        }*/
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 

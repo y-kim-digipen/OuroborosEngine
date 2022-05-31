@@ -112,7 +112,7 @@ namespace Renderer
 	{
 		if(is_vulkan)
 		{
-			//window_data.RenderContextData->Shutdown();
+			window_data.RenderContextData->Shutdown();
 			//vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
 			
 
