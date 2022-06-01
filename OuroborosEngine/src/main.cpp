@@ -8,10 +8,13 @@
 #include <vulkan.h>
 
 //Engine contexts
+#include <gtc/matrix_transform.hpp>
+
 #include "engine/ecs_settings.h"
 #include "engine/ecs/ecs_base.h"
 #include "engine/ecs/components.h"
 #include "engine/gui/gui_component_panel.h"
+#include "Graphics/vulkan/vulkan_context.h"
 
 
 std::unique_ptr<Renderer::Window> window;
@@ -23,7 +26,7 @@ int main()
 
     //For debug ECS manager
     auto& ent = ecs_manager.CreateEntity();
-    ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});
+    ecs_manager.AddComponent<Transform>(ent.myID);
     ecs_manager.AddComponent<Velocity>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
     auto& ent2 = ecs_manager.CreateEntity();
     ecs_manager.AddComponent<LifeTime>(ent2.myID, 5);
@@ -38,12 +41,19 @@ int main()
     std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
     std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
+    auto& ent5 = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<Transform>(ent5.myID);
+    ecs_manager.AddComponent<Mesh>(ent5.myID);
+
     ecs_manager.ForEntitiesMatching<Signature0>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
     {
             std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
             std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
     });
+
+
+
 
     //Debug ECS manager ends here
 
@@ -84,7 +94,38 @@ int main()
 
     while(!glfwWindowShouldClose(window->GetWindowData().window))
     {
+        window->BeginFrame();
+
         window->Update();
+        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
+            [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Mesh& mesh) mutable
+        {
+            static bool init = true;
+            if (init)
+            {
+                dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddMesh("suzanne");
+                init = false;
+            }
+            else
+            {
+                if (ecs_manager.GetEntity(ent).alive)
+                {
+                    glm::mat4 model(1.f);
+                    model = glm::translate(model, transform.pos);
+                    model = glm::scale(model, transform.scale);
+                    model = glm::rotate(model, transform.angle, transform.rotate_axis);
+
+
+                    //TODO : uniform values input in the buffer
+                    // Draw call
+                    //
+
+                	dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawMesh("shader", "suzanne");
+                }
+            }
+        });
+
+        window->EndFrame();
     }
 
     return 0;

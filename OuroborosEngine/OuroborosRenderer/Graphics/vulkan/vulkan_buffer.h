@@ -77,6 +77,7 @@ namespace Renderer
 		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
 		
 		VkDescriptorSet descriptor_set[MAX_FRAMES_IN_FLIGHT];
+		uint64_t GetBufferSize() const;
 	private:
 		void* data;
 		

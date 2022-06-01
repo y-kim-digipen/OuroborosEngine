@@ -37,28 +37,28 @@ namespace Renderer
 		Shutdown();
 	}
 
-	void Window::Update()
+	void Window::BeginFrame()
 	{
 		glfwPollEvents();
-	
+		window_data.RenderContextData->BeginFrame();
+		vulkan_imgui_manager.BeginFrame();
+	}
+
+	void Window::Update()
+	{
 		//TODO: update global_data
 		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
 		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		camera.projection[1][1] *= -1;
 
-
-		
-		window_data.RenderContextData->BeginFrame();
-		vulkan_imgui_manager.BeginFrame();
 		vulkan_imgui_manager.Update();
 
 		// for each shader bind pipeline
 			// for each material bind (set = 1)
 				// for each object bind push_constant (model, normal)
 
-		window_data.RenderContextData->DrawMesh("shader", "suzanne");
-		vulkan_imgui_manager.EndFrame();
-		window_data.RenderContextData->EndFrame();
-		
+		//window_data.RenderContextData->DrawMesh("shader", "suzanne");
+
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
 		{
@@ -68,6 +68,13 @@ namespace Renderer
 		{
 		
 		}
+	}
+
+	void Window::EndFrame()
+	{
+		vulkan_imgui_manager.EndFrame();
+		window_data.RenderContextData->EndFrame();
+
 	}
 
 	void Window::Init(const WindowProperties& window_properties)
@@ -133,7 +140,7 @@ namespace Renderer
 		};
 
 		window_data.RenderContextData->AddShader(&shader_config);
-		window_data.RenderContextData->AddMesh("suzanne");
+		//window_data.RenderContextData->AddMesh("suzanne");
 
 
 

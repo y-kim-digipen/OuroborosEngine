@@ -34,8 +34,11 @@ namespace Renderer {
 		VulkanShader(Vulkan_type* vulkan_type);
 		~VulkanShader() override;
 
+
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
+
+		
 	private:
 
 		int CreateShaderModule(VkShaderModule* out_shader_module,  const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);

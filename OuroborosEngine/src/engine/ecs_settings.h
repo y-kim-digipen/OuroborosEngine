@@ -8,7 +8,9 @@ using Signature0 = OE::ECS::types::Signature<Transform, Velocity>;
 using Signature1 = OE::ECS::types::Signature<LifeTime, Mesh>;
 using Signature2 = OE::ECS::types::Signature<BoolWrapper>;
 
-using SignatureList = OE::ECS::types::SignatureList<Signature0, Signature1, Signature2>;
+using MeshDrawSignature = OE::ECS::types::Signature<Transform, Mesh>;
+
+using SignatureList = OE::ECS::types::SignatureList<Signature0, Signature1, Signature2,MeshDrawSignature>;
 
 using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList>;
 

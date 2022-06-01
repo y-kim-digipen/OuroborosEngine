@@ -194,7 +194,7 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type), buffer_size(buffer_size)
 	{
 		data = malloc(buffer_size);
 
@@ -212,16 +212,11 @@ namespace Renderer
 	void VulkanUniformBuffer::Bind() const
 	{
 		buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
-
-	
 	}
 
 	void VulkanUniformBuffer::UnBind() const
 	{
-
 		UniformBuffer::UnBind();
-
-		
 	}
 
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
@@ -261,4 +256,11 @@ namespace Renderer
 			vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
 		}
 	}
+
+	uint64_t VulkanUniformBuffer::GetBufferSize() const
+	{
+		return buffer_size;
+	}
+
+
 }

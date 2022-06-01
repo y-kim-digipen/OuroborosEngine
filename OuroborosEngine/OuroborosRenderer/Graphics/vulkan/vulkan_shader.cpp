@@ -175,10 +175,14 @@ namespace Renderer {
 		MeshConstant constant;
 		constant.model = glm::mat4(1.f);
 		constant.model = glm::translate(constant.model, { 0,0,0 });
+		vkCmdPushConstants(vulkan_type->frame_data[current_frame].command_buffer, pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(MeshConstant), &constant);
+
+
+
+		//dynamic_cast<VulkanUniformBuffer*>(uniform_buffer_objects[0].get())->UpdateData("projection", );
 
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-	
 		for(auto& buffer_object : uniform_buffer_objects)
 		{
 			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
@@ -278,8 +282,8 @@ namespace Renderer {
 						uniform_buffer_objects.back()->AddMember(
 							refl_binding.block.members[i].name,
 							data_type,
-							refl_binding.block.members[i].offset,
-							refl_binding.block.members[i].size
+							refl_binding.block.members[i].size,
+							refl_binding.block.members[i].offset
 							);
 						
 					}
