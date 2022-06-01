@@ -11,7 +11,6 @@ layout(set = 0, binding = 0) uniform descriptor_set0 {
 
 layout(push_constant) uniform constants {
     mat4 model;
-    mat4 normal_matrix;
 } object_ubo;
 
 layout(location = 0) out VS_OUT {
@@ -19,6 +18,7 @@ layout(location = 0) out VS_OUT {
 } vs_out;
 
 void main() {
-    vs_out.norm = vec3(object_ubo.normal_matrix * vec4(normal, 1.0f));
+
+    vs_out.norm = vec3(normal);
     gl_Position = global_ubo.projection * global_ubo.view * object_ubo.model * vec4(pos, 1.0);
 }

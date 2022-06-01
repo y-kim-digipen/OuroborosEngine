@@ -58,8 +58,6 @@ namespace Renderer
     VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
     VkFormat FindDepthFormat();
 
-
-
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
@@ -102,7 +100,6 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
-
     }
 
     void VulkanContext::Shutdown()
@@ -183,8 +180,15 @@ namespace Renderer
 
     void VulkanContext::DrawMesh(const char* shader_name, const char* mesh_name)
     {
+        if (shader_map.find(shader_name) == shader_map.end())
+        {
+            std::cout << "can't find shader" << std::endl;
+            return;
+        }
         shader_map[shader_name]->Bind();
 
+        if (mesh_map.find(mesh_name) == mesh_map.end())
+            AddMesh(mesh_name);
         mesh_map[mesh_name]->Draw();
     }
 

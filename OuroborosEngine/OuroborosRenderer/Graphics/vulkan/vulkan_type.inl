@@ -61,14 +61,12 @@ struct QueueFamilyIndices
 	}
 };
 
-
 //Maybe use
 struct VulkanCommand
 {
 	VkCommandPool command_pool;
 	VkCommandBuffer command_buffer;
 };
-
 
 struct VulkanSemaphore
 {
@@ -81,7 +79,6 @@ struct VulkanFrameData
 {
 	VulkanSemaphore semaphore;
 	VkCommandBuffer command_buffer;
-
 
 	uint32_t swap_chain_image_index{ 0 };
 };

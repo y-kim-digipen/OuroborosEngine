@@ -42,7 +42,6 @@ namespace Renderer {
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
 		set_layout_count = 0;
-		use_global_data = false;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -55,7 +54,6 @@ namespace Renderer {
 		uint32_t stage_count = config->stage_count;
 		
 		std::vector<VkPipelineShaderStageCreateInfo> shader_stage_create_infos{};
-		std::vector<VkPushConstantRange> push_constant_ranges;
 		std::array<std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4> layout_bindings_set;
 
 		for (uint32_t i = 0; i < stage_count; ++i) {
@@ -103,6 +101,7 @@ namespace Renderer {
 			if (binding_count != 0) {
 				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
 
+				// TODO: don't create descriptor set 0 ubo (since we're going to use one global descriptor set )
 				for (const auto& binding_set : layout_bindings_set[i]) {
 					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
 				}
@@ -172,21 +171,20 @@ namespace Renderer {
 		uint32_t current_frame = vulkan_type->current_frame;
 		auto& frame_data = vulkan_type->frame_data[current_frame];
 
-		MeshConstant constant;
-		constant.model = glm::mat4(1.f);
-		constant.model = glm::translate(constant.model, { 0,0,0 });
-		vkCmdPushConstants(vulkan_type->frame_data[current_frame].command_buffer, pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(MeshConstant), &constant);
-
-
-
-		//dynamic_cast<VulkanUniformBuffer*>(uniform_buffer_objects[0].get())->UpdateData("projection", );
-
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		for(auto& buffer_object : uniform_buffer_objects)
 		{
 			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
 		}
+	}
+
+	void VulkanShader::BindObjectData(const glm::mat4& model)
+	{
+		
+		//TODO: make it configurable
+		for (const auto& push_constant : push_constant_ranges)
+			vkCmdPushConstants(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, pipeline_layout, push_constant.stageFlags, push_constant.offset, push_constant.size, &model);
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
