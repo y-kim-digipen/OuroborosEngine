@@ -157,7 +157,14 @@ namespace Renderer {
 	void VulkanShader::Bind()
 	{
 		uint32_t current_frame = vulkan_type->current_frame;
-		vkCmdBindPipeline(vulkan_type->frame_data[current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+		auto& frame_data = vulkan_type->frame_data[current_frame];
+
+		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+
+		for(auto& buffer_object : uniform_buffer_objects)
+		{
+			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)(buffer_object.get()))->descriptor_set[current_frame], 0, nullptr);
+		}
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)

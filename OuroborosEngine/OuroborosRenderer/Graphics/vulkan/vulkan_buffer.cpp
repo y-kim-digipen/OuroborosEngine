@@ -211,12 +211,9 @@ namespace Renderer
 
 	void VulkanUniformBuffer::Bind() const
 	{
-		void* temp_data;
-		vmaMapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation, &temp_data);
+		buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
 
-		memcpy(temp_data, &data, buffer_size);
-
-		vmaUnmapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation);
+	
 	}
 
 	void VulkanUniformBuffer::UnBind() const
@@ -229,7 +226,8 @@ namespace Renderer
 
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
 	{
-		if (member_vars.find(member_var_name) != member_vars.end()) {
+		if (member_vars.find(member_var_name) != member_vars.end()) 
+		{
 			memcpy(&this->data + member_vars[member_var_name].offset, data, member_vars[member_var_name].size);
 			return 0;
 		}
