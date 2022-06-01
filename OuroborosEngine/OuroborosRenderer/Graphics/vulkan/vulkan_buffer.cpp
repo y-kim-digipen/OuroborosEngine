@@ -212,6 +212,10 @@ namespace Renderer
 
 	void VulkanUniformBuffer::UnBind() const
 	{
+
+		UniformBuffer::UnBind();
+
+		
 	}
 
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
