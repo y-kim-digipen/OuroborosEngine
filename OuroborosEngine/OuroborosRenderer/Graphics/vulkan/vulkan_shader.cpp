@@ -13,10 +13,17 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <gtc/matrix_transform.hpp>
 
 #include "../mesh.h"
 
 namespace Renderer {
+
+	struct MeshConstant
+	{
+		glm::mat4 model;
+		glm::mat4 normal_matrix;
+	};
 
 	void ReadFile(std::string& buffer,const std::string& filename) {
 		std::ifstream file(filename, std::ios::ate);
@@ -159,8 +166,13 @@ namespace Renderer {
 		uint32_t current_frame = vulkan_type->current_frame;
 		auto& frame_data = vulkan_type->frame_data[current_frame];
 
-		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+		MeshConstant constant;
+		constant.model = glm::mat4(1.f);
+		constant.model = glm::translate(constant.model, { 0,0,0 });
 
+
+		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+	
 		for(auto& buffer_object : uniform_buffer_objects)
 		{
 			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)(buffer_object.get()))->descriptor_set[current_frame], 0, nullptr);

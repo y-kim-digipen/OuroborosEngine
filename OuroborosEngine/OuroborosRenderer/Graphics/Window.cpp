@@ -21,6 +21,8 @@ namespace Renderer
 		glm::mat4 view;
 	};
 	static camera_data camera;
+	//push constants
+
 
 
 	Window::Window(const WindowProperties& window_properties)
@@ -43,6 +45,8 @@ namespace Renderer
 		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
 		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
+
+		
 		window_data.RenderContextData->BeginFrame();
 		vulkan_imgui_manager.BeginFrame();
 		vulkan_imgui_manager.Update();

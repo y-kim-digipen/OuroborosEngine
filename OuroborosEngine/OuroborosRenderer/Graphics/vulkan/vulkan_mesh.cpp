@@ -29,6 +29,8 @@ namespace Renderer {
         p_index_buffer->Bind();
         p_vertex_buffer->Bind();
 
+
+ 
         vkCmdDrawIndexed(command_buffer, indices.size(), 1, 0, 0, 0);
     }
 
