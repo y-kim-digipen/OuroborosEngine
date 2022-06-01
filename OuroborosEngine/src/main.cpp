@@ -21,6 +21,7 @@ int main()
 
     OE::Engine::Get().Init();
 
+    //For debug ECS manager
     auto& ent = ecs_manager.CreateEntity();
     ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});
     ecs_manager.AddComponent<Velocity>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
@@ -34,8 +35,8 @@ int main()
     ecs_manager.AddComponent<Transform>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
     ecs_manager.AddComponent<Velocity>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
     ecs_manager.AddComponent<Tag>(ent4.myID, "TestEntity");
-    //std::cout << manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
-    //std::cout << manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
+    std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
+    std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
     ecs_manager.ForEntitiesMatching<Signature0>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
     {
@@ -43,6 +44,8 @@ int main()
             std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
     });
+
+    //Debug ECS manager ends here
 
 
     window->vulkan_imgui_manager.RegisterMainMenu([]()
