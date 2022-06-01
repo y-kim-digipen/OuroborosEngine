@@ -506,9 +506,9 @@ namespace Renderer
         VkPhysicalDeviceProperties device_property;
         vkGetPhysicalDeviceProperties(device, &device_property);
 
-        if (device_property.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-            return false;
-        }
+        //if (device_property.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+        //    return false;
+        //}
 
         QueueFamilyIndices indices = FindQueueFamilies(device);
 
