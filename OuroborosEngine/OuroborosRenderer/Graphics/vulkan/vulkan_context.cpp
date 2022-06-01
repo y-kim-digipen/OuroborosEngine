@@ -256,12 +256,27 @@ namespace Renderer
 
     void VulkanContext::RecreateSwapChain()
     {
+        int width = 0, height = 0;
+        glfwGetFramebufferSize(window, &width, &height);
+
+        if(width == 0 || height == 0)
+        {
+            return;
+        }
+
+  /*      while (width == 0|| height == 0)
+        {
+            glfwGetFramebufferSize(window, &width, &height);
+            glfwWaitEvents();
+        }*/
+
         vkDeviceWaitIdle(vulkan_type.device.handle);
         CleanupSwapChain();
         CreateSwapChain();
         CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
+
     }
 
     int VulkanContext::BeginFrame()
@@ -907,14 +922,22 @@ namespace Renderer
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
+        DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
+
         for (auto image_view : vulkan_type.swapchain.image_views)
         {
             vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
         }
 
-        //TODO :need to implement depthimage clear
-        //TODO : need to destory descriptorPool
-        vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
+
+    	//TODO :need to implement depth image clear
+
+
+    	//TODO : need to destory descriptorPool
+
+
+
+    	vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
 
     }
 

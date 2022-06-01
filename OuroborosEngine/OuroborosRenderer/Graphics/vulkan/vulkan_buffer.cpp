@@ -218,6 +218,18 @@ namespace Renderer
 		
 	}
 
+	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
+	{
+		if (member_vars.find(member_var_name) != member_vars.end()) {
+
+
+
+			return 0;
+		}
+
+		return -1;
+	}
+
 	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
 	{
 		void* temp_data;
