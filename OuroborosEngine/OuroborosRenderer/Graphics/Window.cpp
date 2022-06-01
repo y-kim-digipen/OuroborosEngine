@@ -57,7 +57,8 @@ namespace Renderer
 			// for each material bind (set = 1)
 				// for each object bind push_constant (model, normal)
 
-		//window_data.RenderContextData->DrawMesh("shader", "suzanne");
+		window_data.RenderContextData->shader_map["shader"]->SetUniformValue("projection", (void*)&camera.projection);
+		window_data.RenderContextData->shader_map["shader"]->SetUniformValue("view", (void*)&camera.view);
 
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))

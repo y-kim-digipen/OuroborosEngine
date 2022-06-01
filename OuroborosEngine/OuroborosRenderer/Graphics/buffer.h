@@ -45,6 +45,8 @@ namespace Renderer
 		virtual void Bind() const = 0;
 		virtual void UnBind() const {}
 		void AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset);
+		virtual int UpdateData(const char* member_var_name, void* data) { return 0; };
+
 
 		std::unordered_map<std::string, UniformBufferMember> member_vars;
 		// members

@@ -29,11 +29,12 @@ namespace Renderer
 
 		virtual ~Context();
 
-	protected:
-		GLFWwindow* window;
-
+		
 		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
 		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
+
+	protected:
+		GLFWwindow* window;
 	};
 
 

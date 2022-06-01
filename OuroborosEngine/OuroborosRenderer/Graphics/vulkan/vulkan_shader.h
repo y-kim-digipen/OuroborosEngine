@@ -38,6 +38,9 @@ namespace Renderer {
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
 
+		void BindObjectData(const glm::mat4& model) override;
+
+
 		
 	private:
 
@@ -53,8 +56,7 @@ namespace Renderer {
 		VkPipeline pipeline;
 
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
-
-		bool use_global_data;
+		std::vector<VkPushConstantRange> push_constant_ranges;
 	};
 }
 #endif // !VULKAN_SHADER_H

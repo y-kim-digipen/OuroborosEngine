@@ -103,7 +103,7 @@ int main()
             static bool init = true;
             if (init)
             {
-                dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddMesh("suzanne");
+             window->GetWindowData().RenderContextData.get()->AddMesh("suzanne");
                 init = false;
             }
             else
@@ -119,8 +119,8 @@ int main()
                     //TODO : uniform values input in the buffer
                     // Draw call
                     //
-
-                	dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawMesh("shader", "suzanne");
+                    window->GetWindowData().RenderContextData.get()->shader_map["shader"]->BindObjectData(model);
+                	window->GetWindowData().RenderContextData.get()->DrawMesh("shader", "suzanne");
                 }
             }
         });
