@@ -259,18 +259,24 @@ namespace Renderer
         int width = 0, height = 0;
         glfwGetFramebufferSize(window, &width, &height);
 
-        while (width == 0|| height == 0)
+        if(width == 0 || height == 0)
+        {
+            return;
+        }
+
+  /*      while (width == 0|| height == 0)
         {
             glfwGetFramebufferSize(window, &width, &height);
             glfwWaitEvents();
-        }
-        
+        }*/
+
         vkDeviceWaitIdle(vulkan_type.device.handle);
         CleanupSwapChain();
         CreateSwapChain();
         CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
+
     }
 
     int VulkanContext::BeginFrame()
