@@ -107,6 +107,12 @@
     <ClInclude Include="Graphics\vulkan\vulkan_image.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\mesh_manager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\shader_manager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -180,6 +186,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\buffer.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\mesh_manager.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
