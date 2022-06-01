@@ -922,6 +922,8 @@ namespace Renderer
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
+        DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
+
         for (auto image_view : vulkan_type.swapchain.image_views)
         {
             vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
