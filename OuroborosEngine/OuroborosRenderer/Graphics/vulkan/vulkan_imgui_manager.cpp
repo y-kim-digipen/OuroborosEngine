@@ -222,12 +222,8 @@ namespace Renderer
 
 	void VulkanImguiManager::Update()
 	{
+		ImguiManager::Update();
 		ImGui::ShowDemoWindow();
-
-		ImGui::Begin("d");
-
-		ImGui::End();
-
 	}
 
 }
