@@ -35,10 +35,12 @@ namespace Renderer
 	{
 		shader_manager->shader_map[shader]->Bind();
 		mesh_map[mesh_name]->Draw();
+		return 0;
 	}
 
 	int MeshManager::DeleteMesh(const char* mesh_name)
 	{
 
+		return 0;
 	}
 }

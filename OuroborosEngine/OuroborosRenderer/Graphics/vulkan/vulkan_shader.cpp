@@ -171,7 +171,6 @@ namespace Renderer {
 		uint32_t current_frame = vulkan_type->current_frame;
 		auto& frame_data = vulkan_type->frame_data[current_frame];
 
-
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		for(auto& buffer_object : uniform_buffer_objects)
 		{

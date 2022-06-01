@@ -19,7 +19,7 @@ namespace Renderer
 		int DrawMesh(const char* shader, const char* mesh_name);
 		int DeleteMesh(const char* mesh_name);
 
-		friend class ShaderManager;
+
 	private:
 		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
 		Vulkan_type* vulkan_type;

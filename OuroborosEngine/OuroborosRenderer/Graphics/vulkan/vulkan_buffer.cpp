@@ -219,11 +219,12 @@ namespace Renderer
 		UniformBuffer::UnBind();
 	}
 
-	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
+	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data_)
 	{
 		if (member_vars.find(member_var_name) != member_vars.end()) 
 		{
-			memcpy(&this->data + member_vars[member_var_name].offset, data, member_vars[member_var_name].size);
+			char* ptr = reinterpret_cast<char*>(this->data) + member_vars[member_var_name].offset;
+			memcpy(ptr , data_, member_vars[member_var_name].size);
 			return 0;
 		}
 

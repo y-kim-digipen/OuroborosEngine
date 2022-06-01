@@ -40,6 +40,7 @@ namespace Renderer {
 			for (const auto& ubo : uniform_buffer_objects) {
 				if (ubo->member_vars.find(name) != ubo->member_vars.end()) {
 					ubo->UpdateData(name, data);
+					ubo->Bind();
 				}
 			}
 
