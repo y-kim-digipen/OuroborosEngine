@@ -71,6 +71,8 @@ namespace Renderer
 		~VulkanUniformBuffer() override;
 		void Bind() const override;
 		void UnBind() const override;
+
+		int UpdateData(const char* member_var_name, void* data);
 		void AddData(void* data, uint32_t size, uint32_t offset);
 		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout);
 		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
