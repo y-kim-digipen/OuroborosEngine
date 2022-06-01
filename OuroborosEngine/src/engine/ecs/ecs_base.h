@@ -251,7 +251,7 @@ namespace OE
 				static_assert(settings::template IsComponent<T>());
 			}
 		public:
-			[[nodiscard]] Entity& CreateEntity()
+			Entity& CreateEntity()
 			{
 				GrowthIfNeeded();
 				auto created_entityID = ID_Generator::GenerateID();
@@ -300,7 +300,7 @@ namespace OE
 			void DeleteComponent(ecs_ID entityID)
 			{
 				AssertComponentType<T>();
-				OE_Assert(!HasComponent<T>(entityID), "");
+				OE_Assert(HasComponent<T>(entityID), "");
 
 				Entity& entity = GetEntity(entityID);
 				entity.bitset[settings::template ComponentIndex<T>()] = false;

@@ -17,8 +17,8 @@
     <Filter Include="engine\scene\ecs">
       <UniqueIdentifier>{f16786f5-88ad-40f1-bf3d-6c82714eae92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="type_list">
-      <UniqueIdentifier>{1cc6edd1-de9c-4a46-8a7b-5bcde24cf469}</UniqueIdentifier>
+    <Filter Include="engine\gui">
+      <UniqueIdentifier>{b5032aa8-5dfc-4eca-8985-56a3bea021b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,14 +40,17 @@
     <ClInclude Include="src\engine\ecs\entity_mananger.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="src\type_list\type_list.h">
-      <Filter>type_list</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\ecs\components.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
     <ClInclude Include="ecs_base.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
+    <ClInclude Include="src\engine\gui\gui_component_panel.h">
+      <Filter>engine\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs_settings.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

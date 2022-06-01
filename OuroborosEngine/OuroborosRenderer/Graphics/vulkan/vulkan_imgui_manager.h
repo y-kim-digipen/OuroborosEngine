@@ -22,10 +22,7 @@ namespace Renderer
 	private:
 		Vulkan_type* vulkan_type;
 		VkRenderPass imgui_render_pass;
-
 	};
-
-
 }
 
 

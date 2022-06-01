@@ -11,4 +11,5 @@ namespace OE
     static_assert(MAX_ENTITIES >= 0, 
         "Number of maximum entities must be smaller than its' type's maximum amount");
 
+    #define GET_VARIABLE_NAME(Variable) (#Variable)
 }

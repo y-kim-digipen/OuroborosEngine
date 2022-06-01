@@ -1,12 +1,14 @@
 #pragma once
+#include <glm.hpp>
+
 struct Transform
 {
-	float x, y;
+	glm::vec3 pos;
 };
 
 struct Velocity
 {
-	float x, y;
+	glm::vec3 vel;
 };
 
 struct LifeTime
@@ -26,6 +28,11 @@ struct Shader
 struct BoolWrapper
 {
 	bool bool_type;
+};
+
+struct Tag
+{
+	std::string tag;
 };
 
 //void DrawSystem(mesh, sahder)

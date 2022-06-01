@@ -178,9 +178,10 @@
     <ClInclude Include="src\engine\ecs\component_manager.h" />
     <ClInclude Include="src\engine\ecs\ecs_base.h" />
     <ClInclude Include="src\engine\ecs\entity_mananger.h" />
+    <ClInclude Include="src\engine\ecs_settings.h" />
     <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\gui\gui_component_panel.h" />
     <ClInclude Include="src\engine\modules\resource_manager.h" />
-    <ClInclude Include="src\type_list\type_list.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

@@ -20,6 +20,7 @@ namespace OE
 	{
 		using Settings = TSettings;
 
+	public:
 		using ComponentList = typename Settings::component_list;
 
 	public:
