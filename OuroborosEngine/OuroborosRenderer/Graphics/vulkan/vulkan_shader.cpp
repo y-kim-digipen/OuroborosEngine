@@ -87,6 +87,7 @@ namespace Renderer {
 
 		Vulkan_PipelineBuilder pipeline_builder;
 		set_layout_count = 0;
+		uint32_t ubo_count = 0;
 		
 		for (uint32_t i = 0; i < 4; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
@@ -101,6 +102,11 @@ namespace Renderer {
 
 			if (binding_count != 0) {
 				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
+
+				for (const auto& binding_set : layout_bindings_set[i]) {
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
+				}
+
 				++set_layout_count;
 			}
 			else {
@@ -175,7 +181,7 @@ namespace Renderer {
 	
 		for(auto& buffer_object : uniform_buffer_objects)
 		{
-			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)(buffer_object.get()))->descriptor_set[current_frame], 0, nullptr);
+			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
 		}
 	}
 
