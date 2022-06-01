@@ -213,11 +213,6 @@ namespace Renderer {
 						0,
 					};
 
-					// buffer
-					// total size
-					// member name
-					// member type
-
 					uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size));
 
 					for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {

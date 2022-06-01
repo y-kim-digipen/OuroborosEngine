@@ -196,6 +196,8 @@ namespace Renderer
 
 	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type)
 	{
+		data = malloc(buffer_size);
+
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);			
 		}
@@ -203,11 +205,18 @@ namespace Renderer
 
 	VulkanUniformBuffer::~VulkanUniformBuffer()
 	{
-		
+		free(data);
+		data = nullptr;
 	}
 
 	void VulkanUniformBuffer::Bind() const
 	{
+		void* temp_data;
+		vmaMapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation, &temp_data);
+
+		memcpy(temp_data, &data, buffer_size);
+
+		vmaUnmapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation);
 	}
 
 	void VulkanUniformBuffer::UnBind() const
@@ -221,23 +230,11 @@ namespace Renderer
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data)
 	{
 		if (member_vars.find(member_var_name) != member_vars.end()) {
-
-
-
+			memcpy(&this->data + member_vars[member_var_name].offset, data, member_vars[member_var_name].size);
 			return 0;
 		}
 
 		return -1;
-	}
-
-	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
-	{
-		void* temp_data;
-		vmaMapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation, &temp_data);
-
-		memcpy(temp_data, &data, size);
-
-		vmaUnmapMemory(vulkan_type->allocator, buffer[vulkan_type->current_frame]->allocation);
 	}
 
 	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout)
