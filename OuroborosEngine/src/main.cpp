@@ -45,6 +45,10 @@ int main()
     ecs_manager.AddComponent<Transform>(ent5.myID);
     ecs_manager.AddComponent<Mesh>(ent5.myID);
 
+    auto& ent6 = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<Transform>(ent6.myID);
+    ecs_manager.AddComponent<Mesh>(ent6.myID);
+
     ecs_manager.ForEntitiesMatching<Signature0>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
     {
             std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;

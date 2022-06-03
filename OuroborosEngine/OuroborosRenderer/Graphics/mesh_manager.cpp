@@ -40,6 +40,16 @@ namespace Renderer
 
 	int MeshManager::DeleteMesh(const char* mesh_name)
 	{
+		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
+		{
+			iter->second.reset();
+			mesh_map.erase(iter);
+			return 0;
+		}
+		else
+		{
+			std::cout << mesh_name << "doesn't exist!" << std::endl;
+		}
 
 		return 0;
 	}

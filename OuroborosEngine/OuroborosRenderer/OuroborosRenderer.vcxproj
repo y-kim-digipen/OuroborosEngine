@@ -226,6 +226,7 @@
     <ClCompile Include="Graphics\opengl\opengl_imgui_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
     <ClCompile Include="Graphics\shader.cpp" />
+    <ClCompile Include="Graphics\shader_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />

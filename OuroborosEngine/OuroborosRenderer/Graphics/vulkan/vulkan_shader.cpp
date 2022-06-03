@@ -46,7 +46,8 @@ namespace Renderer {
 
 	VulkanShader::~VulkanShader()
 	{
-
+		vkDestroyPipeline(vulkan_type->device.handle, pipeline, nullptr);
+		vkDestroyPipelineLayout(vulkan_type->device.handle, pipeline_layout, nullptr);
 	}
 
 	void VulkanShader::Init(ShaderConfig* config)

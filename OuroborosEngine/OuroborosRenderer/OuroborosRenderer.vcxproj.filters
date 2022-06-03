@@ -190,6 +190,9 @@
     <ClCompile Include="Graphics\mesh_manager.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\shader_manager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\vulkan\vulkan_type.inl">
