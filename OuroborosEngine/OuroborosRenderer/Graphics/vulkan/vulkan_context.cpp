@@ -66,6 +66,8 @@ namespace Renderer
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData) {
 
+        return VK_FALSE;
+
         switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
             std::cout << ("error: %s", pCallbackData->pMessage) << std::endl;

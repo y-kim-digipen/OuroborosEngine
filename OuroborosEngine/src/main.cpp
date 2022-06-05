@@ -13,6 +13,28 @@
 #include "engine/ecs/components.h"
 #include "engine/gui/gui_component_panel.h"
 
+auto physics_system_impl = [](OE::ecs_ID id, float ft, Transform& transform, Velocity& velocity)
+{
+    transform.pos += velocity.vel;
+};
+
+#include <random>
+#include <type_traits>
+
+
+struct T {
+    enum { int_t, float_t } type;
+    template <typename Integer,
+        std::enable_if_t<std::is_integral<Integer>::value, bool> = true
+    >
+        T(Integer) : type(int_t) {}
+
+    template <typename Floating,
+        std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true
+    >
+        T(Floating) : type(float_t) {} // OK
+};
+
 
 std::unique_ptr<Renderer::Window> window;
 int main()
@@ -21,6 +43,7 @@ int main()
 
     OE::Engine::Get().Init();
 
+   
     //For debug ECS manager
     auto& ent = ecs_manager.CreateEntity();
     ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});
@@ -38,15 +61,21 @@ int main()
     std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
     std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
-    ecs_manager.ForEntitiesMatching<Signature0>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
+    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
     {
             std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
             std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
     });
 
-    //Debug ECS manager ends here
+    ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
+        {
+            std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
+            std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
+            std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
+        });
 
+    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, physics_system_impl);
 
     window->vulkan_imgui_manager.RegisterMainMenu([]()
         {
@@ -72,12 +101,6 @@ int main()
         });
 
     window->vulkan_imgui_manager.RegisterPanel("Entities", &OE::EntityInfoPanelFunction);
-    //window->vulkan_imgui_manager.RegisterPanel("Entities", [&](void)
-    //    {
-    //        manager.ForEntities([](OE::ecs_ID entID)
-    //            {
-    //                ImGui::Text("EntityID : %d", entID);
-    //            });
     //    });
 
     std::cout << "Hello World!" << std::endl;
