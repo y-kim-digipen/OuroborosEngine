@@ -12,27 +12,33 @@ namespace Renderer
 	struct ShaderConfig;
 	class Shader;
 	
+	struct GlobalData {
+		glm::mat4 projection;
+		glm::mat4 view;
+	};
 
 	class Context
 	{
 	public:
 		Context(GLFWwindow* glfwwindow);
+		virtual ~Context();
+
 		virtual void Init(int major, int minor) = 0;
+
+		// create descriptor set for global ubo
+		virtual void InitGlobalData() = 0;
+
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
-		virtual int AddShader(ShaderConfig* config) = 0;
-		virtual int AddMesh(const char* mesh_name) = 0;
 		virtual int BeginFrame();
-		virtual void DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name) = 0;
-		virtual void DrawMesh(const char* shader_name, const char* mesh_name) = 0;
 		virtual int EndFrame();
-
-		virtual ~Context();
+		
+		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
+		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
 
 	protected:
 		GLFWwindow* window;
-		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
-		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
+		GlobalData global_data;
 	};
 
 

@@ -18,24 +18,6 @@ auto physics_system_impl = [](OE::ecs_ID id, float ft, Transform& transform, Vel
     transform.pos += velocity.vel;
 };
 
-#include <random>
-#include <type_traits>
-
-
-struct T {
-    enum { int_t, float_t } type;
-    template <typename Integer,
-        std::enable_if_t<std::is_integral<Integer>::value, bool> = true
-    >
-        T(Integer) : type(int_t) {}
-
-    template <typename Floating,
-        std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true
-    >
-        T(Floating) : type(float_t) {} // OK
-};
-
-
 std::unique_ptr<Renderer::Window> window;
 int main()
 {
@@ -43,7 +25,6 @@ int main()
 
     OE::Engine::Get().Init();
 
-   
     //For debug ECS manager
     auto& ent = ecs_manager.CreateEntity();
     ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});

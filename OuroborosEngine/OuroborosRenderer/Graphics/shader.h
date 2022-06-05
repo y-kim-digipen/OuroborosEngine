@@ -5,6 +5,8 @@
 #include <memory>
 #include "buffer.h"
 
+#include <glm/matrix.hpp>
+
 namespace Renderer {
 
 	class Context;
@@ -33,8 +35,44 @@ namespace Renderer {
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
 		virtual void Bind() = 0;
+		virtual void SetUniformValue(const char* name, void* data) {
 
-	protected:
+			for (const auto& ubo : uniform_buffer_objects) {
+				if (ubo->member_vars.find(name) != ubo->member_vars.end()) {
+					ubo->UpdateData(name, data);
+					ubo->Bind();
+				}
+			}
+
+		}
+
+		virtual void BindObjectData(const glm::mat4& model) = 0;
+
+		/*
+		global_ubo[0]
+		layout(set = 0, binding = 0) {
+			mat4 projection;
+			mat4 view;
+		}
+	
+		global_ubo[1]
+		layout(set = 0, binding = 1) {
+			vec3 other_value;
+			vec4 other_other_value;
+		}
+
+
+		DescriptorSet 0 -> global
+			DescriptorSet -> bindings collection
+			binding = uniform buffer
+
+
+		std::vector<std::unique_ptr<UniformBuffer>> global_ubo;
+		std::vector< std::unique_ptr<UniformBuffer>> renderpass_ubo;
+		std::vector < std::unique_ptr<UniformBuffer>> material_ubo;
+		std::vector<std::unique_ptr<UniformBuffer>> object_ubo;
+		*/
+
 		std::vector<std::unique_ptr<UniformBuffer>> uniform_buffer_objects;
 	};
 }

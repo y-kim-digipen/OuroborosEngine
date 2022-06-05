@@ -33,7 +33,9 @@ namespace Renderer
 		WindowData GetWindowData() { return window_data; }
 		unsigned int GetWidth() { return window_data.width; }
 		unsigned int GetHeight() { return window_data.height; }
+		void BeginFrame();
 		void Update();
+		void EndFrame();
 		void Shutdown();
 		void OnResize();
 		

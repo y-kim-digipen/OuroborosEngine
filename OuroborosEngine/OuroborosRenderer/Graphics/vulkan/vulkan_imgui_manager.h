@@ -12,7 +12,6 @@ namespace Renderer
 	{
 	public:
 		VulkanImguiManager();
-
 		void Init(GLFWwindow* window) override;
 		void VulkanInit(Vulkan_type* vulkan_type);
 		void BeginFrame() override;

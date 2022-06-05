@@ -58,8 +58,6 @@ namespace Renderer
     VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
     VkFormat FindDepthFormat();
 
-
-
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
@@ -104,7 +102,6 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
-
     }
 
     void VulkanContext::Shutdown()
@@ -141,53 +138,6 @@ namespace Renderer
 
         SpirvHelper::Finalize();
 
-    }
-
-    int VulkanContext::AddShader(ShaderConfig* config)
-    {
-        if (shader_map.find(config->name) != shader_map.end())
-            return -1;
-        else {
-            shader_map[config->name] = std::make_unique<VulkanShader>(&vulkan_type);
-            shader_map[config->name]->Init(config);
-        }
-
-        return 0;
-    }
-
-    int VulkanContext::AddMesh(const char* mesh_name)
-    {
-        if (mesh_map.find(mesh_name) != mesh_map.end()) {
-            std::cout << mesh_name << " already exists\n";
-            return -1;
-        }
-
-        mesh_map[mesh_name] = std::make_unique<VulkanMesh>(&vulkan_type);
-        if (!mesh_map[mesh_name]->LoadAsset(mesh_name)) {
-            std::cout << mesh_name << " loading failed\n";
-            return -1;
-        }
-
-        return 0;
-    }
-
-    void VulkanContext::DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name)
-    {
-
-        uint32_t mesh_name_count = meshes_name.size();
-
-        for (uint32_t i = 0; i < mesh_name_count; ++i) {
-
-            shader_map[shaders_name[i]]->Bind();
-
-        }
-    }
-
-    void VulkanContext::DrawMesh(const char* shader_name, const char* mesh_name)
-    {
-        shader_map[shader_name]->Bind();
-
-        mesh_map[mesh_name]->Draw();
     }
 
     void VulkanContext::CreateSurface()
@@ -504,9 +454,9 @@ namespace Renderer
         VkPhysicalDeviceProperties device_property;
         vkGetPhysicalDeviceProperties(device, &device_property);
 
-        if (device_property.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-            return false;
-        }
+        //if (device_property.deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+        //    return false;
+        //}
 
         QueueFamilyIndices indices = FindQueueFamilies(device);
 

@@ -14,15 +14,6 @@
 
 namespace Renderer
 {
-	//TODO: temp camera & global_ubo code
-	struct camera_data {
-		glm::vec3 position;
-		glm::mat4 projection;
-		glm::mat4 view;
-	};
-	static camera_data camera;
-
-
 	Window::Window(const WindowProperties& window_properties)
 	{
 		// make unique pointer
@@ -35,26 +26,25 @@ namespace Renderer
 		Shutdown();
 	}
 
-	void Window::Update()
+	void Window::BeginFrame()
 	{
 		glfwPollEvents();
-	
-		//TODO: update global_data
-		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
-		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
 		window_data.RenderContextData->BeginFrame();
 		vulkan_imgui_manager.BeginFrame();
+	}
+
+	void Window::Update()
+	{
+		//TODO: update global_data
+
 		vulkan_imgui_manager.Update();
 
 		// for each shader bind pipeline
 			// for each material bind (set = 1)
-				// for each object bind push_constant (model, normal)
+				// for each object 
+					// bind push_constant (model, normal)
+					
 
-		window_data.RenderContextData->DrawMesh("shader", "suzanne");
-		vulkan_imgui_manager.EndFrame();
-		window_data.RenderContextData->EndFrame();
-		
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
 		{
@@ -66,15 +56,18 @@ namespace Renderer
 		}
 	}
 
+	void Window::EndFrame()
+	{
+		vulkan_imgui_manager.EndFrame();
+		window_data.RenderContextData->EndFrame();
+
+	}
+
 	void Window::Init(const WindowProperties& window_properties)
 	{
 		window_data.height = window_properties.Height;
 		window_data.width = window_properties.Width;
 		window_data.title = window_properties.title;
-
-		camera = {glm::vec3(0.0f,0.0f, -10.0f)};
-		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
-		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
 		if (!GLFW_IsInit)
 		{
@@ -128,8 +121,7 @@ namespace Renderer
 			2
 		};
 
-		window_data.RenderContextData->AddShader(&shader_config);
-		window_data.RenderContextData->AddMesh("suzanne");
+		//window_data.RenderContextData->AddMesh("suzanne");
 
 
 

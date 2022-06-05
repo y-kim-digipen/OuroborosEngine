@@ -140,6 +140,9 @@ namespace OE
 		if (ImGui::TreeNode(typeid(Transform).name()))
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
+			ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &transform_component.angle);
 			ImGui::TreePop();
 		}
 	}
