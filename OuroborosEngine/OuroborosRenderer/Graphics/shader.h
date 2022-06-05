@@ -47,7 +47,6 @@ namespace Renderer {
 		}
 
 		virtual void BindObjectData(const glm::mat4& model) = 0;
-		
 
 		/*
 		global_ubo[0]

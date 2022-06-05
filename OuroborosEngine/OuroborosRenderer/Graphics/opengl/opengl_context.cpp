@@ -28,20 +28,7 @@ namespace Renderer
 	void OpenglContext::Shutdown()
 	{
 	}
-	int OpenglContext::AddShader(ShaderConfig* config)
-	{
-		return 0;
-	}
-	int OpenglContext::AddMesh(const char* mesh_name)
-	{
-		return 0;
-	}
-	void OpenglContext::DrawMeshes(const std::vector<const char*>& shaders_name, const std::vector<const char*>& meshes_name)
-	{
-	}
-	void OpenglContext::DrawMesh(const char* shader_name, const char* mesh_name)
-	{
-	}
+
 	int OpenglContext::BeginFrame()
 	{
 		return 0;

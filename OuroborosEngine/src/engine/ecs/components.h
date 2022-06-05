@@ -25,8 +25,14 @@ struct Mesh
 	std::string mesh_name;
 };
 
+struct Material
+{
+	std::string material_name;
+};
+
 struct Shader
 {
+	std::string shader_name;
 };
 
 struct BoolWrapper
