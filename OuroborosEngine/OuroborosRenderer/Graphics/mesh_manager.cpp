@@ -33,8 +33,29 @@ namespace Renderer
 
 	int MeshManager::DrawMesh(const char* shader, const char* mesh_name)
 	{
-		shader_manager->shader_map[shader]->Bind();
-		mesh_map[mesh_name]->Draw();
+		if(auto iter = shader_manager->shader_map.find(shader); iter != shader_manager->shader_map.end())
+		{
+			iter->second->Bind();
+			if(auto mesh_iter = mesh_map.find(mesh_name); mesh_iter != mesh_map.end())
+			{
+				mesh_iter->second->Draw();
+			}
+			else
+			{
+				std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
+				int result = AddMesh(mesh_name);
+				if(result == 0)
+				{
+					mesh_iter->second->Draw();
+				}
+			}
+		}
+		else
+		{
+			std::cout << shader << " (shader) is doesn't exist!" << std::endl;
+			return -1;
+		}
+
 		return 0;
 	}
 

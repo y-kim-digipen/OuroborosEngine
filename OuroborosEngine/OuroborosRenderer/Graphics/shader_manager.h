@@ -16,6 +16,7 @@ namespace Renderer
 		~ShaderManager() = default;
 		int AddShader(ShaderConfig* config);
 		int DeleteShader(ShaderConfig* config);
+		Shader* GetShader(const char* shader_name);
 		friend class MeshManager;
 
 	private:

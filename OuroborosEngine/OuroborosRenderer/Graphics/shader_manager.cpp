@@ -36,10 +36,21 @@ namespace Renderer
 		}
 		else
 		{
-			std::cout << config->name << "doesn't exist! " << std::endl;
+			std::cout << config->name << " doesn't exist! " << std::endl;
 			return -1;
 		}
+	}
 
+	Shader* ShaderManager::GetShader(const char* shader_name)
+	{
+		if(auto iter = shader_map.find(shader_name); iter != shader_map.end())
+		{
+			return iter->second.get();
+		}
+		else
+		{
+			std::cout << shader_name << " doesn't exist! " << std::endl;
+		}
 
 	}
 }
