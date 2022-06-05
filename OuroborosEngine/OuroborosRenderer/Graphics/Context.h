@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 #include <memory>
+#include <glm/matrix.hpp>
+
 #include "mesh.h"
 static bool is_vulkan = true;
 struct GLFWwindow;
