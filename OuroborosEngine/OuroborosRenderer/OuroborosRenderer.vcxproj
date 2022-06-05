@@ -186,6 +186,7 @@
     <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h" />
     <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h" />
     <ClInclude Include="Graphics\buffer.h" />
+    <ClInclude Include="Graphics\camera.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
     <ClInclude Include="Graphics\mesh_manager.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp" />
     <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp" />
     <ClCompile Include="Graphics\buffer.cpp" />
+    <ClCompile Include="Graphics\camera.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />
     <ClCompile Include="Graphics\mesh_manager.cpp" />
