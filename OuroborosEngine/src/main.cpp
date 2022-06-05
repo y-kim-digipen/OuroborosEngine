@@ -18,6 +18,15 @@
 
 
 std::unique_ptr<Renderer::Window> window;
+
+struct Camera {
+    glm::mat4 projection;
+    glm::mat4 view;
+    glm::vec3 position;
+};
+
+static Camera camera;
+
 int main()
 {
     window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Project"));
@@ -57,7 +66,8 @@ int main()
     });
 
 
-
+	camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+	camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
     //Debug ECS manager ends here
 

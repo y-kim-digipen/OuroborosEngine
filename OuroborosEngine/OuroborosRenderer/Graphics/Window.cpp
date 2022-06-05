@@ -14,17 +14,6 @@
 
 namespace Renderer
 {
-	//TODO: temp camera & global_ubo code
-	struct camera_data {
-		glm::vec3 position;
-		glm::mat4 projection;
-		glm::mat4 view;
-	};
-	static camera_data camera;
-	//push constants
-
-
-
 	Window::Window(const WindowProperties& window_properties)
 	{
 		// make unique pointer
@@ -47,18 +36,14 @@ namespace Renderer
 	void Window::Update()
 	{
 		//TODO: update global_data
-		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
-		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-		//camera.projection[1][1] *= -1;
 
 		vulkan_imgui_manager.Update();
 
 		// for each shader bind pipeline
 			// for each material bind (set = 1)
-				// for each object bind push_constant (model, normal)
-
-		window_data.RenderContextData->shader_map["shader"]->SetUniformValue("projection", (void*)&camera.projection);
-		window_data.RenderContextData->shader_map["shader"]->SetUniformValue("view", (void*)&camera.view);
+				// for each object 
+					// bind push_constant (model, normal)
+					
 
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
@@ -83,10 +68,6 @@ namespace Renderer
 		window_data.height = window_properties.Height;
 		window_data.width = window_properties.Width;
 		window_data.title = window_properties.title;
-
-		camera = {glm::vec3(0.0f,0.0f, -10.0f)};
-		camera.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window_data.width) / window_data.height, 0.1f, 100.0f);
-		camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
 		if (!GLFW_IsInit)
 		{
@@ -140,7 +121,6 @@ namespace Renderer
 			2
 		};
 
-		window_data.RenderContextData->AddShader(&shader_config);
 		//window_data.RenderContextData->AddMesh("suzanne");
 
 
