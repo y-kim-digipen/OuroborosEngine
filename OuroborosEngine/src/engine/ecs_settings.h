@@ -2,6 +2,7 @@
 #include "ecs/ecs_base.h"
 #include "ecs/components.h"
 #include "ecs/system.h"
+#include "common.h"
 
 using ComponentList = OE::ECS::TypeList<TransformComponent, Velocity, LifeTime, MeshComponent, BoolWrapper, ShaderComponent,MaterialComponent, Tag>;
 
@@ -16,7 +17,7 @@ using Signature2 = OE::ECS::types::Signature<TestSystem, BoolWrapper>;
 
 using MeshDrawSignature = OE::ECS::types::Signature<TransformComponent, MeshComponent,ShaderComponent>;
 
-using SignatureList = OE::ECS::types::SignatureList<Signature0, Signature1, Signature2,MeshDrawSignature>;
+using SignatureList = OE::ECS::types::SignatureList<Signature0, Signature1, Signature2, MeshDrawSignature>;
 
 using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, SystemList>;
 

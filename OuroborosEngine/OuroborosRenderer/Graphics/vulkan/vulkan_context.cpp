@@ -5,6 +5,7 @@
 #include "vulkan_image.h"
 #include "vulkan_shader.h"
 #include "vulkan_mesh.h"
+#include "vulkan_pipeline.h"
 
 #include <iostream>
 #include <optional>
@@ -86,6 +87,10 @@ namespace Renderer
         return VK_FALSE;
     }
 
+    VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), shader_manager_(GetVulkanType()), mesh_manager_(GetVulkanType(), &shader_manager_)
+    {
+	}
+
     void VulkanContext::Init(int major, int minor)
     {
         SpirvHelper::Init();
@@ -105,6 +110,51 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
+    }
+
+    // Must be called after vulkan_context.init()
+    void VulkanContext::InitGlobalData()
+    {
+        Context::InitGlobalData();
+
+        uint32_t buffer_size = sizeof(global_ubo);
+          
+        Vulkan_PipelineBuilder pipeline_builder;
+
+        VkDescriptorSetLayoutBinding binding;
+	    binding.binding = 0;
+        //TODO: convert to storage buffer and combine per frame data to one buffer 
+        binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        binding.descriptorCount = 1;
+        //TODO: might change
+        binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        //binding.pImmutableSamplers = 0;
+
+        VkDescriptorSetLayout set_layout;
+
+        VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
+        set_layout_create_info.bindingCount = 1;
+        set_layout_create_info.pBindings = &binding;
+        VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
+
+        //TODO: this might occur error, need to be test
+        vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, 0, 1, 0, 0);
+        vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
+
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_ubo));
+        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
+    }
+
+    void VulkanContext::UpdateGlobalData()
+    {
+        Context::UpdateGlobalData();
+        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data));
+    }
+
+	// Must be called after init_frame()
+    void VulkanContext::BindGlobalData()
+    {
+        global_ubo->Bind();
     }
 
     void VulkanContext::Shutdown()
@@ -294,10 +344,6 @@ namespace Renderer
         vulkan_type.current_frame = (vulkan_type.current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 
         return  0;
-    }
-
-    void VulkanContext::InitGlobalData()
-    {
     }
 
     Vulkan_type* VulkanContext::GetVulkanType()

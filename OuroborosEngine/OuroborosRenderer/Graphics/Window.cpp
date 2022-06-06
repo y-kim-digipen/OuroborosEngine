@@ -36,12 +36,32 @@ namespace Renderer
 	void Window::Update()
 	{
 		//TODO: update global_data
+		VulkanContext* vulkan_context = (VulkanContext*)window_data.RenderContextData.get();
 
 		vulkan_imgui_manager.Update();
 
-		// for each shader bind pipeline
-			// for each material bind (set = 1)
-				// for each object 
+		// bind global data
+		window_data.RenderContextData->UpdateGlobalData();
+	
+		/*
+		//for(const auto& shader : vulkan_context->shader_manager_)
+		for (shader) {
+			shader.bind(); // bind pipeline & descriptor set 1 bind
+			for (material : material_system.get_materai())
+			{
+				material.bind(); // descriptor set 2 bind
+				for (object : registered_objects) {
+					object.constant_bind(); // push_constant
+				}
+			}
+		}
+		*/
+		window_data.RenderContextData->BindGlobalData();
+
+
+		// for each shader bind pipeline ( bind shader descriptor set )
+			// for each material bind (set = 2)
+				// for each object (set = 3 or might be dynamic material )
 					// bind push_constant (model, normal)
 					
 

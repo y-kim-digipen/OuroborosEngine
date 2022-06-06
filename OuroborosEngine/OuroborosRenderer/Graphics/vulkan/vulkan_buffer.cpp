@@ -199,7 +199,7 @@ namespace Renderer
 		data = malloc(buffer_size);
 
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);			
+			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 		}
 	}
 
@@ -212,6 +212,8 @@ namespace Renderer
 	void VulkanUniformBuffer::Bind() const
 	{
 		buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
+
+		vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, 0, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
 	}
 
 	void VulkanUniformBuffer::UnBind() const
@@ -229,6 +231,33 @@ namespace Renderer
 		}
 
 		return -1;
+	}
+
+	int VulkanUniformBuffer::AddData(void* data, uint32_t new_buffer_size)
+	{
+		if (buffer_size != new_buffer_size)
+		{
+			for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+				if (buffer[i] != nullptr)
+				{
+					buffer[i].reset();
+				}
+
+				buffer_size = new_buffer_size;
+
+
+				buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+			}
+		}
+
+
+		//TODO: stage buffer only if data change
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		staging_buffer->UploadData(data, buffer_size);
+
+		buffer[vulkan_type->current_frame]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+
+		return 0;
 	}
 
 	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout)

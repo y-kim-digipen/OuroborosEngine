@@ -116,7 +116,15 @@
     <ClInclude Include="Graphics\camera.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\MaterialComponent.h" />
+    <ClInclude Include="Graphics\material.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_material.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\material_manager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -199,6 +207,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\camera.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_material.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

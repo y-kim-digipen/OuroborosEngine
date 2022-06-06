@@ -62,30 +62,30 @@ namespace Renderer
 		uint64_t count = 0;
 	};
 
-
-	//TODO: make buffer for each frame 
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
 		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size);
 		~VulkanUniformBuffer() override;
+
+		// Map memory CPU to GPU
 		void Bind() const override;
 		void UnBind() const override;
 
+		// update cpu data block of member variable with matching name
 		int UpdateData(const char* member_var_name, void* data) override;
+
+		// upload cpu data to gpu as a chunk
+		int AddData(void* data, uint32_t buffer_size);
 		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout);
-		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
 		
 		VkDescriptorSet descriptor_set[MAX_FRAMES_IN_FLIGHT];
 		uint64_t GetBufferSize() const;
-	private:
-		void* data;
-		
+	private:		
 		Vulkan_type* vulkan_type;
 
 		uint64_t buffer_size;
 		std::shared_ptr<VulkanBuffer> buffer[MAX_FRAMES_IN_FLIGHT];
-
 	};
 
 }
