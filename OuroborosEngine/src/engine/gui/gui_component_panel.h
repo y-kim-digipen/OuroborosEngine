@@ -205,6 +205,7 @@ namespace OE
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
+
 			ImGui::TreePop();
 		}
 

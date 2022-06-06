@@ -7,18 +7,22 @@ layout(location = 2) in vec2 uv;
 layout(set = 0, binding = 0) uniform global_data {
     mat4 projection;
     mat4 view;
+    vec3 cam_pos;
 } global_ubo;
 
 layout(push_constant) uniform constants {
     mat4 model;
+    mat3 normal_matrix;
 } object_ubo;
 
 layout(location = 0) out VS_OUT {
     vec3 norm;
+    vec3 frag_position;
 } vs_out;
 
-void main() {
-
-    vs_out.norm = vec3(normal);
+void main() 
+{
+    vs_out.norm = normal_matrix * normal;
+    vs_out.frag_position = vec3(object_ubo.model * vec3(pos, 1.0)); 
     gl_Position = global_ubo.projection * global_ubo.view * object_ubo.model * vec4(pos, 1.0);
 }

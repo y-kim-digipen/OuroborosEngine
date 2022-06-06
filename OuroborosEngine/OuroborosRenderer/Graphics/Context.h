@@ -63,7 +63,6 @@ namespace Renderer
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
 		virtual void DrawQueue() {};
 
-
 	protected:
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
