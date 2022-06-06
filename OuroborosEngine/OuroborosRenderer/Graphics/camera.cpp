@@ -3,17 +3,17 @@
 
 namespace Renderer
 {
-	Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-	:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+	Camera::Camera(glm::vec3 position, glm::vec3 up_, float yaw, float pitch)
+	:front(glm::vec3(0.0f, 0.0f, 1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
-		position = position;
-		world_up = up;
+		data.position = position;
+		up = up_;
 		yaw = yaw;
 		pitch = pitch;
 	}
 
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-		:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+		:front(glm::vec3(0.0f, 0.0f, 1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
 		data.position = glm::vec3(posX, posY, posZ);
 		world_up = glm::vec3(upX, upY, upZ);

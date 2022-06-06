@@ -34,7 +34,7 @@ int main()
 
     //For debug ECS manager
     auto& ent = ecs_manager.CreateEntity();
-    ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});
+    ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{ 0.f, 1.f, 0.f });
     ecs_manager.AddComponent<Velocity>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
     auto& ent2 = ecs_manager.CreateEntity();
     ecs_manager.AddComponent<LifeTime>(ent2.myID, 5);
@@ -46,15 +46,18 @@ int main()
     ecs_manager.AddComponent<Transform>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
     ecs_manager.AddComponent<Velocity>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
     ecs_manager.AddComponent<Tag>(ent4.myID, "TestEntity");
+
+
+
     std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
     std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
-    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
-    {
+    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
+        {
             std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
             std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
-    });
+        });
 
     ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
         {
@@ -63,15 +66,20 @@ int main()
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
         });
 
-	//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
- //   camera.data.view = camera.GetCameraMat();
+    ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::ecs_ID ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
+        {
+            transform.pos += velocity.vel * dt;
+        });
+
+    camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+    camera.data.view = camera.GetCameraMat();
 
 
     //Debug ECS manager ends here
     Renderer::ShaderConfig shader_config{
     "shader",
     {
-	    Renderer::E_StageType::VERTEX_SHADER,
+        Renderer::E_StageType::VERTEX_SHADER,
         Renderer::E_StageType::FRAGMENT_SHADER
     },
     2
@@ -84,13 +92,13 @@ int main()
         {
             if (ImGui::BeginMainMenuBar())
             {
-                if(ImGui::BeginMenu("Editor"))
+                if (ImGui::BeginMenu("Editor"))
                 {
                     auto& panels = window->vulkan_imgui_manager.GetPanels();
                     for (auto [key, pair] : panels)
                     {
                         bool& open = pair.second;
-                        if(ImGui::MenuItem(key.c_str()))
+                        if (ImGui::MenuItem(key.c_str()))
                         {
                             std::cout << std::boolalpha << open << std::endl;
                             open = !open;
@@ -108,38 +116,46 @@ int main()
 
     std::cout << "Hello World!" << std::endl;
 
-    while(!glfwWindowShouldClose(window->GetWindowData().window))
+    while (!glfwWindowShouldClose(window->GetWindowData().window))
     {
+        ecs_manager.UpdateSystem(0.1);
         window->BeginFrame();
         window->Update();
         ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
             [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Mesh& mesh) mutable
-        {
-            static bool init = true;
-            auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
-            if (init)
             {
-                context->mesh_manager_.AddMesh("suzanne");
-                init = false;
-            }
-            else
-            {
-                if (ecs_manager.GetEntity(ent).alive)
+                static bool init = true;
+                auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+                if (init)
                 {
-                    glm::mat4 model(1.f);
-                    model = glm::translate(model, transform.pos);
-                    model = glm::scale(model, transform.scale);
-                    model = glm::rotate(model, transform.angle, transform.rotate_axis);
-
-
-                    //TODO : uniform values input in the buffer
-                    // Draw call
-                    //
-                    context->shader_manager_.GetShader("shader")->BindObjectData(model);
-                    context->mesh_manager_.DrawMesh("shader", "suzanne");
+                    context->mesh_manager_.AddMesh("suzanne");
+                    init = false;
                 }
-            }
-        });
+                else
+                {
+                    if (ecs_manager.GetEntity(ent).alive)
+                    {
+                        camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+                        //camera.data.view = camera.GetCameraMat();
+                        //camera.data.projection[1][1] *= -1;
+                        camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+                        context->shader_manager_.GetShader("shader")->SetUniformValue("projection", (void*)&camera.data.projection);
+                        context->shader_manager_.GetShader("shader")->SetUniformValue("view", (void*)&camera.data.view);
+
+                        glm::mat4 model(1.f);
+                        model = glm::translate(model, transform.pos);
+                        model = glm::scale(model, transform.scale);
+                        model = glm::rotate(model, transform.angle, transform.rotate_axis);
+
+
+                        //TODO : uniform values input in the buffer
+                        // Draw call
+                        //
+                        context->shader_manager_.GetShader("shader")->BindObjectData(model);
+                        context->mesh_manager_.DrawMesh("shader", "suzanne");
+                    }
+                }
+            });
 
         window->EndFrame();
     }

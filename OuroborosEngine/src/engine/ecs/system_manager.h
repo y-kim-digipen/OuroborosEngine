@@ -41,6 +41,17 @@ public:
 		function_impl = std::move(function);
 	}
 
+	template<typename TSystem>
+	auto GetSystemImplementation() const
+	{
+		return std::get<TSystem::function_type>(system_impl_container);
+	}
+
+	template<typename TSystem>
+	auto& GetSystemImplementation()
+	{
+		return std::get<TSystem::function_type>(system_impl_container);
+	}
 private:
 	SystemImplContainer system_impl_container;
 };

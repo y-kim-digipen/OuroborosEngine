@@ -2,7 +2,6 @@
 //#include <array>
 #include <vector>
 #include "../custom_assert.h"
-#include "brigand/adapted.hpp"
 #include "brigand/algorithms.hpp"
 
 namespace OE
