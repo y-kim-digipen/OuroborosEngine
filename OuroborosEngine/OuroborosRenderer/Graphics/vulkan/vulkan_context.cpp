@@ -380,7 +380,7 @@ namespace Renderer
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 
                 //material_manager
-                material_manager->GetMaterial(material->name)->Bind();
+                //material_manager->GetMaterial(material->name)->Bind();
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {

@@ -17,6 +17,7 @@
 #include "Graphics/shader_manager.h"
 #include "Graphics/vulkan/vulkan_context.h"
 #include "Graphics/camera.h"
+#include "Graphics/vulkan/vulkan_material.h"
 
 static Renderer::Camera camera;
 std::unique_ptr<Renderer::Window> window;
@@ -54,6 +55,10 @@ int main()
 
     dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 
+    //Renderer::VulkanMaterial material();
+
+    //dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", &material);
+
     ecs_manager.ForEntitiesMatching<PhysicsSystem>(0.0, physics_system_impl);
 
     SetupGUI();
@@ -86,7 +91,7 @@ int main()
                     context->global_data.projection = camera.data.projection;
                     context->UpdateGlobalData();
 
-                    context->AddDrawQueue(&transform, nullptr, &mesh, nullptr);
+                    context->AddDrawQueue(&transform, nullptr , &mesh, &shader);
                 }
 
             }

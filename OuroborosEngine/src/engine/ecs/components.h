@@ -27,7 +27,7 @@ struct MeshComponent
 
 struct MaterialComponent
 {
-	std::string name;
+	std::string name ="material";
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
@@ -36,7 +36,7 @@ struct MaterialComponent
 
 struct ShaderComponent
 {
-	std::string name;
+	std::string name ="shader";
 };
 
 struct BoolWrapperComponent
