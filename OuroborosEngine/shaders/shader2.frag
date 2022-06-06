@@ -44,7 +44,5 @@ void main()
 // //todo light mulitply light diffuse
 //     vec3 diffuse = material.diffuse * diff ;
 
-
-
-    outColor = vec4(abs(normalize(vs_in.norm)),1.0);
+    outColor = vec4(1.0);
 }
