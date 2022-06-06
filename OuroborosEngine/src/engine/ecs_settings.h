@@ -3,7 +3,6 @@
 #include "ecs/components.h"
 #include "ecs/system.h"
 #include "common.h"
-
 using ComponentList = OE::ECS::TypeList<Transform, Velocity, LifeTime, Mesh, BoolWrapper, Tag>;
 
 using PhysicsSystem = OE::ECS::System<Transform, Velocity>;

@@ -56,9 +56,13 @@
     <ClInclude Include="src\engine\gui\GUI_definedColors.h">
       <Filter>engine\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\custom_assert.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\engine\engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl">

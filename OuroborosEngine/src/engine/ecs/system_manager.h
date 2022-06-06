@@ -52,6 +52,12 @@ public:
 	{
 		return std::get<TSystem::function_type>(system_impl_container);
 	}
+
+	template<typename TSystem>
+	bool HasSystemImplementation() const
+	{
+		return GetSystemImplementation<TSystem>() != nullptr;
+	}
 private:
 	SystemImplContainer system_impl_container;
 };

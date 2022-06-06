@@ -21,7 +21,7 @@
 static Renderer::Camera camera;
 std::unique_ptr<Renderer::Window> window;
 
-auto physics_system_impl = [](OE::ecs_ID id, float ft, Transform& transform, Velocity& velocity)
+auto physics_system_impl = [](OE::ecs_ID id, float dt, Transform& transform, Velocity& velocity)
 {
     transform.pos += velocity.vel;
 };
@@ -52,16 +52,19 @@ int main()
     };
     dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 
-    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, physics_system_impl);
+    ecs_manager.ForEntitiesMatching<PhysicsSystem>(0.0, physics_system_impl);
 
     SetupGUI();
 
     while (!glfwWindowShouldClose(window->GetWindowData().window))
     {
-        ecs_manager.UpdateSystem(0.1);
+        OE::Engine::Get().PreUpdate();
+        OE::Engine::Get().Update();
+        ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
         window->BeginFrame();
         window->Update();
-        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
+
+        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(OE::Engine::Get().delta_timer.GetDeltaTime(),
             [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Mesh& mesh) mutable
             {
                 static bool init = true;
@@ -96,8 +99,8 @@ int main()
                     }
                 }
             });
-
         window->EndFrame();
+        OE::Engine::Get().PostUpdate();
     }
 
     return 0;

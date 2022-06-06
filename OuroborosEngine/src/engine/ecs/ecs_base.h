@@ -15,8 +15,6 @@
 
 namespace OE
 {
-
-	
 	namespace impl
 	{
 		template<typename T>
@@ -611,8 +609,6 @@ namespace OE
 						}
 					});
 			}
-
-
 		private:
 			template<typename ...Ts>
 			struct ExpandCallHelper;

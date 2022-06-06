@@ -155,7 +155,8 @@ namespace OE
 
 	static void EngineInfoPanelFunction()
 	{
-		ImGui::Text("dt : %f", 1.0);
+		ImGui::Text("dt : %f", Engine::delta_timer.GetDeltaTime());
+		ImGui::Text("FPS : %d", (int)(1.0 / Engine::delta_timer.GetDeltaTime()));
 	}
 
 	static void SystemInfoPanelFunction()
@@ -217,6 +218,9 @@ namespace OE
 							ImGui::EndListBox();
 						}
 						ImGui::EndTabItem();
+
+						const bool has_implementation = ecs_manager.system_storage.HasSystemImplementation<T>();
+						has_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have implementation"));
 					}
 					ImGui::PopID();
 				});

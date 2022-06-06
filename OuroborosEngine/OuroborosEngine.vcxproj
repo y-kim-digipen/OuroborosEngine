@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
+    <ClInclude Include="src\engine\custom_assert.h" />
     <ClInclude Include="src\engine\ecs\components.h" />
     <ClInclude Include="src\engine\ecs\component_manager.h" />
     <ClInclude Include="src\engine\ecs\ecs_base.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\engine\modules\resource_manager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
