@@ -52,8 +52,19 @@ int main()
     2
     };
 
+    Renderer::ShaderConfig shader_config2{
+"shader2",
+{
+    Renderer::E_StageType::VERTEX_SHADER,
+    Renderer::E_StageType::FRAGMENT_SHADER
+},
+2
+    };
+
+
 
     dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
+    dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
 
     //Renderer::VulkanMaterial material();
 
@@ -69,10 +80,9 @@ int main()
     {
         OE::Engine::Get().PreUpdate();
         OE::Engine::Get().Update();
-        ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
         window->BeginFrame();
         window->Update();
-
+        ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
 
         dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
         window->EndFrame();

@@ -129,7 +129,7 @@ namespace Renderer
         binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         binding.descriptorCount = 1;
         //TODO: might change
-        binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         //binding.pImmutableSamplers = 0;
 
         VkDescriptorSetLayout set_layout;
@@ -137,13 +137,13 @@ namespace Renderer
         VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
         set_layout_create_info.bindingCount = 1;
         set_layout_create_info.pBindings = &binding;
-        VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
+         VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
 
         //TODO: this might occur error, need to be test
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_ubo));
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data));
         ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
     }
 
@@ -357,8 +357,12 @@ namespace Renderer
     {
 	    Context::DrawQueue();
 
+        if (!draw_queue.empty())
+            BindGlobalData();
+
             while (!draw_queue.empty())
             {
+               
                 const auto& front = draw_queue.front();
 
                 auto* transform = front.transform;

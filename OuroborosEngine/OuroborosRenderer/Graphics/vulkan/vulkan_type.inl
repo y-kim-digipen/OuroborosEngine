@@ -107,5 +107,5 @@ struct Vulkan_type
 
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
-	VkPipelineLayout current_pipeline_layout;
+	VkPipelineLayout current_pipeline_layout = VK_NULL_HANDLE;
 };
