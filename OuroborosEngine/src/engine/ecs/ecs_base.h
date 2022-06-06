@@ -1,19 +1,23 @@
 #pragma once
 
-#include <vector>
 #include <bitset>
+#include <vector>
 
 #include "../common.h"
 #include "../custom_assert.h"
-#include "engine/ecs/component_manager.h"
-#include "brigand/sequences.hpp"
 #include "brigand/algorithms.hpp"
+#include "brigand/sequences.hpp"
 #include "brigand/adapted/tuple.hpp"
+#include "brigand/brigand.hpp"
+#include "engine/ecs/component_manager.h"
+#include "engine/ecs/system_manager.h"
 
 #include <type_traits>
 
 namespace OE
 {
+
+	
 	namespace impl
 	{
 		template<typename T>
@@ -33,6 +37,18 @@ namespace OE
 
 		template <typename T, typename... Ts>
 		struct _tuple_has_type<T, std::tuple<T, Ts...>> : std::true_type {};
+
+		template <typename T, typename List>
+		struct _list_has_type;
+
+		template <typename T>
+		struct _list_has_type<T, brigand::list<>> : std::false_type {};
+
+		template <typename T, typename U, typename... Ts>
+		struct _list_has_type<T, brigand::list<U, Ts...>> : _list_has_type<T, brigand::list<Ts...>> {};
+
+		template <typename T, typename... Ts>
+		struct _list_has_type<T, brigand::list<T, Ts...>> : std::true_type {};
 	}
 	namespace ECS
 	{
@@ -47,8 +63,8 @@ namespace OE
 			using SignatureList = TypeList<TS...>;
 			template<typename... TS>
 			using ComponentList = TypeList<TS...>;
-
-
+			template<typename... TS>
+			using SystemList = TypeList<TS...>;
 		}
 		class ID_Generator
 		{
@@ -83,26 +99,48 @@ namespace OE
 			template<class TSettings>
 			class SignatureBitsetStorage;
 
-			template<typename TComponentList, typename TSignatureList>
+			template<typename TComponentList, typename TSignatureList, typename TSystemList>
 			struct Settings
 			{
-				using type = Settings<TComponentList, TSignatureList>;
+				using type = Settings<TComponentList, TSignatureList, TSystemList>;
 
 				using component_list = TComponentList;
 				using signature_list = TSignatureList;
+				using system_list    = TSystemList;
 				using signature_bitset_storage = SignatureBitsetStorage<type>;
-
+				using system_storage = SystemManager<TSystemList>;
 
 				template<typename T>
 				static constexpr bool IsComponent() noexcept
 				{
-					return impl::_tuple_has_type<T, brigand::as_tuple<component_list>>::value;
+					return impl::_list_has_type<T, component_list>::value;
+					//return impl::_tuple_has_type<T, brigand::as_tuple<component_list>>::value;
 				}
 
 				template<typename T>
 				static constexpr bool IsSignature() noexcept
 				{
-					return impl::_tuple_has_type<T, brigand::as_tuple<signature_list>>::value;
+					return impl::_list_has_type<T, signature_list>::value;
+					//return impl::_tuple_has_type<T, brigand::as_tuple<signature_list>>::value;
+				}
+
+				struct _impl
+				{
+					//template <class _Ty>
+					//struct is_floating_point : bool_constant<is_floating_point_v<_Ty>> {};
+
+					template<typename T>
+					struct _IsSignature : impl::_list_has_type<T, signature_list> {};
+
+					template<typename T>
+					struct _IsSystem : impl::_list_has_type<T, system_list> {};
+				};
+
+				template<typename T>
+				static constexpr bool IsSystem() noexcept
+				{
+					return impl::_list_has_type<T, system_list>::value;
+					//return impl::_tuple_has_type<T, brigand::as_tuple<system_list>>::value;
 				}
 
 				static constexpr size_t CountComponent() noexcept
@@ -113,6 +151,11 @@ namespace OE
 				static constexpr size_t CountSignature() noexcept
 				{
 					return brigand::size<signature_list>::value;
+				}
+
+				static constexpr size_t CountSystem() noexcept
+				{
+					return brigand::size<system_list>::value;
 				}
 
 				template<typename T>
@@ -128,7 +171,28 @@ namespace OE
 					return brigand::index_of<signature_list, T>::value;
 				}
 
-				using bitset = std::bitset<CountComponent()>;
+				template<typename T>
+				static constexpr size_t SystemIndex() noexcept
+				{
+					static_assert(IsSystem<T>());
+					return brigand::index_of<system_list, T>::value;
+				}
+
+				template<typename T>
+				static constexpr size_t ComponentBit() noexcept
+				{
+					static_assert(IsComponent<T>());
+					return ComponentIndex<T>();
+				}
+
+				template<typename T>
+				static constexpr size_t SystemBit() noexcept
+				{
+					static_assert(IsSystem<T>());
+					return CountComponent() + SystemIndex<T>();
+				}
+
+				using bitset = std::bitset<CountSystem() + CountComponent()>;
 
 				template<typename T>
 				struct GetSignature
@@ -136,8 +200,14 @@ namespace OE
 					static_assert(IsSignature<T>());
 					using type = brigand::at<signature_list, std::integral_constant<size_t, SignatureIndex<T>()>>;
 				};
-			};
 
+				template<typename T>
+				struct GetSystem
+				{
+					static_assert(IsSystem<T>());
+					using type = brigand::at<system_list, std::integral_constant<size_t, SystemIndex<T>()>>;
+				};
+			};
 
 			template<typename TSettings>
 			class SignatureBitsetStorage
@@ -147,18 +217,30 @@ namespace OE
 				using type = SignatureBitsetStorage<settings>;
 				using component_list = typename settings::component_list;
 				using signature_list = typename settings::signature_list;
+				using system_list    = typename settings::system_list;
 				using tuple_component_list = brigand::as_tuple<typename settings::component_list>;
 				using tuple_signature_list = brigand::as_tuple<typename settings::signature_list>;
+				using tuple_system_list    = brigand::as_tuple<typename settings::system_list>;
 				using bitset = typename settings::bitset;
 
-				using bitset_storage_type = brigand::as_tuple<brigand::filled_list<bitset, settings::CountSignature()>>;
+				using bitset_count = std::integral_constant<size_t, settings::CountSignature() + settings::CountSystem()>;
+				using bitset_storage_type = brigand::as_tuple < brigand::filled_list < bitset, bitset_count{} >> ;
 
+				//template<typename T>
+				//using IsComponentFilter = std::bool_constant < settings::template IsComponent<T>() >;
 				template<typename T>
-				using IsComponentFilter = std::integral_constant<bool, settings::template IsComponent<T>()>;
+				struct IsComponentFilter : std::bool_constant<settings::template IsComponent<T>()>{};
+				template<typename T>
+				struct IsSystemFilter : std::bool_constant < settings::template IsSystem<T>()> {};
 
 				using settings = TSettings;
 
 				bitset_storage_type bitset_storage;
+
+				template<typename TSignature>
+				using SignatureComponents = brigand::remove_if<TSignature, IsSystemFilter<brigand::_1>>;
+				template<typename TSystem>
+				using SignatureSystems = brigand::remove_if<TSystem, IsComponentFilter<brigand::_1>>;
 
 			public:
 				template<typename T>
@@ -178,20 +260,27 @@ namespace OE
 				}
 
 			private:
-				template<typename T>
+				template<typename TSignature>
 				void InitializeBitset() noexcept
 				{
-					auto& bitset = GetSignatureBitset<T>();
+					auto& bitset = GetSignatureBitset<TSignature>();
+					using Components = SignatureComponents<TSignature>;
+					using Systems	 = SignatureSystems<TSignature>;
 
-					using Tsignature = typename settings:: template GetSignature<T>::type;
-					brigand::for_each<Tsignature>([this, &bitset](auto s)
+					brigand::for_each<Components>([this, &bitset](auto s)
 						{
-							using Tcompomnent = decltype(s);
-#ifdef _DEBUG
-							std::cout << typeid(Tsignature).name() << typeid(Tcompomnent).name() << std::endl;
-#endif
-							bitset[settings:: template ComponentIndex<Tcompomnent::type>()] = true;
+							using TComponent = typename decltype(s)::type;
+							bitset[settings:: template ComponentBit<TComponent>()] = true;
 						});
+
+
+					brigand::for_each<Systems>([this, &bitset](auto s)
+						{
+							using TSystem = typename decltype(s)::type;
+							bitset[settings:: template SystemBit<TSystem>()] = true;
+						});
+
+					std::cout << bitset << std::endl;
 				}
 
 			public:
@@ -211,6 +300,7 @@ namespace OE
 			using settings = TSettings;
 			using type = Manager<settings>;
 			using SignatureBitsetStorage = typename settings::signature_bitset_storage;
+			using SystemStorage = typename settings::system_storage;
 			using Entity = _types::Entity<settings>;
 
 			using EntityStorage = std::vector<Entity>;
@@ -220,6 +310,7 @@ namespace OE
 			EntityStorage				entity_storage;
 			ComponentManager<TSettings> component_manager;
 			SignatureBitsetStorage		signature_bitset_storage{};
+			SystemStorage				system_storage{};
 
 			ecs_ID						num_entities{ 0 };
 			size_t						current_container_size{ 0 };
@@ -357,17 +448,70 @@ namespace OE
 				}
 			}
 
-			template<typename Signature, typename TF>
+			//template<typename T>
+			//class EntityMatchingHelper
+			//{
+			//public:
+			//	template<typename TF, std::enable_if_t<settings::_impl::template _IsSignature<T>::value, T>* = nullptr>
+			//	static void _ForEntitiesMatching(float ft, TF&& function)
+			//	{
+			//		ForEntities([this, &ft, &function](ecs_ID i)
+			//			{
+			//				if (MatchesSignature<T>(i))
+			//				{
+			//					ExpandSignatureCall<T>(i, ft, function);
+			//				}
+			//			});
+			//	}
+
+			//	template<typename TF, std::enable_if_t<settings::_impl::template _IsSystem<T>::value, T>* = nullptr>
+			//	static void _ForEntitiesMatching(float ft, TF&& function)
+			//	{
+			//		using signature = typename T::signature;
+			//		ForEntities([this, &ft, &function](ecs_ID i)
+			//			{
+			//				if (MatchesSignature<signature>(i))
+			//				{
+			//					ExpandSignatureCall<signature>(i, ft, function);
+			//				}
+			//			});
+			//	}
+			//};
+
+
+			//template<typename T, typename TF>
+			//void ForEntitiesMatching(float ft, TF&& function)
+			//{
+			//	EntityMatchingHelper<T>::_ForEntitiesMatching(ft, std::forward<TF>(function));
+			//}
+
+
+			template<typename TSignature, typename TF, std::enable_if_t<settings::_impl::template _IsSignature<TSignature>::value, TSignature>* = nullptr>
 			void ForEntitiesMatching(float ft, TF&& function)
 			{
 				ForEntities([this, &ft, &function](ecs_ID i)
 					{
-						if (MatchesSignature<Signature>(i))
+						if (MatchesSignature<TSignature>(i))
 						{
-							ExpandSignatureCall<Signature>(i, ft, function);
+							ExpandSignatureCall<TSignature>(i, ft, function);
 						}
 					});
 			}
+
+			template<typename TSystem, typename TF, std::enable_if_t<settings::_impl::template _IsSystem<TSystem>::value, TSystem>* = nullptr>
+			void ForEntitiesMatching(float ft, TF&& function)
+			{
+				using signature = typename TSystem::signature;
+				using required_components = typename SignatureBitsetStorage::template SignatureComponents<signature>;
+				ForEntities([this, &ft, &function](ecs_ID i)
+					{
+						if (MatchesSignature<required_components>(i))
+						{
+							ExpandSignatureCall<required_components>(i, ft, function);
+						}
+					});
+			}
+
 
 		private:
 			template<typename ...Ts>
@@ -379,11 +523,13 @@ namespace OE
 			template <typename L>
 			using as_expand_call = brigand::wrap<L, expand_call_wrapper>;
 
+
 			template<typename T, typename TF>
 			void ExpandSignatureCall(ecs_ID mI, float dt, TF&& mFunction)
 			{
 				static_assert(settings::template IsSignature<T>(), "");
-				using Helper = as_expand_call<T>;
+				using Components = typename SignatureBitsetStorage::template SignatureComponents<T>;
+				using Helper = as_expand_call<Components>;
 				Helper::Call(mI, dt, *this, mFunction);
 			}
 
@@ -402,5 +548,8 @@ namespace OE
 				}
 			};
 		};
+
+
+
 	}
 }

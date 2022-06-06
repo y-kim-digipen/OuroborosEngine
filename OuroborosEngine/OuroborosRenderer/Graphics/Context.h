@@ -3,7 +3,10 @@
 
 #include <unordered_map>
 #include <memory>
+
 #include <glm.hpp>
+#include <glm/matrix.hpp>
+
 
 #include "mesh.h"
 #include "mesh_manager.h"
