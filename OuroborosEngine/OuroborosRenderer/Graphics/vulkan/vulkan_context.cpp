@@ -382,9 +382,10 @@ namespace Renderer
                 material_manager->GetMaterial(material->name)->Bind();
 
                 //TODO: Bind Object Descriptor set 3 in future
-                if(mesh->mesh_name.size() != 0)
-                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str()); // Draw Object
+                if (mesh->mesh_name.size() != 0) {
 
+                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str()); // Draw Object
+                }
                 draw_queue.pop();
             }
     }
