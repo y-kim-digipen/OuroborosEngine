@@ -37,13 +37,9 @@
     <ClInclude Include="src\engine\ecs\ecs_base.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\entity_mananger.h">
-      <Filter>engine\scene\ecs</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\ecs\components.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="ecs_base.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\gui\gui_component_panel.h">
       <Filter>engine\gui</Filter>
