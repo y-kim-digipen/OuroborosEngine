@@ -55,7 +55,7 @@ namespace Renderer
 			glm::vec3 position;
 		};
 
-		CameraData camera_data;
+		CameraData data;
 	};
 
 

@@ -15,7 +15,7 @@ namespace Renderer
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
 		:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
-		camera_data.position = glm::vec3(posX, posY, posZ);
+		data.position = glm::vec3(posX, posY, posZ);
 		world_up = glm::vec3(upX, upY, upZ);
 		yaw = yaw;
 		pitch = pitch;
@@ -26,17 +26,17 @@ namespace Renderer
 	{
 		float velocity = movement_speed * static_cast<float>(deltaTime);
 		if (direction == Camera_MoveTo::FORWARD)
-			camera_data.position += front * velocity;
+			data.position += front * velocity;
 		if (direction == Camera_MoveTo::BACKWARD)
-			camera_data.position -= front * velocity;
+			data.position -= front * velocity;
 		if (direction == Camera_MoveTo::LEFT)
-			camera_data.position -= right * velocity;
+			data.position -= right * velocity;
 		if (direction == Camera_MoveTo::RIGHT)
-			camera_data.position += right * velocity;
+			data.position += right * velocity;
 		if (direction == Camera_MoveTo::UP)
-			camera_data.position += up * velocity;
+			data.position += up * velocity;
 		if (direction == Camera_MoveTo::DOWN)
-			camera_data.position -= up * velocity;
+			data.position -= up * velocity;
 	}
 
 	void Camera::MouseInput(float xoffset, float yoffset, bool constrainPitch)
@@ -79,12 +79,12 @@ namespace Renderer
 
 	glm::mat4 Camera::GetCameraMat()
 	{
-		return glm::lookAt(camera_data.position, camera_data.position + front, up);
+		return glm::lookAt(data.position, data.position + front, up);
 	}
 
 	void Camera::ResetCamera(glm::vec3 campos)
 	{
-		camera_data.position = campos;
+		data.position = campos;
 		world_up = glm::vec3(0.0f, 1.0f, 0.0f);
 		yaw = -90.f;
 		pitch = 0.f;
