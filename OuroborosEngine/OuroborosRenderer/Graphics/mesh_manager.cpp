@@ -31,11 +31,11 @@ namespace Renderer
 	}
 
 
-	int VulkanMeshManager::DrawMesh(const std::string& mesh_name)
+	int VulkanMeshManager::DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix)
 	{
 		if (auto mesh_iter = mesh_map.find(mesh_name); mesh_iter != mesh_map.end())
 		{
-			mesh_iter->second->Draw();
+			mesh_iter->second->Draw(model, normal_matrix);
 		}
 		else
 		{
@@ -43,7 +43,7 @@ namespace Renderer
 			int result = AddMesh(mesh_name);
 			if (result == 0)
 			{
-				mesh_map.find(mesh_name)->second->Draw();
+				mesh_map.find(mesh_name)->second->Draw(model, normal_matrix);
 			}
 		}
 

@@ -57,7 +57,6 @@ namespace Renderer
 		*/
 
 
-
 		// for each shader bind pipeline ( bind shader descriptor set )
 			// for each material bind (set = 2)
 				// for each object (set = 3 or might be dynamic material )
