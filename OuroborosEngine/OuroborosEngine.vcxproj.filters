@@ -53,8 +53,16 @@
     <ClInclude Include="src\engine\ecs\system_manager.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gui\GUI_definedColors.h">
+      <Filter>engine\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\engine\gui\gui_component_implementation.inl">
+      <Filter>engine\gui</Filter>
+    </None>
   </ItemGroup>
 </Project>

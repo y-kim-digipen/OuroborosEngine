@@ -24,6 +24,4 @@ using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, System
 using ECS_Manager = OE::ECS::Manager<OESettings>;
 
 
-
-
 static inline ECS_Manager ecs_manager;

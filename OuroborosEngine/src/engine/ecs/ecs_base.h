@@ -357,6 +357,7 @@ namespace OE
 			using EntityStorage = std::vector<Entity>;
 		public:
 			using SystemStorage = typename settings::system_storage;
+			using ComponentStorage = typename SignatureBitsetStorage::component_list;
 
 			EntityStorage				entity_storage;
 			ComponentManager<TSettings> component_manager;
