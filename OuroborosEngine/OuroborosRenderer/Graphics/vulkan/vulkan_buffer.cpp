@@ -1,7 +1,5 @@
 #include "vulkan_buffer.h"
 
-#include "vulkan_type.inl"
-
 namespace Renderer
 {
 	VulkanBuffer::VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
@@ -196,33 +194,74 @@ namespace Renderer
 	}
 
 
-	void VulkanUniformBuffer::AddData(void* data, uint32_t size, uint32_t offset)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type), buffer_size(buffer_size)
 	{
+		data = malloc(buffer_size);
 
-
-
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);			
+		}
 	}
 
-	void VulkanUniformBuffer::SetupDescriptorSet( )
+	VulkanUniformBuffer::~VulkanUniformBuffer()
 	{
-		//VkWriteDescriptorSet writes[2];
-		
-
-
-		//vkUpdateDescriptorSets()
+		free(data);
+		data = nullptr;
 	}
 
-	void VulkanUniformBuffer::AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool,
-	                                                VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets)
+	void VulkanUniformBuffer::Bind() const
 	{
-		//TODO : 
-		VkDescriptorSetAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-		allocate_info.descriptorPool = pool;
-		allocate_info.descriptorSetCount = set_count;
-		allocate_info.pSetLayouts = layouts;
-
-		VK_CHECK(vkAllocateDescriptorSets(device->handle, &allocate_info, out_sets));
-
-
+		buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
 	}
+
+	void VulkanUniformBuffer::UnBind() const
+	{
+		UniformBuffer::UnBind();
+	}
+
+	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data_)
+	{
+		if (member_vars.find(member_var_name) != member_vars.end()) 
+		{
+			char* ptr = reinterpret_cast<char*>(this->data) + member_vars[member_var_name].offset;
+			memcpy(ptr , data_, member_vars[member_var_name].size);
+			return 0;
+		}
+
+		return -1;
+	}
+
+	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout)
+	{
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+
+			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+			alloc_info.descriptorSetCount = 1;
+			alloc_info.pSetLayouts = &layout;
+	
+			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));
+
+			VkDescriptorBufferInfo buffer_info{};
+			buffer_info.buffer = buffer[i]->buffer;
+			buffer_info.offset = 0;
+			buffer_info.range = buffer[i]->size;
+
+			VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+			set_write.dstSet = descriptor_set[i];
+			set_write.dstBinding = binding;
+			set_write.descriptorCount = 1;
+			set_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			set_write.pBufferInfo = &buffer_info;
+
+			vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
+		}
+	}
+
+	uint64_t VulkanUniformBuffer::GetBufferSize() const
+	{
+		return buffer_size;
+	}
+
+
 }

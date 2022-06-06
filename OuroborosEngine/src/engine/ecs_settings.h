@@ -13,7 +13,7 @@ using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem>;
 
 using Signature0 = OE::ECS::types::Signature<Transform, Velocity>;
 using Signature1 = OE::ECS::types::Signature<LifeTime, Mesh>;
-using Signature2 = OE::ECS::types::Signature<BoolWrapper>;
+using Signature2 = OE::ECS::types::Signature<TestSystem, BoolWrapper>;
 
 using MeshDrawSignature = OE::ECS::types::Signature<Transform, Mesh>;
 

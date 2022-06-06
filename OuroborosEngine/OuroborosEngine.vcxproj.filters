@@ -51,6 +51,12 @@
     <ClInclude Include="src\engine\ecs_settings.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\ecs\system.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\system_manager.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

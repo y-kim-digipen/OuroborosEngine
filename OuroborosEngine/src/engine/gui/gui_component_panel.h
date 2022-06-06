@@ -163,6 +163,20 @@ namespace OE
 			});
 	}
 
+	static char* buffer = new char[30]();
+	template<>
+	inline void ComponentDrawFunction<Mesh>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		Mesh& mesh_component = ecs_manager.GetComponent<Mesh>(entID);
+		memcpy(buffer,mesh_component.mesh_name.c_str(), 30);
+		if(ImGui::InputText("Meshname",buffer,30, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			mesh_component.mesh_name = buffer;
+		}
+	}
+
+
 	template<>
 	inline void ComponentDrawFunction<Transform>(ecs_ID entID)
 	{

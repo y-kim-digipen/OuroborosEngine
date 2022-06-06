@@ -4,9 +4,13 @@
 #include "vulkan_type.inl"
 
 #include <unordered_map>
+#include <string>
+
 #include "../shader.h"
 
 namespace Renderer {
+
+	enum class DataType;
 
 	struct DescriptorSetBindingData
 	{
@@ -16,8 +20,11 @@ namespace Renderer {
 		VkDescriptorType type;	
 	};
 
-	struct UniformBufferObjectData {
-
+	struct DescriptorSetLayoutData {
+		std::string name;
+		DataType type;
+		uint32_t size;
+		uint32_t offset;
 	};
 
 	class VulkanShader : public Shader
@@ -27,8 +34,14 @@ namespace Renderer {
 		VulkanShader(Vulkan_type* vulkan_type);
 		~VulkanShader() override;
 
+
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
+
+		void BindObjectData(const glm::mat4& model) override;
+
+
+		
 	private:
 
 		int CreateShaderModule(VkShaderModule* out_shader_module,  const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);
@@ -37,12 +50,13 @@ namespace Renderer {
 		Vulkan_type* vulkan_type;
 
 		VkDescriptorSetLayout descriptor_set_layouts[4];
+
 		uint32_t set_layout_count;
 		VkPipelineLayout pipeline_layout;
 		VkPipeline pipeline;
 
-		std::unordered_map<const char*, DescriptorSetBindingData> descriptor_data;
-		//std::unordered_map<const char*,
+		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
+		std::vector<VkPushConstantRange> push_constant_ranges;
 	};
 }
 #endif // !VULKAN_SHADER_H

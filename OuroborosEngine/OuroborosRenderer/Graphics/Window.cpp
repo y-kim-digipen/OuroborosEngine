@@ -7,9 +7,13 @@
 
 #include "shader.h"
 
+//TODO: temp header
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+#include <glm.hpp>
+
 namespace Renderer
 {
-
 	Window::Window(const WindowProperties& window_properties)
 	{
 		// make unique pointer
@@ -22,16 +26,25 @@ namespace Renderer
 		Shutdown();
 	}
 
-	void Window::Update()
+	void Window::BeginFrame()
 	{
 		glfwPollEvents();
-	
 		window_data.RenderContextData->BeginFrame();
 		vulkan_imgui_manager.BeginFrame();
+	}
+
+	void Window::Update()
+	{
+		//TODO: update global_data
+
 		vulkan_imgui_manager.Update();
-		window_data.RenderContextData->DrawMesh("shader", "suzanne");
-		vulkan_imgui_manager.EndFrame();
-		window_data.RenderContextData->EndFrame();
+
+		// for each shader bind pipeline
+			// for each material bind (set = 1)
+				// for each object 
+					// bind push_constant (model, normal)
+					
+
 		//TODO : make close
 		if (glfwWindowShouldClose(window_data.window))
 		{
@@ -41,6 +54,13 @@ namespace Renderer
 		{
 		
 		}
+	}
+
+	void Window::EndFrame()
+	{
+		vulkan_imgui_manager.EndFrame();
+		window_data.RenderContextData->EndFrame();
+
 	}
 
 	void Window::Init(const WindowProperties& window_properties)
@@ -70,6 +90,9 @@ namespace Renderer
 		if(is_vulkan)
 		{
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+					//refl_binding.resource_type
+
+
 			window_data.window = glfwCreateWindow(window_data.width, window_data.height, window_data.title.c_str(), nullptr, nullptr);
 			window_data.RenderContextData = std::make_shared<VulkanContext>(window_data.window);
 			window_data.RenderContextData->Init(1,2);
@@ -89,17 +112,9 @@ namespace Renderer
 			std::cout << "failed to Create window\n";
 		}
 
-		ShaderConfig shader_config{
-			"shader",
-			{
-				E_StageType::VERTEX_SHADER,
-				E_StageType::FRAGMENT_SHADER
-			},
-			2
-		};
 
-		window_data.RenderContextData->AddShader(&shader_config);
-		window_data.RenderContextData->AddMesh("suzanne");
+
+		//window_data.RenderContextData->AddMesh("suzanne");
 
 
 
@@ -111,7 +126,7 @@ namespace Renderer
 	{
 		if(is_vulkan)
 		{
-			//window_data.RenderContextData->Shutdown();
+			window_data.RenderContextData->Shutdown();
 			//vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
 			
 

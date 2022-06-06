@@ -2,15 +2,28 @@
 
 #include "spirv_helper.h"
 #include "vulkan_pipeline.h"
+#include "vulkan_buffer.h"
+
 #include "SPIRV-Reflect/spirv_reflect.h"
+
+#include <glm/matrix.hpp>
+#include <glm/vector_relational.hpp>
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <gtc/matrix_transform.hpp>
 
 #include "../mesh.h"
 
 namespace Renderer {
+
+	struct MeshConstant
+	{
+		glm::mat4 model;
+		glm::mat4 normal_matrix;
+	};
 
 	void ReadFile(std::string& buffer,const std::string& filename) {
 		std::ifstream file(filename, std::ios::ate);
@@ -33,7 +46,8 @@ namespace Renderer {
 
 	VulkanShader::~VulkanShader()
 	{
-
+		vkDestroyPipeline(vulkan_type->device.handle, pipeline, nullptr);
+		vkDestroyPipelineLayout(vulkan_type->device.handle, pipeline_layout, nullptr);
 	}
 
 	void VulkanShader::Init(ShaderConfig* config)
@@ -41,7 +55,6 @@ namespace Renderer {
 		uint32_t stage_count = config->stage_count;
 		
 		std::vector<VkPipelineShaderStageCreateInfo> shader_stage_create_infos{};
-		std::vector<VkPushConstantRange> push_constant_ranges;
 		std::array<std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4> layout_bindings_set;
 
 		for (uint32_t i = 0; i < stage_count; ++i) {
@@ -71,9 +84,9 @@ namespace Renderer {
 			shader_stage_create_infos.push_back(shader_stage_create_info);
 		}
 
-		////
 		Vulkan_PipelineBuilder pipeline_builder;
 		set_layout_count = 0;
+		uint32_t ubo_count = 0;
 		
 		for (uint32_t i = 0; i < 4; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
@@ -88,6 +101,12 @@ namespace Renderer {
 
 			if (binding_count != 0) {
 				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
+
+				// TODO: don't create descriptor set 0 ubo (since we're going to use one global descriptor set )
+				for (const auto& binding_set : layout_bindings_set[i]) {
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
+				}
+
 				++set_layout_count;
 			}
 			else {
@@ -123,8 +142,6 @@ namespace Renderer {
 		input_attribute_descriptions[2].location = 2;
 		input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
 
-
-
 		pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
 		pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
 		pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
@@ -153,7 +170,21 @@ namespace Renderer {
 	void VulkanShader::Bind()
 	{
 		uint32_t current_frame = vulkan_type->current_frame;
-		vkCmdBindPipeline(vulkan_type->frame_data[current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+		auto& frame_data = vulkan_type->frame_data[current_frame];
+
+		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+		for(auto& buffer_object : uniform_buffer_objects)
+		{
+			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
+		}
+	}
+
+	void VulkanShader::BindObjectData(const glm::mat4& model)
+	{
+		
+		//TODO: make it configurable
+		for (const auto& push_constant : push_constant_ranges)
+			vkCmdPushConstants(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, pipeline_layout, push_constant.stageFlags, push_constant.offset, push_constant.size, &model);
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
@@ -185,9 +216,6 @@ namespace Renderer {
 		for (uint32_t i_set = 0; i_set < desciptor_set_count; ++i_set) {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
-
-			struct DescriptorSetLayoutData;
-			VkDescriptorSetLayout set_layout{};
 	
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
 				
@@ -204,7 +232,6 @@ namespace Renderer {
 						descriptor_count *= refl_binding.array.dims[i_dim];
 					}
 
-
 					layout_bindings_set[refl_set.set][refl_binding.binding] = {
 						refl_binding.binding,
 						(VkDescriptorType)refl_binding.descriptor_type,
@@ -213,7 +240,51 @@ namespace Renderer {
 						0,
 					};
 
-					//refl_binding.resource_type
+					uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size));
+
+					for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
+
+						DataType data_type = DataType::NONE;
+
+						switch (refl_binding.block.members[i].type_description->op) {
+						case SpvOp::SpvOpTypeMatrix:
+							if (refl_binding.block.members[i].size == sizeof(glm::mat4))
+								data_type = DataType::MAT4;
+							else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
+								data_type = DataType::MAT3;
+
+							break;
+						case SpvOp::SpvOpTypeVector:
+
+							if (refl_binding.block.members[i].size == sizeof(glm::vec4))
+								data_type = DataType::FLOAT4;
+							else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
+								data_type = DataType::FLOAT3;
+							else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
+								data_type = DataType::FLOAT2;
+
+							break;
+						case SpvOp::SpvOpTypeFloat:
+							data_type = DataType::FLOAT;
+							break;
+						case SpvOp::SpvOpTypeInt:
+							data_type = DataType::INT;
+							break;
+						case SpvOp::SpvOpTypeBool:
+							data_type = DataType::BOOL;
+							break;
+						default:
+							DataType::NONE;
+						}
+
+						uniform_buffer_objects.back()->AddMember(
+							refl_binding.block.members[i].name,
+							data_type,
+							refl_binding.block.members[i].size,
+							refl_binding.block.members[i].offset
+							);
+						
+					}
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
 				}
