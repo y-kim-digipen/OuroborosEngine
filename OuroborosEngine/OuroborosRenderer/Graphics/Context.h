@@ -3,7 +3,11 @@
 
 #include <unordered_map>
 #include <memory>
+#include <glm.hpp>
+
 #include "mesh.h"
+#include "mesh_manager.h"
+#include "shader_manager.h"
 static bool is_vulkan = true;
 struct GLFWwindow;
 
@@ -35,6 +39,8 @@ namespace Renderer
 		
 		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
 		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
+
+
 
 	protected:
 		GLFWwindow* window;

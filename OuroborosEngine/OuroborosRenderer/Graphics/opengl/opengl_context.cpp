@@ -29,6 +29,10 @@ namespace Renderer
 	{
 	}
 
+	void OpenglContext::InitGlobalData()
+	{
+	}
+
 	int OpenglContext::BeginFrame()
 	{
 		return 0;

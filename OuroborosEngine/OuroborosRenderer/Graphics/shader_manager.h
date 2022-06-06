@@ -12,15 +12,28 @@ namespace Renderer
 	class ShaderManager
 	{
 	public:
-		ShaderManager(Vulkan_type* vulkan_type);
-		~ShaderManager() = default;
-		int AddShader(ShaderConfig* config);
-		int DeleteShader(ShaderConfig* config);
-		Shader* GetShader(const char* shader_name);
-		friend class MeshManager;
+		ShaderManager() = default;
+		virtual ~ShaderManager() = default;
+		virtual int AddShader(ShaderConfig * config) = 0;
+		virtual int DeleteShader(ShaderConfig * config) = 0;
+		virtual Shader* GetShader(const char* shader_name) = 0;
+
+	protected:
+		std::unordered_map<const char*, std::shared_ptr<Shader>> shader_map;
+	};
+
+
+	class VulkanShaderManager : public ShaderManager
+	{
+	public:
+		VulkanShaderManager(Vulkan_type* vulkan_type);
+		~VulkanShaderManager() = default;
+		int AddShader(ShaderConfig* config) override;
+		int DeleteShader(ShaderConfig* config) override;
+		Shader* GetShader(const char* shader_name) override;
+		friend class VulkanMeshManager;
 
 	private:
-		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
 		Vulkan_type* vulkan_type;
 	};
 

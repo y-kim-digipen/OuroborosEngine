@@ -291,6 +291,10 @@ namespace Renderer
         return  0;
     }
 
+    void VulkanContext::InitGlobalData()
+    {
+    }
+
     Vulkan_type* VulkanContext::GetVulkanType()
     {
         return &vulkan_type;

@@ -6,12 +6,12 @@
 
 namespace Renderer
 {
-	ShaderManager::ShaderManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanShaderManager::VulkanShaderManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
 
-	int ShaderManager::AddShader(ShaderConfig* config)
+	int VulkanShaderManager::AddShader(ShaderConfig* config)
 	{
 		if (shader_map.find(config->name) != shader_map.end())
 		{
@@ -26,7 +26,7 @@ namespace Renderer
 		return 0;
 	}
 
-	int ShaderManager::DeleteShader(ShaderConfig* config)
+	int VulkanShaderManager::DeleteShader(ShaderConfig* config)
 	{
 		if(auto iter = shader_map.find(config->name); iter != shader_map.end())
 		{
@@ -41,7 +41,7 @@ namespace Renderer
 		}
 	}
 
-	Shader* ShaderManager::GetShader(const char* shader_name)
+	Shader* VulkanShaderManager::GetShader(const char* shader_name)
 	{
 		if(auto iter = shader_map.find(shader_name); iter != shader_map.end())
 		{

@@ -8,11 +8,11 @@
 
 namespace Renderer
 {
-	MeshManager::MeshManager(Vulkan_type* vulkan_type, ShaderManager* shader_manager) : vulkan_type(vulkan_type), shader_manager(shader_manager)
+	VulkanMeshManager::VulkanMeshManager(Vulkan_type* vulkan_type, VulkanShaderManager* shader_manager) : vulkan_type(vulkan_type), shader_manager(shader_manager)
 	{
 
 	}
-	int MeshManager::AddMesh(const char* mesh_name)
+	int VulkanMeshManager::AddMesh(const char* mesh_name)
 	{
 		if (mesh_map.find(mesh_name) != mesh_map.end()) 
 		{
@@ -31,7 +31,7 @@ namespace Renderer
 	}
 
 
-	int MeshManager::DrawMesh(const char* shader, const char* mesh_name)
+	int VulkanMeshManager::DrawMesh(const char* shader, const char* mesh_name)
 	{
 		if(auto iter = shader_manager->shader_map.find(shader); iter != shader_manager->shader_map.end())
 		{
@@ -59,7 +59,7 @@ namespace Renderer
 		return 0;
 	}
 
-	int MeshManager::DeleteMesh(const char* mesh_name)
+	int VulkanMeshManager::DeleteMesh(const char* mesh_name)
 	{
 		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
 		{

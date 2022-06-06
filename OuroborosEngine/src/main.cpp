@@ -14,6 +14,7 @@
 #include "engine/ecs/ecs_base.h"
 #include "engine/ecs/components.h"
 #include "engine/gui/gui_component_panel.h"
+#include "Graphics/shader_manager.h"
 #include "Graphics/vulkan/vulkan_context.h"
 
 
@@ -29,7 +30,7 @@ static Camera camera;
 
 int main()
 {
-    window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Project"));
+    window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
 
     OE::Engine::Get().Init();
 
@@ -70,6 +71,15 @@ int main()
 	camera.view = glm::lookAt(camera.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
     //Debug ECS manager ends here
+    Renderer::ShaderConfig shader_config{
+    "shader",
+    {
+	    Renderer::E_StageType::VERTEX_SHADER,
+        Renderer::E_StageType::FRAGMENT_SHADER
+    },
+    2
+    };
+    dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 
 
     window->vulkan_imgui_manager.RegisterMainMenu([]()
@@ -115,9 +125,10 @@ int main()
             [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Mesh& mesh) mutable
         {
             static bool init = true;
+            const auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
             if (init)
             {
-             window->GetWindowData().RenderContextData.get()->AddMesh("suzanne");
+                context->mesh_manager_.AddMesh("suzanne");
                 init = false;
             }
             else
@@ -133,8 +144,8 @@ int main()
                     //TODO : uniform values input in the buffer
                     // Draw call
                     //
-                    window->GetWindowData().RenderContextData.get()->shader_map["shader"]->BindObjectData(model);
-                	window->GetWindowData().RenderContextData.get()->DrawMesh("shader", "suzanne");
+                    context->shader_manager_.GetShader("shader")->BindObjectData(model);
+                    context->mesh_manager_.DrawMesh("shader", "suzanne");
                 }
             }
         });
