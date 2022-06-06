@@ -206,6 +206,7 @@
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_material.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_material_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_material.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_material_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />

@@ -58,6 +58,8 @@ int main()
 
     SetupGUI();
 
+    window->GetWindowData().RenderContextData.get()->InitGlobalData();
+
     while (!glfwWindowShouldClose(window->GetWindowData().window))
     {
         OE::Engine::Get().PreUpdate();
@@ -67,35 +69,26 @@ int main()
         window->Update();
 
 
-    	ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
+        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
             [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] MeshComponent& mesh, [[maybe_unused]] ShaderComponent& shader) mutable
-        {
-            auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
-            static bool init = true;
-                if (init)
+            {
+                auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+                if (ecs_manager.GetEntity(ent).alive)
                 {
-              
-                    context->shader_manager_.GetShader("shader")->SetUniformValue("projection", (void*)&camera.data.projection);
-                    context->shader_manager_.GetShader("shader")->SetUniformValue("view", (void*)&camera.data.view);
+                    camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+                    camera.data.view = camera.GetCameraMat();
+                    //camera.data.projection[1][1] *= -1;
+                    camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+                    
+                    //TODO: pass renderer camera data
+                    context->global_data = camera.data;
+                    context->UpdateGlobalData();
 
+                    context->AddDrawQueue(&transform, nullptr, &mesh, nullptr);
                 }
-                else
-                {
-                    if (ecs_manager.GetEntity(ent).alive)
-                    {
-                        camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-                        camera.data.view = camera.GetCameraMat();
-                        //camera.data.projection[1][1] *= -1;
-                        camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-                        context->shader_manager_.GetShader("shader")->SetUniformValue("projection", (void*)&camera.data.projection);
-                        context->shader_manager_.GetShader("shader")->SetUniformValue("view", (void*)&camera.data.view);
 
-                
-                        context->AddDrawQueue(&transform, nullptr, &mesh, nullptr);
-                    }
-                }
             }
-            	);
+        );
 
         dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
         window->EndFrame();

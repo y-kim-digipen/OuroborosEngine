@@ -4,7 +4,8 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : Material(), vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(Material)))
+	//TODO: Material(*material) ???
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type, Material* material) : Material(*material), vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(Material)))
 	{
 		//TODO: might not need to create descriptor set layout everytime
 		VkDescriptorSetLayoutBinding binding;

@@ -100,17 +100,18 @@ namespace Renderer {
 			set_layout_create_info.pBindings = bindings.data();
 
 			if (binding_count != 0) {
-				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
 
-				// TODO: don't create descriptor set 0 ubo (since we're going to use one global descriptor set )
+				VkDescriptorSetLayout set_layout;
+
+				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &set_layout));
+
+				descriptor_set_layouts.push_back(set_layout);
+
 				for (const auto& binding_set : layout_bindings_set[i]) {
-					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts.back());
 				}
 
 				++set_layout_count;
-			}
-			else {
-				descriptor_set_layouts[i] = VK_NULL_HANDLE;
 			}
 		}
 
@@ -157,7 +158,7 @@ namespace Renderer {
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
+		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts.data(), set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
 		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
 
