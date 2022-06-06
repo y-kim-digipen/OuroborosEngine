@@ -74,29 +74,6 @@ int main()
         window->Update();
 
 
-        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
-            [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] MeshComponent& mesh, [[maybe_unused]] ShaderComponent& shader) mutable
-            {
-                auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
-                if (ecs_manager.GetEntity(ent).alive)
-                {
-                    camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-                    camera.data.view = camera.GetCameraMat();
-                    //camera.data.projection[1][1] *= -1;
-                    camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-                    
-                    //TODO: pass renderer camera data
-                    context->global_data.position= camera.data.position;
-                    context->global_data.view= camera.data.view;
-                    context->global_data.projection = camera.data.projection;
-                    context->UpdateGlobalData();
-
-                    context->AddDrawQueue(&transform, nullptr , &mesh, &shader);
-                }
-
-            }
-        );
-
         dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
         window->EndFrame();
         OE::Engine::Get().PostUpdate();
@@ -166,5 +143,23 @@ void ECS_TestSetup()
     ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::ecs_ID ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
         {
             transform.pos += velocity.vel * dt;
+        });
+    ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
+        {
+            auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+            if (ecs_manager.GetEntity(ent).alive)
+            {
+                camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+                camera.data.view = camera.GetCameraMat();
+
+                //TODO: pass renderer camera data
+                context->global_data.position = camera.data.position;
+                context->global_data.view = camera.data.view;
+                context->global_data.projection = camera.data.projection;
+                context->UpdateGlobalData();
+                context->BindGlobalData();
+
+                context->AddDrawQueue(&transform, nullptr, &mesh, &shader);
+            }
         });
 }

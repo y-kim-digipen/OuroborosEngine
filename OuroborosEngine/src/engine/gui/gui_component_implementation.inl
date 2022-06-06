@@ -7,9 +7,13 @@ namespace OE
 		std::string strID = std::to_string(entID);
 		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
-		if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+		if (ImGui::TreeNode(typeid(MeshComponent).name()))
 		{
-			mesh_component.mesh_name = buffer;
+			if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				mesh_component.mesh_name = buffer;
+			}
+			ImGui::TreePop();
 		}
 	}
 
@@ -94,9 +98,13 @@ namespace OE
 		std::string strID = std::to_string(entID);
 		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
 		memcpy(buffer, shader_component.name.c_str(), 30);
-		if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
-			shader_component.name = buffer;
+			if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				shader_component.name = buffer;
+			}
+			ImGui::TreePop();
 		}
 	}
 
@@ -107,12 +115,12 @@ namespace OE
 		std::string strID = std::to_string(entID);
 		MaterialComponent& material_component = ecs_manager.GetComponent<MaterialComponent>(entID);
 		memcpy(buffer, material_component.name.c_str(), 30);
+		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
+		{
 		if (ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			material_component.name = buffer;
 		}
-		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
-		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
