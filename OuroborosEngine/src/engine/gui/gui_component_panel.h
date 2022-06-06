@@ -15,11 +15,11 @@ namespace _imgui_helper
 namespace OE
 {
 	static std::vector<std::string> popup_menu_strings = 
-	{ "Add Component", "Add Entity", "Delete Entity", "Delete Component"};
+	{ "Add Component", "Add Entity", "Delete Entity", "Delete Component", "System"};
 
 	enum PopupMenuTypes
 	{
-		COMPONENT_ADD, ENTITY_ADD, ENTITY_DELETE, COMPONENT_DELETE
+		COMPONENT_ADD, ENTITY_ADD, ENTITY_DELETE, COMPONENT_DELETE, SYSTEM
 	};
 
 	template<typename TComponent>
@@ -41,7 +41,6 @@ namespace OE
 				{
 					ecs_manager.CreateEntity();
 				}
-				
 				ImGui::EndPopup();
 			}
 
@@ -112,10 +111,42 @@ namespace OE
 
 								ImGui::EndMenu();
 							}
+
+							if (ImGui::BeginMenu(popup_menu_strings[SYSTEM].c_str()))
+							{
+								using TSystems = decltype(ecs_manager)::SystemStorage::system_list;
+
+								brigand::for_each<TSystems>([entID](auto type)
+									{
+										//ImGui::Text(typeid(decltype(type)::type).name());
+										using TSystem = typename decltype(type)::type::type;
+										const bool has_this_system = ecs_manager.HasSystem<TSystem>(entID);
+										//if (has_this_system)
+										//{
+										//	ImGui::BeginDisabled();
+										//}
+										if (ImGui::MenuItem(typeid(TSystem).name(), nullptr, has_this_system))
+										{
+											if(!has_this_system)
+											{
+												ecs_manager.AddSystem<TSystem>(entID);
+											}
+											else
+											{
+												ecs_manager.DeleteSystem<TSystem>(entID);
+											}
+										}
+										//if (has_this_system)
+										//{
+										//	ImGui::EndDisabled();
+										//}
+									});
+								ImGui::EndMenu();
+							}
+
+
 							ImGui::EndPopup();
 						}
-
-
 
 						brigand::for_each<ComponentList>([entID](auto type)
 							{
@@ -140,6 +171,9 @@ namespace OE
 		if (ImGui::TreeNode(typeid(Transform).name()))
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
+			//ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &transform_component.angle);
 			ImGui::TreePop();
 		}
 	}
