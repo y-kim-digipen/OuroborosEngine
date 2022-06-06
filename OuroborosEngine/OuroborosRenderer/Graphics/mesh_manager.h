@@ -16,7 +16,7 @@ namespace Renderer
 		MeshManager() = default;
 		virtual ~MeshManager() = default;
 		virtual int AddMesh(const std::string& mesh_name) = 0;
-		virtual int DrawMesh(const std::string& shader, const std::string& mesh_name) =0;
+		virtual int DrawMesh(const std::string& mesh_name) =0;
 		virtual int DeleteMesh(const std::string& mesh_name) = 0;
 
 		protected:
@@ -30,7 +30,7 @@ namespace Renderer
 		VulkanMeshManager(Vulkan_type* vulkan_type, VulkanShaderManager* shader_manager);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
 		int AddMesh(const std::string& mesh_name) override;
-		int DrawMesh(const std::string& shader, const std::string& mesh_name) override;
+		int DrawMesh(const std::string& mesh_name) override;
 		int DeleteMesh(const std::string& mesh_name) override;
 
 

@@ -6,6 +6,7 @@
 #include "vulkan_shader.h"
 #include "vulkan_mesh.h"
 #include "vulkan_pipeline.h"
+#include "vulkan_material_manager.h"
 
 #include <iostream>
 #include <optional>
@@ -89,6 +90,7 @@ namespace Renderer
 
     VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), shader_manager_(GetVulkanType()), mesh_manager_(GetVulkanType(), &shader_manager_)
     {
+        material_manager = std::make_unique<VulkanMaterialManager>(&vulkan_type);
 	}
 
     void VulkanContext::Init(int major, int minor)
@@ -365,7 +367,6 @@ namespace Renderer
                 auto* material = front.material;
 
                 //TODO : Draw call
-
                 glm::mat4 model(1.f);
                 model = glm::translate(model, transform->pos);
                 model = glm::scale(model, transform->scale);
@@ -375,11 +376,14 @@ namespace Renderer
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
+                shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 
-                shader_manager_.GetShader("shader")->BindObjectData(model);
+                //material_manager
+                material_manager->GetMaterial(material->name)->Bind();
 
+                //TODO: Bind Object Descriptor set 3 in future
                 if(mesh->mesh_name.size() != 0)
-                mesh_manager_.DrawMesh("shader", mesh->mesh_name.c_str());
+                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str()); // Draw Object
 
                 draw_queue.pop();
             }
