@@ -65,43 +65,88 @@ int main()
 {
     OE::Engine::Get().Init();
 
-    using ComponentList = OE::ECS::TypeList<Transform, Velocity, LifeTime, Mesh, BoolWrapper>;
+    //For debug ECS manager
+    auto& ent = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<Transform>(ent.myID, glm::vec3{0.f, 1.f, 0.f});
+    ecs_manager.AddComponent<Velocity>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
+    auto& ent2 = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<LifeTime>(ent2.myID, 5);
+    ecs_manager.AddComponent<Mesh>(ent2.myID);
+    auto& ent3 = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<BoolWrapper>(ent3.myID, false);
 
-    using Signature0 = OE::ECS::types::Signature<Transform, Velocity>;
-    using Signature1 = OE::ECS::types::Signature<LifeTime, Mesh>;
-    using Signature2 = OE::ECS::types::Signature<BoolWrapper>;
+    auto& ent4 = ecs_manager.CreateEntity();
+    ecs_manager.AddComponent<Transform>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
+    ecs_manager.AddComponent<Velocity>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
+    ecs_manager.AddComponent<Tag>(ent4.myID, "TestEntity");
+    ecs_manager.AddSystem<PhysicsSystem>(ent4.myID);
+    std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
+    std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
-    using SignatureList = OE::ECS::types::SignatureList<Signature0, Signature1, Signature2>;
-    using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList>;
+    //ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f,[](OE::ecs_ID ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
+    //{
+    //        std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
+    //        std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
+    //        std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
+    //});
 
-    //std::cout << OESettings::CountComponent() << std::endl;
-    //std::cout << OESettings::IsComponent<void*>() << std::endl;
-    //std::cout << OESettings::SignatureIndex<Signature0>() << std::endl;
+    //ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](OE::ecs_ID ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
+    //    {
+    //        std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
+    //        std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
+    //        std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
+    //    });
 
-    using ECS_Manager = OE::ECS::Manager<OESettings>;
-    ECS_Manager manager;
-    auto& ent = manager.CreateEntity();
-    manager.AddComponent<Transform>(ent.myID, 0.f, 1.f);
-    manager.AddComponent<Velocity>(ent.myID, 2.f, 3.f);
-    auto& ent2 = manager.CreateEntity();
-    manager.AddComponent<LifeTime>(ent2.myID, 5);
-    manager.AddComponent<Mesh>(ent2.myID);
-    auto& ent3 = manager.CreateEntity();
-    manager.AddComponent<BoolWrapper>(ent3.myID, false);
+    ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::ecs_ID ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Velocity& velocity)
+        {
+            transform.pos += velocity.vel * 0.01f;
+            /*std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
+            std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
+            std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;*/
+        });
 
-    auto& ent4 = manager.CreateEntity();
-    manager.AddComponent<Transform>(ent4.myID, 4.f, 5.f);
-    manager.AddComponent<Velocity>(ent4.myID, 6.f, 7.f);
-    //std::cout << manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
-    //std::cout << manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
+	//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+ //   camera.data.view = camera.GetCameraMat();
 
-    manager.ForEntitiesMatching<Signature0>(1.2f,[](auto& ent, float dt, [[maybe_unused]]Transform& transform, [[maybe_unused]] Velocity& velocity)
+
+    //Debug ECS manager ends here
+    Renderer::ShaderConfig shader_config{
+    "shader",
     {
-            std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
-            std::cerr << "Transform: " << transform.x << ", " << transform.y << std::endl;
-            std::cerr << "Velocity : " << velocity.x << ", " << velocity.y << std::endl;
-    });
+	    Renderer::E_StageType::VERTEX_SHADER,
+        Renderer::E_StageType::FRAGMENT_SHADER
+    },
+    2
+    };
+    dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 
+    ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, physics_system_impl);
+
+    window->vulkan_imgui_manager.RegisterMainMenu([]()
+        {
+            if (ImGui::BeginMainMenuBar())
+            {
+                if(ImGui::BeginMenu("Editor"))
+                {
+                    auto& panels = window->vulkan_imgui_manager.GetPanels();
+                    for (auto [key, pair] : panels)
+                    {
+                        bool& open = pair.second;
+                        if(ImGui::MenuItem(key.c_str()))
+                        {
+                            std::cout << std::boolalpha << open << std::endl;
+                            open = !open;
+                            //ImGui::EndMenu();
+                        }
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMainMenuBar();
+            }
+        });
+
+    window->vulkan_imgui_manager.RegisterPanel("Entities", &OE::EntityInfoPanelFunction);
+    //    });
 
     std::cout << "Hello World!" << std::endl;
 
@@ -110,6 +155,38 @@ int main()
         OE::Engine::Get().PreUpdate(0.0);
         OE::Engine::Get().Update(0.0);
         OE::Engine::Get().PostUpdate(0.0);
+        window->BeginFrame();
+        window->Update();
+        ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
+            [](auto& ent, float dt, [[maybe_unused]] Transform& transform, [[maybe_unused]] Mesh& mesh) mutable
+        {
+            static bool init = true;
+            auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+            if (init)
+            {
+                context->mesh_manager_.AddMesh("suzanne");
+                init = false;
+            }
+            else
+            {
+                if (ecs_manager.GetEntity(ent).alive)
+                {
+                    glm::mat4 model(1.f);
+                    model = glm::translate(model, transform.pos);
+                    model = glm::scale(model, transform.scale);
+                    model = glm::rotate(model, transform.angle, transform.rotate_axis);
+
+
+                    //TODO : uniform values input in the buffer
+                    // Draw call
+                    //
+                    context->shader_manager_.GetShader("shader")->BindObjectData(model);
+                    context->mesh_manager_.DrawMesh("shader", "suzanne");
+                }
+            }
+        });
+        ecs_manager.UpdateSystem(0.f);
+        window->EndFrame();
     }
     VkInstance instance;
     VkInstanceCreateInfo create_info{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
