@@ -211,9 +211,10 @@ namespace Renderer
 
 	void VulkanUniformBuffer::Bind() const
 	{
-		buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
+		//buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
 
-		vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, 0, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
+		if (vulkan_type->current_pipeline_layout != VK_NULL_HANDLE)
+			vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, 0, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
 	}
 
 	void VulkanUniformBuffer::UnBind() const

@@ -11,13 +11,6 @@ struct Material {
 
 layout(location = 0) out vec4 outColor;
 
-layout(set = 0, binding = 0) uniform global_data 
-{
-    mat4 projection;
-    mat4 view;
-    vec3 cam_pos;
-} global_ubo;
-
 layout(location = 0) in VS_IN 
 {
     vec3 norm;

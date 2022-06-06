@@ -73,7 +73,6 @@ int main()
         window->BeginFrame();
         window->Update();
 
-
         ecs_manager.ForEntitiesMatching<MeshDrawSignature>(0.f,
             [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] MeshComponent& mesh, [[maybe_unused]] ShaderComponent& shader) mutable
             {
@@ -90,7 +89,6 @@ int main()
                     context->global_data.view= camera.data.view;
                     context->global_data.projection = camera.data.projection;
                     context->UpdateGlobalData();
-
                     context->AddDrawQueue(&transform, nullptr , &mesh, &shader);
                 }
 

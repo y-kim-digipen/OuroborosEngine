@@ -177,11 +177,6 @@ namespace Renderer {
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-		for(auto& buffer_object : uniform_buffer_objects)
-		{
-			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
-		}
-		
 	}
 
 	void VulkanShader::BindObjectData(const glm::mat4& model)
