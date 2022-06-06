@@ -64,12 +64,12 @@ namespace Renderer
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
 		virtual void DrawQueue() {};
 
+		GlobalData global_data;
 
 	protected:
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
 		
-		GlobalData global_data;
 		std::unique_ptr<UniformBuffer> global_ubo;
 		std::unique_ptr<MaterialMananger> material_manager;
 	};

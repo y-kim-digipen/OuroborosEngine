@@ -140,7 +140,7 @@ namespace Renderer
         VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
 
         //TODO: this might occur error, need to be test
-        vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, 0, 1, 0, 0);
+        vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
         global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_ubo));
@@ -372,6 +372,7 @@ namespace Renderer
                 model = glm::scale(model, transform->scale);
                 model = glm::rotate(model, transform->angle, transform->rotate_axis);
 
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model * global_data.view));
 
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
@@ -383,8 +384,7 @@ namespace Renderer
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {
-
-                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str()); // Draw Object
+                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
                 }
                 draw_queue.pop();
             }

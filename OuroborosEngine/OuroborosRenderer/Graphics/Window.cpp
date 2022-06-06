@@ -40,8 +40,6 @@ namespace Renderer
 
 		vulkan_imgui_manager.Update();
 
-		// bind global data
-		window_data.RenderContextData->UpdateGlobalData();
 	
 		/*
 		//for(const auto& shader : vulkan_context->shader_manager_)
@@ -56,7 +54,6 @@ namespace Renderer
 			}
 		}
 		*/
-		window_data.RenderContextData->BindGlobalData();
 
 
 		// for each shader bind pipeline ( bind shader descriptor set )

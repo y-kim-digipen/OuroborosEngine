@@ -81,7 +81,9 @@ int main()
                     camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
                     
                     //TODO: pass renderer camera data
-                    context->global_data = camera.data;
+                    context->global_data.position = camera.data.position;
+                    context->global_data.projection = camera.data.projection;
+                    context->global_data.view = camera.data.view;
                     context->UpdateGlobalData();
 
                     context->AddDrawQueue(&transform, nullptr, &mesh, nullptr);
