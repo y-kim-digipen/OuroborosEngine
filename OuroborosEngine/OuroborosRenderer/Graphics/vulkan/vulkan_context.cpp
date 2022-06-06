@@ -16,6 +16,9 @@
 #include <GLFW/glfw3.h>
 
 #include <algorithm>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+
 
 #include "backends/imgui_impl_vulkan.h"
 //#define GLFW_EXPOSE_NATIVE_WIN32s
@@ -300,6 +303,40 @@ namespace Renderer
     Vulkan_type* VulkanContext::GetVulkanType()
     {
         return &vulkan_type;
+    }
+
+    void VulkanContext::DrawQueue()
+    {
+	    Context::DrawQueue();
+
+            while (!draw_queue.empty())
+            {
+                const auto& front = draw_queue.front();
+
+                auto* transform = front.transform;
+                auto* mesh = front.mesh;
+                auto* shader = front.shader;
+                auto* material = front.material;
+
+                //TODO : Draw call
+
+                glm::mat4 model(1.f);
+                model = glm::translate(model, transform->pos);
+                model = glm::scale(model, transform->scale);
+                model = glm::rotate(model, transform->angle, transform->rotate_axis);
+
+
+ /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
+                mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
+
+
+                shader_manager_.GetShader("shader")->BindObjectData(model);
+
+                if(mesh->mesh_name.size() != 0)
+                mesh_manager_.DrawMesh("shader", mesh->mesh_name.c_str());
+
+                draw_queue.pop();
+            }
     }
 
 

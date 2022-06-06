@@ -12,7 +12,7 @@ namespace Renderer
 	{
 
 	}
-	int VulkanMeshManager::AddMesh(const char* mesh_name)
+	int VulkanMeshManager::AddMesh(const std::string& mesh_name)
 	{
 		if (mesh_map.find(mesh_name) != mesh_map.end()) 
 		{
@@ -21,7 +21,7 @@ namespace Renderer
 		}
 
 		mesh_map[mesh_name] = std::make_unique<VulkanMesh>(vulkan_type);
-		if (!mesh_map[mesh_name]->LoadAsset(mesh_name)) 
+		if (!mesh_map[mesh_name]->LoadAsset(mesh_name.c_str())) 
 		{
 			std::cout << mesh_name << " loading failed\n";
 			return -1;
@@ -31,7 +31,7 @@ namespace Renderer
 	}
 
 
-	int VulkanMeshManager::DrawMesh(const char* shader, const char* mesh_name)
+	int VulkanMeshManager::DrawMesh(const std::string& shader, const std::string& mesh_name)
 	{
 		if(auto iter = shader_manager->shader_map.find(shader); iter != shader_manager->shader_map.end())
 		{
@@ -46,7 +46,7 @@ namespace Renderer
 				int result = AddMesh(mesh_name);
 				if(result == 0)
 				{
-					mesh_iter->second->Draw();
+					mesh_map.find(mesh_name)->second->Draw();
 				}
 			}
 		}
@@ -59,7 +59,7 @@ namespace Renderer
 		return 0;
 	}
 
-	int VulkanMeshManager::DeleteMesh(const char* mesh_name)
+	int VulkanMeshManager::DeleteMesh(const std::string& mesh_name)
 	{
 		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
 		{

@@ -1,7 +1,7 @@
 #pragma once
 #include <glm.hpp>
 
-struct Transform
+struct TransformComponent
 {
 	glm::vec3 pos;
 	glm::vec3 scale= glm::vec3(1.f);
@@ -20,19 +20,23 @@ struct LifeTime
 	float life_time;
 };
 
-struct Mesh
+struct MeshComponent
 {
 	std::string mesh_name;
 };
 
-struct Material
+struct MaterialComponent
 {
-	std::string material_name;
+	std::string name;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	float shininess;
 };
 
-struct Shader
+struct ShaderComponent
 {
-	std::string shader_name;
+	std::string name;
 };
 
 struct BoolWrapper

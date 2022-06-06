@@ -116,6 +116,7 @@
     <ClInclude Include="Graphics\camera.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\MaterialComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">

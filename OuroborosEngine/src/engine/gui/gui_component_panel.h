@@ -132,12 +132,12 @@ namespace OE
 			});
 	}
 
-	static char* buffer = new char[30]();
 	template<>
-	inline void ComponentDrawFunction<Mesh>(ecs_ID entID)
+	inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
 	{
+		static char buffer[30];
 		std::string strID = std::to_string(entID);
-		Mesh& mesh_component = ecs_manager.GetComponent<Mesh>(entID);
+		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer,mesh_component.mesh_name.c_str(), 30);
 		if(ImGui::InputText("Meshname",buffer,30, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
@@ -145,13 +145,47 @@ namespace OE
 		}
 	}
 
+	template<>
+	inline void ComponentDrawFunction<ShaderComponent>(ecs_ID entID)
+	{
+		static char buffer[30];
+		std::string strID = std::to_string(entID);
+		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
+		memcpy(buffer, shader_component.name.c_str(), 30);
+		if(ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			shader_component.name = buffer;
+		}
+	}
 
 	template<>
-	inline void ComponentDrawFunction<Transform>(ecs_ID entID)
+	inline void ComponentDrawFunction<MaterialComponent>(ecs_ID entID)
+	{
+		static char buffer[30];
+		std::string strID = std::to_string(entID);
+		MaterialComponent& material_component = ecs_manager.GetComponent<MaterialComponent>(entID);
+		memcpy(buffer, material_component.name.c_str(), 30);
+		if(ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			material_component.name = buffer;
+		}
+		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
+		{
+			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
+			ImGui::TreePop();
+		}
+
+	}
+
+
+	template<>
+	inline void ComponentDrawFunction<TransformComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		Transform& transform_component = ecs_manager.GetComponent<Transform>(entID);
-		if (ImGui::TreeNode(typeid(Transform).name()))
+		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
+		if (ImGui::TreeNode(typeid(TransformComponent).name()))
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);

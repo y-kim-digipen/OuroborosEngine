@@ -23,6 +23,9 @@ namespace Renderer {
 		VulkanMeshManager mesh_manager_;
 
 		Vulkan_type* GetVulkanType();
+
+		void DrawQueue() override;
+
 	private:
 		void CreateSurface();
 		void CreateSwapChain();

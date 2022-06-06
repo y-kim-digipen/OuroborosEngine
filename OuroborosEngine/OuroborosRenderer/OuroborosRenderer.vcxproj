@@ -189,7 +189,7 @@
     <ClInclude Include="Graphics\camera.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
-    <ClInclude Include="Graphics\material.h" />
+    <ClInclude Include="Graphics\MaterialComponent.h" />
     <ClInclude Include="Graphics\mesh_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_imgui_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />

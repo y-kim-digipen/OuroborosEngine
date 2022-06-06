@@ -27,6 +27,15 @@ namespace Renderer
 	{
 		return 0;
 	}
+
+	void Context::AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh,
+		ShaderComponent* shader)
+	{
+		draw_queue.push({ transform,material, mesh, shader });
+	}
+
+
+
 	Context::~Context()
 	{
 	}

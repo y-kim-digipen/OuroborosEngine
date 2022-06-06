@@ -5,12 +5,16 @@
 #include <memory>
 
 #include <glm.hpp>
+#include <map>
+#include <queue>
 #include <glm/matrix.hpp>
 
 
 #include "mesh.h"
 #include "mesh_manager.h"
 #include "shader_manager.h"
+
+#include "../../../src/engine/ecs/components.h"
 static bool is_vulkan = true;
 struct GLFWwindow;
 
@@ -43,9 +47,20 @@ namespace Renderer
 		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
 		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
 
+		struct DrawData
+		{
+			TransformComponent* transform;
+			MaterialComponent* material;
+			MeshComponent* mesh;
+			ShaderComponent* shader;
+		};
+
+		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
+		virtual void DrawQueue() {};
 
 
 	protected:
+		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
 		GlobalData global_data;
 	};
