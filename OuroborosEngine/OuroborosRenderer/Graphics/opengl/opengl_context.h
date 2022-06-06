@@ -16,7 +16,6 @@ namespace Renderer
 		void BindGlobalData() override;
 
 		void Shutdown() override;
-		void InitGlobalData() override;
 		int BeginFrame() override;
 		int EndFrame() override;
 

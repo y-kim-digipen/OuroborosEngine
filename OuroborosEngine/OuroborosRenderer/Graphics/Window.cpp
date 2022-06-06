@@ -43,6 +43,7 @@ namespace Renderer
 		// bind global data
 		window_data.RenderContextData->UpdateGlobalData();
 	
+		/*
 		//for(const auto& shader : vulkan_context->shader_manager_)
 		for (shader) {
 			shader.bind(); // bind pipeline & descriptor set 1 bind
@@ -54,7 +55,7 @@ namespace Renderer
 				}
 			}
 		}
-
+		*/
 		window_data.RenderContextData->BindGlobalData();
 
 

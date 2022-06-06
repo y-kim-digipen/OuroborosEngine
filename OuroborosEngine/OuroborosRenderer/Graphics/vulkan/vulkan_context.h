@@ -20,7 +20,6 @@ namespace Renderer {
 				
 		int BeginFrame() override;
 		int EndFrame() override;
-		void InitGlobalData() override;
 
 		VulkanShaderManager shader_manager_;
 		VulkanMeshManager mesh_manager_;

@@ -138,7 +138,7 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, 0, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, global_ubo);
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_ubo));
         ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
     }
 
