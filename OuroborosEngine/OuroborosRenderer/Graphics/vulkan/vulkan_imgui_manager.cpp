@@ -10,11 +10,7 @@
 namespace Renderer
 {
 	VulkanImguiManager::VulkanImguiManager() : ImguiManager()
-	{
-
-
-	}
-
+	{	}
 
 	void VulkanImguiManager::Init(GLFWwindow* window)
 	{
@@ -29,7 +25,7 @@ namespace Renderer
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		bool bStyleDark_ = true;
-		float alpha_ = 0.8;
+		float alpha_ = 1.f;
 
 		style.Alpha = 1.0f;
 		style.FrameRounding = 3.0f;

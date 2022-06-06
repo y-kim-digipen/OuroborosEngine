@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
+    <ClInclude Include="src\engine\custom_assert.h" />
     <ClInclude Include="src\engine\ecs\components.h" />
     <ClInclude Include="src\engine\ecs\component_manager.h" />
     <ClInclude Include="src\engine\ecs\ecs_base.h" />
@@ -181,15 +182,20 @@
     <ClInclude Include="src\engine\ecs_settings.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\gui\gui_component_panel.h" />
+    <ClInclude Include="src\engine\gui\GUI_definedColors.h" />
     <ClInclude Include="src\engine\modules\resource_manager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="OuroborosRenderer\OuroborosRenderer.vcxproj">
       <Project>{243cd115-a8e1-4f11-8e96-9422feb3b60b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\engine\gui\gui_component_implementation.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
