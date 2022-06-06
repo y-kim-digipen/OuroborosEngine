@@ -10,12 +10,12 @@ struct TransformComponent
 };
 
 
-struct Velocity
+struct VelocityComponent
 {
 	glm::vec3 vel;
 };
 
-struct LifeTime
+struct LifeTimeComponent
 {
 	float life_time;
 };
@@ -39,12 +39,12 @@ struct ShaderComponent
 	std::string name;
 };
 
-struct BoolWrapper
+struct BoolWrapperComponent
 {
 	bool bool_type;
 };
 
-struct Tag
+struct TagComponent
 {
 	std::string tag;
 };

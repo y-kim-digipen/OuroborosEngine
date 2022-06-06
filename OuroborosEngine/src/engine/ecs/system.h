@@ -19,6 +19,7 @@ namespace OE
 			using type = System<TRequiredComponents...>;
 			using signature = brigand::append<brigand::list<type>, brigand::list<TRequiredComponents...>>;
 			using function_type = _impl::as_system_function<brigand::list<TRequiredComponents...>>;
+			using required_components = brigand::list<TRequiredComponents...>;
 		};
 	}
 }

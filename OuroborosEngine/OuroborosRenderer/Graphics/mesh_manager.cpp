@@ -31,29 +31,20 @@ namespace Renderer
 	}
 
 
-	int VulkanMeshManager::DrawMesh(const std::string& shader, const std::string& mesh_name)
+	int VulkanMeshManager::DrawMesh(const std::string& mesh_name)
 	{
-		if(auto iter = shader_manager->shader_map.find(shader); iter != shader_manager->shader_map.end())
+		if (auto mesh_iter = mesh_map.find(mesh_name); mesh_iter != mesh_map.end())
 		{
-			iter->second->Bind();
-			if(auto mesh_iter = mesh_map.find(mesh_name); mesh_iter != mesh_map.end())
-			{
-				mesh_iter->second->Draw();
-			}
-			else
-			{
-				std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
-				int result = AddMesh(mesh_name);
-				if(result == 0)
-				{
-					mesh_map.find(mesh_name)->second->Draw();
-				}
-			}
+			mesh_iter->second->Draw();
 		}
 		else
 		{
-			std::cout << shader << " (shader) is doesn't exist!" << std::endl;
-			return -1;
+			std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
+			int result = AddMesh(mesh_name);
+			if (result == 0)
+			{
+				mesh_map.find(mesh_name)->second->Draw();
+			}
 		}
 
 		return 0;

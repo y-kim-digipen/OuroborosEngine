@@ -48,7 +48,7 @@ namespace Renderer {
 		VulkanDevice* device;
 		Vulkan_type* vulkan_type;
 
-		VkDescriptorSetLayout descriptor_set_layouts[4];
+		std::vector<VkDescriptorSetLayout> descriptor_set_layouts;
 
 		uint32_t set_layout_count;
 		VkPipeline pipeline;

@@ -1,9 +1,11 @@
 #pragma once
+#include <imgui-docking/imgui.h>
 #include "../common.h"
 #include "../ecs/ecs_base.h"
 #include "../engine.h"
 #include "../ecs_settings.h"
-#include <imgui-docking/imgui.h>
+#include "engine/ecs_settings.h"
+#include "GUI_definedColors.h"
 
 namespace _imgui_helper
 {
@@ -28,7 +30,7 @@ namespace OE
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Component %s detail is not implemented", typeid(TComponent).name());
 	}
 
-	inline static void EntityInfoPanelFunction()
+	static void EntityInfoPanelFunction()
 	{
 		auto& engine = Engine::Get();
 		using ComponentList = decltype(std::declval<ECS_Manager>().component_manager)::ComponentList;
@@ -118,13 +120,8 @@ namespace OE
 
 								brigand::for_each<TSystems>([entID](auto type)
 									{
-										//ImGui::Text(typeid(decltype(type)::type).name());
 										using TSystem = typename decltype(type)::type::type;
 										const bool has_this_system = ecs_manager.HasSystem<TSystem>(entID);
-										//if (has_this_system)
-										//{
-										//	ImGui::BeginDisabled();
-										//}
 										if (ImGui::MenuItem(typeid(TSystem).name(), nullptr, has_this_system))
 										{
 											if(!has_this_system)
@@ -136,22 +133,15 @@ namespace OE
 												ecs_manager.DeleteSystem<TSystem>(entID);
 											}
 										}
-										//if (has_this_system)
-										//{
-										//	ImGui::EndDisabled();
-										//}
 									});
 								ImGui::EndMenu();
 							}
-
-
 							ImGui::EndPopup();
 						}
 
 						brigand::for_each<ComponentList>([entID](auto type)
 							{
 								using TComponent = typename decltype(type)::type;
-								//ImGui::Text(typeid(TComponent).name());
 								if (ecs_manager.HasComponent<TComponent>(entID))
 								{
 									ComponentDrawFunction<TComponent>(entID);
@@ -163,114 +153,81 @@ namespace OE
 			});
 	}
 
-	template<>
-	inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
+	static void EngineInfoPanelFunction()
 	{
-		static char buffer[30];
-		std::string strID = std::to_string(entID);
-		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
-		memcpy(buffer,mesh_component.mesh_name.c_str(), 30);
-		if(ImGui::InputText("Meshname",buffer,30, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			mesh_component.mesh_name = buffer;
-		}
+		ImGui::Text("dt : %f", Engine::delta_timer.GetDeltaTime());
+		ImGui::Text("FPS : %d", (int)(1.0 / Engine::delta_timer.GetDeltaTime()));
 	}
 
-	template<>
-	inline void ComponentDrawFunction<ShaderComponent>(ecs_ID entID)
+	static void SystemInfoPanelFunction()
 	{
-		static char buffer[30];
-		std::string strID = std::to_string(entID);
-		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
-		memcpy(buffer, shader_component.name.c_str(), 30);
-		if(ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+		using system_list = ECS_Manager::SystemStorage::system_list;
+		using component_list = ECS_Manager::ComponentStorage;
+
+		if (ImGui::BeginTabBar("Systems"))
 		{
-			shader_component.name = buffer;
-		}
-	}
+			brigand::for_each<system_list>([&](auto type)
+				{
+					using T = typename decltype(type)::type;
+					const auto strID = typeid(T).name();
+					ImGui::PushID(ImGui::GetID(strID));
+					if(ImGui::BeginTabItem(strID))
+					{
+						if(ImGui::BeginListBox(""))
+						{
+							ecs_manager.ForEntities([](ecs_ID entityID)
+								{
+									auto& entity = ecs_manager.GetEntity(entityID);
+									if (entity.alive)
+									{
+										if(bool has_system = ecs_manager.HasSystem<T>(entityID))
+										{
+											using system = T;
+											using system_requirement_components = typename system::required_components;
+											bool has_all_component = true;
+											brigand::for_each<system_requirement_components>([&]<typename T>(T type) mutable
+												{
+													using component = typename T::type;
+													has_all_component &= ecs_manager.HasComponent<component>(entityID);
+												});
+											ImGui::Bullet();
+											ImGui::TextColored(has_all_component ? GUI_Colors::GREEN : GUI_Colors::RED, "%d", entityID);
+											if(!has_all_component)
+											{
+												ImGui::TextColored(GUI_Colors::RED, "\tMissing");
+												brigand::for_each<system_requirement_components>([&]<typename T>(T type)
+												{
+													using component = typename T::type;
+													const bool has_component = ecs_manager.HasComponent<component>(entityID);
+													if(!has_component)
+													{
+														using missing_component = component;
+														ImGui::TextColored(GUI_Colors::RED, "\t\t%s", typeid(missing_component).name());
+														ImGui::SameLine();
+														if(ImGui::Button("Add"))
+														{
+															ecs_manager.AddComponent<missing_component>(entityID);
+														}
+													}
+												});
+											}
+										}
+									}
+								});
+							ImGui::EndListBox();
+						}
+						ImGui::EndTabItem();
 
-	template<>
-	inline void ComponentDrawFunction<MaterialComponent>(ecs_ID entID)
-	{
-		static char buffer[30];
-		std::string strID = std::to_string(entID);
-		MaterialComponent& material_component = ecs_manager.GetComponent<MaterialComponent>(entID);
-		memcpy(buffer, material_component.name.c_str(), 30);
-		if(ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			material_component.name = buffer;
-		}
-		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
-		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
 
-			ImGui::TreePop();
-		}
+						const bool has_implementation = ecs_manager.system_storage.HasSystemImplementation<T>();
+						has_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have implementation"));
+					}
+					ImGui::PopID();
+				});
 
-	}
-
-
-	template<>
-	inline void ComponentDrawFunction<TransformComponent>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
-		if (ImGui::TreeNode(typeid(TransformComponent).name()))
-		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
-			//ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &transform_component.angle);
-			ImGui::TreePop();
-		}
-	}
-	
-	template<>
-	inline void ComponentDrawFunction<Velocity>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		Velocity& velocity_component = ecs_manager.GetComponent<Velocity>(entID);
-		if (ImGui::TreeNode(typeid(Velocity).name()))
-		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(velocity_component.vel), &velocity_component.vel.x);
-			ImGui::TreePop();
-		}
-	}
-
-	template<>
-	inline void ComponentDrawFunction<LifeTime>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		LifeTime& life_time_component = ecs_manager.GetComponent<LifeTime>(entID);
-		if (ImGui::TreeNode(typeid(LifeTime).name()))
-		{
-			ImGui::DragFloat(GET_VARIABLE_NAME(life_time_component.life_time), &life_time_component.life_time);
-			ImGui::TreePop();
-		}
-	}
-
-	template<>
-	inline void ComponentDrawFunction<Tag>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		Tag& tag_component = ecs_manager.GetComponent<Tag>(entID);
-		if (ImGui::TreeNode(typeid(Tag).name()))
-		{
-			constexpr int BufSize = 256;
-			static char buf[BufSize];
-			//std::vector<char> buf(tag_component.tag.length());
-			// ReSharper disable once CppDeprecatedEntity
-			strcpy_s(buf, tag_component.tag.c_str());
-
-			if(ImGui::InputText(GET_VARIABLE_NAME(life_time_component.life_time), buf, BufSize))
-			{
-				tag_component.tag = buf;
-			}
-
-			ImGui::TreePop();
+			ImGui::EndTabBar();
 		}
 	}
 }
 
+#include "gui_component_implementation.inl"

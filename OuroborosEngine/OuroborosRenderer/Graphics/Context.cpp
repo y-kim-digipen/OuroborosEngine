@@ -11,7 +11,7 @@
 
 namespace Renderer
 {
-	Context::Context(GLFWwindow* glfwwindow) : window(glfwwindow), material_manager() {}
+	Context::Context(GLFWwindow* glfwwindow) : window(glfwwindow) {}
 
 
 	void Context::InitGlobalData()

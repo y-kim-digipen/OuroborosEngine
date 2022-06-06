@@ -13,9 +13,9 @@
 #include "mesh.h"
 #include "mesh_manager.h"
 #include "shader_manager.h"
+#include "material_manager.h"
 
 #include "../../../src/engine/ecs/components.h"
-#include "material_manager.h"
 
 static bool is_vulkan = true;
 struct GLFWwindow;
@@ -29,6 +29,7 @@ namespace Renderer
 	struct GlobalData {
 		glm::mat4 projection;
 		glm::mat4 view;
+		glm::vec3 position;
 	};
 
 	class Context
