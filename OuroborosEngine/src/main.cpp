@@ -46,6 +46,9 @@ int main()
     ecs_manager.AddComponent<Transform>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
     ecs_manager.AddComponent<Velocity>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
     ecs_manager.AddComponent<Tag>(ent4.myID, "TestEntity");
+
+    
+
     std::cout << ecs_manager.MatchesSignature<Signature0>(ent.myID) << std::endl;
     std::cout << ecs_manager.MatchesSignature<Signature1>(ent.myID) << std::endl;
 
@@ -63,8 +66,8 @@ int main()
             std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
         });
 
-	//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
- //   camera.data.view = camera.GetCameraMat();
+	camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+    camera.data.view = camera.GetCameraMat();
 
 
     //Debug ECS manager ends here
@@ -126,6 +129,13 @@ int main()
             {
                 if (ecs_manager.GetEntity(ent).alive)
                 {
+                    camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+                    //camera.data.view = camera.GetCameraMat();
+                    //camera.data.projection[1][1] *= -1;
+                    camera.data.view = glm::lookAt(camera.data.position, glm::vec3(0.0, 0.0, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+                    context->shader_manager_.GetShader("shader")->SetUniformValue("projection", (void*)&camera.data.projection);
+                    context->shader_manager_.GetShader("shader")->SetUniformValue("view", (void*)&camera.data.view);
+
                     glm::mat4 model(1.f);
                     model = glm::translate(model, transform.pos);
                     model = glm::scale(model, transform.scale);
