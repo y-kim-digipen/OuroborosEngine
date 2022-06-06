@@ -8,7 +8,6 @@
 
 struct GLFWwindow;
 
-
 namespace Renderer
 {
 	static bool GLFW_IsInit = false;

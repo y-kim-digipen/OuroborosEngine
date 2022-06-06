@@ -9,10 +9,13 @@ namespace Renderer {
 
 	class VulkanContext : public Context {
 	public:
-		VulkanContext(GLFWwindow* window) : Context(window), shader_manager_(GetVulkanType()), mesh_manager_(GetVulkanType(), &shader_manager_)
-		{
-		};
+		VulkanContext(GLFWwindow* window);
 		void Init(int major, int minor) override;
+
+		void InitGlobalData() override;
+		void UpdateGlobalData() override;
+		void BindGlobalData() override;
+
 		void Shutdown() override;
 				
 		int BeginFrame() override;

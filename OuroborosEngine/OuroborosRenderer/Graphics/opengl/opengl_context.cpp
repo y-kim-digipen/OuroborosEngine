@@ -25,6 +25,15 @@ namespace Renderer
 		std::cout << "OpenGL Renderer:" << glGetString(GL_RENDERER) << std::endl;
 		std::cout << "-------------------------------------------------" << std::endl;
 	}
+	void OpenglContext::InitGlobalData()
+	{
+	}
+	void OpenglContext::UpdateGlobalData()
+	{
+	}
+	void OpenglContext::BindGlobalData()
+	{
+	}
 	void OpenglContext::Shutdown()
 	{
 	}

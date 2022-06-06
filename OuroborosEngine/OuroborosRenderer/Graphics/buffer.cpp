@@ -9,3 +9,8 @@ void Renderer::UniformBuffer::AddMember(const std::string& name, DataType data_t
 		member_vars[name].offset = offset;
 	}
 }
+
+int Renderer::UniformBuffer::UpdateData(const char* member_var_name, void* data)
+{
+	return 0;
+}
