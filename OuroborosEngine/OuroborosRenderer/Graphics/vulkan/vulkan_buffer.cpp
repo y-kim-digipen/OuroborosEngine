@@ -194,7 +194,7 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size) : vulkan_type(vulkan_type), buffer_size(buffer_size)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, uint32_t set_num) : vulkan_type(vulkan_type), buffer_size(buffer_size), set_num(set_num)
 	{
 		data = malloc(buffer_size);
 
@@ -211,10 +211,8 @@ namespace Renderer
 
 	void VulkanUniformBuffer::Bind() const
 	{
-		//buffer[vulkan_type->current_frame]->UploadData(data, buffer_size);
-
 		if (vulkan_type->current_pipeline_layout != VK_NULL_HANDLE)
-			vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, 0, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
+			vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, set_num, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
 	}
 
 	void VulkanUniformBuffer::UnBind() const

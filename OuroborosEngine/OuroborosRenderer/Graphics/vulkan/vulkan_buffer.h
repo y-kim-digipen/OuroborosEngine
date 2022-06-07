@@ -65,7 +65,7 @@ namespace Renderer
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
-		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size);
+		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, uint32_t set_num);
 		~VulkanUniformBuffer() override;
 
 		// Map memory CPU to GPU
@@ -84,6 +84,7 @@ namespace Renderer
 	private:		
 		Vulkan_type* vulkan_type;
 
+		uint32_t set_num;
 		uint64_t buffer_size;
 		std::shared_ptr<VulkanBuffer> buffer[MAX_FRAMES_IN_FLIGHT];
 	};

@@ -143,7 +143,7 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data));
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data), 0);
         ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
     }
 
@@ -257,8 +257,6 @@ namespace Renderer
 
         vulkan_type.swapchain.image_format = surface_format.format;
         vulkan_type.swapchain.extent = extent;
-
-
     }
 
     void VulkanContext::RecreateSwapChain()
@@ -358,7 +356,6 @@ namespace Renderer
 	    Context::DrawQueue();
 
         if (!draw_queue.empty())
-            BindGlobalData();
 
             while (!draw_queue.empty())
             {
@@ -382,6 +379,7 @@ namespace Renderer
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+				BindGlobalData();
 
                 //material_manager
                 //material_manager->GetMaterial(material->name)->Bind();
