@@ -4,13 +4,13 @@ namespace OE
 {
 	void Engine::DeltaTime::Init()
 	{
-		start = std::chrono::system_clock::now();
+		start = std::chrono::high_resolution_clock::now();
 		end = start;
 	}
 
 	void Engine::DeltaTime::PreUpdate()
 	{
-		start = std::chrono::system_clock::now();
+		start = std::chrono::high_resolution_clock::now();
 	}
 
 	void Engine::DeltaTime::PostUpdate()
@@ -25,10 +25,11 @@ namespace OE
 		//	std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
 		//}
 
-		end = std::chrono::system_clock::now();
-		std::chrono::duration<double, std::milli> sleep_time = end - start;
 
-		dt = sleep_time.count() * 0.001;
+		end = std::chrono::high_resolution_clock::now();
+		const std::chrono::duration delta_tick = end - start;
+		dt = std::chrono::duration<double>(delta_tick).count();
+
 	}
 
 	double Engine::DeltaTime::GetDeltaTime()

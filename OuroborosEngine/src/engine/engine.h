@@ -37,7 +37,7 @@ namespace OE
 
 		static class DeltaTime
 		{
-			using time_point = std::chrono::time_point<std::chrono::system_clock>;
+			using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		public:
 			static void Init();
 			static void PreUpdate();
