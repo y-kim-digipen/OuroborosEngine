@@ -15,6 +15,7 @@ namespace Renderer {
 
 	public:
 		VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
+		VulkanMaterial(Vulkan_type* vulkan_type);
 		~VulkanMaterial() override;
 
 		void Bind() override;

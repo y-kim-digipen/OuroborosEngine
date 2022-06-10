@@ -3,6 +3,8 @@
 
 #include <glm/vec3.hpp>
 
+#include "buffer_data_type.h"
+
 namespace Renderer {
     class Material {
 
@@ -10,12 +12,14 @@ namespace Renderer {
         Material() = default;
         virtual ~Material() = default;
         virtual void Bind() = 0;
-
+        void InitMaterialData(const MaterialData&& other);
     protected:
-        glm::vec3 ambient;
-        glm::vec3 diffuse;
-        glm::vec3 specular;
-        float shininess;
+        MaterialData data;
     };
+
+    inline void Material::InitMaterialData(const MaterialData&& other)
+    {
+        data = other;
+    }
 }
 #endif // !MATERIAL_H

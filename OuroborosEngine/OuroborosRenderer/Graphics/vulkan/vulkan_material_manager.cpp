@@ -14,7 +14,7 @@ namespace Renderer {
 	{
 	}
 
-	int VulkanMaterialManager::AddMaterial(const char* material_name, Material* material)
+	int VulkanMaterialManager::AddMaterial(std::string material_name, Material* material)
 	{
 		if (material_map.find(material_name) != material_map.end())
 		{

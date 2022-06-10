@@ -28,10 +28,9 @@ struct MeshComponent
 struct MaterialComponent
 {
 	std::string name ="material";
-	glm::vec3 ambient;
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-	float shininess;
+	Renderer::MaterialData data;
+	bool flag = false;
+	bool is_save = false;
 };
 
 struct ShaderComponent

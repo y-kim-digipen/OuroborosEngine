@@ -103,9 +103,9 @@ namespace OE
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
-		memcpy(buffer, shader_component.name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
+			memcpy(buffer, shader_component.name.c_str(), 30);
 			if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				shader_component.name = buffer;
@@ -113,6 +113,8 @@ namespace OE
 			ImGui::TreePop();
 		}
 	}
+
+
 
 	template<>
 	inline void ComponentDrawFunction<MaterialComponent>(ecs_ID entID)
@@ -123,14 +125,31 @@ namespace OE
 		memcpy(buffer, material_component.name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
 		{
-		if (ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			material_component.name = buffer;
-		}
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
+			memcpy(buffer, material_component.name.c_str(), 30);
+			if (ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				material_component.name = buffer;
+				material_component.flag = true;
+			}
+			bool is_changed = ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
+			is_changed |= ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
+			is_changed |= ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.shinnesss), &material_component.data.shininess);
+
+			if(is_changed)
+			{
+				material_component.flag = true;
+			}
+			
+			if(ImGui::Button("save"))
+			{
+				material_component.is_save = true;
+			}
 			ImGui::TreePop();
+		}
+		else
+		{
+			material_component.flag = false;
 		}
 
 	}

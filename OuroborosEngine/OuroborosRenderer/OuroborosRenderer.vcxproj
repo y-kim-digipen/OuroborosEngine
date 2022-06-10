@@ -186,12 +186,14 @@
     <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h" />
     <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h" />
     <ClInclude Include="Graphics\buffer.h" />
+    <ClInclude Include="Graphics\buffer_data_type.h" />
     <ClInclude Include="Graphics\camera.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
     <ClInclude Include="Graphics\material.h" />
     <ClInclude Include="Graphics\material_manager.h" />
     <ClInclude Include="Graphics\mesh_manager.h" />
+    <ClInclude Include="Graphics\opengl\opengl_buffer.h" />
     <ClInclude Include="Graphics\opengl\opengl_imgui_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />

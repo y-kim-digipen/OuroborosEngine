@@ -154,6 +154,8 @@ void ECS_TestSetup()
         {
             transform.pos += velocity.vel * dt;
         });
+
+
     ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
         {
             auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
@@ -162,6 +164,13 @@ void ECS_TestSetup()
                 camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
                 camera.data.view = camera.GetCameraMat();
 
+
+                if(material.flag == true)
+                {
+                    
+
+                }
+
                 //TODO: pass renderer camera data
                 context->global_data.position = camera.data.position;
                 context->global_data.view = camera.data.view;
@@ -169,7 +178,7 @@ void ECS_TestSetup()
                 context->UpdateGlobalData();
                 context->BindGlobalData();
 
-                context->AddDrawQueue(&transform, nullptr, &mesh, &shader);
+                context->AddDrawQueue(&transform, &material, &mesh, &shader);
             }
         });
 }
