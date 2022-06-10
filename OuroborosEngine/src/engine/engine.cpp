@@ -85,7 +85,7 @@ namespace OE
 					context->UpdateGlobalData();
 					context->BindGlobalData();
 
-					context->AddDrawQueue(&transform, nullptr, &mesh, &shader);
+					context->AddDrawQueue(&transform, &material, &mesh, &shader);
 				}
 			});
 	}
