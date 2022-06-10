@@ -4,7 +4,6 @@
 #include "../ecs/ecs_base.h"
 #include "../engine.h"
 #include "../ecs_settings.h"
-#include "engine/ecs_settings.h"
 #include "GUI_definedColors.h"
 
 namespace _imgui_helper

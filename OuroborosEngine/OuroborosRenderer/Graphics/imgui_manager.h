@@ -14,7 +14,7 @@ namespace Renderer
 		using GUI_PanelFunction = std::function<void()>;
 	public:
 		ImguiManager() = default;
-		virtual void Init(GLFWwindow* window) =0;
+		virtual void Init(GLFWwindow* window) = 0;
 		virtual void Update()
 		{
 			//const ImGuiViewport* viewport = ImGui::GetMainViewport();
