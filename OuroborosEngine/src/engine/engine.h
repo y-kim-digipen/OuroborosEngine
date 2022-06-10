@@ -11,6 +11,7 @@
 
 #include "Graphics/Window.h"
 #include "Graphics/shader.h"
+#include "input/InputManager.h"
 
 namespace OE
 {
@@ -53,6 +54,8 @@ namespace OE
 
 		inline static std::unique_ptr<Renderer::Window> window;
 
+		//Modules
+		inline static Input input;
 	private:
 		//todo to be removed
 		inline static Renderer::Camera camera;
