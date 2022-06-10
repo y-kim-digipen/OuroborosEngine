@@ -10,8 +10,8 @@
 #include "brigand/brigand.hpp"
 #include "brigand/sequences.hpp"
 #include "brigand/adapted/tuple.hpp"
-#include "engine/ecs/component_manager.h"
-#include "engine/ecs/system_manager.h"
+#include "ecs/component_manager.h"
+#include "ecs/system_manager.h"
 
 namespace OE
 {

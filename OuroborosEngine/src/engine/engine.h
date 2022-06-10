@@ -4,36 +4,34 @@
 #include <thread>
 #include <Windows.h>
 
+#include "Graphics/shader_manager.h"
+#include "Graphics/vulkan/vulkan_context.h"
+#include "Graphics/camera.h"
+#include "Graphics/vulkan/vulkan_material.h"
+
+#include "Graphics/Window.h"
+#include "Graphics/shader.h"
+
 namespace OE
 {
+
 	class Engine
 	{
 	public:
 		static Engine& Get();
 
-		static void Init()
-		{
-			target_fps = 240;
-			target_dt = 1.0f / (target_fps * 2);
+		static void Init();
 
-			Engine& engine = Get();
-			delta_timer.Init();
-		}
-		static void PreUpdate()
-		{
-			delta_timer.PreUpdate();
-		}
-		static void Update()
-		{
-
-		}
-		static void PostUpdate()
-		{
-			delta_timer.PostUpdate();
-		}
-
+		static void PreUpdate();
+		static void Update();
+		static void PostUpdate();
 		static void CleanUp(){}
 		static void ShutDown(){}
+
+		static std::unique_ptr<Renderer::Window>& GetGLFWWindow()
+		{
+			return window;
+		}
 
 		static class DeltaTime
 		{
@@ -52,6 +50,15 @@ namespace OE
 	private:
 		inline static int target_fps;
 		inline static double target_dt;
+
+		inline static std::unique_ptr<Renderer::Window> window;
+
+	private:
+		//todo to be removed
+		inline static Renderer::Camera camera;
+
+		static void SetupGUI();
+		static void ECS_TestSetup();
 	};
 
 	inline Engine& Engine::Get()

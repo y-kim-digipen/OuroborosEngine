@@ -11,6 +11,7 @@
 namespace Renderer {
 
 	enum class DataType;
+	constexpr int max_set_count = 4;
 
 	struct DescriptorSetBindingData
 	{
@@ -38,8 +39,6 @@ namespace Renderer {
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
 
-		void BindObjectData(const glm::mat4& model) override;
-
 		VkPipelineLayout pipeline_layout;
 	private:
 
@@ -48,9 +47,8 @@ namespace Renderer {
 		VulkanDevice* device;
 		Vulkan_type* vulkan_type;
 
-		std::vector<VkDescriptorSetLayout> descriptor_set_layouts;
+		VkDescriptorSetLayout descriptor_set_layouts[max_set_count];
 
-		uint32_t set_layout_count;
 		VkPipeline pipeline;
 
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;

@@ -19,6 +19,7 @@
 
 namespace Renderer {
 
+
 	struct MeshConstant
 	{
 		glm::mat4 model;
@@ -41,7 +42,6 @@ namespace Renderer {
 
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
-		set_layout_count = 0;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -85,10 +85,9 @@ namespace Renderer {
 		}
 
 		Vulkan_PipelineBuilder pipeline_builder;
-		set_layout_count = 0;
 		uint32_t ubo_count = 0;
 		
-		for (uint32_t i = 0; i < 4; ++i) {
+		for (uint32_t i = 0; i < max_set_count; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
 
 			std::vector<VkDescriptorSetLayoutBinding> bindings(binding_count);
@@ -98,20 +97,16 @@ namespace Renderer {
 
 			set_layout_create_info.bindingCount = binding_count;
 			set_layout_create_info.pBindings = bindings.data();
+			VkDescriptorSetLayout set_layout;
+			VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &set_layout));
+			descriptor_set_layouts[i] = set_layout;
 
-			if (binding_count != 0) {
-
-				VkDescriptorSetLayout set_layout;
-
-				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &set_layout));
-
-				descriptor_set_layouts.push_back(set_layout);
+			// set ubo descriptor set only for shader descriptor set #1
+			if (binding_count != 0 && (i == 1)) {
 
 				for (const auto& binding_set : layout_bindings_set[i]) {
-					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts.back());
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
 				}
-
-				++set_layout_count;
 			}
 		}
 
@@ -158,7 +153,7 @@ namespace Renderer {
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts.data(), set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
+		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
 		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
 
@@ -177,14 +172,11 @@ namespace Renderer {
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-	}
+		// bind shader descriptor set 1
+		for (const auto& ubo : uniform_buffer_objects) {
+			ubo->Bind();
+		}
 
-	void VulkanShader::BindObjectData(const glm::mat4& model)
-	{
-		
-		//TODO: make it configurable
-		for (const auto& push_constant : push_constant_ranges)
-			vkCmdPushConstants(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, pipeline_layout, push_constant.stageFlags, push_constant.offset, push_constant.size, &model);
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
@@ -208,12 +200,12 @@ namespace Renderer {
 		SpvReflectResult result = spvReflectCreateShaderModule(sizeof(uint32_t) * shader_binary_code.size(), shader_binary_code.data(), &refl_module);
 		assert(result == SPV_REFLECT_RESULT_SUCCESS);
 
-		uint32_t desciptor_set_count = 0;
-		spvReflectEnumerateDescriptorSets(&refl_module, &desciptor_set_count, 0);
-		std::vector<SpvReflectDescriptorSet*> pdescriptor_sets(desciptor_set_count);
-		spvReflectEnumerateDescriptorSets(&refl_module, &desciptor_set_count, pdescriptor_sets.data());
+		uint32_t descriptor_set_count = 0;
+		spvReflectEnumerateDescriptorSets(&refl_module, &descriptor_set_count, 0);
+		std::vector<SpvReflectDescriptorSet*> pdescriptor_sets(descriptor_set_count);
+		spvReflectEnumerateDescriptorSets(&refl_module, &descriptor_set_count, pdescriptor_sets.data());
 
-		for (uint32_t i_set = 0; i_set < desciptor_set_count; ++i_set) {
+		for (uint32_t i_set = 0; i_set < descriptor_set_count; ++i_set) {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
 	
@@ -240,10 +232,10 @@ namespace Renderer {
 						0,
 					};
 
-					// dont add ubo var for material & object
-					if (refl_set.set != 2 && refl_set.set != 3)
+					// dont add ubo var for material & object & global
+					if (refl_set.set == 1)
 					{
-						uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size));
+						uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size, refl_set.set));
 
 						for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
