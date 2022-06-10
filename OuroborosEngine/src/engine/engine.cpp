@@ -126,7 +126,22 @@ namespace OE
 		SetupGUI();
 		delta_timer.Init();
 
-
+		std::vector<int> key_supports{
+			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, 
+			GLFW_KEY_SPACE
+		};
+		input.Init(window->GetWindowData().window, key_supports);
+		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
+			{
+				if (mode == Input::PRESSED)
+				{
+					std::cout << "Pressed" << std::endl;
+				}
+				else
+				{
+					std::cout << "Released" << std::endl;
+				}
+			});
 	}
 
 	void Engine::PreUpdate()
@@ -136,17 +151,18 @@ namespace OE
 
 	void Engine::Update()
 	{
-		window->BeginFrame();
-		window->Update();
+		input.Update();
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
-
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
-		window->EndFrame();
-		OE::Engine::Get().PostUpdate();
 	}
 
 	void Engine::PostUpdate()
 	{
+		window->BeginFrame();
+		window->Update();
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
+		window->EndFrame();
+
+
 		delta_timer.PostUpdate();
 	}
 
