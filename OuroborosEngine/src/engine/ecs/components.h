@@ -51,16 +51,8 @@ struct TagComponent
 
 struct LightComponent
 {
-	glm::vec3 position;
-	float cutoff;
-	glm::vec3 diffuse;
-	float out_cutoff;
-	glm::vec3 ambient;
-	float falloff;
-	glm::vec3 specular;
-	float padding4;
-	glm::vec3 direction;
-	int light_type;
+	bool init = false;
+	Renderer::LightData data;
 };
 
 //void DrawSystem(mesh, sahder)

@@ -254,7 +254,8 @@ namespace Renderer
 		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData(data, buffer_size);
 
-		buffer[vulkan_type->current_frame]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+		buffer[i]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
 
 		return 0;
 	}

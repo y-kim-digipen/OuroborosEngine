@@ -19,9 +19,11 @@ namespace Renderer {
 		~VulkanMaterial() override;
 
 		void Bind() override;
+
+		bool is_changed = false;
 	private:
 		Vulkan_type* vulkan_type;
-		
+		VkDescriptorSetLayout set_layout{};
 		//TODO: does this should go in parent class ???
 		std::unique_ptr<VulkanUniformBuffer> ubo;
 	};

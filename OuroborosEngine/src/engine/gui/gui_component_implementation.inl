@@ -133,9 +133,9 @@ namespace OE
 				material_component.name = buffer;
 				material_component.flag = true;
 			}
-			bool is_changed = ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
-			is_changed |= ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
-			is_changed |= ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);
+			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
+			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
+			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.shinnesss), &material_component.data.shininess);
 
 			if(is_changed)

@@ -2,6 +2,8 @@
 #define CAMERA_H
 #include <glm.hpp>
 
+#include "buffer_data_type.h"
+
 namespace Renderer
 {
 	enum class Camera_MoveTo
@@ -48,12 +50,6 @@ namespace Renderer
 		float mouse_sensitivity;
 		float zoom;
 
-		struct CameraData
-		{
-			glm::mat4 projection;
-			glm::mat4 view;
-			glm::vec3 position;
-		};
 
 		CameraData data;
 	};

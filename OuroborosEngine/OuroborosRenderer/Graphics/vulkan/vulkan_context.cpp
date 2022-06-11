@@ -359,6 +359,7 @@ namespace Renderer
         if (!draw_queue.empty())
 
 
+
             while (!draw_queue.empty())
             {
                 const auto& front = draw_queue.front();
@@ -379,8 +380,6 @@ namespace Renderer
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
-
-         
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 
             	//TODO: Maybe later, material update should be in update and sorted function 
@@ -388,12 +387,15 @@ namespace Renderer
                 {
                     static VulkanMaterial new_material(GetVulkanType());
                     new_material.InitMaterialData(std::move(material->data));
+                    new_material.is_changed = material->flag;
                     new_material.Bind();
-                    if (material->is_save)
+
+                	if (material->is_save)
                     {
-                        material_manager->AddMaterial(material->name, &new_material);
+                        material_manager->ChangeMaterial(material->name, material->data);
                         material->flag = false;
                         material->is_save = false;
+                        
                     }
                 }
                 else

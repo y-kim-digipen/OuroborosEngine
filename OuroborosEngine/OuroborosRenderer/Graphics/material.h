@@ -13,6 +13,7 @@ namespace Renderer {
         virtual ~Material() = default;
         virtual void Bind() = 0;
         void InitMaterialData(const MaterialData&& other);
+        MaterialData* GetMaterialData();
     protected:
         MaterialData data;
     };
@@ -20,6 +21,11 @@ namespace Renderer {
     inline void Material::InitMaterialData(const MaterialData&& other)
     {
         data = other;
+    }
+
+    inline MaterialData* Material::GetMaterialData() 
+    {
+        return &data;
     }
 }
 #endif // !MATERIAL_H

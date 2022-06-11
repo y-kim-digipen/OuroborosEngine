@@ -79,9 +79,7 @@ namespace OE
 					camera.data.view = camera.GetCameraMat();
 
 					//TODO: pass renderer camera data
-					context->global_data.position = camera.data.position;
-					context->global_data.view = camera.data.view;
-					context->global_data.projection = camera.data.projection;
+					context->global_data = camera.data;;
 					context->UpdateGlobalData();
 			
 					context->AddDrawQueue(&transform, &material, &mesh, &shader);

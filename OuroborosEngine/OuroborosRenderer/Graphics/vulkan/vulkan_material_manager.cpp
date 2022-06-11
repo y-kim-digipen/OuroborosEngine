@@ -27,6 +27,26 @@ namespace Renderer {
 		return 0;
 	}
 
+	int VulkanMaterialManager::ChangeMaterial(std::string material_name, MaterialData data)
+	{
+		if (auto iter = material_map.find(material_name); iter != material_map.end())
+		{
+			iter->second->InitMaterialData(std::move(data));
+			
+		}
+		else
+		{
+			material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type);
+			material_map[material_name]->InitMaterialData(std::move(data));
+		}
+			dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
+
+		return 0;
+	}
+
+;
+	
+
 	Material* VulkanMaterialManager::GetMaterial(const std::string& material_name)
 	{
 		if (material_map.find(material_name) == material_map.end())
