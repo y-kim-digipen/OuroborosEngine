@@ -76,11 +76,6 @@ namespace OE
 
 		namespace _types
 		{
-
-
-			//template<typename TComponentList, typename TSignatureList>
-			//struct Settings;
-
 			template<typename TSetting>
 			struct Entity
 			{
@@ -111,21 +106,16 @@ namespace OE
 				static constexpr bool IsComponent() noexcept
 				{
 					return impl::_list_has_type<T, component_list>::value;
-					//return impl::_tuple_has_type<T, brigand::as_tuple<component_list>>::value;
 				}
 
 				template<typename T>
 				static constexpr bool IsSignature() noexcept
 				{
 					return impl::_list_has_type<T, signature_list>::value;
-					//return impl::_tuple_has_type<T, brigand::as_tuple<signature_list>>::value;
 				}
 
 				struct _impl
 				{
-					//template <class _Ty>
-					//struct is_floating_point : bool_constant<is_floating_point_v<_Ty>> {};
-
 					template<typename T>
 					struct _IsSignature : impl::_list_has_type<T, signature_list> {};
 
@@ -137,7 +127,6 @@ namespace OE
 				static constexpr bool IsSystem() noexcept
 				{
 					return impl::_list_has_type<T, system_list>::value;
-					//return impl::_tuple_has_type<T, brigand::as_tuple<system_list>>::value;
 				}
 
 				static constexpr size_t CountComponent() noexcept

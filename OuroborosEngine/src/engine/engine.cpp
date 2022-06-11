@@ -2,9 +2,8 @@
 #include <chrono>
 #include <gtc/matrix_transform.hpp>
 
-#include "ecs_settings.h"
+#include "engine_settings.h"
 #include "gui/gui_component_panel.h"
-
 
 namespace OE
 {
@@ -90,6 +89,11 @@ namespace OE
 			});
 	}
 
+	void Engine::SetupModule()
+	{
+		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
+	}
+
 	void Engine::Init()
 	{
 		/*
@@ -142,6 +146,8 @@ namespace OE
 					std::cout << "Released" << std::endl;
 				}
 			});
+
+		SetupModule();
 	}
 
 	void Engine::PreUpdate()
