@@ -83,8 +83,7 @@ namespace OE
 					context->global_data.view = camera.data.view;
 					context->global_data.projection = camera.data.projection;
 					context->UpdateGlobalData();
-					context->BindGlobalData();
-
+			
 					context->AddDrawQueue(&transform, &material, &mesh, &shader);
 				}
 			});

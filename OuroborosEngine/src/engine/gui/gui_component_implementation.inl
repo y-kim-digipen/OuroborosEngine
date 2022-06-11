@@ -3,19 +3,21 @@ namespace OE
 	template<>
 	inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
 	{
-		static char* buffer = new char[30]();
+		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(MeshComponent).name()))
 		{
-			if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("Meshname", buffer, 30))
 			{
 				mesh_component.mesh_name = buffer;
 			}
 			ImGui::TreePop();
 		}
 	}
+
+
 
 	template<>
 	inline void ComponentDrawFunction<TransformComponent>(ecs_ID entID)

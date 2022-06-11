@@ -22,7 +22,7 @@ struct LifeTimeComponent
 
 struct MeshComponent
 {
-	std::string mesh_name;
+	std::string mesh_name ="suzanne";
 };
 
 struct MaterialComponent

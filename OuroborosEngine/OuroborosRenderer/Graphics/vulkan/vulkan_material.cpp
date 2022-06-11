@@ -9,7 +9,7 @@ namespace Renderer {
 	{
 		//TODO: might not need to create descriptor set layout everytime
 		VkDescriptorSetLayoutBinding binding;
-		binding.binding = 2;
+		binding.binding = 0;
 		binding.descriptorCount = 1;
 		binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -23,13 +23,13 @@ namespace Renderer {
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 		//TODO: dont use magic number
-		ubo->SetupDescriptorSet(2, 1, set_layout);
+		ubo->SetupDescriptorSet(0, 1, set_layout);
 	}
 
 	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(MaterialData),2))
 	{
 		VkDescriptorSetLayoutBinding binding;
-		binding.binding = 2;
+		binding.binding = 0;
 		binding.descriptorCount = 1;
 		binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -43,7 +43,7 @@ namespace Renderer {
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 		//TODO: dont use magic number
-		ubo->SetupDescriptorSet(2, 1, set_layout);
+		ubo->SetupDescriptorSet(0, 1, set_layout);
 
 	}
 
@@ -54,6 +54,7 @@ namespace Renderer {
 
 	void VulkanMaterial::Bind()
 	{
+		ubo->AddData(&data, sizeof(MaterialData));
 		ubo->Bind();
 	}
 }
