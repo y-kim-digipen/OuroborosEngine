@@ -9,7 +9,6 @@ struct TransformComponent
 	float angle =0.f;
 };
 
-
 struct VelocityComponent
 {
 	glm::vec3 vel;

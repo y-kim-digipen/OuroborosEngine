@@ -27,10 +27,14 @@ namespace Renderer
 	class Shader;
 	class UniformBuffer;
 	
+	constexpr uint32_t max_num_lights = 20;
+
 	struct GlobalData {
 		glm::mat4 projection;
 		glm::mat4 view;
 		glm::vec3 position;
+		LightComponent lights[max_num_lights]; //TODO(Austyn): might make seperate struct for binding 2 if needed
+		uint32_t num_of_lights;
 	};
 
 	class Context
@@ -64,14 +68,24 @@ namespace Renderer
 
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
 		virtual void DrawQueue() {};
+		
+		// Global Data ( camera data and global lights )
 		GlobalData global_data;
-		std::unique_ptr<MaterialMananger> material_manager;
+		
+		int AddLight(uint32_t entity_id, LightComponent* light_component);
+		void RemoveLight(uint32_t entity_id);
+		void UpdateLight(uint32_t entity_id, LightComponent* light_component);
 
+		std::unique_ptr<MaterialMananger> material_manager;
 	protected:
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
 		
 		std::unique_ptr<UniformBuffer> global_ubo;
+
+		// key : entity id
+		// value : array index (in global_data)
+		std::unordered_map<uint32_t, uint32_t> light_map;
 	};
 
 
