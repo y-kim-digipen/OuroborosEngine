@@ -5,6 +5,8 @@
 #include <vec3.hpp>
 #include <vec2.hpp>
 #include <glm\matrix.hpp>
+//#include "assets.h"
+#include "../common/assets.h"
 
 namespace Renderer {
 	struct Vertex {
@@ -18,14 +20,12 @@ namespace Renderer {
 	};
 
 	class Mesh {
-
 	public:
 		Mesh() = default;
 		virtual ~Mesh() =default;
-
-		virtual bool LoadAsset(const char* file_name);
+		
+		virtual bool CopyAssetData(const Asset::Mesh& mesh_name);
 		virtual void Draw(const glm::mat4& model, const glm::mat3& normal_matrix) {}
-
 	protected:
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;

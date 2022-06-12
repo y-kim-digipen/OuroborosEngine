@@ -4,6 +4,7 @@
 #include <thread>
 #include <Windows.h>
 
+#include "engine_settings.h"
 #include "Graphics/shader_manager.h"
 #include "Graphics/vulkan/vulkan_context.h"
 #include "Graphics/camera.h"
@@ -15,7 +16,6 @@
 
 namespace OE
 {
-
 	class Engine
 	{
 	public:
@@ -29,7 +29,7 @@ namespace OE
 		static void CleanUp(){}
 		static void ShutDown(){}
 
-		static std::unique_ptr<Renderer::Window>& GetGLFWWindow()
+		static std::unique_ptr<Renderer::Window>& GetRenderWindow()
 		{
 			return window;
 		}
@@ -62,6 +62,10 @@ namespace OE
 
 		static void SetupGUI();
 		static void ECS_TestSetup();
+		static void SetupModule();
+
+	public: // Modules
+		inline static Asset_Manager asset_manager;
 	};
 
 	inline Engine& Engine::Get()

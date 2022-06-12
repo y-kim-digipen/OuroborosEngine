@@ -7,11 +7,23 @@ namespace OE
 		std::string strID = std::to_string(entID);
 		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
+		const auto& mesh_map = Engine::Get().asset_manager.GetManager<MeshAssetManager>().GetAssetRawData();
 		if (ImGui::TreeNode(typeid(MeshComponent).name()))
 		{
-			if (ImGui::InputText("Meshname", buffer, 30))
+			if(ImGui::BeginCombo("Meshes", mesh_component.mesh_name.c_str()))
 			{
-				mesh_component.mesh_name = buffer;
+				for (const auto& key : mesh_map | std::views::keys)
+				{
+					const bool selected = mesh_component.mesh_name == key;
+					if(ImGui::Selectable(key.c_str(), selected))
+					{
+						mesh_component.mesh_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
 			}
 			ImGui::TreePop();
 		}
@@ -85,19 +97,6 @@ namespace OE
 			ImGui::TreePop();
 		}
 	}
-
-	//template<>
-	//inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
-	//{
-	//	static char buffer[30];
-	//	std::string strID = std::to_string(entID);
-	//	MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
-	//	memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
-	//	if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-	//	{
-	//		mesh_component.mesh_name = buffer;
-	//	}
-	//}
 
 	template<>
 	inline void ComponentDrawFunction<ShaderComponent>(ecs_ID entID)

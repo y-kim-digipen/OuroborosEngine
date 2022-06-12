@@ -12,7 +12,8 @@ namespace Renderer
 	{
 
 	}
-	int VulkanMeshManager::AddMesh(const std::string& mesh_name)
+
+	int VulkanMeshManager::CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh)
 	{
 		if (mesh_map.find(mesh_name) != mesh_map.end()) 
 		{
@@ -21,7 +22,7 @@ namespace Renderer
 		}
 
 		mesh_map[mesh_name] = std::make_unique<VulkanMesh>(vulkan_type);
-		if (!mesh_map[mesh_name]->LoadAsset(mesh_name.c_str())) 
+		if (!mesh_map[mesh_name]->CopyAssetData(mesh)) 
 		{
 			std::cout << mesh_name << " loading failed\n";
 			return -1;
@@ -39,18 +40,19 @@ namespace Renderer
 		}
 		else
 		{
-			std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
-			int result = AddMesh(mesh_name);
-			if (result == 0)
-			{
-				mesh_map.find(mesh_name)->second->Draw(model, normal_matrix);
-			}
+			//std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
+			throw std::runtime_error(mesh_name + "(mesh) is doesn't exist!");
+			//int result = AddMesh(mesh_name);
+			//if (result == 0)
+			//{
+			//	mesh_map.find(mesh_name)->second->Draw(model, normal_matrix);
+			//}
 		}
 
 		return 0;
 	}
 
-	int VulkanMeshManager::DeleteMesh(const std::string& mesh_name)
+	int VulkanMeshManager::DeleteMeshData(const std::string& mesh_name)
 	{
 		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
 		{

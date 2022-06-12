@@ -4,7 +4,7 @@
 int main()
 {
     OE::Engine::Init();
-    while (!glfwWindowShouldClose(OE::Engine::GetGLFWWindow()->GetWindowData().window))
+    while (!glfwWindowShouldClose(OE::Engine::GetRenderWindow()->GetWindowData().window))
     {
         OE::Engine::PreUpdate();
         OE::Engine::Update();
@@ -13,4 +13,3 @@ int main()
     OE::Engine::ShutDown();
     return 0;
 }
-

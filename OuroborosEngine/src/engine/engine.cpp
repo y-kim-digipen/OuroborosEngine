@@ -2,10 +2,9 @@
 #include <chrono>
 #include <gtc/matrix_transform.hpp>
 
-#include "ecs_settings.h"
+#include "engine_settings.h"
 #include "gui/gui_component_panel.h"
-
-
+#include "../../common/assets.h"
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -87,6 +86,11 @@ namespace OE
 			});
 	}
 
+	void Engine::SetupModule()
+	{
+		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
+	}
+
 	void Engine::Init()
 	{
 		/*
@@ -141,7 +145,8 @@ namespace OE
 			});
 
 		
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Renderer::MaterialData());
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
+		SetupModule();
 	}
 
 	void Engine::PreUpdate()

@@ -23,13 +23,13 @@
     <Filter Include="engine\input">
       <UniqueIdentifier>{6c356a02-3d50-40d9-83c7-e7b73abdf7ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\assets">
+      <UniqueIdentifier>{c3c5016f-f9f3-4a03-a5a2-1d8da3399469}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\engine.h">
       <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\modules\resource_manager.h">
-      <Filter>engine\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\common.h">
       <Filter>engine</Filter>
@@ -47,7 +47,7 @@
     <ClInclude Include="src\engine\gui\gui_component_panel.h">
       <Filter>engine\gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs_settings.h">
+    <ClInclude Include="src\engine\engine_settings.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ecs\system.h">
@@ -63,11 +63,26 @@
     <ClInclude Include="src\engine\input\InputManager.h">
       <Filter>engine\input</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\modules\master_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\mesh_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\image_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\engine.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\modules\image_asset_manager.cpp">
+      <Filter>engine\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp">
+      <Filter>engine\modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

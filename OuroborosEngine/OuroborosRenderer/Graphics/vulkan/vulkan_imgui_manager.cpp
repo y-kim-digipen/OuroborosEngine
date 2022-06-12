@@ -107,8 +107,6 @@ namespace Renderer
 			}
 		}
 
-
-
 		VkDescriptorPoolSize pool_sizes[] =
 		{
 			{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
