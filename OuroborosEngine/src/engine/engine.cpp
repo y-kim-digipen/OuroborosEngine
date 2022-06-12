@@ -88,6 +88,18 @@ namespace OE
 					context->AddDrawQueue(&transform, nullptr, &mesh, &shader);
 				}
 			});
+
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light)
+			{
+				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+				if(ecs_manager.GetEntity(ent).alive)
+				{
+					
+
+
+
+				}
+			});
 	}
 
 	void Engine::Init()

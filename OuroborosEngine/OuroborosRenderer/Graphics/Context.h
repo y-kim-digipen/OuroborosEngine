@@ -75,6 +75,7 @@ namespace Renderer
 		// Global Data ( camera data and global lights )
 		GlobalData global_data;
 		LightData light_data;
+
 		
 		int AddLight(uint32_t entity_id, LightComponent* light_component);
 		void RemoveLight(uint32_t entity_id);

@@ -9,13 +9,14 @@ using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, L
 using PhysicsSystem = OE::ECS::System<TransformComponent, VelocityComponent>;
 using TestSystem = OE::ECS::System<BoolWrapperComponent>;
 using DrawSystem = OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
+using LightSystem = OE::ECS::System<ShaderComponent, LightComponent>;
 
-
-using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem, DrawSystem>;
+using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem, DrawSystem, LightSystem>;
 
 using Signature0 = OE::ECS::types::Signature<TransformComponent, VelocityComponent>;
 using Signature1 = OE::ECS::types::Signature<LifeTimeComponent, MeshComponent>;
 using Signature2 = OE::ECS::types::Signature<TestSystem, BoolWrapperComponent>;
+
 
 using MeshDrawSignature = OE::ECS::types::Signature<TransformComponent, MeshComponent,ShaderComponent>;
 

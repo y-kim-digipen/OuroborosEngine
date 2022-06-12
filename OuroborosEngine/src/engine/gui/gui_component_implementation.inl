@@ -132,6 +132,23 @@ namespace OE
 			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
 			ImGui::TreePop();
 		}
+	}
+
+
+	template<>
+	inline void ComponentDrawFunction<LightComponent>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		LightComponent& light_component = ecs_manager.GetComponent<LightComponent>(entID);
+		if (ImGui::TreeNode(typeid(LightComponent).name()))
+		{
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.position.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.direction.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.diffuse), &light_component.diffuse.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.ambient), &light_component.ambient.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.specular), &light_component.specular.x);
+			ImGui::TreePop();
+		}
 
 	}
 
