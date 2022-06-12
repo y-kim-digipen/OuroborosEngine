@@ -16,6 +16,7 @@ namespace Renderer
 
 	void Context::InitGlobalData()
 	{
+		light_data.num_of_lights = 0;
 	}
 
 	void Context::UpdateGlobalData()
@@ -42,13 +43,13 @@ namespace Renderer
 		draw_queue.push({ transform,material, mesh, shader });
 	}
 
-	int Context::AddLight(uint32_t entity_id, LightComponent* light_component)
+	int Context::AddLight(uint32_t entity_id, Asset::LightData* light_component)
 	{
 		// if there is slot left
-		if (light_data.num_of_lights < max_num_lights) {
-
+		if (light_data.num_of_lights < max_num_lights)
+		{
 			light_map[entity_id] = light_data.num_of_lights;
-			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
+			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 			++light_data.num_of_lights;
 			return 0;
 		}
@@ -87,11 +88,11 @@ namespace Renderer
 		--light_data.num_of_lights;
 	}
 
-	void Context::UpdateLight(uint32_t entity_id, LightComponent* light_component)
+	void Context::UpdateLight(uint32_t entity_id, Asset::LightData* light_component)
 	{
 		if (light_map.find(entity_id) != light_map.end()) {
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
+			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 		}
 	}
 

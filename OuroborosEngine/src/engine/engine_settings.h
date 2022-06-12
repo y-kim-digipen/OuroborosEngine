@@ -6,7 +6,7 @@
 #include "modules/image_asset_manager.h"
 #include "modules/mesh_asset_manager.h"
 
-using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent>;
+using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent,LightComponent>;
 
 using PhysicsSystem = OE::ECS::System<TransformComponent, VelocityComponent>;
 using TestSystem = OE::ECS::System<BoolWrapperComponent>;

@@ -4,7 +4,8 @@
 
 #include "engine_settings.h"
 #include "gui/gui_component_panel.h"
-#include "../../common/assets.h"
+
+
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -78,7 +79,7 @@ namespace OE
 					camera.data.view = camera.GetCameraMat();
 
 					//TODO: pass renderer camera data
-					context->global_data = camera.data;;
+					context->global_data = camera.data;
 					context->UpdateGlobalData();
 			
 					context->AddDrawQueue(&transform, &material, &mesh, &shader);
@@ -90,10 +91,12 @@ namespace OE
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
 				{
-					
-
-
-
+					if(light.init == false)
+					{
+						context->AddLight(ent, &light.data);
+						light.init = true;
+					}
+					context->UpdateLight(ent, &light.data);
 				}
 			});
 	}
