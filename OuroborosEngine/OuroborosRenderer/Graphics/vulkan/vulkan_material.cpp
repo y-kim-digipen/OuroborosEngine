@@ -27,7 +27,7 @@ namespace Renderer {
 		ubo->AddData(&data, sizeof(data));
 	}
 	
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(MaterialData),2))
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(Asset::MaterialData),2))
 	{
 		VkDescriptorSetLayoutBinding binding;
 		binding.binding = 0;
@@ -56,7 +56,7 @@ namespace Renderer {
 	{
 		if(is_changed)
 		{
-			ubo->AddData(&data, sizeof(MaterialData));
+			ubo->AddData(&data, sizeof(Asset::MaterialData));
 			is_changed = false;
 		}
 

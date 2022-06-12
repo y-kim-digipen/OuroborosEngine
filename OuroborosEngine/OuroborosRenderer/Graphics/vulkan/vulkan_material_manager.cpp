@@ -16,7 +16,7 @@ namespace Renderer {
 	}
 
 
-	int VulkanMaterialManager::AddMaterial(std::string material_name, MaterialData material_data)
+	int VulkanMaterialManager::AddMaterial(std::string material_name,const Asset::MaterialData& material_data)
 	{
 		if (material_map.find(material_name) != material_map.end())
 		{
@@ -31,7 +31,7 @@ namespace Renderer {
 
 	}
 
-	int VulkanMaterialManager::ChangeMaterial(std::string material_name, MaterialData data)
+	int VulkanMaterialManager::ChangeMaterial(std::string material_name,const Asset::MaterialData& data)
 	{
 		if (auto iter = material_map.find(material_name); iter != material_map.end())
 		{

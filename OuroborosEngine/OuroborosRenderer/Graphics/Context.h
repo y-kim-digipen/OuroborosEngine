@@ -64,7 +64,7 @@ namespace Renderer
 
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
 		virtual void DrawQueue() {};
-		CameraData global_data;
+		Asset::CameraData global_data;
 		std::unique_ptr<MaterialMananger> material_manager;
 
 	protected:

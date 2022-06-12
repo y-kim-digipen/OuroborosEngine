@@ -1,5 +1,7 @@
 #pragma once
+//#include <detail/type_vec.hpp>
 #include <glm.hpp>
+#include "../common/assets.h"
 
 struct TransformComponent
 {
@@ -22,13 +24,13 @@ struct LifeTimeComponent
 
 struct MeshComponent
 {
-	std::string mesh_name ="suzanne";
+	std::string mesh_name;
 };
 
 struct MaterialComponent
 {
 	std::string name ="material";
-	Renderer::MaterialData data{.ambient = {1.f,0.f,0.f}};
+	Asset::MaterialData data{.ambient = {1.f,0.f,0.f}};
 	bool flag = false;
 	bool is_save = false;
 };
@@ -52,7 +54,7 @@ struct TagComponent
 struct LightComponent
 {
 	bool init = false;
-	Renderer::LightData data;
+	Asset::LightData data;
 };
 
 //void DrawSystem(mesh, sahder)

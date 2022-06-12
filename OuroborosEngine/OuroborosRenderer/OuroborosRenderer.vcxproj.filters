@@ -131,9 +131,6 @@
     <ClInclude Include="Graphics\opengl\opengl_buffer.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\buffer_data_type.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">

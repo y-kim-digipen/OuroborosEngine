@@ -1,9 +1,9 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "../../common/assets.h"
 #include <glm/vec3.hpp>
 
-#include "buffer_data_type.h"
 
 namespace Renderer {
     class Material {
@@ -12,18 +12,18 @@ namespace Renderer {
         Material() = default;
         virtual ~Material() = default;
         virtual void Bind() = 0;
-        void InitMaterialData(const MaterialData&& other);
-        MaterialData* GetMaterialData();
+        void InitMaterialData(const Asset::MaterialData&& other);
+        Asset::MaterialData* GetMaterialData();
     protected:
-        MaterialData data;
+        Asset::MaterialData data;
     };
 
-    inline void Material::InitMaterialData(const MaterialData&& other)
+    inline void Material::InitMaterialData(const Asset::MaterialData&& other)
     {
         data = other;
     }
 
-    inline MaterialData* Material::GetMaterialData() 
+    inline Asset::MaterialData* Material::GetMaterialData() 
     {
         return &data;
     }

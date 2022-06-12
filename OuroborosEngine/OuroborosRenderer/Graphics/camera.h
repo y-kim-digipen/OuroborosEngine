@@ -1,8 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#include "../../common/assets.h"
 #include <glm.hpp>
 
-#include "buffer_data_type.h"
+
 
 namespace Renderer
 {
@@ -51,7 +52,7 @@ namespace Renderer
 		float zoom;
 
 
-		CameraData data;
+		Asset::CameraData data;
 	};
 
 
