@@ -20,7 +20,7 @@ struct Light
 	vec3 specular;
 	vec3 direction;
 	int light_type;
-}
+};
 
 layout(set = 0, binding = 1) uniform light_data {
     Light lights[20];
