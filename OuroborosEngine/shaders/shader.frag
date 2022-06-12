@@ -64,5 +64,5 @@ void main()
 
 
 
-    outColor = vec4(abs(normalize(vs_in.norm)),1.0);
+    outColor = vec4(material.ambient,1.0);
 }

@@ -14,7 +14,7 @@
 #include "mesh_manager.h"
 #include "shader_manager.h"
 #include "material_manager.h"
-
+#include "../common/assets.h"
 #include "../../../src/engine/ecs/components.h"
 
 struct MaterialComponent;
@@ -35,8 +35,8 @@ namespace Renderer
 		glm::vec3 position;
 	};
 
-	struct LightData {
-		LightComponent lights[max_num_lights];
+	struct LightGlobalData {
+		Asset::LightData lights[max_num_lights];
 		uint32_t num_of_lights;
 	};
 
@@ -71,17 +71,15 @@ namespace Renderer
 
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
 		virtual void DrawQueue() {};
-		
-		// Global Data ( camera data and global lights )
-		GlobalData global_data;
-		LightData light_data;
-
-		
-		int AddLight(uint32_t entity_id, LightComponent* light_component);
-		void RemoveLight(uint32_t entity_id);
-		void UpdateLight(uint32_t entity_id, LightComponent* light_component);
-
+		Asset::CameraData global_data;
+		LightGlobalData light_data;
 		std::unique_ptr<MaterialMananger> material_manager;
+
+		
+		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
+		void RemoveLight(uint32_t entity_id);
+		void UpdateLight(uint32_t entity_id, Asset::LightData* light_component);
+
 	protected:
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;

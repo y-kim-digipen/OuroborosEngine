@@ -15,14 +15,17 @@ namespace Renderer {
 
 	public:
 		VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
+		VulkanMaterial(Vulkan_type* vulkan_type);
 		~VulkanMaterial() override;
 
 		void Bind() override;
+
+		bool is_changed = false;
+		VkDescriptorSetLayout set_layout{};
+		std::unique_ptr<VulkanUniformBuffer> ubo;
 	private:
 		Vulkan_type* vulkan_type;
-		
 		//TODO: does this should go in parent class ???
-		std::unique_ptr<VulkanUniformBuffer> ubo;
 	};
 }
 

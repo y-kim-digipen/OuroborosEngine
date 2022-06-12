@@ -1,6 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#include "../../common/assets.h"
 #include <glm.hpp>
+
+
 
 namespace Renderer
 {
@@ -48,14 +51,8 @@ namespace Renderer
 		float mouse_sensitivity;
 		float zoom;
 
-		struct CameraData
-		{
-			glm::mat4 projection;
-			glm::mat4 view;
-			glm::vec3 position;
-		};
 
-		CameraData data;
+		Asset::CameraData data;
 	};
 
 

@@ -3,19 +3,33 @@ namespace OE
 	template<>
 	inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
 	{
-		static char* buffer = new char[30]();
+		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
+		const auto& mesh_map = Engine::Get().asset_manager.GetManager<MeshAssetManager>().GetAssetRawData();
 		if (ImGui::TreeNode(typeid(MeshComponent).name()))
 		{
-			if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::BeginCombo("Meshes", mesh_component.mesh_name.c_str()))
 			{
-				mesh_component.mesh_name = buffer;
+				for (const auto& key : mesh_map | std::views::keys)
+				{
+					const bool selected = mesh_component.mesh_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						mesh_component.mesh_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
 			}
 			ImGui::TreePop();
 		}
 	}
+
+
 
 	template<>
 	inline void ComponentDrawFunction<TransformComponent>(ecs_ID entID)
@@ -29,7 +43,7 @@ namespace OE
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
 			float angle = glm::degrees(transform_component.angle);
 
-			if(ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &angle))
+			if (ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &angle))
 			{
 				transform_component.angle = glm::radians(angle);
 			};
@@ -84,28 +98,15 @@ namespace OE
 		}
 	}
 
-	//template<>
-	//inline void ComponentDrawFunction<MeshComponent>(ecs_ID entID)
-	//{
-	//	static char buffer[30];
-	//	std::string strID = std::to_string(entID);
-	//	MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
-	//	memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
-	//	if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-	//	{
-	//		mesh_component.mesh_name = buffer;
-	//	}
-	//}
-
 	template<>
 	inline void ComponentDrawFunction<ShaderComponent>(ecs_ID entID)
 	{
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
-		memcpy(buffer, shader_component.name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
+			memcpy(buffer, shader_component.name.c_str(), 30);
 			if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				shader_component.name = buffer;
@@ -113,6 +114,8 @@ namespace OE
 			ImGui::TreePop();
 		}
 	}
+
+
 
 	template<>
 	inline void ComponentDrawFunction<MaterialComponent>(ecs_ID entID)
@@ -123,13 +126,27 @@ namespace OE
 		memcpy(buffer, material_component.name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
 		{
-		if (ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			material_component.name = buffer;
-		}
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.ambient), &material_component.ambient.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.diffuse), &material_component.diffuse.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(material.specular), &material_component.specular.x);
+			memcpy(buffer, material_component.name.c_str(), 30);
+			if (ImGui::InputText("Materialname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				material_component.name = buffer;
+				material_component.flag = true;
+			}
+			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
+			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
+			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.shinnesss), &material_component.data.shininess);
+
+			if (is_changed)
+			{
+				material_component.flag = true;
+			}
+
+			if (ImGui::Button("save"))
+			{
+				material_component.is_save = true;
+			}
+
 			ImGui::TreePop();
 		}
 	}
@@ -142,14 +159,15 @@ namespace OE
 		LightComponent& light_component = ecs_manager.GetComponent<LightComponent>(entID);
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.position.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.direction.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.diffuse), &light_component.diffuse.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.ambient), &light_component.ambient.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.specular), &light_component.specular.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
 			ImGui::TreePop();
+
+
 		}
 
 	}
-
 }

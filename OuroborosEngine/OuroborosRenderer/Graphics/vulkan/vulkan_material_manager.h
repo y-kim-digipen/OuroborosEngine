@@ -13,7 +13,8 @@ namespace Renderer {
 	public:
 		VulkanMaterialManager(Vulkan_type* vulkan_type);
 		~VulkanMaterialManager() override;
-		int AddMaterial(const char* material_name, Material* material) override;
+		int AddMaterial(std::string material_name, const Asset::MaterialData& material_data) override;
+		int ChangeMaterial(std::string material_name, const Asset::MaterialData& data) override;
 		Material* GetMaterial(const std::string& material_name) override;
 	private:
 		Vulkan_type* vulkan_type;

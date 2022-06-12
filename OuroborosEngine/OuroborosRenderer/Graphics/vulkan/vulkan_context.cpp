@@ -22,6 +22,7 @@
 #include <gtc/matrix_transform.hpp>
 
 
+#include "vulkan_material.h"
 #include "backends/imgui_impl_vulkan.h"
 //#define GLFW_EXPOSE_NATIVE_WIN32s
 //#include <GLFW/glfw3native.h>
@@ -367,9 +368,10 @@ namespace Renderer
 
         if (!draw_queue.empty())
 
+
+
             while (!draw_queue.empty())
             {
-               
                 const auto& front = draw_queue.front();
 
                 auto* transform = front.transform;
@@ -389,10 +391,33 @@ namespace Renderer
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
-				BindGlobalData();
 
-                //material_manager
-                //material_manager->GetMaterial(material->name)->Bind();
+            	//TODO: Maybe later, material update should be in update and sorted function 
+                if (material->flag)
+                {
+                    static VulkanMaterial new_material(GetVulkanType());
+                    new_material.InitMaterialData(std::move(material->data));
+                    new_material.is_changed = material->flag;
+                    new_material.Bind();
+
+                	if (material->is_save)
+                    {
+                        material_manager->ChangeMaterial(material->name, material->data);
+                        material->flag = false;
+                        material->is_save = false;
+                        material_manager->GetMaterial(material->name)->Bind();
+                    }
+                }
+                else
+                {
+                    if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
+                    {
+                        iter->Bind();
+                    }
+
+                }
+                BindGlobalData();
+
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {

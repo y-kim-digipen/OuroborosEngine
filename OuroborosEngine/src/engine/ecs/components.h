@@ -1,5 +1,7 @@
 #pragma once
+//#include <detail/type_vec.hpp>
 #include <glm.hpp>
+#include "../common/assets.h"
 
 struct TransformComponent
 {
@@ -27,10 +29,9 @@ struct MeshComponent
 struct MaterialComponent
 {
 	std::string name ="material";
-	glm::vec3 ambient;
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-	float shininess;
+	Asset::MaterialData data{.ambient = {1.f,0.f,0.f}};
+	bool flag = false;
+	bool is_save = false;
 };
 
 struct ShaderComponent
@@ -51,16 +52,8 @@ struct TagComponent
 
 struct LightComponent
 {
-	glm::vec3 position;
-	float cutoff;
-	glm::vec3 diffuse;
-	float out_cutoff;
-	glm::vec3 ambient;
-	float falloff;
-	glm::vec3 specular;
-	float padding4;
-	glm::vec3 direction;
-	int light_type;
+	bool init = false;
+	Asset::LightData data;
 };
 
 //void DrawSystem(mesh, sahder)

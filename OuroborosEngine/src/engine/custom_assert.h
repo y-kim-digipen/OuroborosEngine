@@ -8,7 +8,7 @@
 #   define OE_Assert(Expr, Msg) ;
 #endif
 
-void __OE_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
+static void __OE_Assert(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
     if (!expr)
     {

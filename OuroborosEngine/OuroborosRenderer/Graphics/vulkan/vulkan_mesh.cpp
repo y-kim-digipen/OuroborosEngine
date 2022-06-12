@@ -17,9 +17,9 @@ namespace Renderer {
     {
     }
 
-    bool VulkanMesh::LoadAsset(const char* file_name)
+    bool VulkanMesh::CopyAssetData(const Asset::Mesh& mesh)
     {
-        if (!Mesh::LoadAsset(file_name))
+        if (!Mesh::CopyAssetData(mesh))
             return false;
 
         p_vertex_buffer = std::make_unique<VulkanVertexBuffer>(vulkan_type,vertices);
