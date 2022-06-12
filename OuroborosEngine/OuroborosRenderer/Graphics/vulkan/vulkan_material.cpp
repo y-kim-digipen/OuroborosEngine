@@ -24,6 +24,7 @@ namespace Renderer {
 
 		//TODO: dont use magic number
 		ubo->SetupDescriptorSet(0, 1, set_layout);
+		ubo->AddData(&data, sizeof(data));
 	}
 	
 	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(MaterialData),2))
@@ -43,6 +44,7 @@ namespace Renderer {
 
 		//TODO: dont use magic number
 		ubo->SetupDescriptorSet(0, 1, set_layout);
+		ubo->AddData(&data, sizeof(data));
 	}
 
 	VulkanMaterial::~VulkanMaterial()

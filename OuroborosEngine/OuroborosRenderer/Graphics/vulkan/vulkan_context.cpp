@@ -395,7 +395,7 @@ namespace Renderer
                         material_manager->ChangeMaterial(material->name, material->data);
                         material->flag = false;
                         material->is_save = false;
-                        
+                        material_manager->GetMaterial(material->name)->Bind();
                     }
                 }
                 else

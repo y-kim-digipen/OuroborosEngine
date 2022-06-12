@@ -28,7 +28,7 @@ struct MeshComponent
 struct MaterialComponent
 {
 	std::string name ="material";
-	Renderer::MaterialData data;
+	Renderer::MaterialData data{.ambient = {1.f,0.f,0.f}};
 	bool flag = false;
 	bool is_save = false;
 };

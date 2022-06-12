@@ -117,7 +117,7 @@ namespace OE
 
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
-		window->GetWindowData().RenderContextData.get()->InitGlobalData();
+		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
 		SetupGUI();
@@ -139,6 +139,9 @@ namespace OE
 					std::cout << "Released" << std::endl;
 				}
 			});
+
+		
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Renderer::MaterialData());
 	}
 
 	void Engine::PreUpdate()

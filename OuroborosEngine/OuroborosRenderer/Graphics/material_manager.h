@@ -13,7 +13,7 @@ namespace Renderer {
 	public:
 		MaterialMananger() = default;
 		virtual ~MaterialMananger() = default;
-		virtual int AddMaterial(std::string material_name ,Material* material) = 0;
+		virtual int AddMaterial(std::string material_name, MaterialData data) = 0;
 		virtual Material* GetMaterial(const std::string& material_name) = 0;
 		virtual int ChangeMaterial(std::string material_name, MaterialData data) = 0;
 	protected:
