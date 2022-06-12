@@ -9,6 +9,24 @@ struct Material {
 }; 
 */
 
+struct Light
+{
+    vec3 position;
+	float cutoff;
+	vec3 diffuse;
+	float out_cutoff;
+	vec3 ambient;
+	float falloff;
+	vec3 specular;
+	vec3 direction;
+	int light_type;
+}
+
+layout(set = 0, binding = 1) uniform light_data {
+    Light lights[20];
+    int num_lights;
+} light_ubo;
+
 layout(location = 0) out vec4 outColor;
 
 layout(location = 0) in VS_IN 

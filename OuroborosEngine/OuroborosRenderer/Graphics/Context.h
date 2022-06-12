@@ -33,7 +33,10 @@ namespace Renderer
 		glm::mat4 projection;
 		glm::mat4 view;
 		glm::vec3 position;
-		LightComponent lights[max_num_lights]; //TODO(Austyn): might make seperate struct for binding 2 if needed
+	};
+
+	struct LightData {
+		LightComponent lights[max_num_lights];
 		uint32_t num_of_lights;
 	};
 
@@ -71,6 +74,7 @@ namespace Renderer
 		
 		// Global Data ( camera data and global lights )
 		GlobalData global_data;
+		LightData light_data;
 		
 		int AddLight(uint32_t entity_id, LightComponent* light_component);
 		void RemoveLight(uint32_t entity_id);
@@ -81,7 +85,9 @@ namespace Renderer
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
 		
+		// global data ( scene data )
 		std::unique_ptr<UniformBuffer> global_ubo;
+		std::unique_ptr<UniformBuffer> light_ubo;
 
 		// key : entity id
 		// value : array index (in global_data)

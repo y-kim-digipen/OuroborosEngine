@@ -45,11 +45,11 @@ namespace Renderer
 	int Context::AddLight(uint32_t entity_id, LightComponent* light_component)
 	{
 		// if there is slot left
-		if (global_data.num_of_lights < max_num_lights) {
+		if (light_data.num_of_lights < max_num_lights) {
 
-			light_map[entity_id] = global_data.num_of_lights;
-			memcpy_s(&global_data.lights[global_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
-			++global_data.num_of_lights;
+			light_map[entity_id] = light_data.num_of_lights;
+			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
+			++light_data.num_of_lights;
 			return 0;
 		}
 
@@ -68,30 +68,30 @@ namespace Renderer
 		uint32_t index = light_map[entity_id];
 
 		// if its not last element, swap with last element 
-		if (index != (global_data.num_of_lights - 1))
+		if (index != (light_data.num_of_lights - 1))
 		{
-			std::swap(global_data.lights[global_data.num_of_lights - 1], global_data.lights[index]);
+			std::swap(light_data.lights[light_data.num_of_lights - 1], light_data.lights[index]);
 
 			// first = entity_id, second = light_array_index
 			// find light that is currently binded to last element and swap 'last index' to 'index'
 			for (auto& pair : light_map) {
-				if (pair.second == global_data.num_of_lights - 1) {
+				if (pair.second == light_data.num_of_lights - 1) {
 					pair.second = index;
 					break;
 				}
 			}
 
-			light_map[entity_id] = global_data.num_of_lights - 1;
+			light_map[entity_id] = light_data.num_of_lights - 1;
 		}
 
-		--global_data.num_of_lights;
+		--light_data.num_of_lights;
 	}
 
 	void Context::UpdateLight(uint32_t entity_id, LightComponent* light_component)
 	{
 		if (light_map.find(entity_id) != light_map.end()) {
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&global_data.lights[global_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
+			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(LightComponent), light_component, sizeof(LightComponent));
 		}
 	}
 

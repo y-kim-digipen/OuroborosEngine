@@ -118,25 +118,28 @@ namespace Renderer
     void VulkanContext::InitGlobalData()
     {
         Context::InitGlobalData();
-
-        uint32_t buffer_size = sizeof(global_ubo);
           
         Vulkan_PipelineBuilder pipeline_builder;
 
-        VkDescriptorSetLayoutBinding binding;
-	    binding.binding = 0;
-        //TODO: convert to storage buffer and combine per frame data to one buffer 
-        binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        binding.descriptorCount = 1;
-        //TODO: might change
-        binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        //binding.pImmutableSamplers = 0;
+		//TODO: convert to dynamic descriptor & ubo buffer and combine per frame data to one buffer 
+        const uint32_t binding_count = 2;
+        VkDescriptorSetLayoutBinding bindings[binding_count];
+        // camera data
+        bindings[0].binding = 0;
+        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        bindings[0].descriptorCount = 1;
+        bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        // light data
+        bindings[1].binding = 1;
+        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        bindings[0].descriptorCount = 1;
+        bindings[0].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
         VkDescriptorSetLayout set_layout;
 
         VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-        set_layout_create_info.bindingCount = 1;
-        set_layout_create_info.pBindings = &binding;
+        set_layout_create_info.bindingCount = binding_count;
+        set_layout_create_info.pBindings = bindings;
          VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
 
         //TODO: this might occur error, need to be test
@@ -145,18 +148,25 @@ namespace Renderer
 
         global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data), 0);
         ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
+
+        light_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(light_data), 0);
+        ((VulkanUniformBuffer*)light_ubo.get())->SetupDescriptorSet(1, 1, set_layout);
+
+        vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
     }
 
     void VulkanContext::UpdateGlobalData()
     {
         Context::UpdateGlobalData();
         ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data));
+        ((VulkanUniformBuffer*)light_ubo.get())->AddData((void*)&light_data, sizeof(light_data));
     }
 
 	// Must be called after init_frame()
     void VulkanContext::BindGlobalData()
     {
         global_ubo->Bind();
+        light_ubo->Bind();
     }
 
     void VulkanContext::Shutdown()
