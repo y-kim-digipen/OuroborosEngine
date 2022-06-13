@@ -132,7 +132,7 @@ namespace Renderer
         bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         // light data
         bindings[1].binding = 1;
-        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         bindings[1].descriptorCount = 1;
         bindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
@@ -147,27 +147,29 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data), 0);
-        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0);
+        VulkanUniformBuffer* vk_global_ubo = (VulkanUniformBuffer*)global_ubo.get();
 
-        light_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(light_data), 0);
-        ((VulkanUniformBuffer*)light_ubo.get())->SetupDescriptorSet(1, 1, set_layout);
+        vk_global_ubo->AddBinding(0, sizeof(global_data));
+        vk_global_ubo->AddBinding(1, sizeof(light_data));
 
+        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(1, set_layout);
+
+ 
         vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
     }
 
     void VulkanContext::UpdateGlobalData()
     {
         Context::UpdateGlobalData();
-        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data));
-        ((VulkanUniformBuffer*)light_ubo.get())->AddData((void*)&light_data, sizeof(light_data));
+        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, 0,sizeof(global_data));
+        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data), sizeof(light_data));
     }
 
 	// Must be called after init_frame()
     void VulkanContext::BindGlobalData()
     {
         global_ubo->Bind();
-        light_ubo->Bind();
     }
 
     void VulkanContext::Shutdown()
@@ -573,6 +575,8 @@ namespace Renderer
             VK_VERSION_PATCH(physical_properties.apiVersion));
 
         vulkan_type.device.physical_device = physical_device;
+
+        vkGetPhysicalDeviceProperties(vulkan_type.device.physical_device, &vulkan_type.device.properties);
 
         return 0;
     }

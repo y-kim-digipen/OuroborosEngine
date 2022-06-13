@@ -105,7 +105,7 @@ namespace Renderer {
 			if (binding_count != 0 && (i == 1)) {
 
 				for (const auto& binding_set : layout_bindings_set[i]) {
-					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.descriptorCount, descriptor_set_layouts[i]);
 				}
 			}
 		}
@@ -209,6 +209,11 @@ namespace Renderer {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
 	
+			// dont add ubo var for material & object & global
+			if (refl_set.set == 1) {
+				uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_set.set));
+			}
+
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
 				
 				const SpvReflectDescriptorBinding& refl_binding = *refl_set.bindings[i_binding];
@@ -235,8 +240,6 @@ namespace Renderer {
 					// dont add ubo var for material & object & global
 					if (refl_set.set == 1)
 					{
-						uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size, refl_set.set));
-
 						for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
 							DataType data_type = DataType::NONE;
@@ -271,6 +274,8 @@ namespace Renderer {
 							default:
 								DataType::NONE;
 							}
+
+							((VulkanUniformBuffer*)uniform_buffer_objects.back().get())->AddBinding(refl_binding.binding, refl_binding.block.size);
 
 							uniform_buffer_objects.back()->AddMember(
 								refl_binding.block.members[i].name,

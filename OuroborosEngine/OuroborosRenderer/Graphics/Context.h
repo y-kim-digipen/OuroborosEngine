@@ -86,7 +86,6 @@ namespace Renderer
 		
 		// global data ( scene data )
 		std::unique_ptr<UniformBuffer> global_ubo;
-		std::unique_ptr<UniformBuffer> light_ubo;
 
 		// key : entity id
 		// value : array index (in global_data)

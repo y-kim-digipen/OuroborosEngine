@@ -4,8 +4,9 @@
 
 namespace Renderer {
 
+	/*
 	//TODO: Material(*material) ???
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type, Material* material) : Material(*material), vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(Material), 2))
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type, Material* material) : Material(*material), vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
 	{
 		//TODO: might not need to create descriptor set layout everytime
 		VkDescriptorSetLayoutBinding binding;
@@ -21,13 +22,13 @@ namespace Renderer {
 		VkDescriptorSetLayout set_layout{};
 
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
-
-		//TODO: dont use magic number
-		ubo->SetupDescriptorSet(0, 1, set_layout);
-		ubo->AddData(&data, sizeof(data));
+		ubo->AddBinding(0, sizeof(Material));
+		ubo->AddData(&data, 0, sizeof(data));
+		ubo->SetupDescriptorSet(1, set_layout);
 	}
-	
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, sizeof(Asset::MaterialData),2))
+	*/
+
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
 	{
 		VkDescriptorSetLayoutBinding binding;
 		binding.binding = 0;
@@ -42,9 +43,9 @@ namespace Renderer {
 
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
-		//TODO: dont use magic number
-		ubo->SetupDescriptorSet(0, 1, set_layout);
-		ubo->AddData(&data, sizeof(data));
+		ubo->AddBinding(0, sizeof(Asset::MaterialData));
+		ubo->SetupDescriptorSet(1, set_layout);
+		ubo->AddData(&data, 0, sizeof(data));
 	}
 
 	VulkanMaterial::~VulkanMaterial()
@@ -56,7 +57,7 @@ namespace Renderer {
 	{
 		if(is_changed)
 		{
-			ubo->AddData(&data, sizeof(Asset::MaterialData));
+			ubo->AddData(&data, 0, sizeof(Asset::MaterialData));
 			is_changed = false;
 		}
 
