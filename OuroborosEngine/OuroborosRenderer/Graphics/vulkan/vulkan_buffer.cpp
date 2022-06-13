@@ -57,7 +57,7 @@ namespace Renderer
 		{
 			.srcOffset = 0,
 			.dstOffset = dst_offset,
-			.size	   = size
+			.size = src_buffer->size
 		};
 
 		vkCmdCopyBuffer(command_buffer, src_buffer->buffer, buffer, 1, &copyRegion);
@@ -318,11 +318,7 @@ namespace Renderer
 				set_write.dstSet = descriptor_set[i];
 				set_write.dstBinding = bindings[i_binding].binding;
 				set_write.descriptorCount = 1;
-
-				set_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-
-				if (i_binding == 0)
-					set_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+				set_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 				set_write.pBufferInfo = &buffer_info;
 
 				set_writes.push_back(set_write);

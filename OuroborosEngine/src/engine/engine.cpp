@@ -121,10 +121,8 @@ namespace OE
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.view = camera.GetCameraMat();
 
-
-
 		Renderer::ShaderConfig shader_config
-		{		"shader",
+		{ "shader",
 		{	Renderer::E_StageType::VERTEX_SHADER,
 					Renderer::E_StageType::FRAGMENT_SHADER },
 			2 };
@@ -132,7 +130,7 @@ namespace OE
 		Renderer::ShaderConfig shader_config2{
 					"shader2",
 			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2};
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
