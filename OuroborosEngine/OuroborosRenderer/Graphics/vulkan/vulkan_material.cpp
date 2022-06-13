@@ -46,6 +46,7 @@ namespace Renderer {
 		ubo->AddBinding(0, sizeof(Asset::MaterialData));
 		ubo->SetupDescriptorSet(1, set_layout);
 		ubo->AddData(&data, 0, sizeof(data));
+		ubo->UploadToGPU();
 	}
 
 	VulkanMaterial::~VulkanMaterial()
@@ -58,6 +59,7 @@ namespace Renderer {
 		if(is_changed)
 		{
 			ubo->AddData(&data, 0, sizeof(Asset::MaterialData));
+			ubo->UploadToGPU();
 			is_changed = false;
 		}
 

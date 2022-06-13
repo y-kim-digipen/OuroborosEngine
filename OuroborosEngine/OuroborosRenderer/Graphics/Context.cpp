@@ -92,7 +92,7 @@ namespace Renderer
 	{
 		if (light_map.find(entity_id) != light_map.end()) {
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			memcpy_s(&light_data.lights[light_map[entity_id]], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 		}
 	}
 

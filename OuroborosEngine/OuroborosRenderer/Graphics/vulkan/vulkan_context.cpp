@@ -162,8 +162,12 @@ namespace Renderer
     void VulkanContext::UpdateGlobalData()
     {
         Context::UpdateGlobalData();
-        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, 0,sizeof(global_data));
-        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data), sizeof(light_data));
+
+        VulkanUniformBuffer* vk_global_ubo = ((VulkanUniformBuffer*)global_ubo.get());
+
+        vk_global_ubo->AddData((void*)&global_data, 0,sizeof(global_data));
+        vk_global_ubo->AddData((void*)&light_data, sizeof(global_data), sizeof(light_data));
+        vk_global_ubo->UploadToGPU();
     }
 
 	// Must be called after init_frame()
@@ -393,6 +397,7 @@ namespace Renderer
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function 
                 if (material->flag)
@@ -418,8 +423,6 @@ namespace Renderer
                     }
 
                 }
-                BindGlobalData();
-
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {

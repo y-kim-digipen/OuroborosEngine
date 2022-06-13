@@ -14,7 +14,7 @@ namespace Renderer
 	public:
 		VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage, VmaMemoryUsage vma_usage);
 		~VulkanBuffer();
-		void UploadData(void* data, uint64_t buffer_size);
+		void UploadData(void* data, uint64_t buffer_size, uint32_t offset = 0);
 		void CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer, uint32_t dst_offset);
 		void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
 
@@ -79,6 +79,7 @@ namespace Renderer
 		int AddBinding(uint32_t binding_num, uint32_t buffer_size);
 
 		int AddData(void* data, uint32_t offset, uint32_t buffer_size) override;
+		void UploadToGPU(uint32_t offset = 0, uint32_t upload_size = 0);
 
 		void SetupDescriptorSet(uint32_t descriptor_count, VkDescriptorSetLayout layout);
 		

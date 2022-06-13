@@ -64,7 +64,7 @@ void main()
 
     if(light_ubo.num_lights > 0)
     {
-        outColor = vec4(light_ubo.lights[0].position, 1.0);
+        outColor = vec4(light_ubo.lights[0].ambient, 1.0);
     }
     else
     {
