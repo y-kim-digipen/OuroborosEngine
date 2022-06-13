@@ -131,6 +131,12 @@
     <ClInclude Include="Graphics\opengl\opengl_buffer.h">
       <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\texture.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_texture.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -219,6 +225,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\buffer.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_texture.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

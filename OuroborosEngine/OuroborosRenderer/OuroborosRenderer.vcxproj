@@ -197,6 +197,7 @@
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\shader_manager.h" />
+    <ClInclude Include="Graphics\texture.h" />
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h" />
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.h" />
     <ClInclude Include="Graphics\vulkan\spirv_helper.h">
@@ -211,6 +212,7 @@
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_texture.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Graphics\opengl\opengl_context.h" />
     <ClInclude Include="Graphics\mesh.h" />
@@ -243,6 +245,7 @@
     <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_texture.cpp" />
     <ClCompile Include="Graphics\window.cpp" />
     <ClCompile Include="Graphics\mesh.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_image.cpp" />

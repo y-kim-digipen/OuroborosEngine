@@ -75,8 +75,11 @@ namespace Renderer
 
 			// first = entity_id, second = light_array_index
 			// find light that is currently binded to last element and swap 'last index' to 'index'
-			for (auto& pair : light_map) {
-				if (pair.second == light_data.num_of_lights - 1) {
+
+			for (auto& pair : light_map) 
+			{
+				if (pair.second == light_data.num_of_lights - 1) 
+				{
 					pair.second = index;
 					break;
 				}
@@ -90,9 +93,10 @@ namespace Renderer
 
 	void Context::UpdateLight(uint32_t entity_id, Asset::LightData* light_component)
 	{
-		if (light_map.find(entity_id) != light_map.end()) {
+		if (auto iter = light_map.find(entity_id); iter != light_map.end())
+		{
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&light_data.lights[light_data.num_of_lights], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			memcpy_s(&light_data.lights[iter->second], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 		}
 	}
 

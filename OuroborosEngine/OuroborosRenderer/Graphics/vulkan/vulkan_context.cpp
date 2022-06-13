@@ -167,7 +167,7 @@ namespace Renderer
     void VulkanContext::BindGlobalData()
     {
         global_ubo->Bind();
-        light_ubo->Bind();
+        //light_ubo->Bind();
     }
 
     void VulkanContext::Shutdown()
@@ -390,7 +390,7 @@ namespace Renderer
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
-                shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+                shader_manager_.GetShader(shader->name)->Bind(); // Bind pipeline & descriptor set 1
 
             	//TODO: Maybe later, material update should be in update and sorted function 
                 if (material->flag)
