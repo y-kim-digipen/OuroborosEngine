@@ -9,23 +9,47 @@ namespace OE
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
 		if (ImGui::InputText("Meshname", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			mesh_component.mesh_name = buffer;
+			if(ImGui::BeginCombo("Meshes", mesh_component.mesh_name.c_str()))
+			{
+				for (const auto& key : mesh_map | std::views::keys)
+				{
+					const bool selected = mesh_component.mesh_name == key;
+					if(ImGui::Selectable(key.c_str(), selected))
+					{
+						mesh_component.mesh_name = key;
+					}
+					//ImGuiDragDropCopy<std::string>(mesh_component.mesh_name);
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::TreePop();
 		}
+		ImGuiDragDropCopy(mesh_component.mesh_name);
 	}
 
 	template<>
 	inline void ComponentDrawFunction<Transform>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		Transform& transform_component = ecs_manager.GetComponent<Transform>(entID);
-		if (ImGui::TreeNode(typeid(Transform).name()))
-		{
+		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
+		//if (ImGui::TreeNode(typeid(TransformComponent).name()))
+		//{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
-			//ImGui::DragFloat(GET_VARIABLE_NAME(transform_component.angle), &transform_component.angle);
-			ImGui::TreePop();
-		}
+			ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
+
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
+			ImGuiDragDropCopy(transform_component.scale, ImGuiDragDropFlags_SourceAllowNullID);
+
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
+			ImGuiDragDropCopy(transform_component.rotate_axis, ImGuiDragDropFlags_SourceAllowNullID);
+			
+			//ImGui::DragFloat ("GET_VARIABLE_NAME(transform_component.angle)", &transform_component.angle.x);
+			ImGui::DragScalarN(GET_VARIABLE_NAME(transform_component.angle), ImGuiDataType_Float, &transform_component.angle.x, 1);
+			ImGuiDragDropCopy(transform_component.angle, ImGuiDragDropFlags_SourceAllowNullID);
 	}
 
 	template<>
@@ -38,6 +62,7 @@ namespace OE
 			ImGui::DragFloat3(GET_VARIABLE_NAME(velocity_component.vel), &velocity_component.vel.x);
 			ImGui::TreePop();
 		}
+		ImGuiDragDropCopy(velocity_component.vel);
 	}
 
 	template<>
@@ -48,6 +73,7 @@ namespace OE
 		if (ImGui::TreeNode(typeid(LifeTime).name()))
 		{
 			ImGui::DragFloat(GET_VARIABLE_NAME(life_time_component.life_time), &life_time_component.life_time);
+			ImGuiDragDropCopy(life_time_component.life_time);
 			ImGui::TreePop();
 		}
 	}

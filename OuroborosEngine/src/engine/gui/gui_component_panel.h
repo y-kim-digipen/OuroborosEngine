@@ -1,10 +1,13 @@
 #pragma once
 #include <imgui-docking/imgui.h>
+
+#include <filesystem>
+
 #include "../common.h"
 #include "../ecs/ecs_base.h"
 #include "../engine.h"
-#include "../ecs_settings.h"
-#include "engine/ecs_settings.h"
+#include "../engine_settings.h"
+#include "../common/assets.h"
 #include "GUI_definedColors.h"
 
 namespace _imgui_helper
@@ -23,6 +26,28 @@ namespace OE
 	{
 		COMPONENT_ADD, ENTITY_ADD, ENTITY_DELETE, COMPONENT_DELETE, SYSTEM
 	};
+
+	template<typename T>
+	static void ImGuiDragDropCopy(T& source_and_target, ImGuiDragDropFlags flag = ImGuiDragDropFlags_None)
+	{
+		if (ImGui::BeginDragDropSource(flag))
+		{
+			ImGui::SetDragDropPayload(typeid(T).name(), &source_and_target, sizeof(T));
+			ImGui::Text("Copy");
+			ImGui::EndDragDropSource();
+		}
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(typeid(T).name()))
+			{
+				const T payload_data = *static_cast<const T*>(payload->Data);
+				source_and_target = payload_data;
+			}
+			ImGui::EndDragDropTarget();
+		}
+	};
+
+	static void FileSystemPanelFunction();
 
 	template<typename TComponent>
 	void ComponentDrawFunction(ecs_ID entID)
@@ -153,10 +178,155 @@ namespace OE
 			});
 	}
 
+	static void AssetBrowserPanelFunction()
+	{
+		using manager_list = decltype(std::declval<Engine>().asset_manager)::manager_list;
+
+		if (ImGui::BeginTabBar(""))
+		{
+			brigand::for_each<manager_list>([](auto type)
+				{
+					using T = typename decltype(type)::type;
+					auto& manager = Engine::Get().asset_manager.GetManager<T>();
+					const std::string typeID_name = std::string(typeid(T).name());
+					const std::string tab_name = typeID_name.substr(typeID_name.find_last_of("::") + 1);
+					const auto& raw_elements_map = manager.GetAssetRawData();
+					if(ImGui::BeginTabItem(tab_name.c_str()))
+					{
+						for (const auto& [name, asset]: raw_elements_map)
+						{
+							if(ImGui::CollapsingHeader(name.c_str()))
+							{
+								OE::ImGuiImpl(asset);
+							}
+						}
+
+						ImGui::EndTabItem();
+					}
+				});
+			ImGui::EndTabBar();
+		}
+
+		if(ImGui::SmallButton("Load"))
+		{
+			//ImGui::Begin("Load file");
+			FileSystemPanelFunction();
+			//ImGui::End();
+		}
+	}
+
 	static void EngineInfoPanelFunction()
 	{
 		ImGui::Text("dt : %f", Engine::delta_timer.GetDeltaTime());
 		ImGui::Text("FPS : %d", (int)(1.0 / Engine::delta_timer.GetDeltaTime()));
+	}
+
+	static void FileSystemPanelFunction()
+	{
+		static std::string directory_path = "..\\";
+
+		static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
+		static std::vector<bool> row_selected(50);
+		if (ImGui::BeginTable("", 2, flags))
+		{
+			ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableHeadersRow();
+			int table_idx = 0;
+			for (const auto& entry : std::filesystem::directory_iterator(directory_path))
+			{
+				ImGui::TableNextRow();
+
+				const auto& path = entry.path();
+				auto relative_path = std::filesystem::relative(path, directory_path);
+
+				ImGui::TableSetColumnIndex(0);
+
+				if (ImGui::Selectable(entry.is_directory() ? (relative_path.string() + '\\').c_str() : relative_path.string().c_str(), row_selected[table_idx]), ImGuiSelectableFlags_AllowDoubleClick)
+				{
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						if (entry.is_directory())
+						{
+							directory_path = entry.path().string();
+						}
+					}
+					if (ImGui::IsItemHovered())
+					{
+						for (auto selected : row_selected)
+						{
+							selected = false;
+						}
+						row_selected[table_idx] = true;
+					}
+					const auto& extension = entry.path().extension().string();
+					if (ImGui::BeginPopupContextItem())
+					{
+						//if(ImGui::MenuItem("Load"))
+						//{
+							using asset_manager_list = decltype(Engine::asset_manager)::manager_list;
+							brigand::for_each<asset_manager_list>([extension, path](auto t)
+								{
+									using TAssetManager = typename decltype(t)::type;
+									using TAsset = typename TAssetManager::asset_type;
+
+									const std::list<std::string>& supported_type = TAsset::supported_formats;
+
+									for (const auto& type : supported_type)
+									{
+										if(type == extension)
+										{
+											//ImGui::MEnu
+											if (ImGui::SmallButton((std::string{ "Load " } + typeid(TAssetManager).name()).c_str()))
+											{
+												auto& asset_manager = Engine::asset_manager.GetManager<TAssetManager>();
+												asset_manager.LoadAsset(path.string());
+												continue;
+												ImGui::CloseCurrentPopup();
+											}
+											
+										}
+									}
+								});
+							//ImGui::CloseCurrentPopup();
+						//}
+						ImGui::EndPopup();
+					}
+					if (ImGui::IsItemHovered())
+						ImGui::SetTooltip("Right-click to load");
+				}
+
+				ImGui::TableSetColumnIndex(1);
+				if (ImGui::Selectable(std::to_string(entry.file_size()).c_str(), row_selected[table_idx]), ImGuiSelectableFlags_AllowDoubleClick)
+				{
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						if (entry.is_directory())
+						{
+							directory_path = entry.path().string();
+						}
+					}
+					if (ImGui::IsItemHovered())
+					{
+						for (auto selected : row_selected)
+						{
+							selected = false;
+						}
+						row_selected[table_idx] = true;
+					}
+				}
+				table_idx++;
+			}
+			ImGui::EndTable();
+		}
+		ImGui::TextUnformatted(directory_path.c_str());
+		if (directory_path != "..\\")
+		{
+			if (ImGui::SmallButton("..."))
+			{
+				directory_path = directory_path.substr(0, directory_path.find_last_of('\\'));
+			}
+		}
 	}
 
 	static void SystemInfoPanelFunction()

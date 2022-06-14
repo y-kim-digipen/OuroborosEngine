@@ -20,6 +20,12 @@
     <Filter Include="engine\gui">
       <UniqueIdentifier>{b5032aa8-5dfc-4eca-8985-56a3bea021b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\input">
+      <UniqueIdentifier>{6c356a02-3d50-40d9-83c7-e7b73abdf7ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{bed55a02-6d66-40ff-9989-b64418c1fe0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\engine.h">
@@ -57,6 +63,21 @@
       <Filter>engine\gui</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\custom_assert.h" />
+    <ClInclude Include="src\engine\input\InputManager.h">
+      <Filter>engine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\master_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\mesh_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\image_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="common\assets.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -67,6 +88,9 @@
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl">
       <Filter>engine\gui</Filter>
+    </None>
+    <None Include="common\asset_imgui_impl.inl">
+      <Filter>common</Filter>
     </None>
   </ItemGroup>
 </Project>

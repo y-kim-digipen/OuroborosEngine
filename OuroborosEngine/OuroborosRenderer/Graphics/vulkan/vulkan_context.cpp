@@ -302,6 +302,46 @@ namespace Renderer
         return &vulkan_type;
     }
 
+    void VulkanContext::DrawQueue()
+    {
+        Context::DrawQueue();
+
+        if (!draw_queue.empty())
+
+            while (!draw_queue.empty())
+            {
+               
+                const auto& front = draw_queue.front();
+
+                auto* transform = front.transform;
+                auto* mesh = front.mesh;
+                auto* shader = front.shader;
+                auto* material = front.material;
+
+                //TODO : Draw call
+                glm::mat4 model(1.f);
+                model = glm::translate(model, transform->pos);
+                model = glm::scale(model, transform->scale);
+                model = glm::rotate(model, transform->angle.x, transform->rotate_axis);
+
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model * global_data.view));
+
+ /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
+                mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
+
+                shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+				BindGlobalData();
+
+                //material_manager
+                //material_manager->GetMaterial(material->name)->Bind();
+
+                //TODO: Bind Object Descriptor set 3 in future
+                if (mesh->mesh_name.size() != 0) {
+                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
+                }
+                draw_queue.pop();
+            }
+    }    	
 
     int CreateInstance(int major, int minor)
     {
