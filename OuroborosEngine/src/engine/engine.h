@@ -46,7 +46,8 @@ namespace OE
 			inline static time_point start;
 			inline static time_point end;
 			inline static double dt;
-		} delta_timer;
+		};
+		inline static DeltaTime delta_timer;
 
 	private:
 		inline static int target_fps;

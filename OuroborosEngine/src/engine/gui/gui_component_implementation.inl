@@ -161,9 +161,9 @@ namespace OE
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
+			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
+			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
+			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
 			ImGui::TreePop();
 
 

@@ -86,7 +86,7 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light)
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform)
 			{
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
@@ -96,6 +96,7 @@ namespace OE
 						context->AddLight(ent, &light.data);
 						light.init = true;
 					}
+					light.data.position = transform.pos;
 					context->UpdateLight(ent, &light.data);
 				}
 			});
