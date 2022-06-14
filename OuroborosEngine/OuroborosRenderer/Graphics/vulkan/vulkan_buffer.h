@@ -14,8 +14,8 @@ namespace Renderer
 	public:
 		VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage, VmaMemoryUsage vma_usage);
 		~VulkanBuffer();
-		void UploadData(void* data, uint64_t buffer_size);
-		void CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer);
+		void UploadData(void* data, uint64_t buffer_size, uint32_t offset = 0);
+		void CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer, uint32_t dst_offset);
 		void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
 
 		VkBuffer buffer = nullptr;
@@ -62,34 +62,46 @@ namespace Renderer
 		uint64_t count = 0;
 	};
 
-
-	//TODO: make buffer for each frame 
 	class VulkanUniformBuffer : public UniformBuffer
 	{
 	public:
-		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size);
+		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num);
 		~VulkanUniformBuffer() override;
+
+		// Map memory CPU to GPU
 		void Bind() const override;
 		void UnBind() const override;
 
+		// update cpu data block of member variable with matching name
 		int UpdateData(const char* member_var_name, void* data) override;
-		void SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout);
-		void AllocateDescriptorSet(VulkanDevice* device, VkDescriptorPool pool, VkDescriptorSetLayout* layouts, uint32_t set_count, VkDescriptorSet* out_sets);
+
+		// return -1 ,if binding already exists or low binding_num doesn't exists
+		int AddBinding(uint32_t binding_num, uint32_t buffer_size);
+
+		int AddData(void* data, uint32_t offset, uint32_t buffer_size) override;
+		void UploadToGPU(uint32_t offset = 0, uint32_t upload_size = 0);
+
+		void SetupDescriptorSet(uint32_t descriptor_count, VkDescriptorSetLayout layout);
 		
 		VkDescriptorSet descriptor_set[MAX_FRAMES_IN_FLIGHT];
 		uint64_t GetBufferSize() const;
-	private:
-		void* data;
-		
+	private:		
 		Vulkan_type* vulkan_type;
 
+		uint32_t set_num;
 		uint64_t buffer_size;
+		
+		struct binding_info
+		{
+			uint32_t binding;
+			uint32_t offset;
+			uint32_t size;
+		};
+		
+		std::vector<binding_info> bindings;
 		std::shared_ptr<VulkanBuffer> buffer[MAX_FRAMES_IN_FLIGHT];
-
 	};
 
 }
-
-
 
 #endif //!VULKAN_BUFFER_H

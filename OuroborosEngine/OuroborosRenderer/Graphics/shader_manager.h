@@ -16,10 +16,10 @@ namespace Renderer
 		virtual ~ShaderManager() = default;
 		virtual int AddShader(ShaderConfig * config) = 0;
 		virtual int DeleteShader(ShaderConfig * config) = 0;
-		virtual Shader* GetShader(const char* shader_name) = 0;
+		virtual Shader* GetShader(const std::string& shader_name) = 0;
 
 	protected:
-		std::unordered_map<const char*, std::shared_ptr<Shader>> shader_map;
+		std::unordered_map<std::string, std::shared_ptr<Shader>> shader_map;
 	};
 
 
@@ -30,7 +30,7 @@ namespace Renderer
 		~VulkanShaderManager() = default;
 		int AddShader(ShaderConfig* config) override;
 		int DeleteShader(ShaderConfig* config) override;
-		Shader* GetShader(const char* shader_name) override;
+		Shader* GetShader(const std::string& shader_name) override;
 		friend class VulkanMeshManager;
 
 	private:

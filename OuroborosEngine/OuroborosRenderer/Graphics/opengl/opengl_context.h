@@ -11,8 +11,11 @@ namespace Renderer
 	public:
 		OpenglContext(GLFWwindow* glfwwindow) : Context(glfwwindow) {}
 		void Init(int major, int minor)  override;
-		void Shutdown() override;
 		void InitGlobalData() override;
+		void UpdateGlobalData() override;
+		void BindGlobalData() override;
+
+		void Shutdown() override;
 		int BeginFrame() override;
 		int EndFrame() override;
 

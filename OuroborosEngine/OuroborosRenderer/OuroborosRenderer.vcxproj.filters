@@ -116,6 +116,21 @@
     <ClInclude Include="Graphics\camera.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_material.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_material_manager.h">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\material.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\material_manager.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\opengl\opengl_buffer.h">
+      <Filter>Source Files\Graphics\opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -187,9 +202,6 @@
     <ClCompile Include="Graphics\vulkan\vulkan_image.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\mesh_manager.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -197,6 +209,15 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_material.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_material_manager.cpp">
+      <Filter>Source Files\Graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\buffer.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

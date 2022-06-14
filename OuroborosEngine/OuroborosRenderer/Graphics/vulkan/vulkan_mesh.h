@@ -17,8 +17,8 @@ namespace Renderer {
 		VulkanMesh(Vulkan_type* vulkan_type);
 		~VulkanMesh() override;
 
-		bool LoadAsset(const char* file_name) override;
-		void Draw() override;
+		bool CopyAssetData(const Asset::Mesh& mesh) override;
+		void Draw(const glm::mat4& model, const glm::mat3& normal_matrix) override;
 
 		std::unique_ptr<VulkanVertexBuffer> p_vertex_buffer;
 		std::unique_ptr<VulkanIndexBuffer> p_index_buffer;

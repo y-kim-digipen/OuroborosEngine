@@ -1,8 +1,10 @@
 #pragma once
+//#include <detail/type_vec.hpp>
 #include <glm.hpp>
 #include <gtc/vec1.hpp>
+#include "../common/assets.h"
 
-struct Transform
+struct TransformComponent
 {
 	glm::vec3 pos;
 	glm::vec3 scale= glm::vec3(1.f);
@@ -10,40 +12,49 @@ struct Transform
 	glm::vec1 angle{ 0.f };
 };
 
-
-struct Velocity
+struct VelocityComponent
 {
 	glm::vec3 vel;
 };
 
-struct LifeTime
+struct LifeTimeComponent
 {
 	float life_time;
 };
 
-struct Mesh
+struct MeshComponent
 {
 	std::string mesh_name;
 };
 
-struct Material
+struct MaterialComponent
 {
-	std::string material_name;
+	std::string name ="material";
+	Asset::MaterialData data{.ambient = {1.f,0.f,0.f}};
+	bool flag = false;
+	bool is_save = false;
 };
 
-struct Shader
+struct ShaderComponent
 {
-	std::string shader_name;
+	std::string name ="shader";
 };
 
-struct BoolWrapper
+struct BoolWrapperComponent
 {
 	bool bool_type;
 };
 
-struct Tag
+struct TagComponent
 {
 	std::string tag;
+};
+
+
+struct LightComponent
+{
+	bool init = false;
+	Asset::LightData data;
 };
 
 //void DrawSystem(mesh, sahder)

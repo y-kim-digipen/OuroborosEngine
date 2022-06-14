@@ -3,6 +3,10 @@
 #include <memory>
 #include <unordered_map>
 
+#include <glm/matrix.hpp>
+
+#include "../common/assets.h"
+
 struct Vulkan_type;
 
 namespace Renderer
@@ -15,12 +19,12 @@ namespace Renderer
 	public:
 		MeshManager() = default;
 		virtual ~MeshManager() = default;
-		virtual int AddMesh(const char* mesh_name) = 0;
-		virtual int DrawMesh(const char* shader, const char* mesh_name) =0;
-		virtual int DeleteMesh(const char* mesh_name) = 0;
+		virtual int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) = 0;
+		virtual int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) =0;
+		virtual int DeleteMeshData(const std::string& mesh_name) = 0;
 
 		protected:
-		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
+		std::unordered_map<std::string, std::unique_ptr<Mesh>> mesh_map;
 	};
 
 
@@ -29,9 +33,9 @@ namespace Renderer
 	public:
 		VulkanMeshManager(Vulkan_type* vulkan_type, VulkanShaderManager* shader_manager);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
-		int AddMesh(const char* mesh_name);
-		int DrawMesh(const char* shader, const char* mesh_name);
-		int DeleteMesh(const char* mesh_name);
+		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) override;
+		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) override;
+		int DeleteMeshData(const std::string& mesh_name) override;
 
 
 	private:

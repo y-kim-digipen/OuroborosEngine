@@ -127,7 +127,7 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -155,7 +155,7 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)external\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -190,7 +190,9 @@
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
     <ClInclude Include="Graphics\material.h" />
+    <ClInclude Include="Graphics\material_manager.h" />
     <ClInclude Include="Graphics\mesh_manager.h" />
+    <ClInclude Include="Graphics\opengl\opengl_buffer.h" />
     <ClInclude Include="Graphics\opengl\opengl_imgui_manager.h" />
     <ClInclude Include="Graphics\opengl\opengl_shader.h" />
     <ClInclude Include="Graphics\shader.h" />
@@ -204,6 +206,8 @@
     <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_material.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_material_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
@@ -234,6 +238,8 @@
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_material.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_material_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_mesh.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp" />

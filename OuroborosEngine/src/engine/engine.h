@@ -4,6 +4,16 @@
 #include <thread>
 #include <Windows.h>
 
+#include "engine_settings.h"
+#include "Graphics/shader_manager.h"
+#include "Graphics/vulkan/vulkan_context.h"
+#include "Graphics/camera.h"
+#include "Graphics/vulkan/vulkan_material.h"
+
+#include "Graphics/Window.h"
+#include "Graphics/shader.h"
+#include "input/InputManager.h"
+
 namespace OE
 {
 	class Engine
@@ -11,33 +21,22 @@ namespace OE
 	public:
 		static Engine& Get();
 
-		static void Init()
-		{
-			target_fps = 240;
-			target_dt = 1.0f / (target_fps * 2);
+		static void Init();
 
-			Engine& engine = Get();
-			delta_timer.Init();
-		}
-		static void PreUpdate()
-		{
-			delta_timer.PreUpdate();
-		}
-		static void Update()
-		{
-
-		}
-		static void PostUpdate()
-		{
-			delta_timer.PostUpdate();
-		}
-
+		static void PreUpdate();
+		static void Update();
+		static void PostUpdate();
 		static void CleanUp(){}
 		static void ShutDown(){}
 
+		static std::unique_ptr<Renderer::Window>& GetRenderWindow()
+		{
+			return window;
+		}
+
 		static class DeltaTime
 		{
-			using time_point = std::chrono::time_point<std::chrono::system_clock>;
+			using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		public:
 			static void Init();
 			static void PreUpdate();
@@ -47,11 +46,27 @@ namespace OE
 			inline static time_point start;
 			inline static time_point end;
 			inline static double dt;
-		} delta_timer;
+		};
+		inline static DeltaTime delta_timer;
 
 	private:
 		inline static int target_fps;
 		inline static double target_dt;
+
+		inline static std::unique_ptr<Renderer::Window> window;
+
+		//Modules
+		inline static Input input;
+	private:
+		//todo to be removed
+		inline static Renderer::Camera camera;
+
+		static void SetupGUI();
+		static void ECS_TestSetup();
+		static void SetupModule();
+
+	public: // Modules
+		inline static Asset_Manager asset_manager;
 	};
 
 	inline Engine& Engine::Get()

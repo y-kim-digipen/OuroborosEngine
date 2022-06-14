@@ -1,5 +1,11 @@
 #include "engine.h"
 #include <chrono>
+#include <gtc/matrix_transform.hpp>
+
+#include "engine_settings.h"
+#include "gui/gui_component_panel.h"
+
+
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -54,20 +60,32 @@ namespace OE
 					camera.data.view = camera.GetCameraMat();
 
 					//TODO: pass renderer camera data
-					context->global_data.position = camera.data.position;
-					context->global_data.view = camera.data.view;
-					context->global_data.projection = camera.data.projection;
+					context->global_data = camera.data;
 					context->UpdateGlobalData();
-					context->BindGlobalData();
+			
+					context->AddDrawQueue(&transform, &material, &mesh, &shader);
+				}
+			});
 
-					context->AddDrawQueue(&transform, nullptr, &mesh, &shader);
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform)
+			{
+				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+				if(ecs_manager.GetEntity(ent).alive)
+				{
+					if(light.init == false)
+					{
+						context->AddLight(ent, &light.data);
+						light.init = true;
+					}
+					light.data.position = transform.pos;
+					context->UpdateLight(ent, &light.data);
 				}
 			});
 	}
 
 	void Engine::SetupModule()
 	{
-		//asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
+		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
 	}
 
 	void Engine::Init()
@@ -96,11 +114,11 @@ namespace OE
 		Renderer::ShaderConfig shader_config2{
 					"shader2",
 			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2};
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
-		window->GetWindowData().RenderContextData.get()->InitGlobalData();
+		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
 		SetupGUI();
@@ -110,7 +128,7 @@ namespace OE
 			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, 
 			GLFW_KEY_SPACE
 		};
-		//input.Init(window->GetWindowData().window, key_supports);
+		input.Init(window->GetWindowData().window, key_supports);
 		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
 			{
 				if (mode == Input::PRESSED)
@@ -123,6 +141,8 @@ namespace OE
 				}
 			});
 
+		
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 	}
 
@@ -150,13 +170,13 @@ namespace OE
 
 	void Engine::DeltaTime::Init()
 	{
-		start = std::chrono::system_clock::now();
+		start = std::chrono::steady_clock::now();
 		end = start;
 	}
 
 	void Engine::DeltaTime::PreUpdate()
 	{
-		start = std::chrono::system_clock::now();
+		start = std::chrono::steady_clock::now();
 	}
 
 	void Engine::DeltaTime::PostUpdate()
@@ -171,14 +191,16 @@ namespace OE
 		//	std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
 		//}
 
-		end = std::chrono::system_clock::now();
-		std::chrono::duration<double, std::milli> sleep_time = end - start;
 
-		dt = sleep_time.count() * 0.001;
+		end = std::chrono::steady_clock::now();
+		const std::chrono::duration delta_tick = end - start;
+		dt = std::chrono::duration<double>(delta_tick).count();
+
 	}
 
 	double Engine::DeltaTime::GetDeltaTime()
 	{
 		return dt;
 	}
+
 }

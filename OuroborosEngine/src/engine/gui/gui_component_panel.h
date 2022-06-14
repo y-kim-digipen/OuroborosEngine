@@ -380,7 +380,6 @@ namespace OE
 														}
 													}
 												});
-
 											}
 										}
 									}
@@ -388,6 +387,7 @@ namespace OE
 							ImGui::EndListBox();
 						}
 						ImGui::EndTabItem();
+
 
 						const bool has_implementation = ecs_manager.system_storage.HasSystemImplementation<T>();
 						has_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have implementation"));

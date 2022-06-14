@@ -19,6 +19,7 @@
 
 namespace Renderer {
 
+
 	struct MeshConstant
 	{
 		glm::mat4 model;
@@ -41,7 +42,6 @@ namespace Renderer {
 
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
-		set_layout_count = 0;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -85,10 +85,9 @@ namespace Renderer {
 		}
 
 		Vulkan_PipelineBuilder pipeline_builder;
-		set_layout_count = 0;
 		uint32_t ubo_count = 0;
 		
-		for (uint32_t i = 0; i < 4; ++i) {
+		for (uint32_t i = 0; i < max_set_count; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
 
 			std::vector<VkDescriptorSetLayoutBinding> bindings(binding_count);
@@ -98,19 +97,16 @@ namespace Renderer {
 
 			set_layout_create_info.bindingCount = binding_count;
 			set_layout_create_info.pBindings = bindings.data();
+			VkDescriptorSetLayout set_layout;
+			VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &set_layout));
+			descriptor_set_layouts[i] = set_layout;
 
-			if (binding_count != 0) {
-				VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &descriptor_set_layouts[i]));
+			// set ubo descriptor set only for shader descriptor set #1
+			if (binding_count != 0 && (i == 1)) {
 
-				// TODO: don't create descriptor set 0 ubo (since we're going to use one global descriptor set )
 				for (const auto& binding_set : layout_bindings_set[i]) {
-					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.binding, binding_set.second.descriptorCount, descriptor_set_layouts[i]);
+					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.descriptorCount, descriptor_set_layouts[i]);
 				}
-
-				++set_layout_count;
-			}
-			else {
-				descriptor_set_layouts[i] = VK_NULL_HANDLE;
 			}
 		}
 
@@ -153,11 +149,11 @@ namespace Renderer {
 		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
-									, .height = static_cast<float>(vulkan_type->swapchain.extent.height) };
+									, .height = static_cast<float>(vulkan_type->swapchain.extent.height), .minDepth = 0.0f, .maxDepth = 1.0f };
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, set_layout_count, push_constant_ranges.data(), push_constant_ranges.size());
+		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
 		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
 
@@ -172,19 +168,15 @@ namespace Renderer {
 		uint32_t current_frame = vulkan_type->current_frame;
 		auto& frame_data = vulkan_type->frame_data[current_frame];
 
-		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-		for(auto& buffer_object : uniform_buffer_objects)
-		{
-			vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &((VulkanUniformBuffer*)buffer_object.get())->descriptor_set[current_frame], 0, nullptr);
-		}
-	}
+		vulkan_type->current_pipeline_layout = pipeline_layout;
 
-	void VulkanShader::BindObjectData(const glm::mat4& model)
-	{
+		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-		//TODO: make it configurable
-		for (const auto& push_constant : push_constant_ranges)
-			vkCmdPushConstants(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, pipeline_layout, push_constant.stageFlags, push_constant.offset, push_constant.size, &model);
+		// bind shader descriptor set 1
+		for (const auto& ubo : uniform_buffer_objects) {
+			ubo->Bind();
+		}
+
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
@@ -208,15 +200,20 @@ namespace Renderer {
 		SpvReflectResult result = spvReflectCreateShaderModule(sizeof(uint32_t) * shader_binary_code.size(), shader_binary_code.data(), &refl_module);
 		assert(result == SPV_REFLECT_RESULT_SUCCESS);
 
-		uint32_t desciptor_set_count = 0;
-		spvReflectEnumerateDescriptorSets(&refl_module, &desciptor_set_count, 0);
-		std::vector<SpvReflectDescriptorSet*> pdescriptor_sets(desciptor_set_count);
-		spvReflectEnumerateDescriptorSets(&refl_module, &desciptor_set_count, pdescriptor_sets.data());
+		uint32_t descriptor_set_count = 0;
+		spvReflectEnumerateDescriptorSets(&refl_module, &descriptor_set_count, 0);
+		std::vector<SpvReflectDescriptorSet*> pdescriptor_sets(descriptor_set_count);
+		spvReflectEnumerateDescriptorSets(&refl_module, &descriptor_set_count, pdescriptor_sets.data());
 
-		for (uint32_t i_set = 0; i_set < desciptor_set_count; ++i_set) {
+		for (uint32_t i_set = 0; i_set < descriptor_set_count; ++i_set) {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
 	
+			// dont add ubo var for material & object & global
+			if (refl_set.set == 1) {
+				uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_set.set));
+			}
+
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
 				
 				const SpvReflectDescriptorBinding& refl_binding = *refl_set.bindings[i_binding];
@@ -240,50 +237,54 @@ namespace Renderer {
 						0,
 					};
 
-					uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_binding.block.size));
+					// dont add ubo var for material & object & global
+					if (refl_set.set == 1)
+					{
+						for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
-					for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
+							DataType data_type = DataType::NONE;
 
-						DataType data_type = DataType::NONE;
+							switch (refl_binding.block.members[i].type_description->op) {
+							case SpvOp::SpvOpTypeMatrix:
+								if (refl_binding.block.members[i].size == sizeof(glm::mat4))
+									data_type = DataType::MAT4;
+								else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
+									data_type = DataType::MAT3;
 
-						switch (refl_binding.block.members[i].type_description->op) {
-						case SpvOp::SpvOpTypeMatrix:
-							if (refl_binding.block.members[i].size == sizeof(glm::mat4))
-								data_type = DataType::MAT4;
-							else if (refl_binding.block.members[i].size == sizeof(glm::mat3))
-								data_type = DataType::MAT3;
+								break;
+							case SpvOp::SpvOpTypeVector:
 
-							break;
-						case SpvOp::SpvOpTypeVector:
+								if (refl_binding.block.members[i].size == sizeof(glm::vec4))
+									data_type = DataType::FLOAT4;
+								else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
+									data_type = DataType::FLOAT3;
+								else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
+									data_type = DataType::FLOAT2;
 
-							if (refl_binding.block.members[i].size == sizeof(glm::vec4))
-								data_type = DataType::FLOAT4;
-							else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
-								data_type = DataType::FLOAT3;
-							else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
-								data_type = DataType::FLOAT2;
+								break;
+							case SpvOp::SpvOpTypeFloat:
+								data_type = DataType::FLOAT;
+								break;
+							case SpvOp::SpvOpTypeInt:
+								data_type = DataType::INT;
+								break;
+							case SpvOp::SpvOpTypeBool:
+								data_type = DataType::BOOL;
+								break;
+							default:
+								DataType::NONE;
+							}
 
-							break;
-						case SpvOp::SpvOpTypeFloat:
-							data_type = DataType::FLOAT;
-							break;
-						case SpvOp::SpvOpTypeInt:
-							data_type = DataType::INT;
-							break;
-						case SpvOp::SpvOpTypeBool:
-							data_type = DataType::BOOL;
-							break;
-						default:
-							DataType::NONE;
-						}
+							((VulkanUniformBuffer*)uniform_buffer_objects.back().get())->AddBinding(refl_binding.binding, refl_binding.block.size);
 
-						uniform_buffer_objects.back()->AddMember(
-							refl_binding.block.members[i].name,
-							data_type,
-							refl_binding.block.members[i].size,
-							refl_binding.block.members[i].offset
+							uniform_buffer_objects.back()->AddMember(
+								refl_binding.block.members[i].name,
+								data_type,
+								refl_binding.block.members[i].size,
+								refl_binding.block.members[i].offset
 							);
-						
+
+						}
 					}
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };

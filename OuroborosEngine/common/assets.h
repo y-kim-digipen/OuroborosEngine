@@ -34,6 +34,40 @@ namespace Asset
         
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
+
+
+    struct CameraData
+    {
+        glm::mat4 projection;
+        glm::mat4 view;
+        glm::vec3 position;
+    };
+
+    struct MaterialData
+    {
+        alignas(16)  glm::vec3 ambient;
+        alignas(16)  glm::vec3 diffuse;
+        alignas(16)  glm::vec3 specular;
+        float shininess;
+    };
+
+    struct LightData
+    {
+        glm::vec3 position;
+        float cutoff;
+        glm::vec3 diffuse;
+        float out_cutoff;
+        glm::vec3 ambient;
+        float falloff;
+        glm::vec3 specular;
+        float padding4;
+        glm::vec3 direction;
+        int light_type;
+    };
+
+
+
+
 }
 
 namespace std {

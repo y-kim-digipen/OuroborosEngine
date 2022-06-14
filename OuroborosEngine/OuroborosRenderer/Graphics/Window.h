@@ -8,7 +8,6 @@
 
 struct GLFWwindow;
 
-
 namespace Renderer
 {
 	static bool GLFW_IsInit = false;
@@ -47,8 +46,8 @@ namespace Renderer
 		{
 			GLFWwindow* window = nullptr;
 			std::string title;
-			unsigned int width = std::numeric_limits<unsigned int>::max();
-			unsigned int height = std::numeric_limits<unsigned int>::max();
+			unsigned int width; /*= std::numeric_limits<unsigned int>::max();*/
+			unsigned int height; /*= std::numeric_limits<unsigned int>::max();*/
 			std::shared_ptr<Context> RenderContextData;
 		};
 		WindowData window_data;
