@@ -27,7 +27,7 @@ layout(location = 0) out VS_OUT {
 
 void main() 
 {
-    vs_out.norm = normal;
+    vs_out.norm = object_ubo.normal_matrix * normal;
     vs_out.frag_position = vec4(object_ubo.model * vec4(pos,1.0)).xyz; 
     vs_out.cam_pos = global_ubo.cam_pos;
     gl_Position = global_ubo.projection * global_ubo.view * object_ubo.model * vec4(pos, 1.0);

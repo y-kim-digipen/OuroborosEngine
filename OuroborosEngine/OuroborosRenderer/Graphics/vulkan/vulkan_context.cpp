@@ -391,7 +391,7 @@ namespace Renderer
                 model = glm::scale(model, transform->scale);
                 model = glm::rotate(model, transform->angle, transform->rotate_axis);
 
-                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model * global_data.view));
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
