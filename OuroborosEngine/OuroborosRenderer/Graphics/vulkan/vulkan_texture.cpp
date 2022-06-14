@@ -99,7 +99,7 @@ namespace Renderer
 			};
 
 
-			VkImageMemoryBarrier imageMemoryBarrier{
+			VkImageMemoryBarrier image_memory_barrier{
 				 .sType			   = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
 				 .srcAccessMask    = 0,
 				 .dstAccessMask    = VK_ACCESS_TRANSFER_WRITE_BIT,
@@ -123,7 +123,16 @@ namespace Renderer
 			command_buffer_begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
 			vkBeginCommandBuffer(command_buffer, &command_buffer_begin_info);
 
-			//vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &)
+			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0,nullptr, 0, nullptr, 1, &image_memory_barrier);
+
+			VulkanBuffer::CopyBufferToImage(command_buffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+				staging_buffer.get(), &image_, image_extent);
+
+
+			image_memory_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+			image_memory_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+
 
 
 		}

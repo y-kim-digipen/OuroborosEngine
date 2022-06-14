@@ -16,7 +16,7 @@ namespace Renderer
 		~VulkanBuffer();
 		void UploadData(void* data, uint64_t buffer_size, uint32_t offset = 0);
 		void CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer, uint32_t dst_offset);
-		void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
+		static void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
 
 		VkBuffer buffer = nullptr;
 		VmaAllocation allocation = nullptr;
