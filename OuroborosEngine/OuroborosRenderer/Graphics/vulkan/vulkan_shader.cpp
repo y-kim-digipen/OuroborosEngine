@@ -149,7 +149,7 @@ namespace Renderer {
 		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
-									, .height = static_cast<float>(vulkan_type->swapchain.extent.height) };
+									, .height = static_cast<float>(vulkan_type->swapchain.extent.height), .minDepth = 0.0f, .maxDepth = 1.0f };
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
