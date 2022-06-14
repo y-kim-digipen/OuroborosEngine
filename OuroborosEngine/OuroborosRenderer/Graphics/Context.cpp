@@ -96,7 +96,7 @@ namespace Renderer
 		if (auto iter = light_map.find(entity_id); iter != light_map.end())
 		{
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&light_data.lights[iter->second], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			memcpy_s(&light_data.lights[light_map[entity_id]], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 		}
 	}
 

@@ -39,9 +39,9 @@ namespace Asset
 
     struct MaterialData
     {
-        glm::vec3 ambient;
-        glm::vec3 diffuse;
-        glm::vec3 specular;
+      alignas(16)  glm::vec3 ambient;
+      alignas(16)  glm::vec3 diffuse;
+      alignas(16)  glm::vec3 specular;
         float shininess;
     };
 

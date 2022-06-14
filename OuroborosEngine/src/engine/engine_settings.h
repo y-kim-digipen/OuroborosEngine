@@ -11,7 +11,7 @@ using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, L
 using PhysicsSystem = OE::ECS::System<TransformComponent, VelocityComponent>;
 using TestSystem = OE::ECS::System<BoolWrapperComponent>;
 using DrawSystem = OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
-using LightSystem = OE::ECS::System<ShaderComponent, LightComponent>;
+using LightSystem = OE::ECS::System<ShaderComponent, LightComponent, TransformComponent>;
 
 using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem, DrawSystem, LightSystem>;
 

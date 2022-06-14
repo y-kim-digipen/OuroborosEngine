@@ -141,7 +141,9 @@
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
+xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,7 +155,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,7 +169,9 @@
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
+xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

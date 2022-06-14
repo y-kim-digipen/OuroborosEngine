@@ -1,5 +1,7 @@
 #include "vulkan_buffer.h"
 
+#include <iostream>
+
 namespace Renderer
 {
 	VulkanBuffer::VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
@@ -26,16 +28,18 @@ namespace Renderer
 		vmaDestroyBuffer(vulkan_type->allocator, buffer, allocation);
 	}
 
-	void VulkanBuffer::UploadData(void* data, uint64_t buffer_size)
-	{
-		void* temp_data = nullptr;
 
-		vmaMapMemory(vulkan_type->allocator, allocation, & temp_data);
+	void VulkanBuffer::UploadData(void* data, uint64_t buffer_size, uint32_t offset)
+	{
+		char* temp_data = nullptr;
+
+		vmaMapMemory(vulkan_type->allocator, allocation, (void**)&temp_data);
+		temp_data += offset;
 		memcpy(temp_data, data, buffer_size);
 		vmaUnmapMemory(vulkan_type->allocator, allocation);
 	}
 
-	void VulkanBuffer::CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer)
+	void VulkanBuffer::CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer, uint32_t dst_offset)
 	{
 		VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
 		allocate_info.level			     = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -54,8 +58,8 @@ namespace Renderer
 		VkBufferCopy copyRegion
 		{
 			.srcOffset = 0,
-			.dstOffset = 0,
-			.size	   = size
+			.dstOffset = dst_offset,
+			.size = src_buffer->size
 		};
 
 		vkCmdCopyBuffer(command_buffer, src_buffer->buffer, buffer, 1, &copyRegion);
@@ -69,7 +73,6 @@ namespace Renderer
 		vkQueueWaitIdle(queue);
 
 		vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
-
 	}
 
 	void VulkanBuffer::CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer,
@@ -100,7 +103,7 @@ namespace Renderer
 		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
-		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
 	}
 
 	VulkanVertexBuffer::~VulkanVertexBuffer()
@@ -139,7 +142,7 @@ namespace Renderer
 		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
-		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
 	}
 
 	VulkanIndexBuffer::VulkanIndexBuffer(Vulkan_type* vulkan_type ,const std::vector<uint32_t>& data) : vulkan_type(vulkan_type)
@@ -152,7 +155,7 @@ namespace Renderer
 		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
-		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
 	}
 
 	VulkanIndexBuffer::~VulkanIndexBuffer()
@@ -190,17 +193,13 @@ namespace Renderer
 		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
-		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t buffer_size, uint32_t set_num) : vulkan_type(vulkan_type), buffer_size(buffer_size), set_num(set_num)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) : vulkan_type(vulkan_type), buffer_size(0), set_num(set_num)
 	{
-		data = malloc(buffer_size);
-
-		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
-		}
+		data = nullptr;
 	}
 
 	VulkanUniformBuffer::~VulkanUniformBuffer()
@@ -232,58 +231,120 @@ namespace Renderer
 		return -1;
 	}
 
-	int VulkanUniformBuffer::AddData(void* data, uint32_t new_buffer_size)
+	int VulkanUniformBuffer::AddBinding(uint32_t binding_num, uint32_t buffer_size)
 	{
-		if (buffer_size != new_buffer_size)
-		{
-			for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-				if (buffer[i] != nullptr)
-				{
-					buffer[i].reset();
-				}
+		uint32_t current_binding_count = bindings.size();
 
-				buffer_size = new_buffer_size;
+		if (current_binding_count > binding_num) {
+			std::cout << "Failed to add binding " << binding_num << std::endl;
+			return -1;
+		}
 
+		uint32_t offset = 0;
 
-				buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+		if (current_binding_count > 0) {
+			offset = bindings.back().offset + bindings.back().size;
+
+			// Calculate required alignment based on minimum device offset alignment
+			size_t min_ubo_alignment = vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment;
+			size_t aligned_size = offset;
+			if (min_ubo_alignment > 0) {
+				aligned_size = (aligned_size + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
 			}
+				
+			offset = aligned_size;
+		}
+
+		bindings.emplace_back(
+			binding_num,
+			offset,
+			buffer_size
+		);
+	}
+
+	// offset refers ubo block offset
+	int VulkanUniformBuffer::AddData(void* data, uint32_t offset, uint32_t buffer_size)
+	{
+		if (this->buffer_size < buffer_size)
+		{
+			std::cout << "block size is bigger than the total block size!" << std::endl;
+			return  -1;
 		}
 
 
-		//TODO: stage buffer only if data change
-		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
-		staging_buffer->UploadData(data, buffer_size);
+		// Calculate required alignment based on minimum device offset alignment
+		size_t min_ubo_alignment = vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment;
+		size_t aligned_size = offset;
+		if (min_ubo_alignment > 0) {
+			aligned_size = (aligned_size + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
+		}
 
-		for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-		buffer[i]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get());
+		offset = aligned_size;
+
+		char* mem = (char*)this->data + offset;
+
+		memcpy_s(mem, this->buffer_size, data, buffer_size);
 
 		return 0;
 	}
 
-	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t binding, uint32_t descriptor_count, VkDescriptorSetLayout layout)
+	void VulkanUniformBuffer::UploadToGPU(uint32_t offset, uint32_t upload_size)
 	{
+		if (upload_size == 0)
+			upload_size = this->buffer_size;
+
+		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, upload_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		staging_buffer->UploadData(data, upload_size, offset);
+
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+			buffer[i]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), offset);
+	}
+
+	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t descriptor_count, VkDescriptorSetLayout layout)
+	{
+		uint32_t binding_count = bindings.size();
+
+		if (binding_count < 0)
+		{
+			std::cout << "Cannot set up descriptor set! binding doesn't exists" << std::endl;
+			return;
+		}
+		
+		if (buffer_size == 0 || data == nullptr) {
+			buffer_size = bindings.back().offset + bindings.back().size;
+			data = malloc(buffer_size);
+		}
+		VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+		alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+		alloc_info.descriptorSetCount = 1;
+		alloc_info.pSetLayouts = &layout;
+
+
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 
-			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
-			alloc_info.descriptorSetCount = 1;
-			alloc_info.pSetLayouts = &layout;
-	
+			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
 			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));
 
-			VkDescriptorBufferInfo buffer_info{};
-			buffer_info.buffer = buffer[i]->buffer;
-			buffer_info.offset = 0;
-			buffer_info.range = buffer[i]->size;
+			std::vector<VkWriteDescriptorSet> set_writes(binding_count);
+			std::vector<VkDescriptorBufferInfo> buffer_info(binding_count);
 
-			VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-			set_write.dstSet = descriptor_set[i];
-			set_write.dstBinding = binding;
-			set_write.descriptorCount = 1;
-			set_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			set_write.pBufferInfo = &buffer_info;
+			for (uint32_t i_binding = 0; i_binding < binding_count; ++i_binding) {
 
-			vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
+				buffer_info[i_binding] = {};
+				buffer_info[i_binding].buffer = buffer[i]->buffer;
+				buffer_info[i_binding].offset = bindings[i_binding].offset;
+				buffer_info[i_binding].range = bindings[i_binding].size;
+
+				set_writes[i_binding] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+				set_writes[i_binding].dstSet = descriptor_set[i];
+				set_writes[i_binding].dstBinding = bindings[i_binding].binding;
+				set_writes[i_binding].descriptorCount = 1;
+				set_writes[i_binding].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+				set_writes[i_binding].pBufferInfo = &buffer_info[i_binding];
+			}
+
+			vkUpdateDescriptorSets(vulkan_type->device.handle, binding_count, set_writes.data(), 0, nullptr);
 		}
 	}
 

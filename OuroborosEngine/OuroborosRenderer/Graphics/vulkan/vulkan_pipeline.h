@@ -78,7 +78,7 @@ namespace Renderer
 		pipeline_rasterization_state_create_info.polygonMode = polygon_mode;
 		pipeline_rasterization_state_create_info.lineWidth = 1.0f;
 		pipeline_rasterization_state_create_info.cullMode = VK_CULL_MODE_BACK_BIT;
-		pipeline_rasterization_state_create_info.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+		pipeline_rasterization_state_create_info.frontFace = VK_FRONT_FACE_CLOCKWISE;
 
 		pipeline_rasterization_state_create_info.depthBiasEnable = VK_FALSE;
 		pipeline_rasterization_state_create_info.depthBiasConstantFactor = 0.f;

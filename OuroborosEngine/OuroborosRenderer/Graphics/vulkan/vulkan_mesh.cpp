@@ -6,8 +6,9 @@
 namespace Renderer {
 
     struct ModelConstant {
-        glm::mat4 model;
-        glm::mat3 normal_matrix;
+      glm::mat4 model;
+      glm::mat3 normal_matrix;
+      glm::vec3 padding;
     };
 
     VulkanMesh::VulkanMesh(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)

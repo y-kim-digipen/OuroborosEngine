@@ -147,27 +147,33 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
 
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(global_data), 0);
-        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(0, 1, set_layout);
+        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0);
+        VulkanUniformBuffer* vk_global_ubo = (VulkanUniformBuffer*)global_ubo.get();
 
-        light_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, sizeof(light_data), 0);
-        ((VulkanUniformBuffer*)light_ubo.get())->SetupDescriptorSet(1, 1, set_layout);
+        vk_global_ubo->AddBinding(0, sizeof(global_data));
+        vk_global_ubo->AddBinding(1, sizeof(light_data));
 
+        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(1, set_layout);
+
+ 
         vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
     }
 
     void VulkanContext::UpdateGlobalData()
     {
         Context::UpdateGlobalData();
-        ((VulkanUniformBuffer*)global_ubo.get())->AddData((void*)&global_data, sizeof(global_data));
-        ((VulkanUniformBuffer*)light_ubo.get())->AddData((void*)&light_data, sizeof(light_data));
+
+        VulkanUniformBuffer* vk_global_ubo = ((VulkanUniformBuffer*)global_ubo.get());
+
+        vk_global_ubo->AddData((void*)&global_data, 0,sizeof(global_data));
+        vk_global_ubo->AddData((void*)&light_data, sizeof(global_data), sizeof(light_data));
+        vk_global_ubo->UploadToGPU();
     }
 
 	// Must be called after init_frame()
     void VulkanContext::BindGlobalData()
     {
         global_ubo->Bind();
-        //light_ubo->Bind();
     }
 
     void VulkanContext::Shutdown()
@@ -385,12 +391,13 @@ namespace Renderer
                 model = glm::scale(model, transform->scale);
                 model = glm::rotate(model, transform->angle, transform->rotate_axis);
 
-                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model * global_data.view));
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
-                shader_manager_.GetShader(shader->name)->Bind(); // Bind pipeline & descriptor set 1
+                shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function 
                 if (material->flag)
@@ -416,8 +423,6 @@ namespace Renderer
                     }
 
                 }
-                BindGlobalData();
-
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {
@@ -573,6 +578,8 @@ namespace Renderer
             VK_VERSION_PATCH(physical_properties.apiVersion));
 
         vulkan_type.device.physical_device = physical_device;
+
+        vkGetPhysicalDeviceProperties(vulkan_type.device.physical_device, &vulkan_type.device.properties);
 
         return 0;
     }
@@ -927,7 +934,7 @@ namespace Renderer
 
         VkClearValue clear_color[] = {
             {{0.2f,0.3f, 0.1f, 1.0f}},
-            {{1.0f, 0.0f}}
+            {{1.0f, 0}}
         };
         render_pass_info.clearValueCount = 2;
         render_pass_info.pClearValues = clear_color;

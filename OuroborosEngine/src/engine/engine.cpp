@@ -86,7 +86,7 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light)
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform)
 			{
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
@@ -96,6 +96,7 @@ namespace OE
 						context->AddLight(ent, &light.data);
 						light.init = true;
 					}
+					light.data.position = transform.pos;
 					context->UpdateLight(ent, &light.data);
 				}
 			});
@@ -121,10 +122,8 @@ namespace OE
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.view = camera.GetCameraMat();
 
-
-
 		Renderer::ShaderConfig shader_config
-		{		"shader",
+		{ "shader",
 		{	Renderer::E_StageType::VERTEX_SHADER,
 					Renderer::E_StageType::FRAGMENT_SHADER },
 			2 };
@@ -132,7 +131,7 @@ namespace OE
 		Renderer::ShaderConfig shader_config2{
 					"shader2",
 			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2};
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);

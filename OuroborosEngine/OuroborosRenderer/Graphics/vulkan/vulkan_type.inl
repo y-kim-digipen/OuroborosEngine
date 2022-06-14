@@ -20,6 +20,7 @@ constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 struct VulkanDevice
 {
 	VkPhysicalDevice physical_device;
+	VkPhysicalDeviceProperties properties;
 	VkDevice handle;
 	VkQueue graphics_queue;
 	VkQueue present_queue;
