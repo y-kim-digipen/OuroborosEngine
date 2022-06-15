@@ -75,6 +75,7 @@ namespace OE
 					if(light.init == false)
 					{
 						context->AddLight(ent, &light.data);
+						material.is_light = true;
 						light.init = true;
 					}
 					light.data.position = transform.pos;

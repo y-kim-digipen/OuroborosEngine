@@ -33,6 +33,7 @@ struct MaterialComponent
 	Asset::MaterialData data{.ambient = {1.f,0.f,0.f}};
 	bool flag = false;
 	bool is_save = false;
+	bool is_light = false;
 };
 
 struct ShaderComponent
