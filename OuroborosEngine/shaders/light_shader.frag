@@ -1,14 +1,5 @@
 #version 450
 
-/*
-struct Material {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-}; 
-*/
-
 struct Light
 {
     vec3 position;
@@ -65,12 +56,20 @@ vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
 
 void main() 
 {
-//  vec3 viewDirection = normalize(vs_in.cam_pos - vs_in.frag_position);
-//  vec3 result = vec3(0.0);
-//   for(int i =0; i < light_ubo.num_lights; ++i)
-//   {
-//     result += DirLight(light_ubo.lights[i],vs_in.norm,vs_in.frag_position,viewDirection);
-//   }
-    outColor = vec4(vs_in.norm, 1.0);
- 
+ vec3 viewDirection = normalize(vs_in.cam_pos - vs_in.frag_position);
+ vec3 result = vec3(0.0);
+  for(int i =0; i < light_ubo.num_lights; ++i)
+  {
+    result += DirLight(light_ubo.lights[i],vs_in.norm,vs_in.frag_position,viewDirection);
+  }
+
+    outColor = vec4(material.diffuse, 1.0);
+    // if(light_ubo.num_lights > 0)
+    // {
+    //     outColor = vec4(light_ubo.lights[0].ambient, 1.0);
+    // }
+    // else
+    // {
+    //  outColor = vec4(material.ambient,1.0);
+    // }
 }

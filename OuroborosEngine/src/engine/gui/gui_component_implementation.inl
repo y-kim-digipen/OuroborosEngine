@@ -37,8 +37,8 @@ namespace OE
 	{
 		std::string strID = std::to_string(entID);
 		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
-		//if (ImGui::TreeNode(typeid(TransformComponent).name()))
-		//{
+		if (ImGui::TreeNode(typeid(TransformComponent).name()))
+		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
 			ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
 
@@ -47,10 +47,12 @@ namespace OE
 
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
 			ImGuiDragDropCopy(transform_component.rotate_axis, ImGuiDragDropFlags_SourceAllowNullID);
-			
+
 			//ImGui::DragFloat ("GET_VARIABLE_NAME(transform_component.angle)", &transform_component.angle.x);
 			ImGui::DragScalarN(GET_VARIABLE_NAME(transform_component.angle), ImGuiDataType_Float, &transform_component.angle, 1);
 			ImGuiDragDropCopy(transform_component.angle, ImGuiDragDropFlags_SourceAllowNullID);
+			ImGui::TreePop();
+		}
 	}
 
 	template<>
@@ -110,6 +112,21 @@ namespace OE
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
 			memcpy(buffer, shader_component.name.c_str(), 30);
+			if(ImGui::Button("light_shader"))
+			{
+				shader_component.name = "light_shader";
+			}
+			ImGui::SameLine();
+			if(ImGui::Button("shader1"))
+			{
+				shader_component.name = "shader";
+			}
+			ImGui::SameLine();
+			if(ImGui::Button("shader2"))
+			{
+				shader_component.name = "shader2";
+			}
+
 			if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				shader_component.name = buffer;
@@ -162,14 +179,12 @@ namespace OE
 		LightComponent& light_component = ecs_manager.GetComponent<LightComponent>(entID);
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
 			ImGui::TreePop();
-
-
 		}
 
 	}

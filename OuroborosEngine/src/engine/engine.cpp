@@ -67,7 +67,7 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform)
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform, MaterialComponent& material)
 			{
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
@@ -78,9 +78,11 @@ namespace OE
 						light.init = true;
 					}
 					light.data.position = transform.pos;
+					material.data.diffuse = light.data.diffuse;
 					context->UpdateLight(ent, &light.data);
 				}
 			});
+
 	}
 
 	void Engine::SetupModule()
@@ -116,8 +118,16 @@ namespace OE
 			{	Renderer::E_StageType::VERTEX_SHADER,
 						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
+
+		Renderer::ShaderConfig shader_config3{
+					"light_shader",
+			{	Renderer::E_StageType::VERTEX_SHADER,
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
+
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config3);
+
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
