@@ -22,6 +22,8 @@
 #include <gtc/matrix_transform.hpp>
 
 
+
+
 #include "vulkan_material.h"
 #include "backends/imgui_impl_vulkan.h"
 //#define GLFW_EXPOSE_NATIVE_WIN32s
@@ -146,7 +148,7 @@ namespace Renderer
         //TODO: this might occur error, need to be test
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
-
+         
         global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0);
         VulkanUniformBuffer* vk_global_ubo = (VulkanUniformBuffer*)global_ubo.get();
 
@@ -399,29 +401,40 @@ namespace Renderer
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 				BindGlobalData();
 
-            	//TODO: Maybe later, material update should be in update and sorted function 
-                if (material->flag)
-                {
-                    static VulkanMaterial new_material(GetVulkanType());
-                    new_material.InitMaterialData(std::move(material->data));
-                    new_material.is_changed = material->flag;
-                    new_material.Bind();
+            	//TODO: Maybe later, material update should be in update and sorted function
 
-                	if (material->is_save)
+                if (!material->is_light)
+                {
+                    if (material->flag)
                     {
-                        material_manager->ChangeMaterial(material->name, material->data);
-                        material->flag = false;
-                        material->is_save = false;
-                        material_manager->GetMaterial(material->name)->Bind();
+                        static VulkanMaterial new_material(GetVulkanType());
+                        new_material.InitMaterialData(std::move(material->data));
+                        new_material.is_changed = material->flag;
+                        new_material.Bind();
+
+                        if (material->is_save)
+                        {
+                            material_manager->ChangeMaterial(material->name, material->data);
+                            material->flag = false;
+                            material->is_save = false;
+                            material_manager->GetMaterial(material->name)->Bind();
+                        }
+                    }
+                    else
+                    {
+                        if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
+                        {
+                            iter->Bind();
+                        }
+
                     }
                 }
                 else
                 {
-                    if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
-                    {
-                        iter->Bind();
-                    }
-
+                    static VulkanMaterial light_material(GetVulkanType());
+                    light_material.InitMaterialData(std::move(material->data));
+                    light_material.is_changed = true;
+                    light_material.Bind();
                 }
 
                 //TODO: Bind Object Descriptor set 3 in future
@@ -431,7 +444,7 @@ namespace Renderer
                 draw_queue.pop();
             }
     }
-
+    
 
     int CreateInstance(int major, int minor)
     {

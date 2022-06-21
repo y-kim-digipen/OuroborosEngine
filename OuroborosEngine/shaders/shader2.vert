@@ -12,7 +12,7 @@ layout(set = 0, binding = 0) uniform global_data {
 
 layout(set = 1, binding = 0) uniform Test {
      vec3 trash;
-}test ;
+}test;
 
 layout(push_constant) uniform constants {
     mat4 model;
@@ -22,11 +22,13 @@ layout(push_constant) uniform constants {
 layout(location = 0) out VS_OUT {
     vec3 norm;
     vec3 frag_position;
+    vec3 cam_pos;
 } vs_out;
 
 void main() 
 {
-    vs_out.norm = normal;
+    vs_out.norm =  normal;
     vs_out.frag_position = vec4(object_ubo.model * vec4(pos,1.0)).xyz; 
+    vs_out.cam_pos = global_ubo.cam_pos;
     gl_Position = global_ubo.projection * global_ubo.view * object_ubo.model * vec4(pos, 1.0);
 }

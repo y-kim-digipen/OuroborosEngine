@@ -12,12 +12,12 @@
 
 namespace OE
 {
-	int MeshAssetManager::LoadAsset(const std::string& file_name)
+	int MeshAssetManager::LoadAsset(const std::string& file_path)
     {
         Asset::Mesh mesh;
 
-        std::string file_path = "model/";
-        file_path.append(file_name);
+        //std::string file_path = "model/";
+        //file_path.append(file_name);
 
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
@@ -27,7 +27,7 @@ namespace OE
         if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, file_path.c_str()))
         {
             //throw std::runtime_error(warn + err);
-            std::cerr << "Failed to load asset " + file_name << std::endl;
+            std::cerr << "Failed to load asset " + file_path << std::endl;
             if (!warn.empty())
             {
 
@@ -79,12 +79,12 @@ namespace OE
                 mesh.indices.push_back(uniqueVertices[vertex]);
             }
         }
-        assets[file_name] = std::make_pair(true, mesh);
+        assets[file_path] = std::make_pair(true, mesh);
         auto& vulkan_mesh_manager
 		                        = static_cast<Renderer::VulkanContext*>
 		                        (Engine().Get().GetRenderWindow().get()->GetWindowData().RenderContextData.get())
 		                        ->mesh_manager_;
-        vulkan_mesh_manager.CopyAssetData(file_name.c_str(), mesh);
+        vulkan_mesh_manager.CopyAssetData(file_path.c_str(), mesh);
         return 0;
     }
 

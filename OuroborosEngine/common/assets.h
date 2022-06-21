@@ -3,6 +3,7 @@
 #include <glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
+#include <imgui-docking/imgui.h>
 
 namespace Asset
 {
@@ -22,13 +23,18 @@ namespace Asset
     
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
+
+        inline static std::list<std::string> supported_formats { ".obj" };
     };
     
     struct Image
     {
         unsigned char* image;
         int width, height;
+        
+        inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
+
 
     struct CameraData
     {
@@ -39,9 +45,9 @@ namespace Asset
 
     struct MaterialData
     {
-      alignas(16)  glm::vec3 ambient;
-      alignas(16)  glm::vec3 diffuse;
-      alignas(16)  glm::vec3 specular;
+        alignas(16)  glm::vec3 ambient;
+        alignas(16)  glm::vec3 diffuse;
+        alignas(16)  glm::vec3 specular;
         float shininess;
     };
 
@@ -58,6 +64,10 @@ namespace Asset
         glm::vec3 direction;
         int light_type;
     };
+
+
+
+
 }
 
 namespace std {
@@ -67,3 +77,5 @@ namespace std {
         }
     };
 }
+
+#include "asset_imgui_impl.inl"

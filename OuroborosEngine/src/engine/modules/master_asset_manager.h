@@ -1,6 +1,7 @@
 #pragma once
 #include <ranges>
 #include <map>
+#include <brigand/brigand.hpp>
 
 namespace OE
 {
@@ -8,6 +9,7 @@ namespace OE
 	class AssetManager
 	{
 	public:
+		using asset_type = TAsset;
 		virtual ~AssetManager() = default;
 		virtual int LoadAsset(const std::string& name) = 0;
 		virtual int UnloadAsset(const std::string& name)
@@ -53,7 +55,7 @@ namespace OE
 		{
 			return std::get<TManager>(tuple_vector_of_assets);
 		}
-
+		using manager_list = brigand::list<TManagers...>;
 		std::tuple<TManagers...> tuple_vector_of_assets;
 	};
 }

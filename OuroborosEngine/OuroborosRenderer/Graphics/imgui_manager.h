@@ -2,6 +2,7 @@
 #define IMGUIMANAGER_H
 #include <functional>
 #include <map>
+#include <ranges>
 #include <string>
 #include <GLFW/glfw3.h>
 #include <imgui-docking/imgui.h>
@@ -38,27 +39,51 @@ namespace Renderer
 			//ImGui::PopStyleVar();
 			//ImGui::PopStyleVar();
 			//ImGui::End();
-
-			main_menu_function();
-			for(auto& [key, value] : panel_functions)
+			
+			if (ImGui::BeginMainMenuBar())
 			{
-				auto& [function, open] = value;
-				if(open)
+				for (auto& [menu_name, map] : panel_functions)
 				{
-					ImGui::Begin(key.c_str(), &open);
-					function();
-					ImGui::End();
+					if (ImGui::BeginMenu(menu_name.c_str()))
+					{
+
+						for (auto& [key, value] : map)
+						{
+							auto& open = value.second;
+							if (ImGui::MenuItem(key.c_str(), nullptr, open))
+							{
+								open = !open;
+							}
+						}
+						ImGui::EndMenu();
+					}
+				}
+				ImGui::EndMainMenuBar();
+			}
+
+			for (auto& menu : panel_functions | std::views::values)
+			{
+				for (auto& [key, pair] : menu)
+				{
+					auto& [function, open] = pair;
+					if (open)
+					{
+						ImGui::Begin(key.c_str(), &open);
+						function();
+						ImGui::End();
+					}
 				}
 			}
 		}
-		
+
 		virtual void Shutdown() =0;
 		virtual void BeginFrame() = 0;
 		virtual void EndFrame() = 0;
 
-		int RegisterPanel(std::string&& key, GUI_PanelFunction&& function, bool wake_on_open = true)
+		int RegisterPanel(std::string&& menu_name, std::string&& key, GUI_PanelFunction&& function, bool wake_on_open = true)
 		{
-			return panel_functions.try_emplace(std::move(key), std::pair(std::move(function), wake_on_open)).second == true;
+			auto& menu = panel_functions[menu_name];
+			return menu.try_emplace(std::move(key), std::pair(std::move(function), wake_on_open)).second == true;
 		}
 
 		auto& GetPanels()
@@ -66,15 +91,9 @@ namespace Renderer
 			return panel_functions;
 		}
 
-		void RegisterMainMenu(GUI_PanelFunction&& function)
-		{
-			main_menu_function = std::move(function);
-		}
-
 	protected:
 		GLFWwindow* window_ = nullptr;
-		GUI_PanelFunction main_menu_function;
-		std::map<std::string, std::pair<GUI_PanelFunction, bool>> panel_functions;
+		std::unordered_map<std::string, std::unordered_map<std::string, std::pair<GUI_PanelFunction, bool>>> panel_functions;
 	};
 }
 

@@ -10,30 +10,11 @@ namespace OE
 {
 	void Engine::SetupGUI()
 	{
-		window->vulkan_imgui_manager.RegisterMainMenu([]() mutable
-			{
-				if (ImGui::BeginMainMenuBar())
-				{
-					if (ImGui::BeginMenu("Editor"))
-					{
-						auto& panels = window->vulkan_imgui_manager.GetPanels();
-						for (auto& [key, pair] : panels)
-						{
-							bool& open = pair.second;
-							if (ImGui::MenuItem(key.c_str(), nullptr, open))
-							{
-								open = !open;
-							}
-						}
-						ImGui::EndMenu();
-					}
-					ImGui::EndMainMenuBar();
-				}
-			});
-
-		window->vulkan_imgui_manager.RegisterPanel("EngineInfo", &OE::EngineInfoPanelFunction);
-		window->vulkan_imgui_manager.RegisterPanel("Entities", &OE::EntityInfoPanelFunction);
-		window->vulkan_imgui_manager.RegisterPanel("SystemInfo", &OE::SystemInfoPanelFunction);
+		window->vulkan_imgui_manager.RegisterPanel("File", "FileBrowser", &OE::FileSystemPanelFunction, false);
+		window->vulkan_imgui_manager.RegisterPanel("System", "AssetManager", &OE::AssetBrowserPanelFunction, false);
+		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
+		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
+		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
 	}
 
 	void Engine::ECS_TestSetup()
@@ -86,7 +67,7 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform)
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform, MaterialComponent& material)
 			{
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
@@ -94,12 +75,15 @@ namespace OE
 					if(light.init == false)
 					{
 						context->AddLight(ent, &light.data);
+						material.is_light = true;
 						light.init = true;
 					}
 					light.data.position = transform.pos;
+					material.data.diffuse = light.data.diffuse;
 					context->UpdateLight(ent, &light.data);
 				}
 			});
+
 	}
 
 	void Engine::SetupModule()
@@ -119,11 +103,13 @@ namespace OE
 
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
-		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		camera.data.projection = glm::perspective(glm::radians(90.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.view = camera.GetCameraMat();
 
+
+
 		Renderer::ShaderConfig shader_config
-		{ "shader",
+		{		"shader",
 		{	Renderer::E_StageType::VERTEX_SHADER,
 					Renderer::E_StageType::FRAGMENT_SHADER },
 			2 };
@@ -133,8 +119,16 @@ namespace OE
 			{	Renderer::E_StageType::VERTEX_SHADER,
 						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
+
+		Renderer::ShaderConfig shader_config3{
+					"light_shader",
+			{	Renderer::E_StageType::VERTEX_SHADER,
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
+
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
+		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config3);
+
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
