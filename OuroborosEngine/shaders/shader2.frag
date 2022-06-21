@@ -15,6 +15,7 @@ layout(location = 0) in VS_IN
 {
     vec3 norm;
     vec3 frag_position;
+     vec2 tex_coord;
 } vs_in;
 
 layout(set = 2, binding = 0) uniform Material 
@@ -44,5 +45,5 @@ void main()
 // //todo light mulitply light diffuse
 //     vec3 diffuse = material.diffuse * diff ;
 
-    outColor = vec4(1.0);
+    outColor = vec4(vs_in.tex_coord.x, vs_in.tex_coord.y, 0.5, 1.0);
 }

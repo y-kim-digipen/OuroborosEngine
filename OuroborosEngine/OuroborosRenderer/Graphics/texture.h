@@ -1,6 +1,10 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include <assets.h>
+
+namespace Asset
+{
+	struct Image;
+}
 
 namespace Renderer
 {
@@ -9,11 +13,10 @@ namespace Renderer
 	public:
 		virtual ~Texture() = default;
 		virtual void Bind() = 0;
-		virtual void UploadData(const Asset::Image& data);
+		virtual void UploadData(const Asset::Image& data) = 0;
 	};
 
 }
-
 
 
 #endif !TEXTURE_H

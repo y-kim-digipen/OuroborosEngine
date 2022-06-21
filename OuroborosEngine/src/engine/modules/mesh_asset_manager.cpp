@@ -68,6 +68,8 @@ namespace OE
                         attrib.normals[3 * index.normal_index + 2],
                 };
 
+
+
                 //vertex.color = { 1.0f, 1.0f, 1.0f };
 
                 if (uniqueVertices.count(vertex) == 0) {

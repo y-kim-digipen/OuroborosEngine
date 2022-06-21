@@ -2,6 +2,8 @@
 #define VULKAN_TEXTURE_H
 #include "vulkan_type.inl"
 #include "../texture.h"
+#include "../common/assets.h"
+
 namespace Renderer
 {
 	class VulkanTexture : public Texture
@@ -10,7 +12,7 @@ namespace Renderer
 		VulkanTexture(Vulkan_type* vulkan_type);
 		void Bind() override;
 		void UploadData(const Asset::Image& data) override;
-
+		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
 
 	private:
 		Vulkan_type* vulkan_type = nullptr;

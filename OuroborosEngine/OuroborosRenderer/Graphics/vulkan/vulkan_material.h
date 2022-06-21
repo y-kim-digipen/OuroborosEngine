@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "vulkan_texture.h"
+
 namespace Renderer {
 
 	class VulkanUniformBuffer;
@@ -23,8 +25,10 @@ namespace Renderer {
 		bool is_changed = false;
 		VkDescriptorSetLayout set_layout{};
 		std::unique_ptr<VulkanUniformBuffer> ubo;
+		VulkanTexture vulkan_texture;
 	private:
 		Vulkan_type* vulkan_type;
+		
 		//TODO: does this should go in parent class ???
 	};
 }

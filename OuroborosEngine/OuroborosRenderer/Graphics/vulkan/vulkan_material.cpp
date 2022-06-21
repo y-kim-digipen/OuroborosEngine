@@ -28,7 +28,7 @@ namespace Renderer {
 	}
 	*/
 
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2)), vulkan_texture(vulkan_type)
 	{
 		VkDescriptorSetLayoutBinding binding;
 		binding.binding = 0;
@@ -38,11 +38,13 @@ namespace Renderer {
 
 		VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
 		set_layout_create_info.bindingCount = 1;
-		set_layout_create_info.pBindings = &binding;
+		set_layout_create_info.pBindings    = &binding;
 
+		
 
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
+		
 		ubo->AddBinding(0, sizeof(Asset::MaterialData));
 		ubo->SetupDescriptorSet(1, set_layout);
 		ubo->AddData(&data, 0, sizeof(data));

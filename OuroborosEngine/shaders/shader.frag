@@ -47,6 +47,8 @@ layout(set = 2, binding = 0) uniform Material
 } material;
 
 
+
+
 vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
 {
     vec3 lightDir = normalize(-lig.direction);
