@@ -155,7 +155,7 @@ namespace Renderer
         vk_global_ubo->AddBinding(0, sizeof(global_data));
         vk_global_ubo->AddBinding(1, sizeof(light_data));
 
-        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(1, set_layout);
+        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(set_layout);
 
  
         vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);

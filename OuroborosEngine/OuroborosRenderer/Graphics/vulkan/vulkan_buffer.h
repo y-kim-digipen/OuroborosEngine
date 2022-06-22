@@ -81,7 +81,7 @@ namespace Renderer
 		int AddData(void* data, uint32_t offset, uint32_t buffer_size) override;
 		void UploadToGPU(uint32_t offset = 0, uint32_t upload_size = 0);
 
-		void SetupDescriptorSet(uint32_t descriptor_count, VkDescriptorSetLayout layout);
+		void SetupDescriptorSet(VkDescriptorSetLayout layout);
 		
 		VkDescriptorSet descriptor_set[MAX_FRAMES_IN_FLIGHT];
 		uint64_t GetBufferSize() const;
@@ -89,7 +89,6 @@ namespace Renderer
 		Vulkan_type* vulkan_type;
 
 		uint32_t set_num;
-		uint64_t buffer_size;
 		
 		struct binding_info
 		{

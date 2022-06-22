@@ -197,7 +197,7 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) : vulkan_type(vulkan_type), buffer_size(0), set_num(set_num)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) : UniformBuffer(), vulkan_type(vulkan_type), set_num(set_num)
 	{
 		data = nullptr;
 	}
@@ -300,7 +300,7 @@ namespace Renderer
 			buffer[i]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), offset);
 	}
 
-	void VulkanUniformBuffer::SetupDescriptorSet(uint32_t descriptor_count, VkDescriptorSetLayout layout)
+	void VulkanUniformBuffer::SetupDescriptorSet(VkDescriptorSetLayout layout)
 	{
 		uint32_t binding_count = bindings.size();
 
