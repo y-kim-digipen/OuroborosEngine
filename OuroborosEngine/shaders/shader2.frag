@@ -35,7 +35,7 @@ layout(location = 0) in VS_IN
 {
     vec3 norm;
     vec3 frag_position;
-     vec2 tex_coord;
+     vec3 tex_coord;
     vec3 cam_pos;
 } vs_in;
 
@@ -74,6 +74,6 @@ void main()
 //     result += DirLight(light_ubo.lights[i],vs_in.norm,vs_in.frag_position,viewDirection);
 //   }
     // outColor = vec4(vs_in.norm, 1.0);
-    outColor = vec4(vs_in.tex_coord.x, vs_in.tex_coord.y, 0.5, 1.0);
+    outColor = vec4(vs_in.tex_coord, 1.0);
  
 }
