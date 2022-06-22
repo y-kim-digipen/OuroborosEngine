@@ -1,9 +1,10 @@
-#pragma once
+#ifndef COMPONENTS_H
+#define COMPONENTS_H
 #include <glm.hpp>
 #include <gtc/vec1.hpp>
 #include "../common/assets.h"
 
-//#include <rttr/type>
+#include <rttr/type>
 
 template<typename TComponent>
 void RTTRComponent()
@@ -77,4 +78,6 @@ struct LightComponent
 //	vector<file* >
 //}
 
-//struct 
+//struct
+
+#endif //!COMPONENTS_H

@@ -46,12 +46,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
-    <IncludePath>$(SolutionDir)OuroborosRenderer;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\OuroborosEngine\external\lib\rttr-0.9.6\include;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(SolutionDir)\external\lib\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
-    <IncludePath>$(SolutionDir)OuroborosRenderer;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\OuroborosEngine\external\lib\rttr-0.9.6\include;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
