@@ -1,8 +1,15 @@
 #pragma once
-//#include <detail/type_vec.hpp>
 #include <glm.hpp>
 #include <gtc/vec1.hpp>
 #include "../common/assets.h"
+
+//#include <rttr/type>
+
+template<typename TComponent>
+void RTTRComponent()
+{
+	//static_assert(true, "rttr reflection not implemented");
+};
 
 struct TransformComponent
 {
@@ -10,6 +17,7 @@ struct TransformComponent
 	glm::vec3 scale= glm::vec3(1.f);
 	glm::vec3 rotate_axis = {1.0f, 0.f,0.f};
 	float angle{ 0.f };
+	
 };
 
 struct VelocityComponent

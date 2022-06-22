@@ -35,7 +35,6 @@ namespace Asset
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
 
-
     struct CameraData
     {
         glm::mat4 projection;
@@ -64,10 +63,6 @@ namespace Asset
         glm::vec3 direction;
         int light_type;
     };
-
-
-
-
 }
 
 namespace std {
