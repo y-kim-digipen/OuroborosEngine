@@ -16,6 +16,7 @@ namespace Renderer {
         Asset::MaterialData* GetMaterialData();
     protected:
         Asset::MaterialData data;
+        Asset::Image* image_ = nullptr;
     };
 
     inline void Material::InitMaterialData(const Asset::MaterialData&& other)

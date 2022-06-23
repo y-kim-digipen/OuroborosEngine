@@ -14,6 +14,7 @@
 #include "mesh_manager.h"
 #include "shader_manager.h"
 #include "material_manager.h"
+#include "texture_manager.h"
 #include "../common/assets.h"
 #include "../../../src/engine/ecs/components.h"
 
@@ -74,7 +75,7 @@ namespace Renderer
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
 		std::unique_ptr<MaterialMananger> material_manager;
-
+		std::unique_ptr<TextureManager> texture_manager_;;
 		
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
 		void RemoveLight(uint32_t entity_id);

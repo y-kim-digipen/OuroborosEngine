@@ -47,6 +47,8 @@ layout(set = 2, binding = 0) uniform Material
     float shininess;
 } material;
 
+layout(set = 2, binding = 1) uniform sampler2D texture;
+
 
 vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
 {

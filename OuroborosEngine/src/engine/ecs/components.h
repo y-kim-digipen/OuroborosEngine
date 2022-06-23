@@ -34,6 +34,7 @@ struct MaterialComponent
 	bool flag = false;
 	bool is_save = false;
 	bool is_light = false;
+	std::string texture_name = "";
 };
 
 struct ShaderComponent

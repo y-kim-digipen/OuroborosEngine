@@ -1,6 +1,7 @@
 #ifndef VULKAN_CONTEXT_H
 #define VULKAN_CONTEXT_H
 
+#include "vulkan_texture_manager.h"
 #include "../context.h"
 
 struct Vulkan_type;
@@ -23,6 +24,7 @@ namespace Renderer {
 
 		VulkanShaderManager shader_manager_;
 		VulkanMeshManager mesh_manager_;
+	
 
 		Vulkan_type* GetVulkanType();
 

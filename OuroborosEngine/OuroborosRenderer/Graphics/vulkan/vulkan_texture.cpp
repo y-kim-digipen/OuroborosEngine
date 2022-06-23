@@ -18,7 +18,6 @@ namespace Renderer
 	void VulkanTexture::UploadData(const Asset::Image& data)
 	{
 
-
 		uint32_t width  = data.width;
 		uint32_t height = data.height;
 
@@ -28,6 +27,7 @@ namespace Renderer
 			.height = height,
 			.depth  = 1,
 		};
+		UpdateColorType(data.channel);
 		
 		if (width != width_ || height != height_)
 		{
@@ -50,17 +50,20 @@ namespace Renderer
 
 			vkCreateSampler(vulkan_type->device.handle, &sampler_create_info, nullptr, &sampler_);
 
+
+			VkFormat color_format = ColorTypeToVulkanFormatType(color_type);
 			VkImageCreateInfo image_create_info
 			{
 				.sType		= VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
 				.imageType  = VK_IMAGE_TYPE_2D,
-				.format     = VK_FORMAT_R8G8B8_SRGB,
+				.format     = color_format,
 				.extent		= image_extent,
 				.mipLevels  = 1,
 				.arrayLayers= 1,
 				.samples    = VK_SAMPLE_COUNT_1_BIT,
 				.tiling     = VK_IMAGE_TILING_OPTIMAL,
-				.usage      = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
+				.usage      = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+				.sharingMode = VK_SHARING_MODE_EXCLUSIVE
 			};
 
 			VmaAllocationCreateInfo image_allocation_info{ .usage = VMA_MEMORY_USAGE_GPU_ONLY };
@@ -72,7 +75,7 @@ namespace Renderer
 				.sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
 				.image	  = image_,
 				.viewType = VK_IMAGE_VIEW_TYPE_2D,
-				.format   = VK_FORMAT_R8G8B8_SRGB,
+				.format   = color_format,
 				.subresourceRange = {
 					.aspectMask		= VK_IMAGE_ASPECT_COLOR_BIT,
 					.baseMipLevel	= 0,
@@ -84,6 +87,8 @@ namespace Renderer
 
 			VK_CHECK(vkCreateImageView(vulkan_type->device.handle, &image_view_create_info, nullptr, &image_view_));
 		}
+
+		//TODO : need to fix the proper data type(jpg, png)
 
 			const uint32_t data_size = width_ * height_ * 4;
 
@@ -168,5 +173,17 @@ namespace Renderer
 		descriptor_set_write.pImageInfo = &image_buffer_info;
 
 		vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &descriptor_set_write, 0, nullptr);
+	}
+
+	void VulkanTexture::UpdateColorType(int channel)
+	{
+		switch (channel)
+		{
+			case 4:
+				color_type = E_ColorType::UNSIGNED_CHAR4;
+				break;
+			default:
+				color_type = E_ColorType::UNSIGNED_CHAR3;
+		}
 	}
 }

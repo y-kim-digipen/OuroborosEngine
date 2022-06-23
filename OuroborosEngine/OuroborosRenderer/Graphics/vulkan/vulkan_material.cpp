@@ -28,7 +28,7 @@ namespace Renderer {
 	}
 	*/
 
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2)), vulkan_texture(vulkan_type)
+	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
 	{
 		VkDescriptorSetLayoutBinding binding;
 		binding.binding = 0;
@@ -40,15 +40,21 @@ namespace Renderer {
 		set_layout_create_info.bindingCount = 1;
 		set_layout_create_info.pBindings    = &binding;
 
-		
 
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
-		
 		ubo->AddBinding(0, sizeof(Asset::MaterialData));
 		ubo->SetupDescriptorSet(1, set_layout);
 		ubo->AddData(&data, 0, sizeof(data));
 		ubo->UploadToGPU();
+
+
+		if(has_texture)
+		{
+			for (int i = 0; i < 3; ++i)
+				vulkan_texture->UpdateToDescripterSet(ubo->descriptor_set[i], 1);
+		}
+
 	}
 
 	VulkanMaterial::~VulkanMaterial()

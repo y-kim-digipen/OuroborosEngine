@@ -23,11 +23,13 @@ namespace Renderer {
 		void Bind() override;
 
 		bool is_changed = false;
+		bool has_texture = false;
 		VkDescriptorSetLayout set_layout{};
 		std::unique_ptr<VulkanUniformBuffer> ubo;
-		VulkanTexture vulkan_texture;
+		std::shared_ptr<VulkanTexture> vulkan_texture;
 	private:
 		Vulkan_type* vulkan_type;
+	
 		
 		//TODO: does this should go in parent class ???
 	};

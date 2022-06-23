@@ -94,6 +94,7 @@ namespace Renderer
     VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), shader_manager_(GetVulkanType()), mesh_manager_(GetVulkanType(), &shader_manager_)
     {
         material_manager = std::make_unique<VulkanMaterialManager>(&vulkan_type);
+        texture_manager_ = std::make_unique<VulkanTextureManager>(&vulkan_type);
 	}
 
     void VulkanContext::Init(int major, int minor)

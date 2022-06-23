@@ -6,6 +6,14 @@
 
 namespace Renderer
 {
+
+	enum class E_ColorType
+	{
+		FLOAT,
+		UNSIGNED_CHAR3,
+		UNSIGNED_CHAR4,
+	};
+
 	class VulkanTexture : public Texture
 	{
 	public:
@@ -13,7 +21,7 @@ namespace Renderer
 		void Bind() override;
 		void UploadData(const Asset::Image& data) override;
 		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
-
+		void UpdateColorType(int channel);
 	private:
 		Vulkan_type* vulkan_type = nullptr;
 		uint32_t width_ {0};
@@ -23,7 +31,24 @@ namespace Renderer
 		VmaAllocation allocation_;
 		VkImageView image_view_;
 		VkSampler sampler_;
+
+		E_ColorType color_type = E_ColorType::UNSIGNED_CHAR4;
 	};
+
+
+	inline VkFormat ColorTypeToVulkanFormatType(E_ColorType colorType)
+	{
+		switch (colorType)
+		{
+		case E_ColorType::FLOAT:
+			return VK_FORMAT_R32G32B32_SFLOAT;
+		case E_ColorType::UNSIGNED_CHAR4:
+			return VK_FORMAT_R8G8B8A8_SRGB;
+		default:
+			return VK_FORMAT_R8G8B8A8_SRGB;
+		}
+	}
+
 
 
 }
