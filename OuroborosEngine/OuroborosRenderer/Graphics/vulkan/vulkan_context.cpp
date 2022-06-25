@@ -426,6 +426,12 @@ namespace Renderer
                         if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
                         {
                             iter->Bind();
+
+                            if(auto iter1 = texture_manager_->GetTexture(material->texture_name); iter1 != nullptr)
+                            {
+                                iter->SetTexture(iter1);
+                                iter->has_texture = true;
+                            }
                         }
 
                     }
@@ -437,6 +443,8 @@ namespace Renderer
                     light_material.is_changed = true;
                     light_material.Bind();
                 }
+
+               
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {

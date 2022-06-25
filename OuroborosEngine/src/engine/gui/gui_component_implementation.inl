@@ -144,6 +144,7 @@ namespace OE
 		std::string strID = std::to_string(entID);
 		MaterialComponent& material_component = ecs_manager.GetComponent<MaterialComponent>(entID);
 		memcpy(buffer, material_component.name.c_str(), 30);
+		const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
 		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
 		{
 			memcpy(buffer, material_component.name.c_str(), 30);
@@ -166,9 +167,22 @@ namespace OE
 			{
 				material_component.is_save = true;
 			}
-			
 
-
+			if (ImGui::BeginCombo("Texture", material_component.texture_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = material_component.texture_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						material_component.texture_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
 			ImGui::TreePop();
 		}
 	}

@@ -19,14 +19,14 @@ namespace Renderer {
 		//VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
 		VulkanMaterial(Vulkan_type* vulkan_type);
 		~VulkanMaterial() override;
-
+		void SetTexture(std::shared_ptr<Texture> texture) override;
 		void Bind() override;
 
+
 		bool is_changed = false;
-		bool has_texture = false;
 		VkDescriptorSetLayout set_layout{};
 		std::unique_ptr<VulkanUniformBuffer> ubo;
-		std::shared_ptr<VulkanTexture> vulkan_texture;
+	
 	private:
 		Vulkan_type* vulkan_type;
 	

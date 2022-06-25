@@ -47,7 +47,7 @@ layout(set = 2, binding = 0) uniform Material
     float shininess;
 } material;
 
-layout(set = 2, binding = 1) uniform sampler2D texture;
+layout(set = 2, binding = 1) uniform sampler2D texture1;
 
 
 vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
@@ -76,6 +76,6 @@ void main()
 //     result += DirLight(light_ubo.lights[i],vs_in.norm,vs_in.frag_position,viewDirection);
 //   }
     // outColor = vec4(vs_in.norm, 1.0);
-    outColor = vec4(vs_in.tex_coord, 1.0);
+    outColor = texture(texture1,vs_in.tex_coord.xy);
  
 }

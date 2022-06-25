@@ -6,15 +6,24 @@
 
 
 namespace Renderer {
-    class Material {
+	class VulkanTexture;
+	class Texture;
+
+	class Material {
 
     public:
         Material() = default;
         virtual ~Material() = default;
         virtual void Bind() = 0;
         void InitMaterialData(const Asset::MaterialData&& other);
+    	virtual void SetTexture(std::shared_ptr<Texture> texture)
+    	{
+            texture_ = texture;
+    	}
         Asset::MaterialData* GetMaterialData();
+        bool has_texture = false;
     protected:
+        std::shared_ptr<Texture> texture_;
         Asset::MaterialData data;
         Asset::Image* image_ = nullptr;
     };

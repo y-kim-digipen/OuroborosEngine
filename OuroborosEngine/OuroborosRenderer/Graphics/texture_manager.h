@@ -13,7 +13,18 @@ namespace Renderer
 		TextureManager() = default;
 		virtual int AddTexture(const std::string& name, const Asset::Image& image) = 0;
 		virtual int DeleteTexture(const std::string& name) = 0;
+		virtual std::shared_ptr<Texture> GetTexture(const std::string& name)
+		{
+			if(auto iter = textures_map.find(name); iter != textures_map.end())
+			{
+				return iter->second;
+			}
+			else
+			{
+				return nullptr;
+			}
 
+		}
 	protected:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> textures_map;
 	};

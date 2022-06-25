@@ -28,7 +28,7 @@ namespace Renderer {
 		material_map[material_name]->InitMaterialData(std::move(material_data));
 		dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
 		return 0;
-
+		
 	}
 
 	int VulkanMaterialManager::ChangeMaterial(std::string material_name,const Asset::MaterialData& data)
