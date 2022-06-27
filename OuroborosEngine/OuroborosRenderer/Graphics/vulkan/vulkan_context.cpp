@@ -392,7 +392,14 @@ namespace Renderer
                 glm::mat4 model(1.f);
                 model = glm::translate(model, transform->pos);
                 model = glm::scale(model, transform->scale);
-                model = glm::rotate(model, transform->angle, transform->rotate_axis);
+
+                glm::mat4 matrix;
+
+                glm::quat rotP = glm::angleAxis(glm::radians(transform->rotate_axis.x), glm::vec3(1.0f, 0.0f, 0.0f));
+                glm::quat rotY = glm::angleAxis(glm::radians(transform->rotate_axis.y), glm::vec3(0.0f, 1.0f, 0.0f));
+                glm::quat rotR = glm::angleAxis(glm::radians(transform->rotate_axis.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+                model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
 
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
@@ -431,6 +438,12 @@ namespace Renderer
                             {
                                 iter->SetTexture(iter1);
                                 iter->has_texture = true;
+
+        //                        ImGui::Begin("Texture");
+        //                        ImGui::Image(dynamic_cast<VulkanMaterial*>(iter)->ubo->descriptor_set[1],ImVec2(300,300));
+								//ImGui::End();
+
+
                             }
                         }
 
@@ -594,6 +607,7 @@ namespace Renderer
         fprintf(stdout, "Device Type:    %d\n", physical_properties.deviceType);
         fprintf(stdout, "Driver Version: %d\n", physical_properties.driverVersion);
 
+        
         fprintf(stdout, "API Version:    %d.%d.%d\n",
             VK_VERSION_MAJOR(physical_properties.apiVersion),
             VK_VERSION_MINOR(physical_properties.apiVersion),

@@ -14,5 +14,11 @@ namespace OE
 	{
 		ImGui::TextWrapped("Width : %d", image.width); ImGui::SameLine();
 		ImGui::TextWrapped("Height : %d", image.height);
+		
 	}
+
+
+
+
+	
 }
