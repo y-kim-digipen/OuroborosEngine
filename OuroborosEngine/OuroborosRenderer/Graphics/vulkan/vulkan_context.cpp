@@ -91,9 +91,10 @@ namespace Renderer
         return VK_FALSE;
     }
 
-    VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), shader_manager_(GetVulkanType()), mesh_manager_(GetVulkanType(), &shader_manager_)
+    VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), mesh_manager_(&vulkan_type)
     {
         material_manager = std::make_unique<VulkanMaterialManager>(&vulkan_type);
+        shader_manager = std::make_unique<VulkanShaderManager>(&vulkan_type);
 	}
 
     void VulkanContext::Init(int major, int minor)
@@ -398,7 +399,7 @@ namespace Renderer
  /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
                 mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
-                shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+                shader_manager->GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function
@@ -407,7 +408,7 @@ namespace Renderer
                 {
                     if (material->flag)
                     {
-                        static VulkanMaterial new_material(GetVulkanType());
+                        static VulkanMaterial new_material(&vulkan_type);
                         new_material.InitMaterialData(std::move(material->data));
                         new_material.is_changed = material->flag;
                         new_material.Bind();
@@ -431,7 +432,7 @@ namespace Renderer
                 }
                 else
                 {
-                    static VulkanMaterial light_material(GetVulkanType());
+                    static VulkanMaterial light_material(&vulkan_type);
                     light_material.InitMaterialData(std::move(material->data));
                     light_material.is_changed = true;
                     light_material.Bind();

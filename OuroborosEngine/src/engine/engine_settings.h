@@ -5,6 +5,7 @@
 #include "modules/master_asset_manager.h"
 #include "modules/image_asset_manager.h"
 #include "modules/mesh_asset_manager.h"
+#include "modules/shader_asset_manager.h"
 
 using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent,LightComponent>;
 
@@ -30,6 +31,6 @@ using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, System
 using ECS_Manager = OE::ECS::Manager<OESettings>;
 
 
-using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager>;
+using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager, OE::ShaderAssetManager>;
 
 static inline ECS_Manager ecs_manager;

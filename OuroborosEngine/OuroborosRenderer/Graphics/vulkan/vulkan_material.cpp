@@ -44,7 +44,7 @@ namespace Renderer {
 		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 		ubo->AddBinding(0, sizeof(Asset::MaterialData));
-		ubo->SetupDescriptorSet(1, set_layout);
+		ubo->SetupDescriptorSet(set_layout);
 		ubo->AddData(&data, 0, sizeof(data));
 		ubo->UploadToGPU();
 	}

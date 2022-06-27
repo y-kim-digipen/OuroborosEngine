@@ -313,6 +313,7 @@ namespace Renderer
 		if (buffer_size == 0 || data == nullptr) {
 			buffer_size = bindings.back().offset + bindings.back().size;
 			data = malloc(buffer_size);
+			memset(data, 0, buffer_size);
 		}
 		VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
 		alloc_info.descriptorPool = vulkan_type->descriptor_pool;

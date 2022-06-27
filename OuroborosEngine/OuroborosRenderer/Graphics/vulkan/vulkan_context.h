@@ -21,7 +21,6 @@ namespace Renderer {
 		int BeginFrame() override;
 		int EndFrame() override;
 
-		VulkanShaderManager shader_manager_;
 		VulkanMeshManager mesh_manager_;
 
 		Vulkan_type* GetVulkanType();

@@ -68,7 +68,6 @@ namespace Renderer
 		VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num);
 		~VulkanUniformBuffer() override;
 
-		// Map memory CPU to GPU
 		void Bind() const override;
 		void UnBind() const override;
 
@@ -79,6 +78,8 @@ namespace Renderer
 		int AddBinding(uint32_t binding_num, uint32_t buffer_size);
 
 		int AddData(void* data, uint32_t offset, uint32_t buffer_size) override;
+		
+		// Map memory CPU to GPU
 		void UploadToGPU(uint32_t offset = 0, uint32_t upload_size = 0);
 
 		void SetupDescriptorSet(VkDescriptorSetLayout layout);

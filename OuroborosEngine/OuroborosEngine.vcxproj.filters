@@ -78,6 +78,9 @@
     <ClInclude Include="common\assets.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\modules\shader_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -88,6 +91,9 @@
       <Filter>engine\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp">
+      <Filter>engine\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\modules\shader_asset_manager.cpp">
       <Filter>engine\modules</Filter>
     </ClCompile>
   </ItemGroup>
