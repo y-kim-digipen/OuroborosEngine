@@ -376,9 +376,6 @@ namespace Renderer
 	    Context::DrawQueue();
 
         if (!draw_queue.empty())
-
-
-
             while (!draw_queue.empty())
             {
                 const auto& front = draw_queue.front();
@@ -393,8 +390,6 @@ namespace Renderer
                 model = glm::translate(model, transform->pos);
                 model = glm::scale(model, transform->scale);
 
-                glm::mat4 matrix;
-
                 glm::quat rotP = glm::angleAxis(glm::radians(transform->rotate_axis.x), glm::vec3(1.0f, 0.0f, 0.0f));
                 glm::quat rotY = glm::angleAxis(glm::radians(transform->rotate_axis.y), glm::vec3(0.0f, 1.0f, 0.0f));
                 glm::quat rotR = glm::angleAxis(glm::radians(transform->rotate_axis.z), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -402,9 +397,6 @@ namespace Renderer
                 model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
 
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
-
- /*               shader_manager_.GetShader(shader->shader_name.c_str())->BindObjectData(model);
-                mesh_manager_.DrawMesh(shader->shader_name.c_str(), mesh->mesh_name.c_str());*/
 
                 shader_manager_.GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 				BindGlobalData();
@@ -438,12 +430,6 @@ namespace Renderer
                             {
                                 iter->SetTexture(iter1);
                                 iter->has_texture = true;
-
-        //                        ImGui::Begin("Texture");
-        //                        ImGui::Image(dynamic_cast<VulkanMaterial*>(iter)->ubo->descriptor_set[1],ImVec2(300,300));
-								//ImGui::End();
-
-
                             }
                         }
 

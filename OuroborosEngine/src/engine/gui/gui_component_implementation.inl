@@ -177,6 +177,8 @@ namespace OE
 					if (ImGui::Selectable(key.c_str(), selected))
 					{
 						material_component.texture_name = key;
+
+					
 					}
 					if (selected) {
 						ImGui::SetItemDefaultFocus();
@@ -184,6 +186,14 @@ namespace OE
 				}
 				ImGui::EndCombo();
 			}
+
+			const auto& texture_manager = Engine::Get().GetRenderWindow()->GetWindowData().RenderContextData->texture_manager_;
+			if(auto texture = texture_manager->GetTexture(material_component.texture_name); texture)
+			{
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
+			}
+			
 			ImGui::TreePop();
 		}
 	}
