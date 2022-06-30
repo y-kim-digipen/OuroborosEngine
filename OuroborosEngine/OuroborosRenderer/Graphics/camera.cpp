@@ -1,10 +1,11 @@
 #include "camera.h"
 #include <gtc/matrix_transform.hpp>
 
+
 namespace Renderer
 {
 	Camera::Camera(glm::vec3 position, glm::vec3 up_, float yaw, float pitch)
-	:front(glm::vec3(0.0f, 0.0f, 1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+	:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
 		data.position = position;
 		world_up = up_;
@@ -14,12 +15,12 @@ namespace Renderer
 	}
 
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-		:front(glm::vec3(0.0f, 0.0f, 1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+		:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
 		data.position = glm::vec3(posX, posY, posZ);
 		world_up = glm::vec3(upX, upY, upZ);
-		yaw = yaw;
-		pitch = pitch;
+		Camera::yaw = yaw;
+		Camera::pitch = pitch;
 		updateCameraVectors();
 	}
 
@@ -38,7 +39,6 @@ namespace Renderer
 			data.position += up * velocity;
 		if (direction == Camera_MoveTo::DOWN)
 			data.position -= up * velocity;
-		updateCameraVectors();
 	}
 
 	void Camera::MouseInput(float xoffset, float yoffset, bool constrainPitch)
@@ -74,6 +74,7 @@ namespace Renderer
 		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 		front.y = sin(glm::radians(pitch));
 		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
 		Camera::front = glm::normalize(front);
 		right = glm::normalize(glm::cross(Camera::front, world_up));
 		up = glm::normalize(glm::cross(right, Camera::front));

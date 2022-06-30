@@ -6,6 +6,8 @@
 #include "gui/gui_component_panel.h"
 
 
+
+
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -57,8 +59,9 @@ namespace OE
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+					//camera.data.projection[1][1] *= -1;
 					camera.data.view = camera.GetCameraMat();
-
+				
 					//TODO: pass renderer camera data
 					context->global_data = camera.data;
 					context->UpdateGlobalData();
@@ -102,10 +105,11 @@ namespace OE
 		Engine& engine = Get();
 
 		ECS_TestSetup();
-
+		
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
-		camera.data.projection = glm::perspective(glm::radians(90.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		//camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
 
 		Renderer::ShaderConfig shader_config3{
@@ -142,22 +146,22 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 
-		Input::RegisterCallback(GLFW_KEY_W, [&](Input::Modes modes)
-			{
-				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
-			});
-		Input::RegisterCallback(GLFW_KEY_S, [&](Input::Modes modes)
-			{
-				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
-			});
-		Input::RegisterCallback(GLFW_KEY_A, [&](Input::Modes modes)
-			{
-				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
-			});
-		Input::RegisterCallback(GLFW_KEY_D, [&](Input::Modes modes)
-			{
-				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
-			});
+		//Input::RegisterCallback(GLFW_KEY_W, [&](Input::Modes modes)
+		//	{
+		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
+		//	});
+		//Input::RegisterCallback(GLFW_KEY_S, [&](Input::Modes modes)
+		//	{
+		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
+		//	});
+		//Input::RegisterCallback(GLFW_KEY_A, [&](Input::Modes modes)
+		//	{
+		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
+		//	});
+		//Input::RegisterCallback(GLFW_KEY_D, [&](Input::Modes modes)
+		//	{
+		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
+		//	});
 	}
 
 	void Engine::PreUpdate()
@@ -168,6 +172,22 @@ namespace OE
 	void Engine::Update()
 	{
 		input.Update();
+		if(Input::Down(GLFW_KEY_W))
+		{
+			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
+		}
+		if (Input::Down(GLFW_KEY_S))
+		{
+			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
+		}
+		if (Input::Down(GLFW_KEY_A))
+		{
+			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
+		}
+		if (Input::Down(GLFW_KEY_D))
+		{
+			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
+		}
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
 	}
 
