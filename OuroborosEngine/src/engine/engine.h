@@ -13,6 +13,7 @@
 #include "Graphics/Window.h"
 #include "Graphics/shader.h"
 #include "input/InputManager.h"
+#include "scripting/lua_script_manager.h"
 
 
 namespace OE
@@ -35,7 +36,7 @@ namespace OE
 			return window;
 		}
 
-		static class DeltaTime
+		class DeltaTime
 		{
 			using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		public:
@@ -68,6 +69,8 @@ namespace OE
 
 	public: // Modules
 		inline static Asset_Manager asset_manager;
+		inline static ECS_Manager ecs_manager;
+		inline static LuaScriptManager lua_script_manager;
 	};
 
 	inline Engine& Engine::Get()

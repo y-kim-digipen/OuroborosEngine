@@ -1,0 +1,14 @@
+elasped_time = 0.0
+
+
+function Init(ent_ID, dt, boolwrapper)
+    bool_type = boolwrapper.bool_type;
+    print('Init from boolwrapper init')
+    print(bool_type);
+end
+
+function Update(ent_ID, dt, boolwrapper)
+    bool_type = boolwrapper.bool_type;
+    print('Update from boolwrapper')
+    print(bool_type);
+end

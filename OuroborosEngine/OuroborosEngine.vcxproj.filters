@@ -84,6 +84,9 @@
     <ClInclude Include="src\engine\ecs\components.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\modules\script_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="src\engine\scripting\lua_script_manager.cpp">
       <Filter>engine\scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\modules\script_asset_manager.cpp">
+      <Filter>engine\modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,6 +35,13 @@ namespace Asset
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
 
+    struct Script
+    {
+        std::string path;
+
+        inline static std::list<std::string> supported_formats{ ".lua" , ".clua", ".slua"};
+    };
+
     struct CameraData
     {
         glm::mat4 projection;

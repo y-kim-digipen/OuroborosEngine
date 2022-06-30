@@ -5,7 +5,7 @@ namespace OE
 	{
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
-		MeshComponent& mesh_component = ecs_manager.GetComponent<MeshComponent>(entID);
+		MeshComponent& mesh_component = OE::Engine::ecs_manager.GetComponent<MeshComponent>(entID);
 		memcpy(buffer, mesh_component.mesh_name.c_str(), 30);
 		const auto& mesh_map = Engine::Get().asset_manager.GetManager<MeshAssetManager>().GetAssetRawData();
 		if (ImGui::TreeNode(typeid(MeshComponent).name()))
@@ -36,7 +36,7 @@ namespace OE
 	inline void ComponentDrawFunction<TransformComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
+		TransformComponent& transform_component = OE::Engine::ecs_manager.GetComponent<TransformComponent>(entID);
 		if (ImGui::TreeNode(typeid(TransformComponent).name()))
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
@@ -59,7 +59,7 @@ namespace OE
 	inline void ComponentDrawFunction<VelocityComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		VelocityComponent& velocity_component = ecs_manager.GetComponent<VelocityComponent>(entID);
+		VelocityComponent& velocity_component = OE::Engine::ecs_manager.GetComponent<VelocityComponent>(entID);
 		if (ImGui::TreeNode(typeid(VelocityComponent).name()))
 		{
 			ImGui::DragFloat3(GET_VARIABLE_NAME(velocity_component.vel), &velocity_component.vel.x);
@@ -72,7 +72,7 @@ namespace OE
 	inline void ComponentDrawFunction<LifeTimeComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		LifeTimeComponent& life_time_component = ecs_manager.GetComponent<LifeTimeComponent>(entID);
+		LifeTimeComponent& life_time_component = OE::Engine::ecs_manager.GetComponent<LifeTimeComponent>(entID);
 		if (ImGui::TreeNode(typeid(LifeTimeComponent).name()))
 		{
 			ImGui::DragFloat(GET_VARIABLE_NAME(life_time_component.life_time), &life_time_component.life_time);
@@ -85,7 +85,7 @@ namespace OE
 	inline void ComponentDrawFunction<TagComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		TagComponent& tag_component = ecs_manager.GetComponent<TagComponent>(entID);
+		TagComponent& tag_component = OE::Engine::ecs_manager.GetComponent<TagComponent>(entID);
 		if (ImGui::TreeNode(typeid(TagComponent).name()))
 		{
 			constexpr int BufSize = 256;
@@ -108,7 +108,7 @@ namespace OE
 	{
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
-		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
+		ShaderComponent& shader_component = OE::Engine::ecs_manager.GetComponent<ShaderComponent>(entID);
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
 			memcpy(buffer, shader_component.name.c_str(), 30);
@@ -142,7 +142,7 @@ namespace OE
 	{
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
-		MaterialComponent& material_component = ecs_manager.GetComponent<MaterialComponent>(entID);
+		MaterialComponent& material_component = OE::Engine::ecs_manager.GetComponent<MaterialComponent>(entID);
 		memcpy(buffer, material_component.name.c_str(), 30);
 		if (ImGui::TreeNode(typeid(MaterialComponent).name()))
 		{
@@ -176,7 +176,7 @@ namespace OE
 	inline void ComponentDrawFunction<LightComponent>(ecs_ID entID)
 	{
 		std::string strID = std::to_string(entID);
-		LightComponent& light_component = ecs_manager.GetComponent<LightComponent>(entID);
+		LightComponent& light_component = OE::Engine::ecs_manager.GetComponent<LightComponent>(entID);
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
@@ -184,6 +184,63 @@ namespace OE
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
+			ImGui::TreePop();
+		}
+
+	}
+
+	template<>
+	inline void ComponentDrawFunction<BoolWrapperComponent>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		BoolWrapperComponent& bool_wrapper_component = OE::Engine::ecs_manager.GetComponent<BoolWrapperComponent>(entID);
+		if (ImGui::TreeNode(typeid(BoolWrapperComponent).name()))
+		{
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			ImGui::Checkbox(GET_VARIABLE_NAME(BoolWrapperComponent::bool_type), &bool_wrapper_component.bool_type);
+
+			ImGui::TreePop();
+		}
+
+	}
+
+	template<>
+	inline void ComponentDrawFunction<ScriptComponent>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		ScriptComponent &script_component = OE::Engine::ecs_manager.GetComponent<ScriptComponent>(entID);
+		const std::string script_extension_str = std::filesystem::path(script_component.script_name).extension().string();
+		Script* script = nullptr;
+
+		if(script_extension_str == ".lua")
+		{
+			script = Engine::lua_script_manager.GetScript(Script::Type::Normal, script_component.script_name);
+		}
+		else if(script_extension_str == ".clua")
+		{
+			script = Engine::lua_script_manager.GetScript(Script::Type::Component, script_component.script_name);
+		}
+		else if (script_extension_str == ".slua")
+		{
+			script = Engine::lua_script_manager.GetScript(Script::Type::System, script_component.script_name);
+		}
+		else
+		{
+			assert(false);
+		}
+		/*if(script == nullptr)
+		{
+			script = Engine::lua_script_manager.GetScript(Script::Type::, script_component.script_name);
+		}*/
+		if (ImGui::TreeNode(typeid(ScriptComponent).name()))
+		{
+			ImGui::Text(script_component.script_name.c_str());
+			if(ImGui::SmallButton("Reload"))
+			{
+				script->RunScript();
+			}
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
 			ImGui::TreePop();
 		}
 

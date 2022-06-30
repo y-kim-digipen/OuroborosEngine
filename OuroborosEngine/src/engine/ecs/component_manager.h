@@ -52,7 +52,6 @@ namespace OE
 				[this, new_capacity](auto s)
 				{
 					using TComponent = typename decltype(s)::type;
-					std::cout << typeid(TComponent).name() << std::endl;
 					std::get<TComponent>(component_vectors).resize(new_capacity);
 				}
 			);

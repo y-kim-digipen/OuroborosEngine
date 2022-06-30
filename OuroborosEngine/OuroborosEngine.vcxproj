@@ -45,13 +45,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
-    <IncludePath>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
+    <IncludePath>$(SolutionDir)OuroborosRenderer;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(SolutionDir)\external\lib\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
-    <IncludePath>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\rttr-0.9.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\external\lib\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
+    <IncludePath>$(SolutionDir)OuroborosRenderer;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -59,20 +59,20 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>librttr_core_d.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+      <Command>
 xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
 xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
@@ -87,7 +87,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -96,13 +96,13 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>librttr_core_d.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+      <Command>
 xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
 xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
@@ -127,12 +127,14 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\modules\image_asset_manager.h" />
     <ClInclude Include="src\engine\modules\master_asset_manager.h" />
     <ClInclude Include="src\engine\modules\mesh_asset_manager.h" />
+    <ClInclude Include="src\engine\modules\script_asset_manager.h" />
     <ClInclude Include="src\engine\scripting\lua_script_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp" />
+    <ClCompile Include="src\engine\modules\script_asset_manager.cpp" />
     <ClCompile Include="src\engine\scripting\lua_script_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>

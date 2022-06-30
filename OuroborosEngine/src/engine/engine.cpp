@@ -15,6 +15,7 @@ namespace OE
 		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
+		//window->vulkan_imgui_manager.RegisterPanel("System", "Scripts", &OE::SystemInfoPanelFunction);
 	}
 
 	void Engine::ECS_TestSetup()
@@ -84,6 +85,15 @@ namespace OE
 				}
 			});
 
+		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::ecs_ID ent, float dt, ScriptComponent& script)
+			{
+				if (ecs_manager.GetEntity(ent).alive)
+				{
+					auto component_script = OE::Engine::lua_script_manager.GetScript(Script::Type::Component, script.script_name);
+					//component_script.RunScript();
+					auto res = component_script->GetFunction("Update")(ent, dt);
+				}
+			});
 	}
 
 	void Engine::SetupModule()
@@ -160,12 +170,49 @@ namespace OE
 	void Engine::PreUpdate()
 	{
 		delta_timer.PreUpdate();
+		
 	}
 
 	void Engine::Update()
 	{
 		input.Update();
-		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
+		float dt = OE::Engine::DeltaTime::GetDeltaTime();
+
+		using system_storage = ECS_Manager::SystemStorage;
+		using system_usage_type = system_storage::system_usage_type;
+		using system_list = ECS_Manager::settings::system_list;
+		brigand::for_each<system_list>([dt](auto type)
+			{
+				using T = typename decltype(type)::type;
+				system_usage_type usage = system_storage::GetSystemUsage<T>();
+				switch(usage)
+				{
+				case system_usage_type::NONE:
+					{
+					break;
+					}
+				case system_usage_type::NATIVE:
+					{
+					ecs_manager.UpdateNativeSystem<T>(dt);
+					break;
+					}
+				case system_usage_type::SCRIPT:
+					{
+					const std::string script_path = system_storage::GetSystemScript<T>();
+					if(script_path.empty())
+					{
+						break;
+					}
+					Script* script = lua_script_manager.GetScript(Script::Type::System, script_path);
+					if(script)
+					{
+						ecs_manager.ForEntitiesMatching<T>(dt, script->GetFunction("Update"));
+					}
+					break;
+					}
+				}
+				
+			});
 	}
 
 	void Engine::PostUpdate()
@@ -188,6 +235,7 @@ namespace OE
 	void Engine::DeltaTime::PreUpdate()
 	{
 		start = std::chrono::steady_clock::now();
+		lua_script_manager.Update(GetDeltaTime());
 	}
 
 	void Engine::DeltaTime::PostUpdate()
