@@ -19,7 +19,7 @@ namespace Renderer
 
 	constexpr float YAW = -90.0f;
 	constexpr float PITCH = 0.0f;
-	constexpr float SPEED = 10.5f;
+	constexpr float SPEED = 20.5f;
 	constexpr float SENSITIVITY = 10.f;
 	constexpr float ZOOM = 45.0f;
 

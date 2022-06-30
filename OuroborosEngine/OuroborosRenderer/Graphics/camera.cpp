@@ -7,9 +7,10 @@ namespace Renderer
 	:front(glm::vec3(0.0f, 0.0f, 1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
 	{
 		data.position = position;
-		up = up_;
-		yaw = yaw;
-		pitch = pitch;
+		world_up = up_;
+		Camera::yaw = yaw;
+		Camera::pitch = pitch;
+		updateCameraVectors();
 	}
 
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
@@ -37,6 +38,7 @@ namespace Renderer
 			data.position += up * velocity;
 		if (direction == Camera_MoveTo::DOWN)
 			data.position -= up * velocity;
+		updateCameraVectors();
 	}
 
 	void Camera::MouseInput(float xoffset, float yoffset, bool constrainPitch)
@@ -72,9 +74,9 @@ namespace Renderer
 		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 		front.y = sin(glm::radians(pitch));
 		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		front = glm::normalize(front);
-		right = glm::normalize(glm::cross(front, world_up));
-		up = glm::normalize(glm::cross(right, front));
+		Camera::front = glm::normalize(front);
+		right = glm::normalize(glm::cross(Camera::front, world_up));
+		up = glm::normalize(glm::cross(right, Camera::front));
 	}
 
 	glm::mat4 Camera::GetCameraMat()

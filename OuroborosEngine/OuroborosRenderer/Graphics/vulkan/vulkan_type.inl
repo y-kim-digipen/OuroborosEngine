@@ -84,6 +84,14 @@ struct VulkanFrameData
 	uint32_t swap_chain_image_index{ 0 };
 };
 
+struct VulkanFrameBufferAttachment
+{
+	VkImage image;
+	VmaAllocation allocation;
+	VkImageView view;
+	VkFormat format;
+};
+
 struct Vulkan_type
 {
 	

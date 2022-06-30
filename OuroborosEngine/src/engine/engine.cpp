@@ -137,7 +137,7 @@ namespace OE
 
 		std::vector<int> key_supports{
 			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, 
-			GLFW_KEY_SPACE
+			GLFW_KEY_SPACE,GLFW_KEY_W,GLFW_KEY_S,GLFW_KEY_D,
 		};
 		input.Init(window->GetWindowData().window, key_supports);
 		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
@@ -155,6 +155,23 @@ namespace OE
 		
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
+
+		Input::RegisterCallback(GLFW_KEY_W, [&](Input::Modes modes)
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
+			});
+		Input::RegisterCallback(GLFW_KEY_S, [&](Input::Modes modes)
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
+			});
+		Input::RegisterCallback(GLFW_KEY_A, [&](Input::Modes modes)
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
+			});
+		Input::RegisterCallback(GLFW_KEY_D, [&](Input::Modes modes)
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
+			});
 	}
 
 	void Engine::PreUpdate()

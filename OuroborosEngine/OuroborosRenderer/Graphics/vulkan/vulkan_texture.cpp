@@ -9,6 +9,13 @@ namespace Renderer
 
 	}
 
+	VulkanTexture::~VulkanTexture()
+	{
+		vkDestroySampler(vulkan_type->device.handle, sampler_, nullptr);
+		vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
+		vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
+	}
+
 	void VulkanTexture::Bind()
 	{
 

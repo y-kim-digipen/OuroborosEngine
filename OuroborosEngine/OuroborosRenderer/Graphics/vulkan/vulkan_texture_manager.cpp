@@ -55,7 +55,16 @@ namespace Renderer
 
 	int VulkanTextureManager::DeleteTexture(const std::string& name)
 	{
-		return 0;
+		if(auto iter = textures_map.find(name); iter != textures_map.end())
+		{
+			textures_map.erase(iter);
+			return 0;
+		}
+		else
+		{
+			std::cout << name << " doesn't exist! cannot delete it" << std::endl;
+			return -1;
+		}
 
 
 	}

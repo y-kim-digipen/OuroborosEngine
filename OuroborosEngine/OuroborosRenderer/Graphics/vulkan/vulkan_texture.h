@@ -18,6 +18,7 @@ namespace Renderer
 	{
 	public:
 		VulkanTexture(Vulkan_type* vulkan_type);
+		~VulkanTexture();
 		void Bind() override;
 		void UploadData(const Asset::Image& data) override;
 		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
