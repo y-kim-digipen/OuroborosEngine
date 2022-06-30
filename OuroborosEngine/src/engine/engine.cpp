@@ -128,8 +128,10 @@ namespace OE
 
 		std::vector<int> key_supports{
 			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, 
-			GLFW_KEY_SPACE
+			GLFW_KEY_SPACE,
+			GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT,
 		};
+
 		input.Init(window->GetWindowData().window, key_supports);
 		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
 			{
@@ -153,6 +155,14 @@ namespace OE
 	{
 		input.Update();
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
+
+		if(input.Down(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			std::cout << "Down" << std::endl;
+		}
+		else {
+			std::cout << "Up" << std::endl;
+		}
 	}
 
 	void Engine::PostUpdate()
