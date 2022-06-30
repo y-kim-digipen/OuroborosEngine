@@ -12,7 +12,15 @@ layout(set = 0, binding = 0) uniform global_data {
 
 layout(set = 1, binding = 0) uniform Test {
      vec3 trash;
-}test ;
+     vec4 trash2;
+     vec2 trash3;
+} test;
+
+layout(set = 1, binding = 1) uniform Test2 {
+     vec3 trash;
+     vec4 trash2;
+     vec4 trash3;
+} test2;
 
 layout(push_constant) uniform constants {
     mat4 model;

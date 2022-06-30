@@ -142,7 +142,7 @@ namespace Renderer {
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling =  VulkanInitializer::PipelineMultisampleStateCreateInfo();
 		pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
-		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);
+		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
 									, .height = static_cast<float>(vulkan_type->swapchain.extent.height),.minDepth = 0.f, .maxDepth = 1.f };

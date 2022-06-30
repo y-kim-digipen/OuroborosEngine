@@ -961,7 +961,7 @@ namespace Renderer
 
         VkClearValue depth_clear;
         depth_clear.depthStencil.depth = 1.f;
-
+        depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = {clear_color, depth_clear};
 
         render_pass_info.clearValueCount = 2;

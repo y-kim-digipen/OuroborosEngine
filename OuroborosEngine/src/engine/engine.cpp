@@ -1,5 +1,6 @@
 #include "engine.h"
 #include <chrono>
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <gtc/matrix_transform.hpp>
 
 #include "engine_settings.h"
@@ -163,22 +164,7 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 
-		//Input::RegisterCallback(GLFW_KEY_W, [&](Input::Modes modes)
-		//	{
-		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
-		//	});
-		//Input::RegisterCallback(GLFW_KEY_S, [&](Input::Modes modes)
-		//	{
-		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
-		//	});
-		//Input::RegisterCallback(GLFW_KEY_A, [&](Input::Modes modes)
-		//	{
-		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
-		//	});
-		//Input::RegisterCallback(GLFW_KEY_D, [&](Input::Modes modes)
-		//	{
-		//		Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
-		//	});
+
 	}
 
 	void Engine::PreUpdate()
@@ -205,6 +191,14 @@ namespace OE
 		if (Input::Down(GLFW_KEY_D) )
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
+		}
+
+		if(Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+		/*	const float offset = DeltaTime::GetDeltaTime() * 5.f;
+			if(Input::glfw)
+			Engine::camera.MouseInput(0,)*/
+
 		}
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
 
