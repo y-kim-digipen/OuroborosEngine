@@ -89,6 +89,8 @@ namespace OE
 	void Engine::SetupModule()
 	{
 		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
+		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
+		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader2");
 	}
 
 	void Engine::Init()
@@ -106,28 +108,12 @@ namespace OE
 		camera.data.projection = glm::perspective(glm::radians(90.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.view = camera.GetCameraMat();
 
-
-
-		Renderer::ShaderConfig shader_config
-		{		"shader",
-		{	Renderer::E_StageType::VERTEX_SHADER,
-					Renderer::E_StageType::FRAGMENT_SHADER },
-			2 };
-
-		Renderer::ShaderConfig shader_config2{
-					"shader2",
-			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
-
-
 		Renderer::ShaderConfig shader_config3{
 					"light_shader",
 			{	Renderer::E_StageType::VERTEX_SHADER,
 						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config);
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config2);
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->shader_manager_.AddShader(&shader_config3);
+		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
@@ -153,7 +139,7 @@ namespace OE
 			});
 
 		
-		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
+		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 	}
 

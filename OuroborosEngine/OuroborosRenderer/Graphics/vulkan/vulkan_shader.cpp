@@ -85,7 +85,6 @@ namespace Renderer {
 		}
 
 		Vulkan_PipelineBuilder pipeline_builder;
-		uint32_t ubo_count = 0;
 		
 		for (uint32_t i = 0; i < max_set_count; ++i) {
 			uint32_t binding_count = layout_bindings_set[i].size();
@@ -103,10 +102,7 @@ namespace Renderer {
 
 			// set ubo descriptor set only for shader descriptor set #1
 			if (binding_count != 0 && (i == 1)) {
-
-				for (const auto& binding_set : layout_bindings_set[i]) {
-					((VulkanUniformBuffer*)uniform_buffer_objects[ubo_count].get())->SetupDescriptorSet(binding_set.second.descriptorCount, descriptor_set_layouts[i]);
-				}
+				((VulkanUniformBuffer*)uniform_buffer_object.get())->SetupDescriptorSet(descriptor_set_layouts[i]);
 			}
 		}
 
@@ -149,7 +145,7 @@ namespace Renderer {
 		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS_OR_EQUAL);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
-									, .height = static_cast<float>(vulkan_type->swapchain.extent.height), .minDepth = 0.0f, .maxDepth = 1.0f };
+									, .height = static_cast<float>(vulkan_type->swapchain.extent.height) };
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
@@ -173,10 +169,7 @@ namespace Renderer {
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
 		// bind shader descriptor set 1
-		for (const auto& ubo : uniform_buffer_objects) {
-			ubo->Bind();
-		}
-
+		uniform_buffer_object->Bind();
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
@@ -209,9 +202,8 @@ namespace Renderer {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
 	
-			// dont add ubo var for material & object & global
-			if (refl_set.set == 1) {
-				uniform_buffer_objects.push_back(std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_set.set));
+			if (refl_set.set == 1 && (uniform_buffer_object.get() == nullptr)) {
+				uniform_buffer_object = std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_set.set);
 			}
 
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
@@ -275,9 +267,7 @@ namespace Renderer {
 								DataType::NONE;
 							}
 
-							((VulkanUniformBuffer*)uniform_buffer_objects.back().get())->AddBinding(refl_binding.binding, refl_binding.block.size);
-
-							uniform_buffer_objects.back()->AddMember(
+							uniform_buffer_object->AddMember(
 								refl_binding.block.members[i].name,
 								data_type,
 								refl_binding.block.members[i].size,
@@ -285,6 +275,8 @@ namespace Renderer {
 							);
 
 						}
+
+						((VulkanUniformBuffer*)(uniform_buffer_object.get()))->AddBinding(refl_binding.binding, refl_binding.block.size);
 					}
 
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };

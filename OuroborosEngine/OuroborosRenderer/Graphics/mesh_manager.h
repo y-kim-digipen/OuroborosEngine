@@ -31,7 +31,7 @@ namespace Renderer
 	class VulkanMeshManager : public MeshManager
 	{
 	public:
-		VulkanMeshManager(Vulkan_type* vulkan_type, VulkanShaderManager* shader_manager);
+		VulkanMeshManager(Vulkan_type* vulkan_type);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
 		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) override;
 		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) override;
@@ -40,7 +40,6 @@ namespace Renderer
 
 	private:
 		Vulkan_type* vulkan_type;
-		VulkanShaderManager* shader_manager;
 	};
 }
 
