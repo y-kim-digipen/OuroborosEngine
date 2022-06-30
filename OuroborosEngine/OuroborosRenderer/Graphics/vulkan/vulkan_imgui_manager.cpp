@@ -135,7 +135,7 @@ namespace Renderer
 		VK_CHECK(vkCreateDescriptorPool(vulkan_type->device.handle, &pool_info, nullptr, &imguiPool));
 
 
-		ImGui_ImplGlfw_InitForVulkan(window, false);
+		ImGui_ImplGlfw_InitForVulkan(window, true);
 		ImGui_ImplVulkan_InitInfo init_info = {};
 		init_info.Instance			= vulkan_type->instance;
 		init_info.PhysicalDevice	= vulkan_type->device.physical_device;
