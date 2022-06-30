@@ -913,7 +913,7 @@ VK_DEFINE_HANDLE(VmaVirtualBlock)
 @{
 */
 
-/// Callback function called after successful vkAllocateMemory.
+/// KeyboardCallback function called after successful vkAllocateMemory.
 typedef void (VKAPI_PTR* PFN_vmaAllocateDeviceMemoryFunction)(
     VmaAllocator VMA_NOT_NULL                    allocator,
     uint32_t                                     memoryType,
@@ -921,7 +921,7 @@ typedef void (VKAPI_PTR* PFN_vmaAllocateDeviceMemoryFunction)(
     VkDeviceSize                                 size,
     void* VMA_NULLABLE                           pUserData);
 
-/// Callback function called before vkFreeMemory.
+/// KeyboardCallback function called before vkFreeMemory.
 typedef void (VKAPI_PTR* PFN_vmaFreeDeviceMemoryFunction)(
     VmaAllocator VMA_NOT_NULL                    allocator,
     uint32_t                                     memoryType,

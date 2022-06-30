@@ -12,9 +12,11 @@ namespace OE
 		{
 			PRESSED, RELEASED
 		};
+
 		static void Init(GLFWwindow* window, std::vector<int> support_keys)
 		{
-			glfwSetKeyCallback(window, Callback);
+			glfwSetKeyCallback(window, KeyboardCallback);
+			glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
 			for (auto element : support_keys)
 			{
@@ -65,7 +67,20 @@ namespace OE
 		}
 
 	private:
-		static void Callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			if (key_callbacks.contains(key) && key_callbacks[key].first)
+			{
+				key_callbacks[key].second(action == GLFW_PRESS ? PRESSED : RELEASED);
+			}
+			if (!HasKey(key))
+			{
+				return;
+			}
+			action == GLFW_PRESS ? keys[key] = true : keys[key] = false;
+		}
+
+		static void MouseButtonCallback(GLFWwindow* window, int key, int action, int mods)
 		{
 			if (key_callbacks.contains(key) && key_callbacks[key].first)
 			{

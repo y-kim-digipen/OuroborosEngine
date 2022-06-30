@@ -59,7 +59,7 @@ namespace OE
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-					//camera.data.projection[1][1] *= -1;
+					camera.data.projection[1][1] *= -1;
 					camera.data.view = camera.GetCameraMat();
 				
 					//TODO: pass renderer camera data
@@ -109,7 +109,7 @@ namespace OE
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-		//camera.data.projection[1][1] *= -1;
+		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
 
 		Renderer::ShaderConfig shader_config3{
@@ -126,9 +126,12 @@ namespace OE
 		delta_timer.Init();
 
 		std::vector<int> key_supports{
-			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, 
-			GLFW_KEY_SPACE,GLFW_KEY_W,GLFW_KEY_S,GLFW_KEY_D,
+			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C,
+			GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_D,
+			GLFW_KEY_SPACE,
+			GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT,
 		};
+
 		input.Init(window->GetWindowData().window, key_supports);
 		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
 			{
@@ -172,23 +175,31 @@ namespace OE
 	void Engine::Update()
 	{
 		input.Update();
-		if(Input::Down(GLFW_KEY_W))
+		if(glfwGetKey(window->GetWindowData().window, GLFW_KEY_W) == GLFW_PRESS)
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_S))
+		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_S) == GLFW_PRESS)
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_A))
+		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_A) == GLFW_PRESS)
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_D))
+		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_D) == GLFW_PRESS)
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
 		}
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
+
+	/*	if(input.Down(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			std::cout << "Down" << std::endl;
+		}
+		else {
+			std::cout << "Up" << std::endl;
+		}*/
 	}
 
 	void Engine::PostUpdate()
