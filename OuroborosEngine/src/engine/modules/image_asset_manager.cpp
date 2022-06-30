@@ -34,7 +34,7 @@ namespace OE
 
         assets.try_emplace(file_name, std::make_pair(true, image));
 
-        auto& texture_manager = Engine().Get().GetRenderWindow().get()->GetWindowData().RenderContextData->texture_manager_;
+        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager_;
         texture_manager->AddTexture(file_name, image);
         return true;
     }

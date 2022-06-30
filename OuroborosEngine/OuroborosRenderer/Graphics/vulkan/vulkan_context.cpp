@@ -955,12 +955,17 @@ namespace Renderer
         render_pass_info.renderArea.offset = { 0,0 };
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
-        VkClearValue clear_color[] = {
-            {{0.2f,0.3f, 0.1f, 1.0f}},
-            {{1.0f}}
+        VkClearValue clear_color = {
+            {{0.2f,0.3f, 0.1f, 1.0f}}
         };
+
+        VkClearValue depth_clear;
+        depth_clear.depthStencil.depth = 1.f;
+
+        VkClearValue clear_values[] = {clear_color, depth_clear};
+
         render_pass_info.clearValueCount = 2;
-        render_pass_info.pClearValues = clear_color;
+        render_pass_info.pClearValues = clear_values;
 
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 

@@ -20,7 +20,7 @@ int OE::ShaderAssetManager::LoadAsset(const std::string& file_name)
         2
     };
 
-    (Engine().Get().GetRenderWindow().get()->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config);
+    (Engine().Get().window.get()->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config);
     assets[file_name] = std::make_pair(true, shader);
    
     return 0;

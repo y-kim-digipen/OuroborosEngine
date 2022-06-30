@@ -108,7 +108,7 @@ namespace OE
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
-		const auto& shader = Engine::Get().GetRenderWindow()->GetWindowData().RenderContextData->shader_manager->GetShader(shader_component.name);
+		const auto& shader = Engine::window->GetWindowData().RenderContextData->shader_manager->GetShader(shader_component.name);
 		const auto& shader_map = Engine::Get().asset_manager.GetManager<ShaderAssetManager>().GetAssetRawData();
 
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
@@ -229,7 +229,7 @@ namespace OE
 				ImGui::EndCombo();
 			}
 
-			const auto& texture_manager = Engine::Get().GetRenderWindow()->GetWindowData().RenderContextData->texture_manager_;
+			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
 			if(auto texture = texture_manager->GetTexture(material_component.texture_name); texture)
 			{
 				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
