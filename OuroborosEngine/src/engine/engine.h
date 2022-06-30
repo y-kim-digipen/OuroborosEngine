@@ -29,9 +29,9 @@ namespace OE
 		static void CleanUp(){}
 		static void ShutDown(){}
 
-		static std::unique_ptr<Renderer::Window>& GetGLFWWindow()
+		static auto GetGLFWWindow()
 		{
-			return window;
+			return window->GetWindowData().window;
 		}
 
 		static class DeltaTime
@@ -62,6 +62,9 @@ namespace OE
 
 		static void SetupGUI();
 		static void ECS_TestSetup();
+
+		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
 	};
 
 	inline Engine& Engine::Get()

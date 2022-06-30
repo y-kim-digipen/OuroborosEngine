@@ -5,7 +5,6 @@
 #include "ecs_settings.h"
 #include "gui/gui_component_panel.h"
 
-
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -90,6 +89,18 @@ namespace OE
 			});
 	}
 
+	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
+	{
+		input.KeyboardCallback(p_window, key, scancode, action, mods);
+		window->vulkan_imgui_manager.GLFW_KeyboardCallback(p_window, key, scancode, action, mods);
+	}
+
+	void Engine::GLFW_MouseButton_Callback(GLFWwindow* p_window, int key, int action, int mods)
+	{
+		input.MouseButtonCallback(p_window, key, action, mods);
+		window->vulkan_imgui_manager.GLFW_MouseButtonCallback(p_window, key, action, mods);
+	}
+
 	void Engine::Init()
 	{
 		/*
@@ -102,6 +113,11 @@ namespace OE
 
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
+
+		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
+		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
+
+
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.view = camera.GetCameraMat();
 
@@ -148,12 +164,13 @@ namespace OE
 
 	void Engine::PreUpdate()
 	{
+		glfwPollEvents();
 		delta_timer.PreUpdate();
 	}
 
 	void Engine::Update()
 	{
-		input.Update();
+
 		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
 
 		if(input.Down(GLFW_MOUSE_BUTTON_LEFT))
@@ -171,7 +188,7 @@ namespace OE
 		window->Update();
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 		window->EndFrame();
-
+		input.Update();
 
 		delta_timer.PostUpdate();
 	}
