@@ -51,6 +51,7 @@ namespace Renderer
 		std::unordered_map<std::string, UniformBufferMember> member_vars;
 
 		void* data;
+		uint64_t buffer_size;
 	};
 
 	class VertexArray

@@ -59,9 +59,6 @@ namespace Renderer
 		virtual int BeginFrame();
 		virtual int EndFrame();
 		
-		std::unordered_map<const char*, std::unique_ptr<Shader>> shader_map;
-		std::unordered_map<const char*, std::unique_ptr<Mesh>> mesh_map;
-
 		struct DrawData
 		{
 			TransformComponent* transform;
@@ -74,6 +71,7 @@ namespace Renderer
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
+		std::unique_ptr<ShaderManager> shader_manager;
 		std::unique_ptr<MaterialMananger> material_manager;
 		std::unique_ptr<TextureManager> texture_manager_;;
 		

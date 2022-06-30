@@ -108,30 +108,71 @@ namespace OE
 		static char buffer[30];
 		std::string strID = std::to_string(entID);
 		ShaderComponent& shader_component = ecs_manager.GetComponent<ShaderComponent>(entID);
+		const auto& shader = Engine::Get().GetRenderWindow()->GetWindowData().RenderContextData->shader_manager->GetShader(shader_component.name);
+		const auto& shader_map = Engine::Get().asset_manager.GetManager<ShaderAssetManager>().GetAssetRawData();
+
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
-			memcpy(buffer, shader_component.name.c_str(), 30);
-			if(ImGui::Button("light_shader"))
+			if (ImGui::BeginCombo("Shader", shader_component.name.c_str()))
 			{
-				shader_component.name = "light_shader";
-			}
-			ImGui::SameLine();
-			if(ImGui::Button("shader1"))
-			{
-				shader_component.name = "shader";
-			}
-			ImGui::SameLine();
-			if(ImGui::Button("shader2"))
-			{
-				shader_component.name = "shader2";
+				for (const auto& key : shader_map | std::views::keys)
+				{
+					const bool selected = shader_component.name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						shader_component.name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
 			}
 
-			if (ImGui::InputText("Shadername", buffer, 30, ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				shader_component.name = buffer;
+			if (shader_map.find(shader_component.name) != shader_map.end()) {
+				
+				for (const auto& member_variable : shader->uniform_buffer_object->member_vars) {
+
+					switch (member_variable.second.type) {
+					case Renderer::DataType::BOOL:
+						ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::FLOAT:
+						ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::FLOAT2:
+						ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::FLOAT3:
+						ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::FLOAT4:
+						ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::INT:
+						ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::INT2:
+						ImGui::DragInt2(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::INT3:
+						ImGui::DragInt3(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::INT4:
+						ImGui::DragInt4(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						break;
+					case Renderer::DataType::MAT3:
+						break;
+					case Renderer::DataType::MAT4:
+						break;
+					}
+
+				}
 			}
+
 			ImGui::TreePop();
 		}
+
 	}
 
 
@@ -152,6 +193,7 @@ namespace OE
 				material_component.name = buffer;
 				material_component.flag = true;
 			}
+
 			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
 			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
 			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);

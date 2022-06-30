@@ -35,18 +35,16 @@ namespace Renderer {
 		virtual ~Shader() = 0 {};
 		virtual void Init(ShaderConfig* config) = 0;
 		virtual void Bind() = 0;
+		virtual void* GetMemberVariable(const std::string& name);
 		virtual void SetUniformValue(const char* name, void* data) {
 
-			for (const auto& ubo : uniform_buffer_objects) {
-				if (ubo->member_vars.find(name) != ubo->member_vars.end()) {
-					ubo->UpdateData(name, data);
-					ubo->Bind();
-				}
+			if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
+				uniform_buffer_object->UpdateData(name, data);
+				uniform_buffer_object->Bind();
 			}
-
 		}
 
-		std::vector<std::unique_ptr<UniformBuffer>> uniform_buffer_objects;
+		std::unique_ptr<UniformBuffer> uniform_buffer_object;
 	};
 }
 

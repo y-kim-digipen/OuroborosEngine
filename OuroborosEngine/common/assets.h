@@ -5,6 +5,8 @@
 #include <glm/gtx/hash.hpp>
 #include <imgui-docking/imgui.h>
 
+#include "../../OuroborosRenderer/Graphics/buffer.h"
+
 namespace Asset
 {
     struct Mesh
@@ -35,6 +37,12 @@ namespace Asset
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
 
+    struct Shader
+    {
+        std::string name;
+
+        inline static std::list<std::string> supported_formats{ ".vert", ".frag" };
+    };
 
     struct CameraData
     {
