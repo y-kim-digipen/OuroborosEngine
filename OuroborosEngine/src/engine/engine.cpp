@@ -172,7 +172,7 @@ namespace OE
 		glfwPollEvents();
 		delta_timer.PreUpdate();
 	}
-
+	 
 	void Engine::Update()
 	{
 		input.Update();
