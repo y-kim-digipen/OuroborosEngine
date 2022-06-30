@@ -957,7 +957,7 @@ namespace Renderer
 
         VkClearValue clear_color[] = {
             {{0.2f,0.3f, 0.1f, 1.0f}},
-            {{1.0f, 0}}
+            {{1.0f}}
         };
         render_pass_info.clearValueCount = 2;
         render_pass_info.pClearValues = clear_color;

@@ -16,7 +16,7 @@ namespace OE
 		static void Init(GLFWwindow* window, std::vector<int> support_keys)
 		{
 			glfwSetKeyCallback(window, KeyboardCallback);
-			glfwSetMouseButtonCallback(window, MouseButtonCallback);
+			//glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
 			for (auto element : support_keys)
 			{
