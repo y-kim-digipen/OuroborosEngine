@@ -268,7 +268,7 @@ namespace Renderer {
 							}
 
 							uniform_buffer_object->AddMember(
-								refl_binding.block.members[i].name,
+								std::string(refl_binding.block.name) + std::string(".") + refl_binding.block.members[i].name,
 								data_type,
 								refl_binding.block.members[i].size,
 								refl_binding.block.members[i].offset
