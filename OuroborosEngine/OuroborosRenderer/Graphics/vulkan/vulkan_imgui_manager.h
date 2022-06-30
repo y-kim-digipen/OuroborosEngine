@@ -18,6 +18,9 @@ namespace Renderer
 		void EndFrame() override;
 		void Shutdown() override;
 		void Update() override;
+
+		void GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void GLFW_MouseButtonCallback(GLFWwindow* window, int key, int action, int mods);
 	private:
 		Vulkan_type* vulkan_type;
 		VkRenderPass imgui_render_pass;

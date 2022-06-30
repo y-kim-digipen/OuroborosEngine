@@ -5,9 +5,6 @@
 #include "engine_settings.h"
 #include "gui/gui_component_panel.h"
 
-
-
-
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -96,6 +93,18 @@ namespace OE
 		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader2");
 	}
 
+	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
+	{
+		input.KeyboardCallback(p_window, key, scancode, action, mods);
+		window->vulkan_imgui_manager.GLFW_KeyboardCallback(p_window, key, scancode, action, mods);
+	}
+
+	void Engine::GLFW_MouseButton_Callback(GLFWwindow* p_window, int key, int action, int mods)
+	{
+		input.MouseButtonCallback(p_window, key, action, mods);
+		window->vulkan_imgui_manager.GLFW_MouseButtonCallback(p_window, key, action, mods);
+	}
+
 	void Engine::Init()
 	{
 		/*
@@ -108,6 +117,11 @@ namespace OE
 		
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
+
+		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
+		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
+
+
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
@@ -169,25 +183,26 @@ namespace OE
 
 	void Engine::PreUpdate()
 	{
+		glfwPollEvents();
 		delta_timer.PreUpdate();
 	}
 
 	void Engine::Update()
 	{
 		input.Update();
-		if(glfwGetKey(window->GetWindowData().window, GLFW_KEY_W) == GLFW_PRESS)
+		if(Input::Down( GLFW_KEY_W) )
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
 		}
-		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_S) == GLFW_PRESS)
+		if (Input::Down(GLFW_KEY_S) )
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
 		}
-		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_A) == GLFW_PRESS)
+		if (Input::Down(GLFW_KEY_A) )
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
 		}
-		if (glfwGetKey(window->GetWindowData().window, GLFW_KEY_D) == GLFW_PRESS)
+		if (Input::Down(GLFW_KEY_D) )
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
 		}
@@ -208,7 +223,7 @@ namespace OE
 		window->Update();
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 		window->EndFrame();
-
+		input.Update();
 
 		delta_timer.PostUpdate();
 	}

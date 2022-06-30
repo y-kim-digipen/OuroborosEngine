@@ -28,7 +28,6 @@ namespace Renderer
 
 	void Window::BeginFrame()
 	{
-		glfwPollEvents();
 		window_data.RenderContextData->BeginFrame();
 		vulkan_imgui_manager.BeginFrame();
 	}

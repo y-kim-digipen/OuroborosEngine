@@ -133,7 +133,7 @@ namespace Renderer
 		VK_CHECK(vkCreateDescriptorPool(vulkan_type->device.handle, &pool_info, nullptr, &imguiPool));
 
 
-		ImGui_ImplGlfw_InitForVulkan(window, true);
+		ImGui_ImplGlfw_InitForVulkan(window, false);
 		ImGui_ImplVulkan_InitInfo init_info = {};
 		init_info.Instance			= vulkan_type->instance;
 		init_info.PhysicalDevice	= vulkan_type->device.physical_device;
@@ -257,4 +257,13 @@ namespace Renderer
 		ImGui::ShowDemoWindow();
 	}
 
+	void VulkanImguiManager::GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+	}
+
+	void VulkanImguiManager::GLFW_MouseButtonCallback(GLFWwindow* window, int key, int action, int mods)
+	{
+		ImGui_ImplGlfw_MouseButtonCallback(window, key, action, mods);
+	}
 }

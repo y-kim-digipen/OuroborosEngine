@@ -29,9 +29,9 @@ namespace OE
 		static void CleanUp(){}
 		static void ShutDown(){}
 
-		static std::unique_ptr<Renderer::Window>& GetRenderWindow()
+		static auto GetGLFWWindow()
 		{
-			return window;
+			return window->GetWindowData().window;
 		}
 
 		static class DeltaTime
@@ -53,7 +53,7 @@ namespace OE
 		inline static int target_fps;
 		inline static double target_dt;
 
-		inline static std::unique_ptr<Renderer::Window> window;
+		
 
 		//Modules
 		inline static Input input;
@@ -67,6 +67,9 @@ namespace OE
 
 	public: // Modules
 		inline static Asset_Manager asset_manager;
+		inline static std::unique_ptr<Renderer::Window> window;
+		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
 	};
 
 	inline Engine& Engine::Get()
