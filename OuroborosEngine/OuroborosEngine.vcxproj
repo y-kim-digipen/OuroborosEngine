@@ -129,6 +129,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\modules\mesh_asset_manager.h" />
     <ClInclude Include="src\engine\modules\script_asset_manager.h" />
     <ClInclude Include="src\engine\scripting\lua_script_manager.h" />
+    <ClInclude Include="src\engine\scripting\script.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />

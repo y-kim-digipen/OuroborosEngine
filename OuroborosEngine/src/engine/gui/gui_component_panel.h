@@ -195,24 +195,29 @@ namespace OE
 					{
 						for (const auto& [name, asset]: raw_elements_map)
 						{
-							if(ImGui::CollapsingHeader(name.c_str()))
+							if (ImGui::CollapsingHeader(name.c_str()))
 							{
-								OE::ImGuiImpl(asset);
+							bool is_asset_ready = asset.first;
+							if(!is_asset_ready)
+							{
+								ImGui::TextColored(OE::GUI_Colors::RED, "Asset is not ready for use");
+							}
+							else
+							{
+								OE::ImGuiImpl(asset.second);
+							}
 							}
 						}
-
 						ImGui::EndTabItem();
 					}
 				});
 			ImGui::EndTabBar();
 		}
 
-		if(ImGui::SmallButton("Load"))
-		{
-			//ImGui::Begin("Load file");
-			FileSystemPanelFunction();
-			//ImGui::End();
-		}
+		//if(ImGui::SmallButton("Load"))
+		//{
+		//	Engine::GetRenderWindow()->vulkan_imgui_manager.GetPanels()["System"]["AssetManager"].second = true;
+		//}
 	}
 
 	static void EngineInfoPanelFunction()
@@ -420,20 +425,20 @@ namespace OE
 						has_script_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has script implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have script implementation"));
 
 
-						auto& system_scripts = OE::Engine::lua_script_manager.scripts[Script::Type::System];
+						auto& system_scripts = OE::Engine::lua_script_manager.GetScripts(Script::ScriptType::System);
 						std::string script_using = OE::Engine::ecs_manager.system_storage.GetSystemScript<T>();
 						if(ImGui::BeginCombo("Scripts", script_using.c_str()))
 						{
-							for (Script& script : system_scripts)
+							for (auto& [name, script] : system_scripts)
 							{
 								const std::string& script_path = script.script_path;
 								const bool selected = script_using == script_path;
 								if(ImGui::Selectable(script_path.c_str(), selected))
 								{
-									auto init_func = script.GetFunction("Init");
+									//auto init_func = script.GetFunction("Init");
 
 									OE::Engine::ecs_manager.system_storage.RegisterSystemScript<T>(script_path);
-									OE::Engine::ecs_manager.ForEntitiesMatching<T>(0.0f, init_func);
+									//OE::Engine::ecs_manager.ForEntitiesMatching<T>(0.0f, init_func);
 								}
 							}
 							ImGui::EndCombo();

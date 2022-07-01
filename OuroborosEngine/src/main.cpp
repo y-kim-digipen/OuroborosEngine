@@ -6,7 +6,7 @@
 int main()
 {
     OE::Engine::Init();
-    TestLua();
+    OE::Script::TestLua();
     while (!glfwWindowShouldClose(OE::Engine::GetRenderWindow()->GetWindowData().window))
     {
         OE::Engine::PreUpdate();

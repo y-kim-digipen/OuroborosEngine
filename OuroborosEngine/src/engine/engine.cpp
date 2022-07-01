@@ -85,13 +85,17 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::ecs_ID ent, float dt, ScriptComponent& script)
+		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::ecs_ID ent, float dt, ScriptComponent& script_component)
 			{
 				if (ecs_manager.GetEntity(ent).alive)
 				{
-					auto component_script = OE::Engine::lua_script_manager.GetScript(Script::Type::Component, script.script_name);
-					//component_script.RunScript();
-					auto res = component_script->GetFunction("Update")(ent, dt);
+					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::Component, script_component.name);
+					script->Update(ent, dt);
+
+					if(script->GetState() == Script::Script::State::Invalid)
+					{
+						assert(false);
+					}
 				}
 			});
 	}
@@ -173,6 +177,135 @@ namespace OE
 		
 	}
 
+	namespace _impl
+	{
+
+		//template <typename R>
+		//class MultiFunc
+		//{
+		//	typedef void(*function_t)();
+		//	function_t m_func;
+		//public:
+		//	template <typename ...A1>
+		//	MultiFunc<R>(R(*f)(A1...))
+		//	{
+		//		m_func = (void(*)())f;
+		//	}
+
+		//	template <typename ...A1>
+		//	MultiFunc<R> operator =(R(*f)(A1...))
+		//	{
+		//		m_func = (void(*)())f;
+		//		return *this;
+		//	}
+
+
+		//	template <typename ...A1>
+		//	R operator()(A1... a1) const
+		//	{
+		//		R(*f)(A1...) = (R(*)(A1...))(m_func);
+		//		return (*f)(a1...);
+		//	}
+		//};
+
+		////X = parent class
+		////R = ReturnType
+		//template <typename X, typename R>
+		//class MultiFunc2
+		//{
+		//	typedef void(X::* function_t)();
+
+		//	function_t m_func;
+		//	X* m_obj;
+		//public:
+
+		//	template <typename ...A1>
+		//	MultiFunc2<X, R>(X* obj, R(X::* f)(A1...))
+		//	{
+		//		m_func = (void(X::*)())(f);
+		//		m_obj = obj;
+		//	}
+
+
+		//	template <typename ...A1>
+		//	MultiFunc2<X, R> operator =(R(X::* f)(A1...))
+		//	{
+		//		m_func = (void(X::*)())(f);
+		//		return *this;
+		//	}
+
+
+		//	template <typename ...A1>
+		//	R operator()(A1&&... a1) const
+		//	{
+		//		std::cout << sizeof...(A1) << std::endl;
+		//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
+
+		//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
+		//	}
+		//};
+
+		//template <typename X, typename R>
+		//class MultiFunc3
+		//{
+		//	typedef void(X::* function_t)();
+
+		//	function_t m_func;
+		//	X* m_obj;
+		//public:
+
+		//	template <typename ...A1>
+		//	MultiFunc3<X, R>(X* obj, R(X::* f)(A1...))
+		//	{
+		//		m_func = (void(X::*)())(f);
+		//		m_obj = obj;
+		//	}
+
+
+		//	template <typename ...A1>
+		//	MultiFunc3<X, R> operator =(R(X::* f)(A1...))
+		//	{
+		//		m_func = (void(X::*)())(f);
+		//		return *this;
+		//	}
+
+
+		//	template <typename ...A1>
+		//	R operator()(A1&&... a1) const
+		//	{
+		//		std::cout << sizeof...(A1) << std::endl;
+		//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
+
+		//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
+		//	}
+		//};
+
+		//template <typename... T>
+		//using expand_script_call_wrapper = MultiFunc3<Script::Script, void>;
+
+		//template <typename L>
+		//using as_expand_script_call = brigand::wrap<L, expand_script_call_wrapper>;
+
+		template<typename... Args>
+		struct Mem_Fn
+		{
+			//template< class M, template<typename ...> class T >
+			static constexpr auto Get(/*M T<Args...>::* pm*/)
+			{
+				return std::mem_fn(&Script::Script::Update<Args...>);
+				//auto f = static_cast<M  T<typename Args...>::*>(pm);
+				//return std::mem_fn(pm);
+			}
+		};
+
+		template <typename... T>
+		using mem_fn_wrapper = Mem_Fn<T...>;
+
+		template <typename L>
+		using as_mem_fn = brigand::wrap<L, mem_fn_wrapper>;
+
+	}
+
 	void Engine::Update()
 	{
 		input.Update();
@@ -183,8 +316,9 @@ namespace OE
 		using system_list = ECS_Manager::settings::system_list;
 		brigand::for_each<system_list>([dt](auto type)
 			{
-				using T = typename decltype(type)::type;
-				system_usage_type usage = system_storage::GetSystemUsage<T>();
+				using TSystem = typename decltype(type)::type;
+				using function_signature = typename TSystem::function_signature;
+				system_usage_type usage = system_storage::GetSystemUsage<TSystem>();
 				switch(usage)
 				{
 				case system_usage_type::NONE:
@@ -193,20 +327,27 @@ namespace OE
 					}
 				case system_usage_type::NATIVE:
 					{
-					ecs_manager.UpdateNativeSystem<T>(dt);
+					ecs_manager.UpdateNativeSystem<TSystem>(dt);
 					break;
 					}
 				case system_usage_type::SCRIPT:
 					{
-					const std::string script_path = system_storage::GetSystemScript<T>();
+					const std::string script_path = system_storage::GetSystemScript<TSystem>();
 					if(script_path.empty())
 					{
 						break;
 					}
-					Script* script = lua_script_manager.GetScript(Script::Type::System, script_path);
+
+					Script::Script* script  = lua_script_manager.GetScript(Script::ScriptType::System, script_path);
 					if(script)
 					{
-						ecs_manager.ForEntitiesMatching<T>(dt, script->GetFunction("Update"));
+						//_impl::MultiFunc2<Script::Script, void> caller(script, &Script::Script::Update<ecs_ID, float, BoolWrapperComponent&>);
+				/*		using Functor = _impl::as_expand_script_call<typename TSystem::required_components>;
+						Fu*/
+						using member_function = _impl::as_mem_fn<function_signature>;
+						auto func = member_function::Get(/*&Script::Script::Update*/);
+						//auto func = std::bind(bind, *script);
+						ecs_manager.ForEntitiesMatching<TSystem>(dt, script, func);
 					}
 					break;
 					}
@@ -235,7 +376,11 @@ namespace OE
 	void Engine::DeltaTime::PreUpdate()
 	{
 		start = std::chrono::steady_clock::now();
-		lua_script_manager.Update(GetDeltaTime());
+		auto& scripts = lua_script_manager.GetScripts(Script::ScriptType::Normal);
+		for (auto& script : scripts)
+		{
+			script.second.Update(GetDeltaTime());
+		}
 	}
 
 	void Engine::DeltaTime::PostUpdate()

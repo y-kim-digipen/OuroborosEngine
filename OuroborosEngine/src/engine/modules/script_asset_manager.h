@@ -16,7 +16,6 @@ namespace OE
     };
 
 
-
     inline int ScriptAssetManager::UnloadAsset(const std::string& name)
     {
 	    return AssetManager<Asset::Script>::UnloadAsset(name);

@@ -60,7 +60,7 @@ struct LightComponent
 
 struct ScriptComponent
 {
-	std::string script_name = "scripts/componenttest.lua";
+	std::string name;
 };
 
 //void DrawSystem(mesh, sahder)

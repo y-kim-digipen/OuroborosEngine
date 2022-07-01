@@ -209,36 +209,47 @@ namespace OE
 	{
 		std::string strID = std::to_string(entID);
 		ScriptComponent &script_component = OE::Engine::ecs_manager.GetComponent<ScriptComponent>(entID);
-		const std::string script_extension_str = std::filesystem::path(script_component.script_name).extension().string();
-		Script* script = nullptr;
-
-		if(script_extension_str == ".lua")
-		{
-			script = Engine::lua_script_manager.GetScript(Script::Type::Normal, script_component.script_name);
-		}
-		else if(script_extension_str == ".clua")
-		{
-			script = Engine::lua_script_manager.GetScript(Script::Type::Component, script_component.script_name);
-		}
-		else if (script_extension_str == ".slua")
-		{
-			script = Engine::lua_script_manager.GetScript(Script::Type::System, script_component.script_name);
-		}
-		else
+		using Script = OE::Script::Script;
+		using ScriptType = OE::Script::ScriptType;
+		Script* script = Engine::lua_script_manager.GetScript(ScriptType::Component, script_component.name);
+		if(script == nullptr)
 		{
 			assert(false);
 		}
-		/*if(script == nullptr)
-		{
-			script = Engine::lua_script_manager.GetScript(Script::Type::, script_component.script_name);
-		}*/
+		const std::string& using_script_path = script->GetUsingScriptPath();
 		if (ImGui::TreeNode(typeid(ScriptComponent).name()))
 		{
-			ImGui::Text(script_component.script_name.c_str());
-			if(ImGui::SmallButton("Reload"))
+			ImGui::Text(script_component.name.c_str());  // NOLINT(clang-diagnostic-format-security)
+
+			if(ImGui::BeginCombo("ScriptPath", using_script_path.c_str()))
 			{
-				script->RunScript();
+				const auto& script_assets = Engine::asset_manager.GetManager<ScriptAssetManager>().GetAssetRawData();
+				for (const auto& [string, script_asset] : script_assets)
+				{
+					const std::string& extension_str = std::filesystem::path(string).extension().string();
+					if(extension_str == ".clua")
+					{
+						bool selected = string == using_script_path;
+						if(ImGui::Selectable(string.c_str(), selected, selected || script_asset.first ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
+						{
+							script_component.name = string;
+							Script* pScript = OE::Engine::lua_script_manager.GetScript(ScriptType::Component, script_component.name);
+							pScript->ChangeScript(string);
+							/*if(pScript)
+							{
+								
+							}*/
+						}
+					}
+				}
+				ImGui::EndCombo();
 			}
+
+
+		/*	if(ImGui::SmallButton("Reload"))
+			{
+				script->ChangeScript(script_path);
+			}*/
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
 			ImGui::TreePop();

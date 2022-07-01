@@ -87,6 +87,9 @@
     <ClInclude Include="src\engine\modules\script_asset_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\scripting\script.h">
+      <Filter>engine\scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

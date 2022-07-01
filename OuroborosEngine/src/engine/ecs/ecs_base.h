@@ -550,6 +550,21 @@ namespace OE
 					});
 			}
 
+			template<typename TSystem, typename Obj, typename TF, std::enable_if_t<settings::_impl::template _IsSystem<TSystem>::value, TSystem>* = nullptr>
+			void ForEntitiesMatching(float dt, Obj* obj, TF&& function) noexcept
+			{
+				//static_assert(std::false_type());
+				using signature = typename TSystem::signature;
+				using required_components = typename SignatureBitsetStorage::template SignatureComponents<signature>;
+				ForEntities([this, &dt, &function, &obj](ecs_ID i)
+					{
+						if (MatchesSignature<TSystem>(i))
+						{
+							ExpandSignatureCall<required_components, Obj>(obj, i, dt, function);
+						}
+					});
+			}
+
 			template<typename TSignature, typename TF, std::enable_if_t<settings::_impl::template _IsSignature<TSignature>::value, TSignature>* = nullptr>
 			void ForEntitiesMatching(float dt, TF& function) noexcept
 			{
@@ -599,6 +614,14 @@ namespace OE
 			template <typename L>
 			using as_expand_call = brigand::wrap<L, expand_call_wrapper>;
 
+			template<typename T, typename Obj, typename TF>
+			void ExpandSignatureCall(Obj* obj, ecs_ID mI, float dt, TF&& mFunction)
+			{
+				//static_assert(settings::template IsSignature<T>(), "");
+				using Components = typename SignatureBitsetStorage::template SignatureComponents<T>;
+				using Helper = as_expand_call<Components>;
+				Helper::Call(obj, mI, dt, *this, mFunction);
+			}
 
 			template<typename T, typename TF>
 			void ExpandSignatureCall(ecs_ID mI, float dt, TF&& mFunction)
@@ -625,11 +648,26 @@ namespace OE
 				static void Call(ecs_ID mI, float dt, type& mMgr, TF&& mFunction)
 				{
 					auto di(mMgr.GetEntity(mI).myID);
+
 					mFunction
 					(
 						mI, dt,
 						mMgr.component_manager.template GetComponent<Ts>(di)...
 					);
+				}
+
+				template<typename TF, typename Obj>
+				static void Call(Obj* obj, ecs_ID mI, float dt, type& mMgr, TF&& mFunction)
+				{
+					auto di(mMgr.GetEntity(mI).myID);
+
+					mFunction(*obj, std::forward<ecs_ID>(mI), std::forward<float>(dt), mMgr.component_manager.template GetComponent<Ts>(di)...);
+
+					//mFunction
+					//(
+					//	mI, dt,
+					//	mMgr.component_manager.template GetComponent<Ts>(di)...
+					//);
 				}
 			};
 		};

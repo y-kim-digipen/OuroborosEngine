@@ -70,7 +70,7 @@ namespace OE
 	public: // Modules
 		inline static Asset_Manager asset_manager;
 		inline static ECS_Manager ecs_manager;
-		inline static LuaScriptManager lua_script_manager;
+		inline static Script::LuaScriptManager lua_script_manager;
 	};
 
 	inline Engine& Engine::Get()
