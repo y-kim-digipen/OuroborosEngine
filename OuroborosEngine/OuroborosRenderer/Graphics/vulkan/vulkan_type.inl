@@ -39,6 +39,10 @@ struct VulkanImage {
 	VkImageView image_view;
 	VkFormat format;
 };
+struct VulkanFrameBufferAttachment
+{
+	VulkanImage vulkan_image;
+};
 
 struct VulkanSwapchain
 {
@@ -50,6 +54,11 @@ struct VulkanSwapchain
 	std::vector<VkImageView> image_views;
 	VulkanImage depth_image;
 	std::vector<VkFramebuffer> framebuffers;
+
+	VulkanFrameBufferAttachment position;
+	VulkanFrameBufferAttachment normal;
+	VulkanFrameBufferAttachment albedo;
+	VulkanFrameBufferAttachment depth;
 };
 
 struct QueueFamilyIndices
@@ -84,10 +93,7 @@ struct VulkanFrameData
 	uint32_t swap_chain_image_index{ 0 };
 };
 
-struct VulkanFrameBufferAttachment
-{
-	VulkanImage vulkan_image;
-};
+
 
 struct Vulkan_type
 {
