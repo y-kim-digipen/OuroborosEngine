@@ -65,6 +65,14 @@ vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
     return (ambient + diffuse + specular);
 }
 
+// vec3 PointLight(Light lig, vec3 normal, vec3 fragposition, vec3 viewDir)
+// {
+//     vec3 lightDir =normalize(lig.position - fragposition);
+
+
+
+// }
+
 void main() 
 {
  vec3 viewDirection = normalize(vs_in.cam_pos - vs_in.frag_position);

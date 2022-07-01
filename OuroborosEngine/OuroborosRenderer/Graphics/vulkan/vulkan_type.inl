@@ -86,10 +86,7 @@ struct VulkanFrameData
 
 struct VulkanFrameBufferAttachment
 {
-	VkImage image;
-	VmaAllocation allocation;
-	VkImageView view;
-	VkFormat format;
+	VulkanImage vulkan_image;
 };
 
 struct Vulkan_type
