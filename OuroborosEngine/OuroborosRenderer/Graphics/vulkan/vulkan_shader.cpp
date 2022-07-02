@@ -26,18 +26,52 @@ namespace Renderer {
 		glm::mat4 normal_matrix;
 	};
 
-	void ReadFile(std::string& buffer,const std::string& filename) {
-		std::ifstream file(filename, std::ios::ate);
+	static void GetFilePath(const std::string& full_path, std::string& path_without_file_name)
+	{
+		size_t found = full_path.find_last_of("/\\");
+		path_without_file_name = full_path.substr(0, found + 1);
+	}
 
-		if (!file.is_open()) {
+	void ReadFile(std::string& buffer,const std::string& filename)
+	{
+		std::ifstream file(filename);
+
+		if (!file.is_open()) 
+		{
 			throw std::runtime_error("failed to open file!");
 		}
+		static bool isRecursiveCall = false;
+		std::string include_indentifier = "#include";
 
-		size_t fileSize = (size_t)file.tellg();
-		buffer.resize(fileSize);
-		file.seekg(0);
-		file.read(buffer.data(), fileSize);
+		std::string line_buffer;
+		while (std::getline(file, line_buffer))
+		{
+			if (line_buffer.find(include_indentifier) != line_buffer.npos)
+			{
+
+				line_buffer.erase(0, include_indentifier.size());
+				line_buffer.erase(0, 2);
+				line_buffer.erase(line_buffer.size() - 1, 1);
+
+				std::string path_of_this_file;
+				GetFilePath(filename, path_of_this_file);
+				line_buffer.insert(0, path_of_this_file);
+
+				isRecursiveCall = true;
+				
+				std::string new_buffer;
+				ReadFile(new_buffer,line_buffer);
+				buffer += new_buffer + '\n';
+				continue;
+			}
+			buffer += line_buffer + '\n';
+		}
+
+		if (!isRecursiveCall)
+			buffer += '\0';
+
 		file.close();
+
 	}
 
 	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
