@@ -66,6 +66,10 @@ namespace Renderer
     VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
     VkFormat FindDepthFormat();
 
+    //For Deferred rendering
+    void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
+
+
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
@@ -1221,5 +1225,32 @@ namespace Renderer
         );
     }
 
+    //deferred rendering
+    void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment)
+    {
+        VkImageAspectFlags aspect_mask = 0;
+        VkImageLayout image_layout;
+
+        attachment->vulkan_image.format = format;
+        if(usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
+        {
+            aspect_mask = VK_IMAGE_ASPECT_COLOR_BIT;
+            image_layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        }
+        if(usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+        {
+            aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+            image_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        }
+
+        if(aspect_mask < 0)
+        {
+            std::runtime_error("Error frame buffer attachment aspect mask error!");
+        }
+
+        CreateImage(vulkan_type, &attachment->vulkan_image, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.width, attachment->vulkan_image.format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
+    }
+
+    
 }
 

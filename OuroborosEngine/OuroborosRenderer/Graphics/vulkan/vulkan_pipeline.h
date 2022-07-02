@@ -7,6 +7,13 @@
 
 namespace Renderer
 {
+	struct DeferredPipeline
+	{
+		
+		 
+	};
+
+
 	struct Vulkan_PipelineBuilder
 	{
 		VkPipeline BuildPipeLine(VkDevice device, VkRenderPass render_pass, std::vector<VkPipelineShaderStageCreateInfo>& shader_stage_create_infos);

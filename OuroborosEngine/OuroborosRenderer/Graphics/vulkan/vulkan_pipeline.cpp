@@ -32,7 +32,7 @@ namespace Renderer
         pipeline_create_info.subpass              = 0;
         pipeline_create_info.basePipelineHandle   = VK_NULL_HANDLE;
         pipeline_create_info.pDepthStencilState   = &depth_stencil;
-
+           
         VkPipeline new_pipeline;
 
         if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipeline_create_info, nullptr, &new_pipeline) != VK_SUCCESS) 
