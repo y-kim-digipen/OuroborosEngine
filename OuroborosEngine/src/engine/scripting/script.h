@@ -61,7 +61,15 @@ namespace OE
 
 		inline void Script::ChangeScript(const std::string& new_script_path)
 		{
-			script_path = new_script_path;
+			if(!new_script_path.empty())
+			{
+				script_path = new_script_path;
+			}
+			else
+			{
+				script_path.clear();
+			}
+
 			state = State::Unloaded;
 		}
 
@@ -103,11 +111,15 @@ namespace OE
 		template <typename ...Args>
 		inline void Script::Update(Args&&... args)
 		{
-			std::cout << sizeof...(Args) << std::endl;
+			//std::cout << sizeof...(Args) << std::endl;
 			switch (state)
 			{
 			case State::Unloaded:
 			{
+					if(script_path.empty())
+					{
+						break;
+					}
 				if (bool res = RunScript())
 				{
 					state = State::Init;

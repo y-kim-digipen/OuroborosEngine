@@ -90,11 +90,15 @@ namespace OE
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::Component, script_component.name);
-					script->Update(ent, dt);
-
-					if(script->GetState() == Script::Script::State::Invalid)
+					if(script != nullptr)
 					{
-						assert(false);
+						script->Update(ent, dt);
+
+						if (script->GetState() == Script::Script::State::Invalid)
+						{
+							printf(" [ScriptError] From %s \t %s", script->script_path.c_str(), script->GetLastError());
+							return;
+						}
 					}
 				}
 			});
@@ -174,7 +178,6 @@ namespace OE
 	void Engine::PreUpdate()
 	{
 		delta_timer.PreUpdate();
-		
 	}
 
 	namespace _impl

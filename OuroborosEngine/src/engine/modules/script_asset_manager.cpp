@@ -31,10 +31,15 @@ namespace OE
             assert(false);
         }
 
-        sol::state script;
-        bool res = script.do_file(file_name).valid();
+        auto script = OE::Engine::lua_script_manager.CreateScript(file_name, type, file_name);
+        bool res = script != nullptr || script->RunScript();
+        if (res == false)
+        {
+            std::cerr << script->GetLastError() << std::endl;
+        }
+
         assets[file_name] = std::pair(res, Asset::Script(file_name));
-        OE::Engine::lua_script_manager.CreateScript(file_name, ScriptType::System, file_name);
+
         return 0;
     }
 }

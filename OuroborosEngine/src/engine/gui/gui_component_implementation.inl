@@ -212,15 +212,9 @@ namespace OE
 		using Script = OE::Script::Script;
 		using ScriptType = OE::Script::ScriptType;
 		Script* script = Engine::lua_script_manager.GetScript(ScriptType::Component, script_component.name);
-		if(script == nullptr)
-		{
-			assert(false);
-		}
-		const std::string& using_script_path = script->GetUsingScriptPath();
+		const std::string& using_script_path = script!= nullptr ? script->GetUsingScriptPath() : "";
 		if (ImGui::TreeNode(typeid(ScriptComponent).name()))
 		{
-			ImGui::Text(script_component.name.c_str());  // NOLINT(clang-diagnostic-format-security)
-
 			if(ImGui::BeginCombo("ScriptPath", using_script_path.c_str()))
 			{
 				const auto& script_assets = Engine::asset_manager.GetManager<ScriptAssetManager>().GetAssetRawData();
@@ -233,13 +227,21 @@ namespace OE
 						if(ImGui::Selectable(string.c_str(), selected, selected || script_asset.first ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
 						{
 							script_component.name = string;
-							Script* pScript = OE::Engine::lua_script_manager.GetScript(ScriptType::Component, script_component.name);
-							pScript->ChangeScript(string);
+							script->ChangeScript(string);
 							/*if(pScript)
 							{
 								
 							}*/
 						}
+					}
+					if (ImGui::Selectable("##None", using_script_path.empty(), using_script_path.empty() ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
+					{
+						script_component.name = "";
+						script->ChangeScript("");
+						/*if(pScript)
+						{
+
+						}*/
 					}
 				}
 				ImGui::EndCombo();

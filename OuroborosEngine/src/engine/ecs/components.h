@@ -60,20 +60,7 @@ struct LightComponent
 
 struct ScriptComponent
 {
-	std::string name;
+	std::string name = "..\\OuroborosEngine\\scripts\\componenttest.clua";
 };
-
-//void DrawSystem(mesh, sahder)
-//{
-//	Redenrer->Render(mesh, shader, transform);
-//};
-//
-//ResourceManager
-//{
-//	vector<image*>
-//	vector<file* >
-//}
-
-//struct
 
 #endif //!COMPONENTS_H

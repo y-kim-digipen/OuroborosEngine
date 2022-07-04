@@ -1,5 +1,11 @@
 elasped_time = 0.0
 print('hi')
+
+
+function Init(ent_ID, dt)
+
+end
+
 function Update(ent_ID, dt)
     elasped_time = elasped_time + dt
     ecs_manager = GetECS_Manager()
@@ -21,4 +27,8 @@ function Update(ent_ID, dt)
         ecs_manager:GetTransformComponent(ent_ID).pos.y = cos(elasped_time)
 
     end
+end
+
+function CleanUp(ent_ID, dt)
+
 end
