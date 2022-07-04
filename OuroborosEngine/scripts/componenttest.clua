@@ -13,14 +13,13 @@ function Update(ent_ID, dt)
     local has_transform_component = ecs_manager:HasTransformComponent(ent_ID)
     if has_transform_component then
         local transform_component = ecs_manager:GetTransformComponent(ent_ID)
-        local rotate_angle = transform_component.angle
+        local rotation = transform_component.rotation
         -- print(rotate_angle)
         local rotation_amount = dt * 1.5
 
-        ecs_manager:GetTransformComponent(ent_ID).angle = rotate_angle + rotation_amount 
-        -- ecs_manager:GetTransformComponent(ent_ID).pos.x = 5
-        -- print(  ecs_manager:GetTransformComponent(ent_ID).pos.x);
-    
+        ecs_manager:GetTransformComponent(ent_ID).rotation.x = ecs_manager:GetTransformComponent(ent_ID).rotation.x + rotation_amount;
+
+
         -- print(sin(elasped_time))
         ecs_manager:GetTransformComponent(ent_ID).pos.x = sin(elasped_time);
 

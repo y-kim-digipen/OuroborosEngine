@@ -395,9 +395,9 @@ namespace Renderer
                 model = glm::translate(model, transform->pos);
                 model = glm::scale(model, transform->scale);
 
-                glm::quat rotP = glm::angleAxis(glm::radians(transform->rotate_axis.x), glm::vec3(1.0f, 0.0f, 0.0f));
-                glm::quat rotY = glm::angleAxis(glm::radians(transform->rotate_axis.y), glm::vec3(0.0f, 1.0f, 0.0f));
-                glm::quat rotR = glm::angleAxis(glm::radians(transform->rotate_axis.z), glm::vec3(0.0f, 0.0f, 1.0f));
+                glm::quat rotP = glm::angleAxis(glm::radians(transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+                glm::quat rotY = glm::angleAxis(glm::radians(transform->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+                glm::quat rotR = glm::angleAxis(glm::radians(transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
                 model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
 

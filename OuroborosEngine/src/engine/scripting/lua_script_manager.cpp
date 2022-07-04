@@ -34,12 +34,12 @@ namespace OE
 				, "y", &glm::vec3::y
 				, "z", &glm::vec3::z);
 
-			state.new_usertype<glm::vec3>("vec4",
-				sol::constructors<glm::vec4(), glm::vec4(glm::vec4), glm::vec4(float), glm::vec4(float, float, float, float)>()
-				, "x", &glm::vec4::x
-				, "y", &glm::vec4::y
-				, "z", &glm::vec4::z
-				, "w", &glm::vec4::w);
+			//state.new_usertype<glm::vec3>("vec4",
+			//	sol::constructors<glm::vec4(), glm::vec4(glm::vec4), glm::vec4(float), glm::vec4(float, float, float, float)>()
+			//	, "x", &glm::vec4::x
+			//	, "y", &glm::vec4::y
+			//	, "z", &glm::vec4::z
+			//	, "w", &glm::vec4::w);
 
 			//Engine
 			state.set("GetECS_Manager", &GetECSManager);
@@ -79,8 +79,7 @@ namespace OE
 				sol::constructors<TransformComponent()>()
 				, "pos", &TransformComponent::pos
 				, "scale", &TransformComponent::scale
-				, "rotate_axis", &TransformComponent::rotate_axis
-				, "angle", &TransformComponent::angle
+				, "rotation", &TransformComponent::rotation
 				);
 
 			state.new_usertype<VelocityComponent>("VelocityComponent",

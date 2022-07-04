@@ -8,7 +8,7 @@ struct TransformComponent
 {
 	glm::vec3 pos;
 	glm::vec3 scale= glm::vec3(1.f);
-	glm::vec3 rotate_axis = {1.0f, 0.f,0.f};
+	glm::vec3 rotation = {1.0f, 0.f,0.f};
 };
 
 struct VelocityComponent
