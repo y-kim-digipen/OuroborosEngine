@@ -15,6 +15,7 @@ namespace OE
 		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
+		//window->vulkan_imgui_manager.RegisterPanel("System", "Scripts", &OE::SystemInfoPanelFunction);
 	}
 
 	void Engine::ECS_TestSetup()
@@ -85,6 +86,23 @@ namespace OE
 				}
 			});
 
+		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::ecs_ID ent, float dt, ScriptComponent& script_component)
+			{
+				if (ecs_manager.GetEntity(ent).alive)
+				{
+					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::Component, script_component.name);
+					if(script != nullptr)
+					{
+						script->Update(ent, dt);
+
+						if (script->GetState() == Script::Script::State::Invalid)
+						{
+							printf(" [ScriptError] From %s \t %s", script->script_path.c_str(), script->GetLastError());
+							return;
+						}
+					}
+				}
+			});
 	}
 
 	void Engine::SetupModule()
@@ -163,8 +181,6 @@ namespace OE
 		
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
-
-
 	}
 
 	void Engine::PreUpdate()
@@ -172,43 +188,99 @@ namespace OE
 		glfwPollEvents();
 		delta_timer.PreUpdate();
 	}
-	 
+
+	namespace _impl
+	{
+		template<typename... Args>
+		struct Mem_Fn
+		{
+			static constexpr auto Get(/*M T<Args...>::* pm*/)
+			{
+				return std::mem_fn(&Script::Script::Update<Args...>);
+			}
+		};
+
+		template <typename... T>
+		using mem_fn_wrapper = Mem_Fn<T...>;
+
+		template <typename L>
+		using as_mem_fn = brigand::wrap<L, mem_fn_wrapper>;
+	}
+
 	void Engine::Update()
 	{
 		input.Update();
-		if(Input::Down( GLFW_KEY_W) )
+		if (Input::Down(GLFW_KEY_W))
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_S) )
+		if (Input::Down(GLFW_KEY_S))
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_A) )
+		if (Input::Down(GLFW_KEY_A))
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
 		}
-		if (Input::Down(GLFW_KEY_D) )
+		if (Input::Down(GLFW_KEY_D))
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
 		}
 
-		if(Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
+		if (Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-		/*	const float offset = DeltaTime::GetDeltaTime() * 5.f;
-			if(Input::glfw)
-			Engine::camera.MouseInput(0,)*/
+			/*	const float offset = DeltaTime::GetDeltaTime() * 5.f;
+				if(Input::glfw)
+				Engine::camera.MouseInput(0,)*/
 
 		}
-		ecs_manager.UpdateSystem(OE::Engine::Get().delta_timer.GetDeltaTime());
 
-	/*	if(input.Down(GLFW_MOUSE_BUTTON_LEFT))
-		{
-			std::cout << "Down" << std::endl;
-		}
-		else {
-			std::cout << "Up" << std::endl;
-		}*/
+		input.Update();
+		float dt = OE::Engine::DeltaTime::GetDeltaTime();
+
+		using system_storage = ECS_Manager::SystemStorage;
+		using system_usage_type = system_storage::system_usage_type;
+		using system_list = ECS_Manager::settings::system_list;
+		brigand::for_each<system_list>([dt](auto type)
+			{
+				using TSystem = typename decltype(type)::type;
+				using function_signature = typename TSystem::function_signature;
+				system_usage_type usage = system_storage::GetSystemUsage<TSystem>();
+				switch (usage)
+				{
+				case system_usage_type::NONE:
+				{
+					break;
+				}
+				case system_usage_type::NATIVE:
+				{
+					ecs_manager.UpdateNativeSystem<TSystem>(dt);
+					break;
+				}
+				case system_usage_type::SCRIPT:
+				{
+					const std::string script_path = system_storage::GetSystemScript<TSystem>();
+					if (script_path.empty())
+					{
+						break;
+					}
+
+					Script::Script* script = lua_script_manager.GetScript(Script::ScriptType::System, script_path);
+					if (script)
+					{
+						//_impl::MultiFunc2<Script::Script, void> caller(script, &Script::Script::Update<ecs_ID, float, BoolWrapperComponent&>);
+				/*		using Functor = _impl::as_expand_script_call<typename TSystem::required_components>;
+						Fu*/
+						using member_function = _impl::as_mem_fn<function_signature>;
+						auto func = member_function::Get(/*&Script::Script::Update*/);
+						//auto func = std::bind(bind, *script);
+						ecs_manager.ForEntitiesMatching<TSystem>(dt, script, func);
+					}
+					break;
+				}
+				}
+
+			});
 	}
 
 	void Engine::PostUpdate()
@@ -231,6 +303,11 @@ namespace OE
 	void Engine::DeltaTime::PreUpdate()
 	{
 		start = std::chrono::steady_clock::now();
+		auto& scripts = lua_script_manager.GetScripts(Script::ScriptType::Normal);
+		for (auto& script : scripts)
+		{
+			script.second.Update(GetDeltaTime());
+		}
 	}
 
 	void Engine::DeltaTime::PostUpdate()
@@ -258,3 +335,109 @@ namespace OE
 	}
 
 }
+
+//template <typename R>
+	//class MultiFunc
+	//{
+	//	typedef void(*function_t)();
+	//	function_t m_func;
+	//public:
+	//	template <typename ...A1>
+	//	MultiFunc<R>(R(*f)(A1...))
+	//	{
+	//		m_func = (void(*)())f;
+	//	}
+
+	//	template <typename ...A1>
+	//	MultiFunc<R> operator =(R(*f)(A1...))
+	//	{
+	//		m_func = (void(*)())f;
+	//		return *this;
+	//	}
+
+
+	//	template <typename ...A1>
+	//	R operator()(A1... a1) const
+	//	{
+	//		R(*f)(A1...) = (R(*)(A1...))(m_func);
+	//		return (*f)(a1...);
+	//	}
+	//};
+
+	////X = parent class
+	////R = ReturnType
+	//template <typename X, typename R>
+	//class MultiFunc2
+	//{
+	//	typedef void(X::* function_t)();
+
+	//	function_t m_func;
+	//	X* m_obj;
+	//public:
+
+	//	template <typename ...A1>
+	//	MultiFunc2<X, R>(X* obj, R(X::* f)(A1...))
+	//	{
+	//		m_func = (void(X::*)())(f);
+	//		m_obj = obj;
+	//	}
+
+
+	//	template <typename ...A1>
+	//	MultiFunc2<X, R> operator =(R(X::* f)(A1...))
+	//	{
+	//		m_func = (void(X::*)())(f);
+	//		return *this;
+	//	}
+
+
+	//	template <typename ...A1>
+	//	R operator()(A1&&... a1) const
+	//	{
+	//		std::cout << sizeof...(A1) << std::endl;
+	//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
+
+	//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
+	//	}
+	//};
+
+	//template <typename X, typename R>
+	//class MultiFunc3
+	//{
+	//	typedef void(X::* function_t)();
+
+	//	function_t m_func;
+	//	X* m_obj;
+	//public:
+
+	//	template <typename ...A1>
+	//	MultiFunc3<X, R>(X* obj, R(X::* f)(A1...))
+	//	{
+	//		m_func = (void(X::*)())(f);
+	//		m_obj = obj;
+	//	}
+
+
+	//	template <typename ...A1>
+	//	MultiFunc3<X, R> operator =(R(X::* f)(A1...))
+	//	{
+	//		m_func = (void(X::*)())(f);
+	//		return *this;
+	//	}
+
+
+	//	template <typename ...A1>
+	//	R operator()(A1&&... a1) const
+	//	{
+	//		std::cout << sizeof...(A1) << std::endl;
+	//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
+
+	//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
+	//	}
+	//};
+
+	//template <typename... T>
+	//using expand_script_call_wrapper = MultiFunc3<Script::Script, void>;
+
+	//template <typename L>
+	//using as_expand_script_call = brigand::wrap<L, expand_script_call_wrapper>;

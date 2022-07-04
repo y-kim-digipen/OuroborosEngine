@@ -40,8 +40,13 @@ namespace Asset
     struct Shader
     {
         std::string name;
-
         inline static std::list<std::string> supported_formats{ ".vert", ".frag" };
+    };
+
+    struct Script
+    {
+        std::string path;
+        inline static std::list<std::string> supported_formats{ ".lua" , ".clua", ".slua"};
     };
 
     struct CameraData
@@ -72,10 +77,6 @@ namespace Asset
         glm::vec3 direction;
         int light_type;
     };
-
-
-
-
 }
 
 namespace std {

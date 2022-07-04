@@ -1,5 +1,7 @@
 #include <GLFW/glfw3.h>
 #include "engine/engine.h"
+#include "engine/scripting/lua_script_manager.h"
+
 
 int main()
 {
@@ -7,7 +9,9 @@ int main()
     while (!glfwWindowShouldClose(OE::Engine::GetGLFWWindow()))
     {
         OE::Engine::PreUpdate();
+
         OE::Engine::Update();
+
         OE::Engine::PostUpdate();
     }
     OE::Engine::ShutDown();

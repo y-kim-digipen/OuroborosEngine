@@ -1,5 +1,5 @@
-#pragma once
-//#include <detail/type_vec.hpp>
+#ifndef COMPONENTS_H
+#define COMPONENTS_H
 #include <glm.hpp>
 #include <gtc/vec1.hpp>
 #include "../common/assets.h"
@@ -58,15 +58,9 @@ struct LightComponent
 	Asset::LightData data;
 };
 
-//void DrawSystem(mesh, sahder)
-//{
-//	Redenrer->Render(mesh, shader, transform);
-//};
-//
-//ResourceManager
-//{
-//	vector<image*>
-//	vector<file* >
-//}
+struct ScriptComponent
+{
+	std::string name = "..\\OuroborosEngine\\scripts\\componenttest.clua";
+};
 
-//struct 
+#endif //!COMPONENTS_H

@@ -66,14 +66,14 @@ namespace OE
 			{
 				if (ImGui::MenuItem(popup_menu_strings[ENTITY_ADD].c_str()))
 				{
-					ecs_manager.CreateEntity();
+					Engine::ecs_manager.CreateEntity();
 				}
 				ImGui::EndPopup();
 			}
 
-		ecs_manager.ForEntities([](ecs_ID entID)
+		Engine::ecs_manager.ForEntities([](ecs_ID entID)
 			{
-				if(ecs_manager.GetEntity(entID).alive)
+				if(Engine::ecs_manager.GetEntity(entID).alive)
 				{
 					std::string strID = std::to_string(entID);
 					if (ImGui::CollapsingHeader(strID.c_str()))
@@ -89,23 +89,23 @@ namespace OE
 							//std::string menu_str = "Add Component to"
 							if (ImGui::MenuItem(popup_menu_strings[ENTITY_DELETE].c_str()))
 							{
-								ecs_manager.DeleteEntity(entID);
+								Engine::ecs_manager.DeleteEntity(entID);
 							}
 							if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_ADD].c_str()))
 							{
-								using TComponents = decltype(ecs_manager.component_manager)::ComponentList;
+								using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
 
 								brigand::for_each<TComponents>([entID](auto type)
 									{
 										using TComponent = typename decltype(type)::type;
-										const bool has_this_component = ecs_manager.HasComponent<TComponent>(entID);
+										const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
 										if (has_this_component)
 										{
 											ImGui::BeginDisabled();
 										}
 										if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
 										{
-											ecs_manager.AddComponent<TComponent>(entID);
+											OE::Engine::ecs_manager.AddComponent<TComponent>(entID);
 										}
 										if (has_this_component)
 										{
@@ -116,19 +116,19 @@ namespace OE
 							}
 							if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_DELETE].c_str()))
 							{
-								using TComponents = decltype(ecs_manager.component_manager)::ComponentList;
+								using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
 
 								brigand::for_each<TComponents>([entID](auto type)
 									{
 										using TComponent = typename decltype(type)::type;
-										const bool has_this_component = ecs_manager.HasComponent<TComponent>(entID);
+										const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
 										if (!has_this_component)
 										{
 											ImGui::BeginDisabled();
 										}
 										if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
 										{
-											ecs_manager.DeleteComponent<TComponent>(entID);
+											OE::Engine::ecs_manager.DeleteComponent<TComponent>(entID);
 										}
 										if (!has_this_component)
 										{
@@ -141,21 +141,21 @@ namespace OE
 
 							if (ImGui::BeginMenu(popup_menu_strings[SYSTEM].c_str()))
 							{
-								using TSystems = decltype(ecs_manager)::SystemStorage::system_list;
+								using TSystems = decltype(Engine::ecs_manager)::SystemStorage::system_list;
 
 								brigand::for_each<TSystems>([entID](auto type)
 									{
 										using TSystem = typename decltype(type)::type::type;
-										const bool has_this_system = ecs_manager.HasSystem<TSystem>(entID);
+										const bool has_this_system = OE::Engine::ecs_manager.HasSystem<TSystem>(entID);
 										if (ImGui::MenuItem(typeid(TSystem).name(), nullptr, has_this_system))
 										{
 											if(!has_this_system)
 											{
-												ecs_manager.AddSystem<TSystem>(entID);
+												OE::Engine::ecs_manager.AddSystem<TSystem>(entID);
 											}
 											else
 											{
-												ecs_manager.DeleteSystem<TSystem>(entID);
+												OE::Engine::ecs_manager.DeleteSystem<TSystem>(entID);
 											}
 										}
 									});
@@ -167,7 +167,7 @@ namespace OE
 						brigand::for_each<ComponentList>([entID](auto type)
 							{
 								using TComponent = typename decltype(type)::type;
-								if (ecs_manager.HasComponent<TComponent>(entID))
+								if (OE::Engine::ecs_manager.HasComponent<TComponent>(entID))
 								{
 									ComponentDrawFunction<TComponent>(entID);
 								}
@@ -195,24 +195,29 @@ namespace OE
 					{
 						for (const auto& [name, asset]: raw_elements_map)
 						{
-							if(ImGui::CollapsingHeader(name.c_str()))
+							if (ImGui::CollapsingHeader(name.c_str()))
 							{
-								OE::ImGuiImpl(asset);
+							bool is_asset_ready = asset.first;
+							if(!is_asset_ready)
+							{
+								ImGui::TextColored(OE::GUI_Colors::RED, "Asset is not ready for use");
+							}
+							else
+							{
+								OE::ImGuiImpl(asset.second);
+							}
 							}
 						}
-
 						ImGui::EndTabItem();
 					}
 				});
 			ImGui::EndTabBar();
 		}
 
-		if(ImGui::SmallButton("Load"))
-		{
-			//ImGui::Begin("Load file");
-			FileSystemPanelFunction();
-			//ImGui::End();
-		}
+		//if(ImGui::SmallButton("Load"))
+		//{
+		//	Engine::GetRenderWindow()->vulkan_imgui_manager.GetPanels()["System"]["AssetManager"].second = true;
+		//}
 	}
 
 	static void EngineInfoPanelFunction()
@@ -345,12 +350,12 @@ namespace OE
 					{
 						if(ImGui::BeginListBox(""))
 						{
-							ecs_manager.ForEntities([](ecs_ID entityID)
+							OE::Engine::ecs_manager.ForEntities([](ecs_ID entityID)
 								{
-									auto& entity = ecs_manager.GetEntity(entityID);
+									auto& entity = OE::Engine::ecs_manager.GetEntity(entityID);
 									if (entity.alive)
 									{
-										if(bool has_system = ecs_manager.HasSystem<T>(entityID))
+										if(bool has_system = OE::Engine::ecs_manager.HasSystem<T>(entityID))
 										{
 											using system = T;
 											using system_requirement_components = typename system::required_components;
@@ -358,7 +363,7 @@ namespace OE
 											brigand::for_each<system_requirement_components>([&]<typename T>(T type) mutable
 												{
 													using component = typename T::type;
-													has_all_component &= ecs_manager.HasComponent<component>(entityID);
+													has_all_component &= OE::Engine::ecs_manager.HasComponent<component>(entityID);
 												});
 											ImGui::Bullet();
 											ImGui::TextColored(has_all_component ? GUI_Colors::GREEN : GUI_Colors::RED, "%d", entityID);
@@ -368,7 +373,7 @@ namespace OE
 												brigand::for_each<system_requirement_components>([&]<typename T>(T type)
 												{
 													using component = typename T::type;
-													const bool has_component = ecs_manager.HasComponent<component>(entityID);
+													const bool has_component = OE::Engine::ecs_manager.HasComponent<component>(entityID);
 													if(!has_component)
 													{
 														using missing_component = component;
@@ -376,7 +381,7 @@ namespace OE
 														ImGui::SameLine();
 														if(ImGui::Button("Add"))
 														{
-															ecs_manager.AddComponent<missing_component>(entityID);
+															OE::Engine::ecs_manager.AddComponent<missing_component>(entityID);
 														}
 													}
 												});
@@ -389,8 +394,55 @@ namespace OE
 						ImGui::EndTabItem();
 
 
-						const bool has_implementation = ecs_manager.system_storage.HasSystemImplementation<T>();
-						has_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have implementation"));
+						const bool has_native_implementation = OE::Engine::ecs_manager.system_storage.HasSystemImplementation<T>();
+						const bool has_script_implementation = OE::Engine::ecs_manager.system_storage.HasSystemScript<T>();
+						const auto system_current_usage = OE::Engine::ecs_manager.system_storage.GetSystemUsage<T>();
+						using ECS_Manager = decltype(OE::Engine::ecs_manager);
+						using system_usage_type = ECS_Manager::settings::system_storage::system_usage_type;
+
+						bool using_native = system_current_usage == system_usage_type::NATIVE;
+
+						if (ImGui::Checkbox("Native", &using_native))
+						{
+							if (has_native_implementation)
+							{
+								OE::Engine::ecs_manager.system_storage.SetSystemUsage<T>(system_usage_type::NATIVE);
+							}
+						}
+						ImGui::SameLine();
+						has_native_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has native implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have native implementation"));
+
+
+						bool using_lua = system_current_usage == system_usage_type::SCRIPT;
+						if (ImGui::Checkbox("LuaScript", &using_lua))
+						{
+							if (has_script_implementation)
+							{
+								OE::Engine::ecs_manager.system_storage.SetSystemUsage<T>(system_usage_type::SCRIPT);
+							}
+						}
+						ImGui::SameLine();
+						has_script_implementation ? (ImGui::TextColored(GUI_Colors::GREEN, "System has script implementation")) : (ImGui::TextColored(GUI_Colors::RED, "System doesn't have script implementation"));
+
+
+						auto& system_scripts = OE::Engine::lua_script_manager.GetScripts(Script::ScriptType::System);
+						std::string script_using = OE::Engine::ecs_manager.system_storage.GetSystemScript<T>();
+						if(ImGui::BeginCombo("Scripts", script_using.c_str()))
+						{
+							for (auto& [name, script] : system_scripts)
+							{
+								const std::string& script_path = script.script_path;
+								const bool selected = script_using == script_path;
+								if(ImGui::Selectable(script_path.c_str(), selected))
+								{
+									//auto init_func = script.GetFunction("Init");
+
+									OE::Engine::ecs_manager.system_storage.RegisterSystemScript<T>(script_path);
+									//OE::Engine::ecs_manager.ForEntitiesMatching<T>(0.0f, init_func);
+								}
+							}
+							ImGui::EndCombo();
+						}
 					}
 					ImGui::PopID();
 				});

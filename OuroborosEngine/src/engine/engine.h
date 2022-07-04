@@ -13,6 +13,8 @@
 #include "Graphics/Window.h"
 #include "Graphics/shader.h"
 #include "input/InputManager.h"
+#include "scripting/lua_script_manager.h"
+
 
 namespace OE
 {
@@ -34,7 +36,7 @@ namespace OE
 			return window->GetWindowData().window;
 		}
 
-		static class DeltaTime
+		class DeltaTime
 		{
 			using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		public:
@@ -70,6 +72,8 @@ namespace OE
 		inline static std::unique_ptr<Renderer::Window> window;
 		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
+		inline static ECS_Manager ecs_manager;
+		inline static Script::LuaScriptManager lua_script_manager;
 	};
 
 	inline Engine& Engine::Get()

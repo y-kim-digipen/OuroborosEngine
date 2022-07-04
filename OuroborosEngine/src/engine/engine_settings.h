@@ -6,16 +6,17 @@
 #include "modules/image_asset_manager.h"
 #include "modules/mesh_asset_manager.h"
 #include "modules/shader_asset_manager.h"
+#include "modules/script_asset_manager.h"
 
-using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent,LightComponent>;
+using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent, LightComponent, ScriptComponent>;
 
 using PhysicsSystem = OE::ECS::System<TransformComponent, VelocityComponent>;
 using TestSystem = OE::ECS::System<BoolWrapperComponent>;
 using DrawSystem = OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
 using LightSystem = OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent>;
+using ScriptingSystem = OE::ECS::System<ScriptComponent>;
 
-
-using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem,  DrawSystem, LightSystem>;
+using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem,  DrawSystem, LightSystem, ScriptingSystem>;
 
 using Signature0 = OE::ECS::types::Signature<TransformComponent, VelocityComponent>;
 using Signature1 = OE::ECS::types::Signature<LifeTimeComponent, MeshComponent>;
@@ -30,7 +31,4 @@ using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, System
 
 using ECS_Manager = OE::ECS::Manager<OESettings>;
 
-
-using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager, OE::ShaderAssetManager>;
-
-static inline ECS_Manager ecs_manager;
+using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager, OE::ShaderAssetManager, OE::ScriptAssetManager>;
