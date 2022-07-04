@@ -1,80 +1,72 @@
 #version 450
 
-/*
-struct Material {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-}; 
-*/
-
-struct Light
-{
-    vec3 position;
-	float cutoff;
-	vec3 diffuse;
-	float out_cutoff;
-	vec3 ambient;
-	float falloff;
-	vec3 specular;
-    float padding;
-	vec3 direction;
-	int light_type;
-};
-
-
-layout(set = 0, binding = 1) uniform light_data {
-    Light lights[20];
-    int num_lights;
-} light_ubo;
+#include "common_frag.glsl"
 
 layout(location = 0) out vec4 outColor;
 
 layout(location = 0) in VS_IN 
 {
     vec3 norm;
-    vec3 frag_position;
+    vec3 frag_pos;
     vec3 cam_pos;
 } vs_in;
 
-layout(set = 2, binding = 0) uniform Material 
-{
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-} material;
-
 layout(set = 2, binding = 1) uniform sampler2D texture1;
-
-
-#include "common.glsl"
-
-// vec3 PointLight(Light lig, vec3 normal, vec3 fragposition, vec3 viewDir)
-// {
-//     vec3 lightDir =normalize(lig.position - fragposition);
-
-
-
-// }
 
 void main() 
 {
- vec3 viewDirection = normalize(vs_in.cam_pos - vs_in.frag_position);
- vec3 result = vec3(0.0);
-  for(int i =0; i < light_ubo.num_lights; ++i)
-  {
-    result += DirLight(light_ubo.lights[i],vs_in.norm,vs_in.frag_position,viewDirection);
-  }
+    vec3 Lo = vec3(0);
 
-    outColor = vec4(result, 1.0);
-    // if(light_ubo.num_lights > 0)
-    // {
-    //     outColor = vec4(light_ubo.lights[0].ambient, 1.0);
-    // }
-    // else
-    // {
-    //  outColor = vec4(material.ambient,1.0);
-    // }
+    for(int i = 0; i < light_ubo.num_lights; ++i) {
+        Light light = light_ubo.lights[i];
+        vec3 L;
+        float att;
+
+        if(light.type == 0) {
+            L = light.pos - vs_in.frag_pos;
+            float d = length(L);
+            att = 1 / (d * d);
+            L = normalize(L);
+        }
+        else if(light.type == 1) {
+            L = light.pos - vs_in.frag_pos;
+            float d = length(L);
+            att = 1 / (d * d);
+            L = normalize(L);
+            float theta = dot(L, normalize(-light.dir));
+            float epsilon = light.cutoff - light.out_cutoff;
+            att *= clamp((theta - light.out_cutoff) / epsilon, 0, 1);
+        }
+        else if(light.type == 2) {
+            L = -normalize(light.dir);
+            att = 1;
+        }
+
+        vec3 radiance = att * light.diffuse;
+
+        vec3 V = normalize(vs_in.cam_pos - vs_in.frag_pos);
+        vec3 N = normalize(vs_in.norm);
+        vec3 H = normalize(L + V);
+
+        float D = DistributionGGX(N, H, material.roughness);
+
+        vec3 F0 = vec3(0.04);
+        F0 = mix(F0, material.albedo, material.metallic);
+        vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
+        float G = GeometrySmith(N, V, L, material.roughness);
+
+        vec3 Ks = F;
+        vec3 Kd = vec3(1.0) - Ks;
+        Kd *= 1.0 - material.metallic;
+
+        vec3 specular = (D * F * G) / max(4 * max(dot(V, N), 0.0) * max(dot(L, N), 0.0), 0.0001);
+        Lo += (Kd * material.albedo / PI + specular) * radiance * max(dot(L, N), 0.0);
+    }
+
+    vec3 ambient = vec3(0.03) * material.albedo * material.ao;
+    vec3 color = ambient + Lo;
+    //color = color /  (color + vec3(1.0));
+    //color = pow(color, vec3(1.0/2.2));
+
+    outColor = vec4(color, 1.0);
 }

@@ -194,10 +194,10 @@ namespace OE
 				material_component.flag = true;
 			}
 
-			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.ambient), &material_component.data.ambient.x);
-			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.diffuse), &material_component.data.diffuse.x);
-			is_changed |= ImGui::ColorEdit3(GET_VARIABLE_NAME(material.specular), &material_component.data.specular.x);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.shinnesss), &material_component.data.shininess);
+			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.albedo), &material_component.data.albedo.x);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.metallic), &material_component.data.metallic);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao);
 
 			if (is_changed)
 			{
@@ -249,10 +249,12 @@ namespace OE
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.dir.x);
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
-			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.ambient), &light_component.data.ambient.x);
-			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.specular), &light_component.data.specular.x);
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.inner_cut_off), &light_component.data.cutoff);
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.outer_cut_off), &light_component.data.out_cutoff);
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.falloff), &light_component.data.falloff);
+			ImGui::InputInt(GET_VARIABLE_NAME(light.type), &light_component.data.type);
 			ImGui::TreePop();
 		}
 

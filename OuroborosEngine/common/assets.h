@@ -53,29 +53,22 @@ namespace Asset
 
     struct MaterialData
     {
-        alignas(16)  glm::vec3 ambient;
-        alignas(16)  glm::vec3 diffuse;
-        alignas(16)  glm::vec3 specular;
-        float shininess;
+        alignas(16)  glm::vec3 albedo;
+        float metallic;
+        float roughness;
+        float ao;
     };
 
     struct LightData
     {
-        glm::vec3 position;
-        float cutoff;
-        glm::vec3 diffuse;
-        float out_cutoff;
-        glm::vec3 ambient;
+        alignas(16)   glm::vec3 pos;
+		float cutoff;
+        alignas(16)   glm::vec3 diffuse;
+		float out_cutoff;
+        alignas(16) 	glm::vec3 dir;
         float falloff;
-        glm::vec3 specular;
-        float padding4;
-        glm::vec3 direction;
-        int light_type;
+        int type; // 0 = point, 1 = spot, 2 = directional
     };
-
-
-
-
 }
 
 namespace std {

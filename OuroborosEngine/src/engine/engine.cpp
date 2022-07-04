@@ -79,8 +79,8 @@ namespace OE
 						material.is_light = true;
 						light.init = true;
 					}
-					light.data.position = transform.pos;
-					material.data.diffuse = light.data.diffuse;
+					light.data.pos = transform.pos;
+					//material.data.diffuse = light.data.diffuse;
 					context->UpdateLight(ent, &light.data);
 				}
 			});
