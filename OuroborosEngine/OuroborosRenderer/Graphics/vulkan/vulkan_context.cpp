@@ -22,8 +22,7 @@
 #include <gtc/matrix_transform.hpp>
 
 
-
-
+#include "vulkan_initializers.h"
 #include "vulkan_material.h"
 #include "backends/imgui_impl_vulkan.h"
 //#define GLFW_EXPOSE_NATIVE_WIN32s
@@ -56,6 +55,8 @@ namespace Renderer
     void CleanupSwapChain();
     int RateDeviceSuitability(VkPhysicalDevice device);
 
+
+
     bool IsDevicesSuitable(VkPhysicalDevice device);
     QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
     bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
@@ -68,7 +69,8 @@ namespace Renderer
 
     //For Deferred rendering
     void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
-
+    int DeferredFramebufferInit();
+    int DeferredDescriptorSetLayoutInit();
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -1248,9 +1250,159 @@ namespace Renderer
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
 
-        CreateImage(vulkan_type, &attachment->vulkan_image, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.width, attachment->vulkan_image.format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
+       CreateImage(vulkan_type, &attachment->vulkan_image, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.width, attachment->vulkan_image.format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
     }
 
-    
+    int DeferredFramebufferInit()
+    {
+        auto& swap_chain = vulkan_type.swapchain;
+        auto& deferred_frame_buffer    = vulkan_type.deferred_frame_buffer;
+
+        deferred_frame_buffer.width  = swap_chain.extent.width;
+        deferred_frame_buffer.height = swap_chain.extent.height;
+
+        //color attachment
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &deferred_frame_buffer.position);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &deferred_frame_buffer.normal);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &deferred_frame_buffer.albedo);
+
+        VkFormat att_depth_format;
+        VkBool32 valid_depth_format = VulkanInitializer::GetSupportDepthFormat(vulkan_type.device.physical_device, &att_depth_format);
+        assert(valid_depth_format);
+
+        //depth attachment
+        CreateFrameAttachment(&vulkan_type, att_depth_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &deferred_frame_buffer.depth);
+
+        std::array<VkAttachmentDescription, 4> attachment_descriptions = {};
+
+        for (uint32_t idx = 0; idx < 4; ++idx)
+        {
+            attachment_descriptions[idx].samples        = VK_SAMPLE_COUNT_1_BIT;
+            attachment_descriptions[idx].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachment_descriptions[idx].storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+            attachment_descriptions[idx].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachment_descriptions[idx].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            if (idx == 3)
+            {
+                attachment_descriptions[idx].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment_descriptions[idx].finalLayout   = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            }
+            else
+            {
+                attachment_descriptions[idx].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment_descriptions[idx].finalLayout   = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            }
+        }
+
+        attachment_descriptions[0].format = deferred_frame_buffer.position.vulkan_image.format;
+        attachment_descriptions[1].format = deferred_frame_buffer.normal.vulkan_image.format;
+        attachment_descriptions[2].format = deferred_frame_buffer.albedo.vulkan_image.format;
+        attachment_descriptions[3].format = deferred_frame_buffer.depth.vulkan_image.format;
+
+        std::vector<VkAttachmentReference> color_references{
+        	{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+        	{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+        	{ 2, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },};
+
+        VkAttachmentReference depth_reference{};
+        depth_reference.attachment = 3;
+        depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+
+        VkSubpassDescription sub_pass{};
+
+        sub_pass.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        sub_pass.pColorAttachments       = color_references.data();
+        sub_pass.colorAttachmentCount    = color_references.size();
+        sub_pass.pDepthStencilAttachment = &depth_reference;
+
+        std::array<VkSubpassDependency, 2> dependencies;
+
+        dependencies[0].srcSubpass      = VK_SUBPASS_EXTERNAL;
+        dependencies[0].dstSubpass      = 0;
+        dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[0].dstStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[0].srcAccessMask   = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[0].dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+        dependencies[1].srcSubpass      = 0;
+        dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
+        dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[1].dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+        VkRenderPassCreateInfo render_pass_info = {};
+        render_pass_info.sType              = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        render_pass_info.pAttachments       = attachment_descriptions.data();
+        render_pass_info.attachmentCount    = attachment_descriptions.size();
+        render_pass_info.subpassCount       = 1;
+        render_pass_info.pSubpasses         = &sub_pass;
+        render_pass_info.dependencyCount    = 2;
+        render_pass_info.pDependencies      = dependencies.data();
+
+        VK_CHECK(vkCreateRenderPass(vulkan_type.device.handle, &render_pass_info, nullptr, &deferred_frame_buffer.render_pass));
+
+        std::array<VkImageView, 4> attachments;
+        attachments[0] = deferred_frame_buffer.position.vulkan_image.image_view;
+        attachments[1] = deferred_frame_buffer.normal.vulkan_image.image_view;
+        attachments[2] = deferred_frame_buffer.albedo.vulkan_image.image_view;
+        attachments[3] = deferred_frame_buffer.depth.vulkan_image.image_view;
+
+        VkFramebufferCreateInfo framebuffer_create_info{};
+
+        framebuffer_create_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebuffer_create_info.pNext           = NULL;
+        framebuffer_create_info.renderPass      = deferred_frame_buffer.render_pass;
+        framebuffer_create_info.pAttachments    = attachments.data();
+        framebuffer_create_info.attachmentCount = attachments.size();
+        framebuffer_create_info.width           = deferred_frame_buffer.width;
+        framebuffer_create_info.height          = deferred_frame_buffer.height;
+        framebuffer_create_info.layers          = 1;
+
+        VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &deferred_frame_buffer.frame_buffer));
+
+        VkSamplerCreateInfo sampler_create_info = VulkanInitializer::SamplerCreateInfo();
+        sampler_create_info.magFilter           = VK_FILTER_NEAREST;
+        sampler_create_info.minFilter           = VK_FILTER_NEAREST;
+        sampler_create_info.mipmapMode          = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        sampler_create_info.addressModeU        = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        sampler_create_info.addressModeV        = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        sampler_create_info.addressModeW        = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        sampler_create_info.mipLodBias          = 0.0f;
+        sampler_create_info.maxAnisotropy       = 1.0f;
+        sampler_create_info.minLod              = 0.0f;
+        sampler_create_info.maxLod              = 1.f;
+        sampler_create_info.borderColor         = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+
+        VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &sampler_create_info, nullptr, &deferred_frame_buffer.color_sampler));
+
+        return 0;
+    }
+
+    int DeferredDescriptorSetLayoutInit()
+    {
+        std::vector<VkDescriptorSetLayoutBinding> set_layout_bindings = 
+        {
+            // Binding 0 : Vertex shader uniform buffer
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
+            // Binding 1 : Position texture target / Scene colormap
+             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 1),
+            // Binding 2 : Normals texture target
+              VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
+            // Binding 3 : Albedo texture target
+              VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3),
+        };
+
+
+
+
+
+
+
+
+
+    }
 }
 

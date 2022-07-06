@@ -9,6 +9,8 @@
 #include <optional>
 #include <vk_mem_alloc.h>
 
+#include "vulkan_buffer.h"
+
 #define VK_CHECK(call) \
 	do {	\
 		VkResult result_ = call; \
@@ -63,8 +65,19 @@ struct VulkanDeferredFrameBuffer
 	VulkanFrameBufferAttachment normal;
 	VulkanFrameBufferAttachment albedo;
 	VulkanFrameBufferAttachment depth;
+
 	VkFramebuffer frame_buffer;
 	VkRenderPass render_pass;
+
+	VkDescriptorSet descriptor_set;
+	VkDescriptorSetLayout descriptor_set_layout;
+	VkSampler color_sampler;
+
+	uint32_t width;
+	uint32_t height;
+
+	Renderer::VulkanUniformBuffer uniform_buffer_screen;
+	Renderer::VulkanUniformBuffer uniform_buffer_composition;
 };
 struct QueueFamilyIndices
 {
@@ -121,6 +134,7 @@ struct Vulkan_type
 
 	VkCommandPool command_pool;
 
+	VulkanDeferredFrameBuffer deferred_frame_buffer;
 
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
