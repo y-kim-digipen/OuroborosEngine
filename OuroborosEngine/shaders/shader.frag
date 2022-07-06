@@ -65,8 +65,8 @@ void main()
 
     vec3 ambient = vec3(0.03) * material.albedo * material.ao;
     vec3 color = ambient + Lo;
-    //color = color /  (color + vec3(1.0));
-    //color = pow(color, vec3(1.0/2.2));
+    color = color /  (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2));
 
     outColor = vec4(color, 1.0);
 }

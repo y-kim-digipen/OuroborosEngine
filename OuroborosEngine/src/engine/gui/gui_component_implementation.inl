@@ -195,8 +195,8 @@ namespace OE
 			}
 
 			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.albedo), &material_component.data.albedo.x);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.metallic), &material_component.data.metallic);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.metallic), &material_component.data.metallic, 0.01f, 0.0f, 1.0f);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness, 0.01f, 0.0f, 1.0f);
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao);
 
 			if (is_changed)
