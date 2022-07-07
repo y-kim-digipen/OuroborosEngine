@@ -66,7 +66,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release;$(SolutionDir)external\lib\yaml-cpp\build\RelWithDebInfo</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yaml-cpp.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
@@ -113,6 +113,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
     <ClInclude Include="src\engine\custom_assert.h" />
+    <ClInclude Include="src\engine\debug\profiler.h" />
     <ClInclude Include="src\engine\ecs\components.h" />
     <ClInclude Include="src\engine\ecs\component_manager.h" />
     <ClInclude Include="src\engine\ecs\ecs_base.h" />
@@ -133,6 +134,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\scripting\script.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\debug\profiler.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp" />
