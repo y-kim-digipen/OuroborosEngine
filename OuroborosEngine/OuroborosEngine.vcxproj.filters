@@ -23,12 +23,6 @@
     <Filter Include="engine\input">
       <UniqueIdentifier>{6c356a02-3d50-40d9-83c7-e7b73abdf7ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="common">
-      <UniqueIdentifier>{bed55a02-6d66-40ff-9989-b64418c1fe0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="engine\assets">
-      <UniqueIdentifier>{c3c5016f-f9f3-4a03-a5a2-1d8da3399469}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\scripting">
       <UniqueIdentifier>{b208a801-5d97-4c9f-a6d3-8cfacae2e0b7}</UniqueIdentifier>
     </Filter>
@@ -75,9 +69,6 @@
     <ClInclude Include="src\engine\modules\image_asset_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
-    <ClInclude Include="common\assets.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\modules\shader_asset_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
@@ -92,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="src\engine\scripting\script.h">
       <Filter>engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gui\gui_asset_implementation.h">
+      <Filter>engine\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -118,9 +112,6 @@
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl">
       <Filter>engine\gui</Filter>
-    </None>
-    <None Include="common\asset_imgui_impl.inl">
-      <Filter>common</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -86,5 +86,3 @@ namespace std {
         }
     };
 }
-
-#include "asset_imgui_impl.inl"

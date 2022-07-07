@@ -8,6 +8,7 @@
 #include "../engine.h"
 #include "../engine_settings.h"
 #include "../common/assets.h"
+#include "gui/gui_asset_implementation.h"
 #include "GUI_definedColors.h"
 
 namespace _imgui_helper
@@ -204,7 +205,7 @@ namespace OE
 							}
 							else
 							{
-								OE::ImGuiImpl(asset.second);
+								OE::AssetImGuiImpl(asset.second);
 							}
 							}
 						}

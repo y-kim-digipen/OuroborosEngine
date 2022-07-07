@@ -15,6 +15,9 @@
 #include "input/InputManager.h"
 #include "scripting/lua_script_manager.h"
 
+#ifndef ENGINE
+#define ENGINE
+#endif
 
 namespace OE
 {

@@ -59,14 +59,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release;$(SolutionDir)external\lib\yaml-cpp\build\RelWithDebInfo</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yaml-cpp.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
@@ -87,7 +87,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -95,8 +95,8 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release;$(SolutionDir)external\lib\yaml-cpp\build\RelWithDebInfo</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yaml-cpp.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
@@ -110,7 +110,6 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="common\assets.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
     <ClInclude Include="src\engine\custom_assert.h" />
@@ -121,6 +120,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\ecs\system_manager.h" />
     <ClInclude Include="src\engine\engine_settings.h" />
     <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\gui\gui_asset_implementation.h" />
     <ClInclude Include="src\engine\gui\gui_component_panel.h" />
     <ClInclude Include="src\engine\gui\GUI_definedColors.h" />
     <ClInclude Include="src\engine\input\InputManager.h" />
@@ -147,7 +147,6 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\asset_imgui_impl.inl" />
     <None Include="src\engine\gui\gui_component_implementation.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
