@@ -126,6 +126,7 @@ namespace OE
 
 	void Engine::Init()
 	{
+		Profiler::Init();
 		/*
 		target_fps = 240;
 		target_dt = 1.0f / (target_fps * 2);*/
@@ -181,6 +182,8 @@ namespace OE
 		
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
+
+		Profiler::Start();
 	}
 
 	void Engine::PreUpdate()
