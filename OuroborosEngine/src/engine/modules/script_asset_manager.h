@@ -1,5 +1,6 @@
 #pragma once
 #include "master_asset_manager.h"
+#include "../src/engine/scripting/script.h"
 
 namespace Asset
 {
@@ -13,6 +14,24 @@ namespace OE
     public:
         virtual int LoadAsset(const std::string& file_name) override;
         virtual int UnloadAsset(const std::string& name) override;
+
+        static OE::Script::ScriptType GetTypeFromExtension(const std::string extension_str)
+        {
+	        Script::ScriptType type = Script::ScriptType::Normal;
+            if (extension_str == ".lua")
+            {
+                type = Script::ScriptType::Normal;
+            }
+            else if (extension_str == ".clua")
+            {
+                type = Script::ScriptType::Component;
+            }
+            else if (extension_str == ".slua")
+            {
+                type = Script::ScriptType::System;
+            }
+            return type;
+        }
     };
 
 

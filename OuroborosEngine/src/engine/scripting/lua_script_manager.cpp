@@ -25,6 +25,53 @@ namespace OE
 			return res.valid();
 		}
 
+		Script* LuaScriptManager::CreateScript(std::string&& script_name, ScriptType type, std::string&& script_path)
+		{
+			sol::state sol_state = Create(sol::state());
+			auto res = scripts[GetScriptTypeIdx(type)].try_emplace(script_name, std::move(sol_state));
+			if (res.second)
+			{
+				if (script_path.empty() == false)
+				{
+					res.first->second.ChangeScript(script_path);
+				}
+				return &res.first->second;
+			}
+			return nullptr;
+		}
+
+		Script* LuaScriptManager::CreateScript(const std::string& script_name, ScriptType type,
+			const std::string& script_path)
+		{
+			sol::state sol_state = Create(sol::state());
+			auto res = scripts[GetScriptTypeIdx(type)].try_emplace(script_name, std::move(sol_state));
+			if (res.second)
+			{
+				if (script_path.empty() == false)
+				{
+					res.first->second.ChangeScript(script_path);
+				}
+				return &res.first->second;
+			}
+			return nullptr;
+		}
+
+		Script* LuaScriptManager::GetScript(ScriptType type, std::string&& script_name)
+		{
+			bool contains = scripts[GetScriptTypeIdx(type)].contains(script_name);
+			if (contains == false)
+				return nullptr;
+			return &scripts[GetScriptTypeIdx(type)][script_name];
+		}
+
+		Script* LuaScriptManager::GetScript(ScriptType type, const std::string& script_name)
+		{
+			bool contains = scripts[GetScriptTypeIdx(type)].contains(script_name);
+			if (contains == false)
+				return nullptr;
+			return &scripts[GetScriptTypeIdx(type)][script_name];
+		}
+
 		void LuaScriptManager::RegisterUserDateTypes(sol::state& state)
 		{		//Math types
 			state.new_usertype<glm::vec3>("vec3",

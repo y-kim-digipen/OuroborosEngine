@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "../common/assets.h"
+#include "engine.h"
 
 namespace OE
 {
@@ -22,10 +23,12 @@ namespace OE
 	template<>
 	inline void AssetImGuiImpl<Asset::Script>(const Asset::Script& script)
 	{
-		const std::string& file_path = script.path;
+		const std::filesystem::path script_path(script.path);
+		const std::string& extension = script_path.extension().string();
 
 		std::ifstream script_file;
-		script_file.open(file_path);
+
+		script_file.open(script_path);
 
 		if (script_file.is_open())
 		{
@@ -46,12 +49,13 @@ namespace OE
 		}
 		else
 		{
-			ImGui::TextColored(OE::GUI_Colors::RED, "Cannot open file %s", file_path.c_str());
+			ImGui::TextColored(OE::GUI_Colors::RED, "Cannot open file %s", script_path.c_str());
 		}
 
 		if (ImGui::SmallButton("Reload changes"))
 		{
-			/*Engine::*/
+			const auto pScript = OE::Engine::lua_script_manager.GetScript(ScriptAssetManager::GetTypeFromExtension(extension), script_path.string());
+			pScript->ChangeScript(script_path.string());
 		}
 		//ImGui::TextWrapped(.c_str());
 	}

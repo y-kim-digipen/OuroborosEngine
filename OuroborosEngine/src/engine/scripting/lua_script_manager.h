@@ -9,60 +9,14 @@ namespace OE
 		class LuaScriptManager
 		{
 		public:
-			Script* CreateScript(std::string&& script_name, ScriptType type, std::string&& script_path = std::string())
-			{
-				sol::state sol_state = Create(sol::state());
-				auto res = scripts[GetScriptTypeIdx(type)].try_emplace(script_name, std::move(sol_state));
-				if (res.second)
-				{
-					if(script_path.empty() == false)
-					{
-						res.first->second.ChangeScript(script_path);
-					}
-					return &res.first->second;
-				}
-				return nullptr;
-			}
-
-			Script* CreateScript(const std::string& script_name, ScriptType type, const std::string& script_path = std::string())
-			{
-				sol::state sol_state = Create(sol::state());
-				auto res = scripts[GetScriptTypeIdx(type)].try_emplace(script_name, std::move(sol_state));
-				if (res.second)
-				{
-					if (script_path.empty() == false)
-					{
-						res.first->second.ChangeScript(script_path);
-					}
-					return &res.first->second;
-				}
-				return nullptr;
-			}
+			Script* CreateScript(std::string&& script_name, ScriptType type, std::string&& script_path = std::string());
+			Script* CreateScript(const std::string& script_name, ScriptType type, const std::string& script_path = std::string());
 
 			template<typename ... Args>
-			void Update(ScriptType type, Args&& ... args)
-			{
-				for (auto& script : scripts[GetScriptTypeIdx(type)] | std::views::values)
-				{
-					script.Update(std::move(args)...);
-				}
-			}
+			void Update(ScriptType type, Args&& ... args);
 
-			Script* GetScript(ScriptType type, std::string&& script_name)
-			{
-				bool contains = scripts[GetScriptTypeIdx(type)].contains(script_name);
-				if (contains == false)
-					return nullptr;
-				return &scripts[GetScriptTypeIdx(type)][script_name];
-			}
-
-			Script* GetScript(ScriptType type, const std::string& script_name)
-			{
-				bool contains = scripts[GetScriptTypeIdx(type)].contains(script_name);
-				if (contains == false)
-					return nullptr;
-				return &scripts[GetScriptTypeIdx(type)][script_name];
-			}
+			Script* GetScript(ScriptType type, std::string&& script_name);
+			Script* GetScript(ScriptType type, const std::string& script_name);
 
 			auto& GetScripts(ScriptType type)
 			{
@@ -87,6 +41,16 @@ namespace OE
 		public:
 			std::array<std::map<std::string, Script>, static_cast<size_t>(ScriptType::Count)> scripts;
 		};
+
+		template <typename ... Args>
+		void LuaScriptManager::Update(ScriptType type, Args&&... args)
+		{
+			for (auto& script : scripts[GetScriptTypeIdx(type)] | std::views::values)
+			{
+				script.Update(std::move(args)...);
+			}
+		}
+
 
 		void TestLua();
 	}

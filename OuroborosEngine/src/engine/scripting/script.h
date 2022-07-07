@@ -109,9 +109,8 @@ namespace OE
 		}
 
 		template <typename ...Args>
-		inline void Script::Update(Args&&... args)
+		void Script::Update(Args&&... args)
 		{
-			//std::cout << sizeof...(Args) << std::endl;
 			switch (state)
 			{
 			case State::Unloaded:
