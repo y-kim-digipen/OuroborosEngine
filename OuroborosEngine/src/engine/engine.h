@@ -15,7 +15,7 @@
 #include "input/InputManager.h"
 #include "scripting/lua_script_manager.h"
 
-#include "debug/profiler.h"
+//#include "debug/profiler.h"
 
 #ifndef ENGINE
 #define ENGINE
@@ -34,7 +34,7 @@ namespace OE
 		static void Update();
 		static void PostUpdate();
 		static void CleanUp(){}
-		static void ShutDown() { Profiler::Exit(); }
+		static void ShutDown() { /*Profiler::Exit();*/ }
 
 		static auto GetGLFWWindow()
 		{

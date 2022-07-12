@@ -90,9 +90,6 @@
     <ClInclude Include="src\engine\gui\gui_asset_implementation.h">
       <Filter>engine\gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\debug\profiler.h">
-      <Filter>engine\debug</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -113,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="src\engine\modules\script_asset_manager.cpp">
       <Filter>engine\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\debug\profiler.cpp">
-      <Filter>engine\debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
