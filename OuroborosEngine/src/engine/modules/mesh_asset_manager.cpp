@@ -102,4 +102,13 @@ namespace OE
         vulkan_mesh_manager.DeleteMeshData(name);
         return 0;
 	}
+
+	void MeshAssetManager::CleanUp()
+	{
+        for(const auto& key : assets | std::views::keys)
+        {
+            UnloadAsset(key);
+        }
+		AssetManager<Asset::Mesh>::CleanUp();
+	}
 }

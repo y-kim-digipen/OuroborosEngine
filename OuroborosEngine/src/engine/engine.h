@@ -15,6 +15,8 @@
 #include "input/InputManager.h"
 #include "scripting/lua_script_manager.h"
 
+#include "serializer/scene_serializer.h"
+
 //#include "debug/profiler.h"
 
 #ifndef ENGINE
@@ -39,6 +41,11 @@ namespace OE
 		static auto GetGLFWWindow()
 		{
 			return window->GetWindowData().window;
+		}
+
+		static auto& GetECSManager()
+		{
+			return ecs_manager;
 		}
 
 		class DeltaTime
@@ -79,6 +86,7 @@ namespace OE
 		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
 		inline static ECS_Manager ecs_manager;
 		inline static Script::LuaScriptManager lua_script_manager;
+		inline static SceneSerializer scene_serializer;
 	};
 
 	inline Engine& Engine::Get()

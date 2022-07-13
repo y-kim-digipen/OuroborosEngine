@@ -268,34 +268,29 @@ namespace OE
 					const auto& extension = entry.path().extension().string();
 					if (ImGui::BeginPopupContextItem())
 					{
-						//if(ImGui::MenuItem("Load"))
-						//{
-							using asset_manager_list = decltype(Engine::asset_manager)::manager_list;
-							brigand::for_each<asset_manager_list>([extension, path](auto t)
+						using asset_manager_list = decltype(Engine::asset_manager)::manager_list;
+						brigand::for_each<asset_manager_list>([extension, path](auto t)
+							{
+								using TAssetManager = typename decltype(t)::type;
+								using TAsset = typename TAssetManager::asset_type;
+
+								const std::list<std::string>& supported_type = TAsset::supported_formats;
+
+								for (const auto& type : supported_type)
 								{
-									using TAssetManager = typename decltype(t)::type;
-									using TAsset = typename TAssetManager::asset_type;
-
-									const std::list<std::string>& supported_type = TAsset::supported_formats;
-
-									for (const auto& type : supported_type)
+									if (type == extension)
 									{
-										if(type == extension)
+										if (ImGui::SmallButton((std::string{ "Load " } + typeid(TAssetManager).name()).c_str()))
 										{
-											//ImGui::MEnu
-											if (ImGui::SmallButton((std::string{ "Load " } + typeid(TAssetManager).name()).c_str()))
-											{
-												auto& asset_manager = Engine::asset_manager.GetManager<TAssetManager>();
-												asset_manager.LoadAsset(path.string());
-												continue;
-												ImGui::CloseCurrentPopup();
-											}
-											
+											auto& asset_manager = Engine::asset_manager.GetManager<TAssetManager>();
+											asset_manager.LoadAsset(path.string());
+											continue;
+											ImGui::CloseCurrentPopup();
 										}
+
 									}
-								});
-							//ImGui::CloseCurrentPopup();
-						//}
+								}
+							});
 						ImGui::EndPopup();
 					}
 					if (ImGui::IsItemHovered())
@@ -332,6 +327,16 @@ namespace OE
 			{
 				directory_path = directory_path.substr(0, directory_path.find_last_of('\\'));
 			}
+		}
+
+		static char buf[25];
+		ImGui::InputText("##name", buf, 25);
+		ImGui::SameLine();
+		if(ImGui::SmallButton("Save"))
+		{
+			const std::filesystem::path path = (directory_path + "\\").append(buf);
+			std::string relative_path = std::filesystem::relative(path, "..\\").string();
+			OE::Engine::scene_serializer.SerializeScene( path.string());
 		}
 	}
 

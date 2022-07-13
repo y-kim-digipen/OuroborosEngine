@@ -9,6 +9,7 @@ namespace OE
     public:
         ~ImageAssetManager() override;
         virtual int LoadAsset(const std::string& name) override;
-        //virtual int UnloadAsset(const std::string& name) override;
+        virtual int UnloadAsset(const std::string& name) override;
+        void CleanUp() override;
     };
 }

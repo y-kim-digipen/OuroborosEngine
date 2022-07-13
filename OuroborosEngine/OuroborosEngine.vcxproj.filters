@@ -29,6 +29,9 @@
     <Filter Include="engine\debug">
       <UniqueIdentifier>{934397c8-1130-40cc-8b33-3dba24d3a0aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\serializer">
+      <UniqueIdentifier>{fd2ff098-a17d-4802-8c07-9de1166cb593}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\engine.h">
@@ -90,6 +93,9 @@
     <ClInclude Include="src\engine\gui\gui_asset_implementation.h">
       <Filter>engine\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\serializer\scene_serializer.h">
+      <Filter>engine\serializer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -110,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="src\engine\modules\script_asset_manager.cpp">
       <Filter>engine\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\serializer\scene_serializer.cpp">
+      <Filter>engine\serializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -85,8 +85,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>RENDERER</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)external\lib\rttr-0.9.6\include;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>

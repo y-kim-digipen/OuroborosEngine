@@ -132,7 +132,7 @@ namespace OE
 		target_dt = 1.0f / (target_fps * 2);*/
 		//Init engine
 		Engine& engine = Get();
-
+		scene_serializer.Init();
 		ECS_TestSetup();
 		
 		//Init window
@@ -183,6 +183,8 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 
+		scene_serializer.SerializeScene("test.yaml");
+		scene_serializer.DeserializeScene("1.yaml");
 		//Profiler::Start();
 	}
 

@@ -71,6 +71,10 @@ namespace OE
 				//OE_Assert(counter == INT16_MAX, "ID encountered maximum size of ID generator");
 				return counter++;
 			}
+			static void Reset()
+			{
+				counter = 0;
+			}
 			inline static ecs_ID counter{ 0 };
 		};
 
@@ -371,6 +375,18 @@ namespace OE
 				static_assert(settings::template IsComponent<T>());
 			}
 		public:
+			void Clear()
+			{
+				for (ecs_ID idx = 0; idx < num_entities; ++idx)
+				{
+					DeleteEntity(idx);
+				}
+				current_container_size = 0;
+				num_entities = 0;
+				component_manager.GrowCapacity(current_container_size);
+				entity_storage.resize(current_container_size);
+				ID_Generator::Reset();
+			}
 
 			Entity& CreateEntity()
 			{
