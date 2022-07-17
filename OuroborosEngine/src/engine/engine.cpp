@@ -216,6 +216,8 @@ namespace OE
 		window->BeginFrame();
 		window->Update();
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
+
+
 		window->EndFrame();
 		input.Update();
 

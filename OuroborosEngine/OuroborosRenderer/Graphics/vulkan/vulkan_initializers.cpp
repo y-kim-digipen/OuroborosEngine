@@ -1,5 +1,7 @@
 #include "vulkan_initializers.h"
 
+#include <vector>
+
 namespace Renderer
 {
 	VkDescriptorSetLayoutBinding VulkanInitializer::DescripterSetLayoutBinding(VkDescriptorType type,
@@ -49,7 +51,17 @@ namespace Renderer
 		return write_descriptor_set;
 	}
 
-	bool VulkanInitializer::GetSupportDepthFormat(VkPhysicalDevice physical_device, VkFormat* depth_format)
+	VkDescriptorImageInfo VulkanInitializer::DescriptorImageInfo(VkSampler sampler, VkImageView image_view,
+		VkImageLayout image_layout)
+	{
+		VkDescriptorImageInfo descriptor_image_info{};
+		descriptor_image_info.sampler = sampler;
+		descriptor_image_info.imageView = image_view;
+		descriptor_image_info.imageLayout = image_layout;
+		return descriptor_image_info;
+	}
+
+	VkBool32 VulkanInitializer::GetSupportDepthFormat(VkPhysicalDevice physical_device, VkFormat* depth_format)
 	{
 		std::vector<VkFormat> depth_formats = 
 		{
@@ -118,7 +130,7 @@ namespace Renderer
 	}
 
 	 VkPipelineRasterizationStateCreateInfo VulkanInitializer::PipelineRasterizationStateCreateInfo(
-		VkPolygonMode polygon_mode)
+		VkPolygonMode polygon_mode, VkCullModeFlags cull_mode)
 	{
 		VkPipelineRasterizationStateCreateInfo pipeline_rasterization_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
 		pipeline_rasterization_state_create_info.depthClampEnable = VK_FALSE;
@@ -147,16 +159,17 @@ namespace Renderer
 		pipeline_multisample_state_create_info.pSampleMask = nullptr;
 		pipeline_multisample_state_create_info.alphaToCoverageEnable = VK_FALSE;
 		pipeline_multisample_state_create_info.alphaToOneEnable = VK_FALSE;
+		pipeline_multisample_state_create_info.flags = 0;
 
 		return pipeline_multisample_state_create_info;
 	}
 
-	 VkPipelineColorBlendAttachmentState VulkanInitializer::PipelineColorBlendAttachmentState()
+	 VkPipelineColorBlendAttachmentState VulkanInitializer::PipelineColorBlendAttachmentState(VkColorComponentFlags color_write_mask,
+		 VkBool32 blend_enable)
 	{
 		VkPipelineColorBlendAttachmentState pipeline_color_blend_attachment_state{};
-		pipeline_color_blend_attachment_state.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-			VK_COLOR_COMPONENT_A_BIT;
-		pipeline_color_blend_attachment_state.blendEnable = VK_FALSE;
+		pipeline_color_blend_attachment_state.colorWriteMask = color_write_mask;
+		pipeline_color_blend_attachment_state.blendEnable = blend_enable;
 		return pipeline_color_blend_attachment_state;
 	}
 
@@ -192,4 +205,31 @@ namespace Renderer
 		return info;
 	}
 
+	 VkPipelineVertexInputStateCreateInfo VulkanInitializer::PipelineVertexInputStateCreateInfo()
+	 {
+		 VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo{};
+		 pipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		 return pipelineVertexInputStateCreateInfo;
+	 }
+
+	 VkSemaphoreCreateInfo VulkanInitializer::SemaphoreCreateInfo()
+	 {
+		 VkSemaphoreCreateInfo semaphore_create_info{};
+		 semaphore_create_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+		 return semaphore_create_info;
+	 }
+
+	 VkRenderPassBeginInfo VulkanInitializer::RenderPassBeginInfo()
+	 {
+		 VkRenderPassBeginInfo render_pass_begin_info{};
+		 render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		 return render_pass_begin_info;
+	 }
+
+	 VkCommandBufferBeginInfo VulkanInitializer::CommandBufferBeginInfo()
+	 {
+		 VkCommandBufferBeginInfo cmd_buffer_begin_info{};
+		 cmd_buffer_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		 return cmd_buffer_begin_info;
+	 }
 }

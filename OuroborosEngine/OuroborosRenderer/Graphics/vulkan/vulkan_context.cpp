@@ -54,7 +54,7 @@ namespace Renderer
     int CreateDescriptorPool();
     void CleanupSwapChain();
     int RateDeviceSuitability(VkPhysicalDevice device);
-
+    
 
 
     bool IsDevicesSuitable(VkPhysicalDevice device);
@@ -70,7 +70,7 @@ namespace Renderer
     //For Deferred rendering
     void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
     int DeferredFramebufferInit();
-    int DeferredDescriptorSetLayoutInit();
+    int DeferredCommandBuffer();
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -119,6 +119,7 @@ namespace Renderer
         CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
+        DeferredFramebufferInit();
         CreateCommandPool();
         CreateCommandBuffer();
         CreateSyncObjects();
@@ -133,24 +134,38 @@ namespace Renderer
         Vulkan_PipelineBuilder pipeline_builder;
 
 		//TODO: convert to dynamic descriptor & ubo buffer and combine per frame data to one buffer 
-        const uint32_t binding_count = 2;
-        VkDescriptorSetLayoutBinding bindings[binding_count];
-        // camera data
-        bindings[0].binding = 0;
-        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[0].descriptorCount = 1;
-        bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        // light data
-        bindings[1].binding = 1;
-        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[1].descriptorCount = 1;
-        bindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        const uint32_t binding_count = 5;
+        std::vector <VkDescriptorSetLayoutBinding> bindings{
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT,1),
+            // Binding 2 : Position texture target / Scene colormap
+             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
+             // Binding 3 : Normals texture target
+             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3),
+             // Binding 4 : Albedo texture target
+             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 4),
+
+        };
+
+
+        //VkDescriptorSetLayoutBinding bindings[binding_count];
+        //// camera data
+        //bindings[0].binding = 0;
+        //bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        //bindings[0].descriptorCount = 1;
+        //bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        //// light data
+        //bindings[1].binding = 1;
+        //bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        //bindings[1].descriptorCount = 1;
+        //bindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
 
         VkDescriptorSetLayout set_layout;
 
         VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
         set_layout_create_info.bindingCount = binding_count;
-        set_layout_create_info.pBindings = bindings;
+        set_layout_create_info.pBindings = bindings.data();
          VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
 
         //TODO: this might occur error, need to be test
@@ -165,7 +180,26 @@ namespace Renderer
 
         ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(set_layout);
 
- 
+
+        //deferred
+        auto& deferred_frame_buffer = vulkan_type.deferred_frame_buffer;
+        auto& deferred_color_sampler = deferred_frame_buffer.color_sampler;
+
+        VkDescriptorImageInfo descriptor_position_image_info = VulkanInitializer::DescriptorImageInfo(deferred_color_sampler, deferred_frame_buffer.position.vulkan_image.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo descriptor_normal_image_info = VulkanInitializer::DescriptorImageInfo(deferred_color_sampler, deferred_frame_buffer.normal.vulkan_image.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo descriptor_albedo_image_info = VulkanInitializer::DescriptorImageInfo(deferred_color_sampler, deferred_frame_buffer.albedo.vulkan_image.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            std::vector<VkWriteDescriptorSet> write_descriptor_sets
+            {
+                VulkanInitializer::WriteDescriptorSet(((VulkanUniformBuffer*)global_ubo.get())->descriptor_set[i], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &descriptor_position_image_info),
+                VulkanInitializer::WriteDescriptorSet(((VulkanUniformBuffer*)global_ubo.get())->descriptor_set[i], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &descriptor_normal_image_info),
+                VulkanInitializer::WriteDescriptorSet(((VulkanUniformBuffer*)global_ubo.get())->descriptor_set[i], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &descriptor_albedo_image_info),
+            };
+
+            vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
+        }
         vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
     }
 
@@ -319,20 +353,30 @@ namespace Renderer
         VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore, VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
 
             
-        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
-
-
-
-        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
-        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
 
         return 0;
     }
 
     int VulkanContext::EndFrame()
     {
+        //offscreen end render pass
+        vkCmdEndRenderPass(vulkan_type.deferred_frame_buffer.command_buffer);
+        VK_CHECK(vkEndCommandBuffer(vulkan_type.deferred_frame_buffer.command_buffer));
+
+
+
+
+
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
+
+        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+
+        
+
+
         vkCmdEndRenderPass(frame_data.command_buffer);
         vkEndCommandBuffer(frame_data.command_buffer);
 
@@ -837,21 +881,41 @@ namespace Renderer
             depth_attachment
         };
 
+        //VkSubpassDependency dependency{};
+        //dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        //dependency.dstSubpass = 0;
+        //dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        //dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        //dependency.srcAccessMask = 0;
+        //dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+
+        //VkSubpassDependency depth_dependency{};
+        //depth_dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        //depth_dependency.dstSubpass = 0;
+        //depth_dependency.srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        //depth_dependency.dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        //depth_dependency.srcAccessMask = 0;
+        //depth_dependency.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+
+
         VkSubpassDependency dependency{};
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
         dependency.dstSubpass = 0;
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
         dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.srcAccessMask = 0;
+        dependency.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+        dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
 
         VkSubpassDependency depth_dependency{};
-        depth_dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        depth_dependency.dstSubpass = 0;
-        depth_dependency.srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-        depth_dependency.dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-        depth_dependency.srcAccessMask = 0;
-        depth_dependency.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        depth_dependency.srcSubpass = 0;
+        depth_dependency.dstSubpass = VK_SUBPASS_EXTERNAL;
+        depth_dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        depth_dependency.dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        depth_dependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        depth_dependency.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        depth_dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;;
 
         const uint32_t dependency_count = 2;
         VkSubpassDependency dependencies[dependency_count] = {
@@ -1304,11 +1368,11 @@ namespace Renderer
         	{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
         	{ 2, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },};
 
-        VkAttachmentReference depth_reference{};
+        VkAttachmentReference depth_reference= {};
         depth_reference.attachment = 3;
-        depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+        depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-        VkSubpassDescription sub_pass{};
+        VkSubpassDescription sub_pass ={};
 
         sub_pass.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
         sub_pass.pColorAttachments       = color_references.data();
@@ -1381,25 +1445,50 @@ namespace Renderer
         return 0;
     }
 
-    int DeferredDescriptorSetLayoutInit()
+    int DeferredCommandBuffer()
     {
-        std::vector<VkDescriptorSetLayoutBinding> set_layout_bindings = 
+        if(vulkan_type.deferred_frame_buffer.command_buffer == VK_NULL_HANDLE)
         {
-            // Binding 0 : Vertex shader uniform buffer
-            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
-            // Binding 1 : Position texture target / Scene colormap
-             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 1),
-            // Binding 2 : Normals texture target
-              VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
-            // Binding 3 : Albedo texture target
-              VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3),
-        };
+            VkCommandBufferAllocateInfo allocate_info{};
+            allocate_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+            allocate_info.commandPool = vulkan_type.command_pool;
+            allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+            allocate_info.commandBufferCount = 1;
+
+            if (vkAllocateCommandBuffers(vulkan_type.device.handle, &allocate_info, &vulkan_type.deferred_frame_buffer.command_buffer) != VK_SUCCESS)
+            {
+                throw std::runtime_error("failed to create command buffer");
+            }
+
+            VkSemaphoreCreateInfo semaphoreCreateInfo = VulkanInitializer::SemaphoreCreateInfo();
+            VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphoreCreateInfo, nullptr, &vulkan_type.deferred_frame_buffer.semaphore));
+        }
+
+        VkCommandBufferBeginInfo cmd_buffer_info = VulkanInitializer::CommandBufferBeginInfo();
+
+        std::array<VkClearValue, 4> clear_values;
+        clear_values[0].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+        clear_values[1].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+        clear_values[2].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+        clear_values[3].depthStencil = { 1.0f, 0 };
 
 
+        VkRenderPassBeginInfo renderPassBeginInfo = VulkanInitializer::RenderPassBeginInfo();
+        renderPassBeginInfo.renderPass               = vulkan_type.deferred_frame_buffer.render_pass;
+        renderPassBeginInfo.framebuffer              = vulkan_type.deferred_frame_buffer.frame_buffer;
+        renderPassBeginInfo.renderArea.extent.width  = vulkan_type.deferred_frame_buffer.width;
+        renderPassBeginInfo.renderArea.extent.height = vulkan_type.deferred_frame_buffer.height;
+        renderPassBeginInfo.clearValueCount          = static_cast<uint32_t>(clear_values.size());
+        renderPassBeginInfo.pClearValues             = clear_values.data();
+
+        VK_CHECK(vkBeginCommandBuffer(vulkan_type.deferred_frame_buffer.command_buffer, &cmd_buffer_info));
+
+        vkCmdBeginRenderPass(vulkan_type.deferred_frame_buffer.command_buffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+        
 
 
-
-
+        
 
 
 

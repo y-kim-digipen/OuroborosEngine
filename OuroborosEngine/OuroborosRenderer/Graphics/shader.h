@@ -25,6 +25,7 @@ namespace Renderer {
 		const char* name;
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
+		bool is_deferred_geometry_pass = false;
 	};
 
 	class Shader {

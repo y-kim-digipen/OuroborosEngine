@@ -9,7 +9,6 @@
 #include <optional>
 #include <vk_mem_alloc.h>
 
-#include "vulkan_buffer.h"
 
 #define VK_CHECK(call) \
 	do {	\
@@ -73,11 +72,12 @@ struct VulkanDeferredFrameBuffer
 	VkDescriptorSetLayout descriptor_set_layout;
 	VkSampler color_sampler;
 
+	VkSemaphore semaphore;
+	VkCommandBuffer command_buffer = VK_NULL_HANDLE;
 	uint32_t width;
 	uint32_t height;
 
-	Renderer::VulkanUniformBuffer uniform_buffer_screen;
-	Renderer::VulkanUniformBuffer uniform_buffer_composition;
+
 };
 struct QueueFamilyIndices
 {
@@ -112,10 +112,8 @@ struct VulkanFrameData
 };
 
 
-
 struct Vulkan_type
 {
-	
 #if defined(_DEBUG)
 	VkDebugUtilsMessengerEXT debug_messenger;
 #endif

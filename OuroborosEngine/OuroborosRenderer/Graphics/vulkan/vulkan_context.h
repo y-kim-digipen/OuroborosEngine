@@ -21,7 +21,7 @@ namespace Renderer {
 				
 		int BeginFrame() override;
 		int EndFrame() override;
-
+		int GeometryFrame();
 		VulkanMeshManager mesh_manager_;
 	
 

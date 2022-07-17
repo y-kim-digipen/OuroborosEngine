@@ -206,6 +206,7 @@ namespace Renderer
 	{
 		free(data);
 		data = nullptr;
+
 	}
 
 	void VulkanUniformBuffer::Bind() const
@@ -322,7 +323,7 @@ namespace Renderer
 
 
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-
+		
 			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 
 			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));

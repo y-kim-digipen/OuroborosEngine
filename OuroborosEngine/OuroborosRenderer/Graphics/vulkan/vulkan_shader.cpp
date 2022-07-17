@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <gtc/matrix_transform.hpp>
 
+#include "vulkan_initializers.h"
 #include "../mesh.h"
 
 namespace Renderer {
@@ -140,52 +141,65 @@ namespace Renderer {
 			}
 		}
 
-		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
 		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-
-		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
-
-		//TODO: put in vertex_mesh class as a static
-		VkVertexInputBindingDescription input_binding_description;
-		input_binding_description.binding = 0;
-		input_binding_description.stride = sizeof(Vertex);
-		input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions(3);
-
-		input_attribute_descriptions[0].binding = 0;
-		input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-		input_attribute_descriptions[0].location = 0;
-		input_attribute_descriptions[0].offset = offsetof(Vertex, position);
-
-		input_attribute_descriptions[1].binding = 0;
-		input_attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		input_attribute_descriptions[1].location = 1;
-		input_attribute_descriptions[1].offset = offsetof(Vertex, normal);
-
-		input_attribute_descriptions[2].binding = 0;
-		input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-		input_attribute_descriptions[2].location = 2;
-		input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
-
-		pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
-		pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
-		pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
-		pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
-
-		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling =  VulkanInitializer::PipelineMultisampleStateCreateInfo();
-		pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
-		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
-
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
 									, .height = static_cast<float>(vulkan_type->swapchain.extent.height),.minDepth = 0.f, .maxDepth = 1.f };
 
 		pipeline_builder.scissor = { .offset = {0,0},.extent = vulkan_type->swapchain.extent };
 
-		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
-		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
+		//deferred Pipeline check
+		if (config->is_deferred_geometry_pass == false)
+		{
+			VkPipelineVertexInputStateCreateInfo emptyInputState = VulkanInitializer::PipelineVertexInputStateCreateInfo();
+			pipeline_builder.vertex_input_info = emptyInputState;
+			pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+				VK_COLOR_COMPONENT_A_BIT, VK_FALSE);
+			pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT);
+			pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
+		    pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
+		    pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
+		}
+		else
+		{
+			VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
+
+			//TODO: put in vertex_mesh class as a static
+			VkVertexInputBindingDescription input_binding_description;
+			input_binding_description.binding = 0;
+			input_binding_description.stride = sizeof(Vertex);
+			input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+			std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions(3);
+
+			input_attribute_descriptions[0].binding = 0;
+			input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+			input_attribute_descriptions[0].location = 0;
+			input_attribute_descriptions[0].offset = offsetof(Vertex, position);
+
+			input_attribute_descriptions[1].binding = 0;
+			input_attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+			input_attribute_descriptions[1].location = 1;
+			input_attribute_descriptions[1].offset = offsetof(Vertex, normal);
+
+			input_attribute_descriptions[2].binding = 0;
+			input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+			input_attribute_descriptions[2].location = 2;
+			input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
+
+			pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
+			pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
+			pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
+			pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
+
+			pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
+			pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState(0xf, VK_FALSE);
+			pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT);
+			pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
+			pipeline = pipeline_builder.BuildPipeLineDeferredOffscreen(device->handle, vulkan_type->deferred_frame_buffer.render_pass, shader_stage_create_infos);
+		}
+
 
 		for (uint32_t i = 0; i < E_StageType::MAX_VALUE; ++i) {
 			if (shader_stage_create_infos[i].module != VK_NULL_HANDLE)
