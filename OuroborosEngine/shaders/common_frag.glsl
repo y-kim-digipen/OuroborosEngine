@@ -22,7 +22,16 @@ layout(set = 2, binding = 0) uniform Material
     float metallic;
     float roughness;
     float ao;
+    int has_albedo_texture;
+    int has_normal_texture;
+    int has_metalroughness_texture;
+    int has_ao_texture;
 } material;
+
+layout(set = 2, binding = 1) uniform sampler2D albedo_texture;
+layout(set = 2, binding = 2) uniform sampler2D normal_texture;
+layout(set = 2, binding = 3) uniform sampler2D metalroughness_texture;
+layout(set = 2, binding = 4) uniform sampler2D ao_texture;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {

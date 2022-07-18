@@ -33,7 +33,10 @@ struct MaterialComponent
 	bool flag = false;
 	bool is_save = false;
 	bool is_light = false;
-	std::string texture_name = "";
+	std::string texture_albedo_name = "";
+	std::string texture_normal_name = "";
+	std::string texture_metalroughness_name = "";
+	std::string texture_ao_name = "";
 };
 
 struct ShaderComponent

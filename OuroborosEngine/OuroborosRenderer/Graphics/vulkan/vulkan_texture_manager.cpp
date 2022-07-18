@@ -16,17 +16,26 @@ namespace Renderer
 		static bool init = false;
 		if(!init)
 		{
-			VkDescriptorSetLayoutBinding binding{};
-			binding.descriptorCount = 1;
-			binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-			binding.binding = 0;
 
+			std::vector<VkDescriptorSetLayoutBinding> bindings;
+			//max imgui texture 4
+
+			for(int i = 0 ; i < 4; ++i)
+			{
+				VkDescriptorSetLayoutBinding binding{};
+				binding.descriptorCount = 1;
+				binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+				binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+				binding.binding = i;
+				bindings.push_back(binding);
+			}
+			
+		
 			VkDescriptorSetLayout set_layout;
 
 			VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-			set_layout_create_info.bindingCount = 1;
-			set_layout_create_info.pBindings = &binding;
+			set_layout_create_info.bindingCount = 4;
+			set_layout_create_info.pBindings = bindings.data();
 			VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };

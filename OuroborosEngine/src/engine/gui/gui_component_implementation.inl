@@ -130,7 +130,7 @@ namespace OE
 			}
 
 			if (shader_map.find(shader_component.name) != shader_map.end()) {
-				
+				if(shader->uniform_buffer_object != nullptr)
 				for (const auto& member_variable : shader->uniform_buffer_object->member_vars) {
 
 					switch (member_variable.second.type) {
@@ -199,10 +199,7 @@ namespace OE
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness, 0.01f, 0.0f, 1.0f);
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao);
 
-			if (is_changed)
-			{
-				material_component.flag = true;
-			}
+		
 
 			if (ImGui::Button("save"))
 			{
@@ -211,15 +208,15 @@ namespace OE
 
 
 		
-			if (ImGui::BeginCombo("Texture", material_component.texture_name.c_str()))
+			if (ImGui::BeginCombo("AlbedoTexture", material_component.texture_albedo_name.c_str()))
 			{
 				for (const auto& key : texture_map | std::views::keys)
 				{
-					const bool selected = material_component.texture_name == key;
+					const bool selected = material_component.texture_albedo_name == key;
 					if (ImGui::Selectable(key.c_str(), selected))
 					{
-						material_component.texture_name = key;
-
+						material_component.texture_albedo_name = key;
+						is_changed |= true;
 					
 					}
 					if (selected) {
@@ -230,10 +227,84 @@ namespace OE
 			}
 
 			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
-			if(auto texture = texture_manager->GetTexture(material_component.texture_name); texture)
+		/*	if(auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
 			{
 				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
 				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
+			}*/
+
+			if (ImGui::BeginCombo("NormalTexture", material_component.texture_normal_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = material_component.texture_normal_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						material_component.texture_normal_name = key;
+						is_changed |= true;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_normal_name); texture)
+			{
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 1);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
+			}*/
+
+			if (ImGui::BeginCombo("MetalRoughnessTexture", material_component.texture_metalroughness_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = material_component.texture_metalroughness_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						material_component.texture_metalroughness_name = key;
+						is_changed |= true;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_metalroughness_name); texture)
+			{
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 2);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
+			}*/
+
+			if (ImGui::BeginCombo("AOTexture", material_component.texture_ao_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = material_component.texture_ao_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						material_component.texture_ao_name = key;
+						is_changed |= true;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name); texture)
+			{
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 3);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
+			}*/
+
+			if (is_changed)
+			{
+				material_component.flag = true;
 			}
 			
 			ImGui::TreePop();

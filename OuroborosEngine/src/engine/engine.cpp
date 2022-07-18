@@ -128,7 +128,7 @@ namespace OE
 		camera.data.view = camera.GetCameraMat();
 
 		Renderer::ShaderConfig shader_config3{
-					"light_shader",
+					"shader",
 			{	Renderer::E_StageType::VERTEX_SHADER,
 						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 

@@ -57,6 +57,10 @@ namespace Asset
         float metallic;
         float roughness;
         float ao;
+        int has_albedo_texture=0;
+        int has_normal_texture=0;
+        int has_metalroughness_texture=0;
+        int has_ao_texture=0;
     };
 
     struct LightData

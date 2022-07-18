@@ -19,9 +19,11 @@ namespace Renderer {
 		//VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
 		VulkanMaterial(Vulkan_type* vulkan_type);
 		~VulkanMaterial() override;
-		void SetTexture(std::shared_ptr<Texture> texture) override;
+		void SetAlbedoTexture(std::shared_ptr<Texture> texture) override;
 		void Bind() override;
-
+		void SetAOTexture(std::shared_ptr<Texture> texture) override;
+		void SetMetalRoughness(std::shared_ptr<Texture> texture) override;
+		void SetNormalTexture(std::shared_ptr<Texture> texture) override;
 
 		bool is_changed = false;
 		VkDescriptorSetLayout set_layout{};

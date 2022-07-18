@@ -38,18 +38,38 @@ namespace Renderer {
 		binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		VkDescriptorSetLayoutBinding sampler_layout_binding{};
-		sampler_layout_binding.binding				= 1;
-		sampler_layout_binding.descriptorCount		= 1;
-		sampler_layout_binding.descriptorType		= VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.pImmutableSamplers	= nullptr;
-		sampler_layout_binding.stageFlags			= VK_SHADER_STAGE_FRAGMENT_BIT;
+		VkDescriptorSetLayoutBinding sampler_layout_binding_1{};
+		sampler_layout_binding_1.binding				= 1;
+		sampler_layout_binding_1.descriptorCount		= 1;
+		sampler_layout_binding_1.descriptorType		= VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding_1.pImmutableSamplers	= nullptr;
+		sampler_layout_binding_1.stageFlags			= VK_SHADER_STAGE_FRAGMENT_BIT;
 
+		VkDescriptorSetLayoutBinding sampler_layout_binding_2{};
+		sampler_layout_binding_2.binding = 2;
+		sampler_layout_binding_2.descriptorCount = 1;
+		sampler_layout_binding_2.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding_2.pImmutableSamplers = nullptr;
+		sampler_layout_binding_2.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		std::array<VkDescriptorSetLayoutBinding, 2> bindings = { binding, sampler_layout_binding };
+		VkDescriptorSetLayoutBinding sampler_layout_binding_3{};
+		sampler_layout_binding_3.binding = 3;
+		sampler_layout_binding_3.descriptorCount = 1;
+		sampler_layout_binding_3.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding_3.pImmutableSamplers = nullptr;
+		sampler_layout_binding_3.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+		VkDescriptorSetLayoutBinding sampler_layout_binding_4{};
+		sampler_layout_binding_4.binding = 4;
+		sampler_layout_binding_4.descriptorCount = 1;
+		sampler_layout_binding_4.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding_4.pImmutableSamplers = nullptr;
+		sampler_layout_binding_4.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+		std::array<VkDescriptorSetLayoutBinding, 5> bindings = { binding, sampler_layout_binding_1, sampler_layout_binding_2, sampler_layout_binding_3, sampler_layout_binding_4 };
 
 		VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-		set_layout_create_info.bindingCount = 2;
+		set_layout_create_info.bindingCount = 5;
 		set_layout_create_info.pBindings    = bindings.data();
 
 
@@ -68,10 +88,10 @@ namespace Renderer {
 		vkDestroyDescriptorSetLayout(vulkan_type->device.handle, set_layout, nullptr);
 	}
 
-	void VulkanMaterial::SetTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetAlbedoTexture(std::shared_ptr<Texture> texture)
 	{
-		texture_ = texture;
-		has_texture = true;
+		texture_albedo = texture;
+		has_albedo_texture = true;
 	}
 
 	void VulkanMaterial::Bind()
@@ -82,12 +102,42 @@ namespace Renderer {
 			ubo->UploadToGPU();
 			is_changed = false;
 		}
-		if (has_texture)
-		{
-			for (int i = 0; i < 3; ++i)
-				dynamic_cast<VulkanTexture*>(texture_.get())->UpdateToDescripterSet(ubo->descriptor_set[i], 1);
-		}
-
+			
+				if (has_albedo_texture)
+				{
+					dynamic_cast<VulkanTexture*>(texture_albedo.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);
+				}
+				if (has_normal_texture)
+				{
+					dynamic_cast<VulkanTexture*>(texture_normal.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 2);
+				}
+				if (has_metalroughness_texture)
+				{
+					dynamic_cast<VulkanTexture*>(texture_metalroughness.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
+				}
+				if (has_ao_texture)
+				{
+					dynamic_cast<VulkanTexture*>(texture_ao.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 4);
+				}
+			
 		ubo->Bind();
+	}
+
+	void VulkanMaterial::SetAOTexture(std::shared_ptr<Texture> texture)
+	{
+		Material::SetAOTexture(texture);
+		has_ao_texture = true;
+	}
+
+	void VulkanMaterial::SetMetalRoughness(std::shared_ptr<Texture> texture)
+	{
+		Material::SetMetalRoughness(texture);
+		has_metalroughness_texture = true;
+	}
+
+	void VulkanMaterial::SetNormalTexture(std::shared_ptr<Texture> texture)
+	{
+		Material::SetNormalTexture(texture);
+		has_normal_texture = true;
 	}
 }
