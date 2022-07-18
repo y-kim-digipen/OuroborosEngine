@@ -14,7 +14,7 @@ namespace Renderer
 		VulkanTextureManager(Vulkan_type* vulkan_type);
 		int AddTexture(const std::string& name, const Asset::Image& image) override;
 		int DeleteTexture(const std::string& name) override;
-		VkDescriptorSet descriptor_set_;
+		VkDescriptorSet descriptor_set_[4];
 	private:
 		Vulkan_type* vulkan_type;
 	};

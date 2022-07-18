@@ -229,8 +229,8 @@ namespace OE
 			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
 			if(auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[0], 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[0], ImVec2(100, 100));
 			}
 
 			if (ImGui::BeginCombo("NormalTexture", material_component.texture_normal_name.c_str()))
@@ -252,8 +252,8 @@ namespace OE
 
 			if (auto texture = texture_manager->GetTexture(material_component.texture_normal_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[1], 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[1], ImVec2(100, 100));
 			}
 
 			if (ImGui::BeginCombo("MetalRoughnessTexture", material_component.texture_metalroughness_name.c_str()))
@@ -275,8 +275,8 @@ namespace OE
 
 			if (auto texture = texture_manager->GetTexture(material_component.texture_metalroughness_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[2], 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[2], ImVec2(100, 100));
 			}
 
 			if (ImGui::BeginCombo("AOTexture", material_component.texture_ao_name.c_str()))
@@ -298,8 +298,8 @@ namespace OE
 
 			if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[3], 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_[3], ImVec2(100, 100));
 			}
 
 			if (is_changed)

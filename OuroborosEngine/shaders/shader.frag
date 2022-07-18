@@ -10,10 +10,25 @@ layout(location = 0) in VS_IN
     vec3 frag_pos;
     vec3 cam_pos;
     vec2 uv;
-    vec3 pure_normal;
+    vec3 non_pure_normal;
 } vs_in;
 
+vec3 getNormalFromMap()
+{
+    vec3 tangentNormal = texture(normal_texture,  vs_in.uv).xyz * 2.0 - 1.0;
 
+    vec3 Q1  = dFdx(vs_in.frag_pos);
+    vec3 Q2  = dFdy(vs_in.frag_pos);
+    vec2 st1 = dFdx(vs_in.uv);
+    vec2 st2 = dFdy(vs_in.uv);
+
+    vec3 N   = normalize(vs_in.non_pure_normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
 
 void main() 
 {
@@ -53,12 +68,9 @@ void main()
         vec3 N = normalize(vs_in.norm);
         vec3 H = normalize(L + V);
 
-        vec3 NB = normalize(vs_in.pure_normal);
-
-        mat3 tbn = mat3(NB, cross(N,NB), N);
         if(material.has_normal_texture != 0)
         {
-            N = tbn *(texture(normal_texture, vs_in.uv).xyz * 2.0f - 1.0f);
+            N = getNormalFromMap();
         }
 
      
