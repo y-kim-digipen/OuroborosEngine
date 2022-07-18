@@ -39,13 +39,13 @@ namespace OE
 		TransformComponent& transform_component = ecs_manager.GetComponent<TransformComponent>(entID);
 		if (ImGui::TreeNode(typeid(TransformComponent).name()))
 		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x,0.1);
 			ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
 
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x, 0.1);
 			ImGuiDragDropCopy(transform_component.scale, ImGuiDragDropFlags_SourceAllowNullID);
 
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotateAxis), &transform_component.rotate_axis.x, 0.1);
 			ImGuiDragDropCopy(transform_component.rotate_axis, ImGuiDragDropFlags_SourceAllowNullID);
 
 			//ImGui::DragFloat ("GET_VARIABLE_NAME(transform_component.angle)", &transform_component.angle.x);
@@ -197,7 +197,7 @@ namespace OE
 			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.albedo), &material_component.data.albedo.x);
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.metallic), &material_component.data.metallic, 0.01f, 0.0f, 1.0f);
 			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness, 0.01f, 0.0f, 1.0f);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao);
+			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao,0.1f);
 
 		
 
@@ -227,11 +227,11 @@ namespace OE
 			}
 
 			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
-		/*	if(auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
+			if(auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
 			{
 				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
-			}*/
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+			}
 
 			if (ImGui::BeginCombo("NormalTexture", material_component.texture_normal_name.c_str()))
 			{
@@ -250,11 +250,11 @@ namespace OE
 				ImGui::EndCombo();
 			}
 
-		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_normal_name); texture)
+			if (auto texture = texture_manager->GetTexture(material_component.texture_normal_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 1);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
-			}*/
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+			}
 
 			if (ImGui::BeginCombo("MetalRoughnessTexture", material_component.texture_metalroughness_name.c_str()))
 			{
@@ -273,11 +273,11 @@ namespace OE
 				ImGui::EndCombo();
 			}
 
-		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_metalroughness_name); texture)
+			if (auto texture = texture_manager->GetTexture(material_component.texture_metalroughness_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 2);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
-			}*/
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+			}
 
 			if (ImGui::BeginCombo("AOTexture", material_component.texture_ao_name.c_str()))
 			{
@@ -296,11 +296,11 @@ namespace OE
 				ImGui::EndCombo();
 			}
 
-		/*	if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name); texture)
+			if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name); texture)
 			{
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 3);
-				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(300, 300));
-			}*/
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, 0);
+				ImGui::Image(dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->descriptor_set_, ImVec2(100, 100));
+			}
 
 			if (is_changed)
 			{

@@ -35,13 +35,13 @@ namespace Renderer {
 	{
 		if (auto iter = material_map.find(material_name); iter != material_map.end())
 		{
-			iter->second->InitMaterialData(std::move(data));
+			iter->second->InitMaterialData(data);
 			
 		}
 		else
 		{
 			material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type);
-			material_map[material_name]->InitMaterialData(std::move(data));
+			material_map[material_name]->InitMaterialData(data);
 		}
 			dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
 

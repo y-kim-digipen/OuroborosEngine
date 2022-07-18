@@ -102,7 +102,7 @@ namespace Renderer {
 			ubo->UploadToGPU();
 			is_changed = false;
 		}
-			
+
 				if (has_albedo_texture)
 				{
 					dynamic_cast<VulkanTexture*>(texture_albedo.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);

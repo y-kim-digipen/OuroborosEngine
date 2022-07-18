@@ -58,7 +58,7 @@ void main()
         mat3 tbn = mat3(NB, cross(N,NB), N);
         if(material.has_normal_texture != 0)
         {
-            N = texture(normal_texture, vs_in.uv).xyz * 2.0f - 1.0f;
+            N = tbn *(texture(normal_texture, vs_in.uv).xyz * 2.0f - 1.0f);
         }
 
      
@@ -105,14 +105,14 @@ void main()
         vec3 Kd = vec3(1.0) - Ks;
         Kd *= 1.0 - metallic;
 
-        vec3 specular = (D * F * G) / max(4 * max(dot(V, N), 0.0) * max(dot(L, N), 0.0), 0.0001);
-        Lo += (Kd * albedo / PI + specular) * radiance * max(dot(L, N), 0.0);
+        vec3 specular = (D * F * G) / (4*  max(dot(V, N), 0.0) * max(dot(L, N), 0.0)+ 0.0001);
+        Lo += (Kd * albedo / PI + specular) * radiance * max(dot(N, L), 0.0);
     }
 
     vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
-    // color = color /  (color + vec3(1.0));
-    // color = pow(color, vec3(1.0/2.2));
+    color = color /  (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2));
 
     outColor = vec4(color, 1.0);
 }

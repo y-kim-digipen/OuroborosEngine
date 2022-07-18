@@ -384,7 +384,7 @@ namespace Renderer
             while (!draw_queue.empty())
             {
                 const auto& front = draw_queue.front();
-
+                 
                 auto* transform = front.transform;
                 auto* mesh = front.mesh;
                 auto* shader = front.shader;
@@ -407,47 +407,78 @@ namespace Renderer
 				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function
-                 
+                  
 
                 if (!material->is_light)
                 {
                     if (material->flag)
                     {
-                        if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
+                        static VulkanMaterial new_material(&vulkan_type);
+                        new_material.InitMaterialData(std::move(material->data));
+                        new_material.is_changed = material->flag;
+
+                        if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
                         {
-
-                            if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
-                            {
-                                iter->SetAlbedoTexture(albedo_texture_iter);
-                                iter->GetMaterialData()->has_albedo_texture = true;
-                            }
-                            if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
-                            {
-                                iter->SetNormalTexture(normal_texture_iter);
-                                iter->GetMaterialData()->has_normal_texture = true;
-                            }
-                            if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
-                            {
-                                iter->SetMetalRoughness(metalrough_texture_iter);
-                                iter->GetMaterialData()->has_metalroughness_texture = true;
-                            }
-                            if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
-                            {
-                                iter->SetAOTexture(ao_texture_iter);
-                                iter->GetMaterialData()->has_ao_texture = true;
-                            }
-                            iter->Bind();
+                            new_material.SetAlbedoTexture(albedo_texture_iter);
+                            new_material.GetMaterialData()->has_albedo_texture = true;
                         }
-                            
+                        if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
+                        {
+                            new_material.SetNormalTexture(normal_texture_iter);
+                            new_material.GetMaterialData()->has_normal_texture = true;
+                        }
+                        if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
+                        {
+                            new_material.SetMetalRoughness(metalrough_texture_iter);
+                            new_material.GetMaterialData()->has_metalroughness_texture = true;
+                        }
+                        if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
+                        {
+                            new_material.SetAOTexture(ao_texture_iter);
+                            new_material.GetMaterialData()->has_ao_texture = true;
+                        }
+                        new_material.Bind();
 
-                   
                         if (material->is_save)
                         {
                             material_manager->ChangeMaterial(material->name, material->data);
+                            if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
+                            {
+                                if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
+                                {
+                                    iter->SetAlbedoTexture(albedo_texture_iter);
+                                    iter->GetMaterialData()->has_albedo_texture = true;
+                                }
+                                if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
+                                {
+                                    iter->SetNormalTexture(normal_texture_iter);
+                                    iter->GetMaterialData()->has_normal_texture = true;
+                                }
+                                if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
+                                {
+                                    iter->SetMetalRoughness(metalrough_texture_iter);
+                                    iter->GetMaterialData()->has_metalroughness_texture = true;
+                                }
+                                if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
+                                {
+                                    iter->SetAOTexture(ao_texture_iter);
+                                    iter->GetMaterialData()->has_ao_texture = true;
+                                }
+                                iter->Bind();
+                            }
+
                             material->flag = false;
                             material->is_save = false;
                             material_manager->GetMaterial(material->name)->Bind();
                         }
+                    }
+                    else
+                    {
+                        if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
+                        {
+                            iter->Bind();
+                        }
+	                    
                     }
                 }
                 else

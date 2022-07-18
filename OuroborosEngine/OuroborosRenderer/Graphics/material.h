@@ -16,6 +16,7 @@ namespace Renderer {
         virtual ~Material() = default;
         virtual void Bind() = 0;
         void InitMaterialData(const Asset::MaterialData&& other);
+        void InitMaterialData(const Asset::MaterialData& other);
     	virtual void SetAlbedoTexture(std::shared_ptr<Texture> texture);
         virtual void SetAOTexture(std::shared_ptr<Texture> texture);
         virtual void SetNormalTexture(std::shared_ptr<Texture> texture);
@@ -40,6 +41,11 @@ namespace Renderer {
     };
 
     inline void Material::InitMaterialData(const Asset::MaterialData&& other)
+    {
+        data = other;
+    }
+
+    inline void Material::InitMaterialData(const Asset::MaterialData& other)
     {
         data = other;
     }

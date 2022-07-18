@@ -145,6 +145,7 @@ namespace OE
 			GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_D,
 			GLFW_KEY_SPACE,
 			GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT,
+			GLFW_KEY_Y, GLFW_KEY_H, GLFW_KEY_G, GLFW_KEY_J
 		};
 
 		input.Init(window->GetWindowData().window, key_supports);
@@ -192,9 +193,29 @@ namespace OE
 		{
 			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
 		}
+		const float offset = 5.f * DeltaTime::GetDeltaTime();
+		if (Input::Down(GLFW_KEY_Y))
+		{
+			Engine::camera.MouseInput(0, offset);
+		}
+		if (Input::Down(GLFW_KEY_H))
+		{
+			Engine::camera.MouseInput(0, -offset);
+		}
+
+		if (Input::Down(GLFW_KEY_G))
+		{
+			Engine::camera.MouseInput(-offset, 0);
+		}
+		if (Input::Down(GLFW_KEY_J))
+		{
+			Engine::camera.MouseInput(offset, 0);
+		}
+
 
 		if(Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
 		{
+	
 		/*	const float offset = DeltaTime::GetDeltaTime() * 5.f;
 			if(Input::glfw)
 			Engine::camera.MouseInput(0,)*/
