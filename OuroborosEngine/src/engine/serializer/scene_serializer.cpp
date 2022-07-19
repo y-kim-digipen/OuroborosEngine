@@ -40,37 +40,40 @@ namespace OE
 		int entity_counter = 0;
 		ecs_manager.ForEntities([&](OE::ecs_ID entityID)
 			{
-				//EntityID
-				out << YAML::Key << entity_counter++;
-				out << YAML::Value << YAML::BeginMap;
-				//System
-				out << YAML::Key << "System";
-				out << YAML::Value << YAML::BeginMap;
-				brigand::for_each<SystemList>([&]<typename T>(T /*T*/)
+				if (ecs_manager.GetEntity(entityID).alive)
 				{
-					using TSystem = typename T::type;
-					out << YAML::Key << typeid(TSystem).name();
-					const bool has_system = ecs_manager.HasSystem<TSystem>(entityID);
-					out << YAML::Value << YAML::YesNoBool << has_system;
-				}
-				);
-				out << YAML::EndMap;
-
-				out << YAML::Key << "Component";
-				out << YAML::Value << YAML::BeginMap;
-				brigand::for_each<ComponentList>([&]<typename T>(T /*T*/)
-				{
-					using TComponent = typename T::type;
-					const bool has_component = ecs_manager.HasComponent<TComponent>(entityID);
-					if (has_component)
+					//EntityID
+					out << YAML::Key << entity_counter++;
+					out << YAML::Value << YAML::BeginMap;
+					//System
+					out << YAML::Key << "System";
+					out << YAML::Value << YAML::BeginMap;
+					brigand::for_each<SystemList>([&]<typename T>(T /*T*/)
 					{
-						out << YAML::Key << typeid(TComponent).name();
-						out << YAML::Value << ecs_manager.GetComponent<TComponent>(entityID);
+						using TSystem = typename T::type;
+						out << YAML::Key << typeid(TSystem).name();
+						const bool has_system = ecs_manager.HasSystem<TSystem>(entityID);
+						out << YAML::Value << YAML::YesNoBool << has_system;
 					}
+					);
+					out << YAML::EndMap;
+
+					out << YAML::Key << "Component";
+					out << YAML::Value << YAML::BeginMap;
+					brigand::for_each<ComponentList>([&]<typename T>(T /*T*/)
+					{
+						using TComponent = typename T::type;
+						const bool has_component = ecs_manager.HasComponent<TComponent>(entityID);
+						if (has_component)
+						{
+							out << YAML::Key << typeid(TComponent).name();
+							out << YAML::Value << YAML::BeginMap << ecs_manager.GetComponent<TComponent>(entityID) << YAML::EndMap;
+						}
+					}
+					);
+					out << YAML::EndMap;
+					out << YAML::EndMap;
 				}
-				);
-				out << YAML::EndMap;
-				out << YAML::EndMap;
 			});
 		out << YAML::EndMap;
 

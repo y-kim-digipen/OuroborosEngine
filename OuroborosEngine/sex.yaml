@@ -18,42 +18,6 @@ ECS:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: no
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-    Component:
-      {}
-  1:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-    Component:
-      {}
-  2:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-    Component:
-      {}
-  3:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-    Component:
-      {}
-  4:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
       struct OE::ECS::System<struct ScriptComponent>: no
@@ -66,8 +30,9 @@ ECS:
         mesh_name: ..\OuroborosEngine\model\DamagedHelmet.obj
       struct ShaderComponent:
         name: shader
-      struct MaterialComponent
-  5:
+      struct MaterialComponent:
+        {}
+  1:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: no
@@ -83,4 +48,7 @@ ECS:
         mesh_name: ..\OuroborosEngine\model\cube.obj
       struct ShaderComponent:
         name: shader
-      struct MaterialComponent: struct LightComponent
+      struct MaterialComponent:
+        {}
+      struct LightComponent:
+        {}

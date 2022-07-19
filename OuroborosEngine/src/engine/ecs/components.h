@@ -121,11 +121,10 @@ inline YAML::Node operator >> (YAML::Node node, T& val)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const TransformComponent& transform)
 {
-	emitter << YAML::BeginMap;
+
 	emitter << YAML::Key << "pos" << YAML::Value << transform.pos;
 	emitter << YAML::Key << "scale" << YAML::Value << transform.scale;
 	emitter << YAML::Key << "rotation" << YAML::Value << transform.rotation;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -139,9 +138,7 @@ inline YAML::Node operator>>(YAML::Node node, TransformComponent& transform)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const VelocityComponent& velocity)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "vel" << YAML::Value << velocity.vel;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -153,9 +150,7 @@ inline YAML::Node operator>>(YAML::Node node, VelocityComponent& velocity)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const LifeTimeComponent& lifetime)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "life_time" << YAML::Value << lifetime.life_time;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -167,9 +162,7 @@ inline YAML::Node operator>>(YAML::Node node, LifeTimeComponent& life_time)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const MeshComponent& mesh)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "mesh_name" << YAML::Value << mesh.mesh_name;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -191,23 +184,19 @@ inline YAML::Node operator>>(YAML::Node node, MaterialComponent& material)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const ShaderComponent& shader)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "name" << YAML::Value << shader.name;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
 inline YAML::Node operator>>(YAML::Node node, ShaderComponent& shader)
 {
-	node["shader"] >> shader.name;
+	node["name"] >> shader.name;
 	return node;
 }
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const BoolWrapperComponent& bool_wrapper)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "bool_type" << YAML::Value << bool_wrapper.bool_type;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -219,9 +208,7 @@ inline YAML::Node operator>>(YAML::Node node, BoolWrapperComponent& bool_wrapper
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const TagComponent& tag)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "tag" << YAML::Value << tag.tag;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
@@ -243,9 +230,7 @@ inline YAML::Node operator>>(YAML::Node node, LightComponent& light)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const ScriptComponent& script)
 {
-	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "name" << YAML::Value << script.name;
-	emitter << YAML::EndMap;
 	return emitter;
 }
 
