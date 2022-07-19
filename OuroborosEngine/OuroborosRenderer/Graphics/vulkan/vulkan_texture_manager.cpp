@@ -99,7 +99,7 @@ namespace Renderer
 
 	bool VulkanTextureImguiDescriptorPool::NeedGrowCapacity() const
 	{
-		return current_used_id_num + 10 >= current_container_size;
+		return current_used_id_num + 5 >= current_container_size;
 	}
 
 	void VulkanTextureImguiDescriptorPool::GrowCapacity(int size)
