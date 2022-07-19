@@ -162,10 +162,14 @@ namespace OE
 
 			state.new_usertype<Asset::MaterialData>("MaterialData",
 				sol::constructors<Asset::MaterialData()>()
-				, "ambient", &Asset::MaterialData::ambient
-				, "diffuse", &Asset::MaterialData::diffuse
-				, "specular", &Asset::MaterialData::specular
-				, "shininess", &Asset::MaterialData::shininess
+				, "albedo", &Asset::MaterialData::albedo
+				, "metallic", &Asset::MaterialData::metallic
+				, "roughness", &Asset::MaterialData::roughness
+				, "ao", &Asset::MaterialData::ao
+				, "has_albedo_texture", &Asset::MaterialData::has_albedo_texture
+				, "has_normal_texture", &Asset::MaterialData::has_normal_texture
+				, "has_metalroughness_texture", &Asset::MaterialData::has_metalroughness_texture
+				, "has_ao_texture", &Asset::MaterialData::has_ao_texture
 				);
 
 			state.new_usertype<MaterialComponent>("MaterialComponent",
@@ -174,6 +178,10 @@ namespace OE
 				, "data", &MaterialComponent::data
 				, "flag", &MaterialComponent::flag
 				, "is_light", &MaterialComponent::is_light
+				, "texture_albedo_name", &MaterialComponent::texture_albedo_name
+				, "texture_normal_name", &MaterialComponent::texture_normal_name
+				, "texture_metalroughness_name", &MaterialComponent::texture_metalroughness_name
+				, "texture_ao_name", &MaterialComponent::texture_ao_name
 				);
 
 			state.new_usertype<ShaderComponent>("ShaderComponent",
@@ -193,11 +201,13 @@ namespace OE
 
 			state.new_usertype<Asset::LightData>("LightData",
 			    sol::constructors<Asset::LightData()>()
-			    , "position", &Asset::LightData::position
+			    , "position", &Asset::LightData::pos
 			    , "diffuse", &Asset::LightData::diffuse
-				, "ambient", &Asset::LightData::ambient
-				, "specular", &Asset::LightData::specular
-				, "direction", &Asset::LightData::direction
+				, "cutoff", &Asset::LightData::cutoff
+				, "dir", &Asset::LightData::dir
+				, "falloff", &Asset::LightData::falloff
+				, "out_cutoff", &Asset::LightData::out_cutoff
+				, "type", &Asset::LightData::type
 			);
 
 			state.new_usertype<LightComponent>("LightComponent",
