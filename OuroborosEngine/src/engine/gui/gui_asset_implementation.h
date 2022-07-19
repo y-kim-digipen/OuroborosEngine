@@ -18,6 +18,15 @@ namespace OE
 	{
 		ImGui::TextWrapped("Width : %d", image.width); ImGui::SameLine();
 		ImGui::TextWrapped("Height : %d", image.height);
+
+		const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
+
+		if(auto texture = texture_manager->GetTexture(image.filename); texture)
+		{
+			const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+			dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+			ImGui::Image(*TextureID, ImVec2(100, 100));
+		}
 	}
 
 	template<>
