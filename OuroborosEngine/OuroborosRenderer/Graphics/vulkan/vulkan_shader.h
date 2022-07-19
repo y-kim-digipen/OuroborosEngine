@@ -38,6 +38,8 @@ namespace Renderer {
 
 		void Init(ShaderConfig* config) override;
 		void Bind() override;
+		void ShutDown() override;
+		void Reload() override;
 
 		VkPipelineLayout pipeline_layout;
 	private:

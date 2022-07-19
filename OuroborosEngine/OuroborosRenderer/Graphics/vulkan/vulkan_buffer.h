@@ -70,6 +70,7 @@ namespace Renderer
 
 		void Bind() const override;
 		void UnBind() const override;
+		void ShutDown() override;
 
 		// update cpu data block of member variable with matching name
 		int UpdateData(const char* member_var_name, void* data) override;
