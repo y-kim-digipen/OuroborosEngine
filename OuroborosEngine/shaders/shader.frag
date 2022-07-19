@@ -22,7 +22,7 @@ vec3 getNormalFromMap()
     vec2 st1 = dFdx(vs_in.uv);
     vec2 st2 = dFdy(vs_in.uv);
 
-    vec3 N   = normalize(vs_in.non_pure_normal);
+    vec3 N   = normalize(vs_in.norm);
     vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);

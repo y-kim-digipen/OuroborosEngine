@@ -91,7 +91,7 @@ namespace Renderer {
 	void VulkanMaterial::SetAlbedoTexture(std::shared_ptr<Texture> texture)
 	{
 		texture_albedo = texture;
-		has_albedo_texture = true;
+		data.has_albedo_texture = true;
 	}
 
 	void VulkanMaterial::Bind()
@@ -103,21 +103,33 @@ namespace Renderer {
 			is_changed = false;
 		}
 
-				if (has_albedo_texture)
+				if (data.has_albedo_texture)
 				{
-					dynamic_cast<VulkanTexture*>(texture_albedo.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);
+					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_albedo.get()); ptr != nullptr)
+					{
+						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);
+					}
 				}
-				if (has_normal_texture)
+				if (data.has_normal_texture)
 				{
-					dynamic_cast<VulkanTexture*>(texture_normal.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 2);
+					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_normal.get()); ptr != nullptr)
+					{
+						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 2);
+					}
 				}
-				if (has_metalroughness_texture)
+				if (data.has_metalroughness_texture)
 				{
-					dynamic_cast<VulkanTexture*>(texture_metalroughness.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
+					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_metalroughness.get()); ptr != nullptr)
+					{
+						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
+					}
 				}
-				if (has_ao_texture)
+				if (data.has_ao_texture)
 				{
-					dynamic_cast<VulkanTexture*>(texture_ao.get())->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 4);
+					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
+					{
+						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 4);
+					}
 				}
 			
 		ubo->Bind();
@@ -126,18 +138,18 @@ namespace Renderer {
 	void VulkanMaterial::SetAOTexture(std::shared_ptr<Texture> texture)
 	{
 		Material::SetAOTexture(texture);
-		has_ao_texture = true;
+		data.has_ao_texture = true;
 	}
 
 	void VulkanMaterial::SetMetalRoughness(std::shared_ptr<Texture> texture)
 	{
 		Material::SetMetalRoughness(texture);
-		has_metalroughness_texture = true;
+		data.has_metalroughness_texture = true;
 	}
 
 	void VulkanMaterial::SetNormalTexture(std::shared_ptr<Texture> texture)
 	{
 		Material::SetNormalTexture(texture);
-		has_normal_texture = true;
+		data.has_normal_texture = true;
 	}
 }
