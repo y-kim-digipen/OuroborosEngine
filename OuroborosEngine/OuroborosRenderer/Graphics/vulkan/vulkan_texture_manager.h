@@ -8,6 +8,25 @@ struct Vulkan_type;
 
 namespace Renderer
 {
+	using TextureID = VkDescriptorSet;
+	
+
+	class VulkanTextureImguiDescriptorPool
+	{
+	public:
+		VulkanTextureImguiDescriptorPool(Vulkan_type* vulkan_type);
+		TextureID* GetImGuiTextureID();
+		void Init();
+		[[nodiscard]] bool NeedGrowCapacity() const;
+		void GrowCapacity(int size);
+		void ResetCount();
+	private:
+		int current_container_size = 10;
+		int current_used_id_num = 0;
+		std::vector<VkDescriptorSet> descriptor_sets_pool;
+		Vulkan_type* vulkan_type;
+
+	};
 	class VulkanTextureManager : public TextureManager
 	{
 	public:
@@ -15,8 +34,13 @@ namespace Renderer
 		int AddTexture(const std::string& name, const Asset::Image& image) override;
 		int DeleteTexture(const std::string& name) override;
 		VkDescriptorSet descriptor_set_[4];
+
+		VulkanTextureImguiDescriptorPool vulkan_texture_imgui_descriptor_pool;
 	private:
 		Vulkan_type* vulkan_type;
 	};
+
+
+	
 }
 #endif //!VULKAN_TEXTURE_MANAGER_H

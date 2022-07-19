@@ -368,6 +368,7 @@ namespace Renderer
 
         vulkan_type.current_frame = (vulkan_type.current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 
+        dynamic_cast<VulkanTextureManager*>(texture_manager_.get())->vulkan_texture_imgui_descriptor_pool.ResetCount();
         return  0;
     }
 
