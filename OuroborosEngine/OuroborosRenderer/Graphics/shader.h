@@ -25,6 +25,8 @@ namespace Renderer {
 		const char* name;
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
+
+		void operator=(const ShaderConfig& config);
 	};
 
 	class Shader {
@@ -33,8 +35,11 @@ namespace Renderer {
 		Shader(const Shader& shader) = delete;
 		Shader(Shader&& shader) = delete;
 		virtual ~Shader() = 0 {};
-		virtual void Init(ShaderConfig* config) = 0;
+		virtual void Init(ShaderConfig* config);
 		virtual void Bind() = 0;
+		virtual void Reload() = 0;
+		virtual void ShutDown();
+
 		virtual void* GetMemberVariable(const std::string& name);
 		virtual void SetUniformValue(const char* name, void* data) {
 
@@ -45,6 +50,8 @@ namespace Renderer {
 		}
 
 		std::unique_ptr<UniformBuffer> uniform_buffer_object;
+	protected:
+		ShaderConfig config;
 	};
 }
 

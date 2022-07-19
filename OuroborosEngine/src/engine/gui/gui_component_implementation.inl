@@ -126,10 +126,17 @@ namespace OE
 						ImGui::SetItemDefaultFocus();
 					}
 				}
+
 				ImGui::EndCombo();
 			}
 
 			if (shader_map.find(shader_component.name) != shader_map.end()) {
+
+				if (ImGui::Button("Reload"))
+				{
+					shader->Reload();
+				}
+
 				if(shader->uniform_buffer_object != nullptr)
 				for (const auto& member_variable : shader->uniform_buffer_object->member_vars) {
 

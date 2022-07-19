@@ -74,7 +74,7 @@ void main()
         }
 
      
-        float metallic = 0.f;
+		float metallic = 0.f;
         float roughness = 0.f;
       
         if(material.has_albedo_texture != 0)
@@ -117,8 +117,8 @@ void main()
         vec3 Kd = vec3(1.0) - Ks;
         Kd *= 1.0 - metallic;
 
-        vec3 specular = (D * F * G) / (4*  max(dot(V, N), 0.0) * max(dot(L, N), 0.0)+ 0.0001);
-        Lo += (Kd * albedo / PI + specular) * radiance * max(dot(N, L), 0.0);
+        vec3 specular = (D * F * G) / max(4 * max(dot(V, N), 0.0) * max(dot(L, N), 0.0), 0.0001);
+        Lo += (Kd * albedo / PI + specular) * radiance * max(dot(L, N), 0.0);
     }
 
     vec3 ambient = vec3(0.03) * albedo * ao;

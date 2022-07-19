@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include <unordered_map>
+#include <map>
 #include <string>
 
 namespace Renderer
@@ -44,11 +44,13 @@ namespace Renderer
 		virtual ~UniformBuffer() = default;
 		virtual void Bind() const = 0;
 		virtual void UnBind() const {}
+		virtual void ShutDown();
 		void AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset);
 		virtual int AddData(void* data, uint32_t offset, uint32_t buffer_size) = 0;
 		virtual int UpdateData(const char* member_var_name, void* data);
 
-		std::unordered_map<std::string, UniformBufferMember> member_vars;
+		//TODO: seperate colors with other val
+		std::map<std::string, UniformBufferMember> member_vars;
 
 		void* data;
 		uint64_t buffer_size;

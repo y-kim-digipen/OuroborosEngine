@@ -219,6 +219,14 @@ namespace Renderer
 		UniformBuffer::UnBind();
 	}
 
+	void VulkanUniformBuffer::ShutDown()
+	{
+		UniformBuffer::ShutDown();
+
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+			buffer[i].reset();
+	}
+
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data_)
 	{
 		if (member_vars.find(member_var_name) != member_vars.end()) 

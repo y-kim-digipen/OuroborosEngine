@@ -104,6 +104,14 @@ namespace Renderer
 		glUseProgram(shader_id);
 	}
 
+	void OpenglShader::ShutDown()
+	{
+	}
+
+	void OpenglShader::Reload()
+	{
+	}
+
 	void OpenglShader::UnBind()
 	{
 		glUseProgram(0);

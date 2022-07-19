@@ -2,6 +2,13 @@
 
 namespace Renderer {
 
+	void UniformBuffer::ShutDown()
+	{
+		if (data != nullptr)
+			free(data);
+		data = nullptr;
+	}
+
 	void UniformBuffer::AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset)
 	{
 		if (member_vars.find(name) == member_vars.end()) {

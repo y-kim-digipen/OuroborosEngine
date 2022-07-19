@@ -201,8 +201,7 @@ namespace Renderer
         {
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
-        //TODO : need to implement in shader for destorying the pipeline layout
-        //vkDestroyPipelineLayout(vulkan_type.device.handle, vulkan_type.pipeline_layout, nullptr);
+        //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
         for (auto image_view : vulkan_type.swapchain.image_views)

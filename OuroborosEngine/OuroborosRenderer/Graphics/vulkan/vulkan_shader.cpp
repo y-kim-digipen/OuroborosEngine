@@ -80,12 +80,13 @@ namespace Renderer {
 
 	VulkanShader::~VulkanShader()
 	{
-		vkDestroyPipeline(vulkan_type->device.handle, pipeline, nullptr);
-		vkDestroyPipelineLayout(vulkan_type->device.handle, pipeline_layout, nullptr);
+		ShutDown();
 	}
 
 	void VulkanShader::Init(ShaderConfig* config)
 	{
+		Shader::Init(config);
+
 		uint32_t stage_count = config->stage_count;
 		
 		std::vector<VkPipelineShaderStageCreateInfo> shader_stage_create_infos{};
@@ -105,6 +106,9 @@ namespace Renderer {
 					shader_stage_create_info.module = shader_module;
 					shader_stage_create_info.pName = "main";
 				}
+				else {
+					return;
+				}
 			}
 			else if (config->stages[i].type == FRAGMENT_SHADER) {
 				shader_name.append(".frag");
@@ -112,6 +116,9 @@ namespace Renderer {
 					shader_stage_create_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
 					shader_stage_create_info.module = shader_module;
 					shader_stage_create_info.pName = "main";
+				}
+				else {
+					return;
 				}
 			}
 
@@ -204,7 +211,38 @@ namespace Renderer {
 		
 		// bind shader descriptor set 1
 		if(uniform_buffer_object.get() != nullptr)
-		uniform_buffer_object->Bind();
+			uniform_buffer_object->Bind();
+	}
+
+	void VulkanShader::ShutDown()
+	{
+		Shader::ShutDown();
+		descriptor_data.clear();
+		push_constant_ranges.clear();
+
+
+		for (uint32_t i = 0; i < max_set_count; ++i) {
+			vkDestroyDescriptorSetLayout(device->handle, descriptor_set_layouts[i], nullptr);
+			descriptor_set_layouts[i] = VK_NULL_HANDLE;
+		}
+
+		if (pipeline_layout != VK_NULL_HANDLE)
+			vkDestroyPipelineLayout(device->handle, pipeline_layout, nullptr);
+
+		if (pipeline != VK_NULL_HANDLE)
+			vkDestroyPipeline(device->handle, pipeline, nullptr);
+
+		pipeline_layout = VK_NULL_HANDLE;
+		pipeline = VK_NULL_HANDLE;
+	}
+
+	void VulkanShader::Reload()
+	{
+		if (device->handle != nullptr)
+			vkDeviceWaitIdle(device->handle);
+
+		ShutDown();
+		Init(&config);
 	}
 
 	int VulkanShader::CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t,VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set)
