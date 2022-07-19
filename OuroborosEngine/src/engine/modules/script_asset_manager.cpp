@@ -32,7 +32,12 @@ namespace OE
         }
 
         auto script = OE::Engine::lua_script_manager.CreateScript(file_name, type, file_name);
-        bool res = script != nullptr || script->RunScript();
+        if(script == nullptr)
+        {
+            std::cerr << "Failed to load script" << file_name << std::endl;
+            return 1;
+        }
+        bool res = script->RunScript();
         if (res == false)
         {
             std::cerr << script->GetLastError() << std::endl;
@@ -41,5 +46,21 @@ namespace OE
         assets[file_name] = std::pair(res, Asset::Script(file_name));
 
         return 0;
+    }
+
+    int ScriptAssetManager::UnloadAsset(const std::string& name)
+    {
+        OE::Engine::lua_script_manager.DeleteScript(name);
+    	return AssetManager<Asset::Script>::UnloadAsset(name);
+        
+    }
+
+    void ScriptAssetManager::CleanUp()
+    {
+	    for (auto asset : assets)
+	    {
+            OE::Engine::lua_script_manager.DeleteScript(asset.first);
+	    }
+	    AssetManager<Asset::Script>::CleanUp();
     }
 }

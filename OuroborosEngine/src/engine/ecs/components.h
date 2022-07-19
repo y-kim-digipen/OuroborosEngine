@@ -109,12 +109,12 @@ inline YAML::Node operator >> (YAML::Node node, T& val)
 //	return node;
 //}
 
-inline YAML::Node operator >> (YAML::Node node, std::string& s)
-{
-	YAML::iterator it = node.begin();
-	s = it->as<std::string>();
-	return node;
-}
+//inline YAML::Node operator >> (YAML::Node node, std::string& s)
+//{
+//	YAML::iterator it = node.begin();
+//	s = it->as<std::string>();
+//	return node;
+//}
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const TransformComponent& transform)
 {
@@ -172,6 +172,7 @@ inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const MeshComponent& me
 
 inline YAML::Node operator>>(YAML::Node node, MeshComponent& mesh)
 {
+	node["mesh_name"] >> mesh.mesh_name;
 	return node;
 }
 
@@ -195,6 +196,7 @@ inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const ShaderComponent& 
 
 inline YAML::Node operator>>(YAML::Node node, ShaderComponent& shader)
 {
+	node["shader"] >> shader.name;
 	return node;
 }
 
@@ -208,6 +210,7 @@ inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const BoolWrapperCompon
 
 inline YAML::Node operator>>(YAML::Node node, BoolWrapperComponent& bool_wrapper)
 {
+	node["bool_type"] >> bool_wrapper.bool_type;
 	return node;
 }
 
@@ -221,6 +224,7 @@ inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const TagComponent& tag
 
 inline YAML::Node operator>>(YAML::Node node, TagComponent& tag)
 {
+	node["tag"] >> tag.tag;
 	return node;
 }
 
@@ -236,11 +240,15 @@ inline YAML::Node operator>>(YAML::Node node, LightComponent& light)
 
 inline YAML::Emitter& operator<<(YAML::Emitter& emitter, const ScriptComponent& script)
 {
+	emitter << YAML::BeginMap;
+	emitter << YAML::Key << "name" << YAML::Value << script.name;
+	emitter << YAML::EndMap;
 	return emitter;
 }
 
 inline YAML::Node operator>>(YAML::Node node, ScriptComponent& script)
 {
+	node["name"] >> script.name;
 	return node;
 }
 

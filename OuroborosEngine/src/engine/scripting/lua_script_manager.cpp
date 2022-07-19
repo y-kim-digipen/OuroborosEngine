@@ -72,6 +72,22 @@ namespace OE
 			return &scripts[GetScriptTypeIdx(type)][script_name];
 		}
 
+		void LuaScriptManager::DeleteScript(ScriptType type, const std::string& script_name)
+		{
+			bool contains = scripts[GetScriptTypeIdx(type)].contains(script_name);
+			if (contains == false)
+				return;
+			scripts[GetScriptTypeIdx(type)].erase(scripts[GetScriptTypeIdx(type)].find(script_name));
+		}
+
+		void LuaScriptManager::DeleteScript(const std::string& script_name)
+		{
+			for(int i = 0; i < static_cast<int>(ScriptType::Count); ++i)
+			{
+				DeleteScript(static_cast<ScriptType>(i), script_name);
+			}
+		}
+
 		void LuaScriptManager::RegisterUserDateTypes(sol::state& state)
 		{		//Math types
 			state.new_usertype<glm::vec3>("vec3",

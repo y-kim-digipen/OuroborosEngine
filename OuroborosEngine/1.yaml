@@ -1,13 +1,13 @@
 Asset:
   class OE::ImageAssetManager:
-    []
+    - ..\OuroborosEngine\images\20220507_154034.jpg
   class OE::MeshAssetManager:
-    []
+    - ..\OuroborosEngine\model\cube.obj
   class OE::ShaderAssetManager:
     - shader
     - shader2
   class OE::ScriptAssetManager:
-    []
+    - ..\OuroborosEngine\scripts\test1 - Copy (2).slua
 ECS:
   0:
     System:
@@ -34,7 +34,7 @@ ECS:
       struct LifeTimeComponent:
         life_time: 5
       struct MeshComponent:
-        mesh_name: ""
+        mesh_name: ..\OuroborosEngine\model\cube.obj
   2:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
@@ -48,10 +48,10 @@ ECS:
   3:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct BoolWrapperComponent>: yes
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
         pos: [4, 5, 0]
@@ -60,4 +60,4 @@ ECS:
       struct VelocityComponent:
         vel: [6, 7, 0]
       struct TagComponent:
-        tag: ""
+        tag: Hello World

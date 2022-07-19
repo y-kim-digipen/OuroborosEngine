@@ -287,10 +287,21 @@ namespace OE
 											continue;
 											ImGui::CloseCurrentPopup();
 										}
-
 									}
 								}
 							});
+
+						if (extension == ".yaml")
+						{
+							if(ImGui::SmallButton("Load Scene"))
+							{
+								auto func = &decltype(Engine::scene_serializer)::DeserializeScene;
+								auto void_func = std::bind(func, &Engine::scene_serializer, path.string());
+								Engine::RegisterEvent(Engine::POST, void_func);
+								//Engine::scene_serializer.DeserializeScene(void_func);
+							}
+						}
+
 						ImGui::EndPopup();
 					}
 					if (ImGui::IsItemHovered())

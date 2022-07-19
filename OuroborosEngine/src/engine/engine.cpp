@@ -183,7 +183,7 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
 
-		scene_serializer.SerializeScene("test.yaml");
+		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("1.yaml");
 		//Profiler::Start();
 	}
@@ -192,6 +192,17 @@ namespace OE
 	{
 		glfwPollEvents();
 		delta_timer.PreUpdate();
+		for (auto& event_function : event_functions[EventFunctionType::PRE])
+		{
+			event_function();
+		}
+		auto& scripts = lua_script_manager.GetScripts(Script::ScriptType::Normal);
+		for (auto& script : scripts)
+		{
+			script.second.Update(delta_timer.GetDeltaTime());
+		}
+
+		event_functions[EventFunctionType::PRE].clear();
 	}
 
 	namespace _impl
@@ -286,10 +297,21 @@ namespace OE
 				}
 
 			});
+
+		for (auto& event_function : event_functions[EventFunctionType::ONTIME])
+		{
+			event_function();
+		}
+		event_functions[EventFunctionType::ONTIME].clear();
 	}
 
 	void Engine::PostUpdate()
 	{
+		for (auto& event_function : event_functions[EventFunctionType::POST])
+		{
+			event_function();
+		}
+		event_functions[EventFunctionType::POST].clear();
 		window->BeginFrame();
 		window->Update();
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
@@ -308,16 +330,10 @@ namespace OE
 	void Engine::DeltaTime::PreUpdate()
 	{
 		start = std::chrono::steady_clock::now();
-		auto& scripts = lua_script_manager.GetScripts(Script::ScriptType::Normal);
-		for (auto& script : scripts)
-		{
-			script.second.Update(GetDeltaTime());
-		}
 	}
 
 	void Engine::DeltaTime::PostUpdate()
 	{
-
 		std::chrono::duration<double, std::milli> work_time = start - end;
 
 		//if (work_time.count() < target_dt * 1000)

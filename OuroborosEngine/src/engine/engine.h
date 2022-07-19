@@ -28,6 +28,11 @@ namespace OE
 	class Engine
 	{
 	public:
+		enum EventFunctionType
+		{
+			PRE, ONTIME, POST, COUNT
+		};
+
 		static Engine& Get();
 
 		static void Init();
@@ -37,6 +42,11 @@ namespace OE
 		static void PostUpdate();
 		static void CleanUp(){}
 		static void ShutDown() { /*Profiler::Exit();*/ }
+
+		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
+		{
+			event_functions[type].emplace_back(std::move(fn));
+		}
 
 		static auto GetGLFWWindow()
 		{
@@ -66,9 +76,6 @@ namespace OE
 	private:
 		inline static int target_fps;
 		inline static double target_dt;
-
-		
-
 		//Modules
 		inline static Input input;
 	private:
@@ -78,7 +85,7 @@ namespace OE
 		static void SetupGUI();
 		static void ECS_TestSetup();
 		static void SetupModule();
-
+		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
 	public: // Modules
 		inline static Asset_Manager asset_manager;
 		inline static std::unique_ptr<Renderer::Window> window;

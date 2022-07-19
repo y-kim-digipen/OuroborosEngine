@@ -107,7 +107,11 @@ namespace OE
 	{
         for(const auto& key : assets | std::views::keys)
         {
-            UnloadAsset(key);
+            auto& vulkan_mesh_manager
+                = static_cast<Renderer::VulkanContext*>
+                (Engine().Get().window.get()->GetWindowData().RenderContextData.get())
+                ->mesh_manager_;
+            vulkan_mesh_manager.DeleteMeshData(key);
         }
 		AssetManager<Asset::Mesh>::CleanUp();
 	}

@@ -17,6 +17,8 @@ namespace OE
 
 			Script* GetScript(ScriptType type, std::string&& script_name);
 			Script* GetScript(ScriptType type, const std::string& script_name);
+			void DeleteScript(ScriptType type, const std::string& script_name);
+			void DeleteScript(const std::string& script_name);
 
 			auto& GetScripts(ScriptType type)
 			{

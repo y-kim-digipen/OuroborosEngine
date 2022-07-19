@@ -14,6 +14,7 @@ namespace OE
     public:
         virtual int LoadAsset(const std::string& file_name) override;
         virtual int UnloadAsset(const std::string& name) override;
+        virtual void CleanUp() override;
 
         static OE::Script::ScriptType GetTypeFromExtension(const std::string extension_str)
         {
@@ -33,12 +34,6 @@ namespace OE
             return type;
         }
     };
-
-
-    inline int ScriptAssetManager::UnloadAsset(const std::string& name)
-    {
-	    return AssetManager<Asset::Script>::UnloadAsset(name);
-    }
 }
 
 

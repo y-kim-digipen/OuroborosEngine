@@ -92,7 +92,6 @@ namespace OE
 		for (YAML::iterator it = asset_node.begin(); it != asset_node.end(); ++it)
 		{
 			const std::string& asset_manager_name = it->first.as<std::string>();
-
 			YAML::Node asset_sequence_node = it->second;
 
 			bool stop_search = false;
