@@ -20,7 +20,7 @@ namespace OE
 
     int ImageAssetManager::LoadAsset(const std::string& file_name)
     {
-	    Asset::Image image{ nullptr, 0, 0 };
+	    Asset::Image image{ nullptr, 0, 0 ,0, file_name };
         //int nrChannels;
         image.image = stbi_load(file_name.c_str(),
             &image.width, &image.height,

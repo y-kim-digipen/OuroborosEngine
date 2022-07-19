@@ -34,6 +34,7 @@ namespace Asset
         unsigned char* image;
         int width, height;
         int channel;
+        std::string filename;
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
 
