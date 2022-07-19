@@ -39,5 +39,19 @@ namespace OE
         return true;
     }
 
+    int ImageAssetManager::UnloadAsset(const std::string& name)
+    {
+        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager_;
+        texture_manager->DeleteTexture(name);
+        return true;
+    }
 
+    void ImageAssetManager::CleanUp()
+    {
+	    for (const auto& [key, val] : assets)
+	    {
+            UnloadAsset(key);
+	    }
+	    AssetManager<Asset::Image>::CleanUp();
+    }
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include <ranges>
 #include <map>
-#include <brigand/brigand.hpp>
-
+#include <yaml-cpp/yaml.h>
+#include <brigand/algorithms.hpp>
+#include <iostream>
 namespace OE
 {
 	template<typename TAsset>
@@ -42,6 +43,22 @@ namespace OE
         {
 			return assets;
         }
+
+		virtual void CleanUp()
+		{
+			assets.clear();
+		}
+
+		void Serialize(YAML::Emitter& emitter) const
+		{
+			emitter << YAML::BeginSeq;
+			for (auto element : assets)
+			{
+				std::cout << element.first << std::endl;
+				emitter << std::string(element.first);
+			}
+			emitter << YAML::EndSeq;
+		}
 	protected:
 		std::map<std::string, std::pair<bool, TAsset>> assets;
 	};
@@ -54,6 +71,14 @@ namespace OE
 		TManager& GetManager()
 		{
 			return std::get<TManager>(tuple_vector_of_assets);
+		}
+
+		void CleanUp()
+		{
+			brigand::for_each<decltype(tuple_vector_of_assets)>([this](auto t)
+				{
+					GetManager<typename decltype(t)::type>().CleanUp();
+				});
 		}
 		using manager_list = brigand::list<TManagers...>;
 		std::tuple<TManagers...> tuple_vector_of_assets;

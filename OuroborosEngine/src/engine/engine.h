@@ -13,12 +13,26 @@
 #include "Graphics/Window.h"
 #include "Graphics/shader.h"
 #include "input/InputManager.h"
+#include "scripting/lua_script_manager.h"
+
+#include "serializer/scene_serializer.h"
+
+//#include "debug/profiler.h"
+
+#ifndef ENGINE
+#define ENGINE
+#endif
 
 namespace OE
 {
 	class Engine
 	{
 	public:
+		enum EventFunctionType
+		{
+			PRE, ONTIME, POST, COUNT
+		};
+
 		static Engine& Get();
 
 		static void Init();
@@ -27,14 +41,24 @@ namespace OE
 		static void Update();
 		static void PostUpdate();
 		static void CleanUp(){}
-		static void ShutDown(){}
+		static void ShutDown() { /*Profiler::Exit();*/ }
+
+		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
+		{
+			event_functions[type].emplace_back(std::move(fn));
+		}
 
 		static auto GetGLFWWindow()
 		{
 			return window->GetWindowData().window;
 		}
 
-		static class DeltaTime
+		static auto& GetECSManager()
+		{
+			return ecs_manager;
+		}
+
+		class DeltaTime
 		{
 			using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		public:
@@ -52,9 +76,6 @@ namespace OE
 	private:
 		inline static int target_fps;
 		inline static double target_dt;
-
-		
-
 		//Modules
 		inline static Input input;
 	private:
@@ -64,12 +85,15 @@ namespace OE
 		static void SetupGUI();
 		static void ECS_TestSetup();
 		static void SetupModule();
-
+		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
 	public: // Modules
 		inline static Asset_Manager asset_manager;
 		inline static std::unique_ptr<Renderer::Window> window;
 		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
+		inline static ECS_Manager ecs_manager;
+		inline static Script::LuaScriptManager lua_script_manager;
+		inline static SceneSerializer scene_serializer;
 	};
 
 	inline Engine& Engine::Get()

@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OuroborosEngine", "Ouroboro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OuroborosRenderer", "OuroborosRenderer\OuroborosRenderer.vcxproj", "{243CD115-A8E1-4F11-8E96-9422FEB3B60B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8106C151-1E1B-402B-BF19-B9B201189DAD}"
+	ProjectSection(SolutionItems) = preProject
+		common\assets.h = common\assets.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

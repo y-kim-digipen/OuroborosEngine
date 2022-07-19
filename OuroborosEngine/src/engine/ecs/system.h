@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+
 namespace OE
 {
 	namespace ECS
@@ -20,6 +21,8 @@ namespace OE
 			using signature = brigand::append<brigand::list<type>, brigand::list<TRequiredComponents...>>;
 			using function_type = _impl::as_system_function<brigand::list<TRequiredComponents...>>;
 			using required_components = brigand::list<TRequiredComponents...>;
+
+			using function_signature = brigand::list< ecs_ID, float, TRequiredComponents&...>;
 		};
 	}
 }

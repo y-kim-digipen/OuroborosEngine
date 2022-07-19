@@ -23,11 +23,14 @@
     <Filter Include="engine\input">
       <UniqueIdentifier>{6c356a02-3d50-40d9-83c7-e7b73abdf7ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="common">
-      <UniqueIdentifier>{bed55a02-6d66-40ff-9989-b64418c1fe0f}</UniqueIdentifier>
+    <Filter Include="engine\scripting">
+      <UniqueIdentifier>{b208a801-5d97-4c9f-a6d3-8cfacae2e0b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\assets">
-      <UniqueIdentifier>{c3c5016f-f9f3-4a03-a5a2-1d8da3399469}</UniqueIdentifier>
+    <Filter Include="engine\debug">
+      <UniqueIdentifier>{934397c8-1130-40cc-8b33-3dba24d3a0aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\serializer">
+      <UniqueIdentifier>{fd2ff098-a17d-4802-8c07-9de1166cb593}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +44,6 @@
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ecs\ecs_base.h">
-      <Filter>engine\scene\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\ecs\components.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
@@ -75,11 +75,26 @@
     <ClInclude Include="src\engine\modules\image_asset_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
-    <ClInclude Include="common\assets.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\modules\shader_asset_manager.h">
       <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\lua_script_manager.h">
+      <Filter>engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\components.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\modules\script_asset_manager.h">
+      <Filter>engine\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\script.h">
+      <Filter>engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gui\gui_asset_implementation.h">
+      <Filter>engine\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\serializer\scene_serializer.h">
+      <Filter>engine\serializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,13 +111,19 @@
     <ClCompile Include="src\engine\modules\shader_asset_manager.cpp">
       <Filter>engine\modules</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scripting\lua_script_manager.cpp">
+      <Filter>engine\scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\modules\script_asset_manager.cpp">
+      <Filter>engine\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\serializer\scene_serializer.cpp">
+      <Filter>engine\serializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl">
       <Filter>engine\gui</Filter>
-    </None>
-    <None Include="common\asset_imgui_impl.inl">
-      <Filter>common</Filter>
     </None>
   </ItemGroup>
 </Project>

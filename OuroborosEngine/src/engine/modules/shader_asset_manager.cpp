@@ -28,7 +28,17 @@ int OE::ShaderAssetManager::LoadAsset(const std::string& file_name)
 
 int OE::ShaderAssetManager::UnloadAsset(const std::string& name)
 {
-    assets.erase(name);
+    //TODO: make configurable
+    Renderer::ShaderConfig shader_config{
+        name.c_str(),
+        {
+            Renderer::E_StageType::VERTEX_SHADER,
+            Renderer::E_StageType::FRAGMENT_SHADER
+        },
+        2
+    };
 
+    (Engine().Get().window.get()->GetWindowData().RenderContextData.get())->shader_manager->DeleteShader(&shader_config);
+    AssetManager::UnloadAsset(name);
     return 0;
 }

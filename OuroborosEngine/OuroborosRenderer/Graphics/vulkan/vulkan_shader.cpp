@@ -41,7 +41,7 @@ namespace Renderer {
 			throw std::runtime_error("failed to open file!");
 		}
 		static bool isRecursiveCall = false;
-		std::string include_indentifier = "#include";
+		static std::string include_indentifier = "#include";
 
 		std::string line_buffer;
 		while (std::getline(file, line_buffer))

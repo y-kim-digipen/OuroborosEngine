@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -26,19 +18,6 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -57,12 +36,6 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -70,78 +43,39 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
     <IncludePath>$(SolutionDir)OuroborosRenderer;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(SolutionDir)\external\lib\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\external\lib\lib;$(LibraryPath);$(SolutionDir)external\lib\rttr-0.9.6\lib</LibraryPath>
     <IncludePath>$(SolutionDir)OuroborosRenderer;$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\vulkan;$(ProjectDir)external\lib;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX; ENGINE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\yaml-cpp\build\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libyaml-cppmdd.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+      <Command>
+xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
 xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </PostBuildEvent>
@@ -152,30 +86,32 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX; ENGINE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\gainput\build\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\yaml-cpp\build\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yaml-cpp.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+      <Command>
+xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
 xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="common\assets.h" />
     <ClInclude Include="external\lib\vulkan\include\vk_mem_alloc.h" />
     <ClInclude Include="src\engine\common.h" />
     <ClInclude Include="src\engine\custom_assert.h" />
@@ -186,6 +122,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\ecs\system_manager.h" />
     <ClInclude Include="src\engine\engine_settings.h" />
     <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\gui\gui_asset_implementation.h" />
     <ClInclude Include="src\engine\gui\gui_component_panel.h" />
     <ClInclude Include="src\engine\gui\GUI_definedColors.h" />
     <ClInclude Include="src\engine\input\InputManager.h" />
@@ -193,12 +130,19 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\modules\master_asset_manager.h" />
     <ClInclude Include="src\engine\modules\mesh_asset_manager.h" />
     <ClInclude Include="src\engine\modules\shader_asset_manager.h" />
+    <ClInclude Include="src\engine\modules\script_asset_manager.h" />
+    <ClInclude Include="src\engine\scripting\lua_script_manager.h" />
+    <ClInclude Include="src\engine\scripting\script.h" />
+    <ClInclude Include="src\engine\serializer\scene_serializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\shader_asset_manager.cpp" />
+    <ClCompile Include="src\engine\modules\script_asset_manager.cpp" />
+    <ClCompile Include="src\engine\scripting\lua_script_manager.cpp" />
+    <ClCompile Include="src\engine\serializer\scene_serializer.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +151,6 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\asset_imgui_impl.inl" />
     <None Include="src\engine\gui\gui_component_implementation.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
