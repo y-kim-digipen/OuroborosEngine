@@ -50,6 +50,7 @@ namespace Renderer {
 		}
 
 		std::unique_ptr<UniformBuffer> uniform_buffer_object;
+		bool reload_next_frame;
 	protected:
 		ShaderConfig config;
 	};

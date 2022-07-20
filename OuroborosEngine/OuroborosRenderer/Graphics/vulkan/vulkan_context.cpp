@@ -403,6 +403,9 @@ namespace Renderer
 
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
+                if (shader_manager->GetShader(front.shader->name)->reload_next_frame)
+                    shader_manager->GetShader(front.shader->name)->Reload();
+
                 shader_manager->GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
 				BindGlobalData();
 

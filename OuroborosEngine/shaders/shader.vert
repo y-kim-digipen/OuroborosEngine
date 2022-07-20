@@ -14,11 +14,6 @@ layout(location = 0) out VS_OUT {
     vec3 non_pure_normal;
 } vs_out;
 
-layout(set = 1, binding = 0) uniform Test
-{
-	vec3 var;
-} test;
-
 void main() 
 {
     vs_out.norm = object_ubo.normal_matrix *normal;

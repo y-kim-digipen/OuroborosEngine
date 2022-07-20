@@ -111,7 +111,7 @@ vec3 AlbedoValue()
     vec3 result = vec3(0.f);
     if(material.has_albedo_texture != 0)
     {
-        result = texture(albedo_texture, vs_in.uv).xyz;
+        result = pow(texture(albedo_texture, vs_in.uv).xyz, vec3(2.2));
     }
     else
     {

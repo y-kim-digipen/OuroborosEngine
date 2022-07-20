@@ -134,7 +134,7 @@ namespace OE
 
 				if (ImGui::Button("Reload"))
 				{
-					shader->Reload();
+					shader->reload_next_frame = true;
 				}
 
 				if(shader->uniform_buffer_object != nullptr)
