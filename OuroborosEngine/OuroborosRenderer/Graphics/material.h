@@ -25,10 +25,7 @@ namespace Renderer {
         virtual void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture);
         virtual void SetEmissiveTexture(std::shared_ptr<Texture> texture);
         Asset::MaterialData* GetMaterialData();
-        bool has_albedo_texture = false;
-        bool has_ao_texture = false;
-        bool has_normal_texture = false;
-        bool has_metalroughness_texture = false;
+
 
     protected:
         std::shared_ptr<Texture> texture_albedo;
