@@ -22,8 +22,11 @@ namespace Renderer {
 		void SetAlbedoTexture(std::shared_ptr<Texture> texture) override;
 		void Bind() override;
 		void SetAOTexture(std::shared_ptr<Texture> texture) override;
-		void SetMetalRoughness(std::shared_ptr<Texture> texture) override;
+		void SetMetalRoughnessTexture(std::shared_ptr<Texture> texture) override;
 		void SetNormalTexture(std::shared_ptr<Texture> texture) override;
+		void SetMetalicTexture(std::shared_ptr<Texture> texture) override;
+		void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture) override;
+		void SetEmissiveTexture(std::shared_ptr<Texture> texture) override;
 
 		bool is_changed = false;
 		VkDescriptorSetLayout set_layout{};

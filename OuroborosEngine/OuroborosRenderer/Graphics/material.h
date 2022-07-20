@@ -20,7 +20,10 @@ namespace Renderer {
     	virtual void SetAlbedoTexture(std::shared_ptr<Texture> texture);
         virtual void SetAOTexture(std::shared_ptr<Texture> texture);
         virtual void SetNormalTexture(std::shared_ptr<Texture> texture);
-        virtual void SetMetalRoughness(std::shared_ptr<Texture> texture);
+        virtual void SetMetalRoughnessTexture(std::shared_ptr<Texture> texture);
+        virtual void SetMetalicTexture(std::shared_ptr<Texture> texture);
+        virtual void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture);
+        virtual void SetEmissiveTexture(std::shared_ptr<Texture> texture);
         Asset::MaterialData* GetMaterialData();
         bool has_albedo_texture = false;
         bool has_ao_texture = false;
@@ -32,6 +35,9 @@ namespace Renderer {
         std::shared_ptr<Texture> texture_ao;
         std::shared_ptr<Texture> texture_normal;
         std::shared_ptr<Texture> texture_metalroughness;
+        std::shared_ptr<Texture> texture_metallic;
+        std::shared_ptr<Texture> texture_rough_smoothness;
+        std::shared_ptr<Texture> texture_emissive;
 
         Asset::MaterialData data;
         Asset::Image* image_albedo = nullptr;
@@ -65,9 +71,24 @@ namespace Renderer {
         texture_normal = texture;
     }
 
-    inline void Material::SetMetalRoughness(std::shared_ptr<Texture> texture)
+    inline void Material::SetMetalRoughnessTexture(std::shared_ptr<Texture> texture)
     {
         texture_metalroughness = texture;
+    }
+
+    inline void Material::SetMetalicTexture(std::shared_ptr<Texture> texture)
+    {
+        texture_metallic = texture;
+    }
+
+    inline void Material::SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture)
+    {
+        texture_rough_smoothness = texture;
+    }
+
+    inline void Material::SetEmissiveTexture(std::shared_ptr<Texture> texture)
+    {
+        texture_emissive = texture;
     }
 
     inline Asset::MaterialData* Material::GetMaterialData() 

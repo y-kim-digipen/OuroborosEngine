@@ -420,9 +420,9 @@ namespace Renderer
 
                         if (new_material.GetMaterialData()->has_albedo_texture == true)
                         {
-                            if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
+                            if (auto albedo_texture = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture != nullptr)
                             {
-                                new_material.SetAlbedoTexture(albedo_texture_iter);
+                                new_material.SetAlbedoTexture(albedo_texture);
                             }
                             else
                             {
@@ -433,9 +433,9 @@ namespace Renderer
 
                         if (new_material.GetMaterialData()->has_normal_texture == true)
                         {
-                            if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
+                            if (auto normal_texture = texture_manager_->GetTexture(material->texture_normal_name); normal_texture != nullptr)
                             {
-                                new_material.SetNormalTexture(normal_texture_iter);
+                                new_material.SetNormalTexture(normal_texture);
                             }
                             else
                             {
@@ -446,13 +446,49 @@ namespace Renderer
 
                         if (new_material.GetMaterialData()->has_metalroughness_texture == true)
                         {
-                            if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
+                            if (auto metalrough_texture = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture != nullptr)
                             {
-                                new_material.SetMetalRoughness(metalrough_texture_iter);
+                                new_material.SetMetalRoughnessTexture(metalrough_texture);
                             }
                             else
                             {
-                                new_material.SetMetalRoughness(nullptr);
+                                new_material.SetMetalRoughnessTexture(nullptr);
+                            }
+                        }
+
+                        if(new_material.GetMaterialData()->has_metalic_texture == true)
+                        {
+                            if (auto metallic_texture = texture_manager_->GetTexture(material->texture_metalroughness_name); metallic_texture != nullptr)
+                            {
+                                new_material.SetMetalicTexture(metallic_texture);
+                            }
+                            else
+                            {
+                                new_material.SetMetalicTexture(nullptr);
+                            }
+                        }
+
+                        if(new_material.GetMaterialData()->has_roughness_texture == true)
+                        {
+                            if (auto roughSmooothness_texture = texture_manager_->GetTexture(material->texture_roughness_name); roughSmooothness_texture != nullptr)
+                            {
+                                new_material.SetRoughSmoothnessTexture(roughSmooothness_texture);
+                            }
+                            else
+                            {
+                                new_material.SetRoughSmoothnessTexture(nullptr);
+                            }
+                        }
+
+                        if (new_material.GetMaterialData()->has_emissive_texture == true)
+                        {
+                            if (auto emissive_texture = texture_manager_->GetTexture(material->texture_emissive_name); emissive_texture != nullptr)
+                            {
+                                new_material.SetEmissiveTexture(emissive_texture);
+                            }
+                            else
+                            {
+                                new_material.SetEmissiveTexture(nullptr);
                             }
                         }
                         
@@ -467,6 +503,7 @@ namespace Renderer
                                 new_material.SetAOTexture(nullptr);
                             }
                         }
+
                         
                         
                         new_material.Bind();
@@ -477,41 +514,77 @@ namespace Renderer
                             if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
                             {
                                 if (iter->GetMaterialData()->has_albedo_texture == true)
-                                if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
-                                {
-                                    iter->SetAlbedoTexture(albedo_texture_iter);
-                                }
-                                else
-                                {
-                                    iter->SetAlbedoTexture(std::shared_ptr<Texture>(nullptr));
-                                }
-                                
+                                    if (auto albedo_texture_iter = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture_iter != nullptr)
+                                    {
+                                        iter->SetAlbedoTexture(albedo_texture_iter);
+                                    }
+                                    else
+                                    {
+                                        iter->SetAlbedoTexture(std::shared_ptr<Texture>(nullptr));
+                                    }
+
                                 if (iter->GetMaterialData()->has_normal_texture == true)
-                                if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
-                                {
-                                    iter->SetNormalTexture(normal_texture_iter);
-                                }
-                                else
-                                {
-                                    iter->SetNormalTexture(std::shared_ptr<Texture>(nullptr));
-                                }
+                                    if (auto normal_texture_iter = texture_manager_->GetTexture(material->texture_normal_name); normal_texture_iter != nullptr)
+                                    {
+                                        iter->SetNormalTexture(normal_texture_iter);
+                                    }
+                                    else
+                                    {
+                                        iter->SetNormalTexture(std::shared_ptr<Texture>(nullptr));
+                                    }
                                 if (iter->GetMaterialData()->has_metalroughness_texture == true)
-                                if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
+                                    if (auto metalrough_texture_iter = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture_iter != nullptr)
+                                    {
+                                        iter->SetMetalRoughnessTexture(metalrough_texture_iter);
+                                    }
+                                    else
+                                    {
+                                        iter->SetMetalRoughnessTexture(std::shared_ptr<Texture>(nullptr));
+                                    }
+                                if (iter->GetMaterialData()->has_ao_texture == true)
+                                    if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
+                                    {
+                                        iter->SetAOTexture(ao_texture_iter);
+                                    }
+                                    else
+                                    {
+                                        iter->SetAOTexture(std::shared_ptr<Texture>(nullptr));
+                                    }
+
+                                if (iter->GetMaterialData()->has_metalic_texture == true)
                                 {
-                                    iter->SetMetalRoughness(metalrough_texture_iter);
+                                    if (auto metallic_texture = texture_manager_->GetTexture(material->texture_metalroughness_name); metallic_texture != nullptr)
+                                    {
+                                        iter->SetMetalicTexture(metallic_texture);
+                                    }
+                                    else
+                                    {
+                                        iter->SetMetalicTexture(nullptr);
+                                    }
                                 }
-                                else
+
+                                if (iter->GetMaterialData()->has_roughness_texture == true)
                                 {
-                                    iter->SetMetalRoughness(std::shared_ptr<Texture>(nullptr));
+                                    if (auto roughSmooothness_texture = texture_manager_->GetTexture(material->texture_roughness_name); roughSmooothness_texture != nullptr)
+                                    {
+                                        iter->SetRoughSmoothnessTexture(roughSmooothness_texture);
+                                    }
+                                    else
+                                    {
+                                        iter->SetRoughSmoothnessTexture(nullptr);
+                                    }
                                 }
-                                if(iter->GetMaterialData()->has_ao_texture == true)
-                                if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
+
+                                if (iter->GetMaterialData()->has_emissive_texture == true)
                                 {
-                                    iter->SetAOTexture(ao_texture_iter);
-                                }
-                                else
-                                {
-                                    iter->SetAOTexture(std::shared_ptr<Texture>(nullptr));
+                                    if (auto emissive_texture = texture_manager_->GetTexture(material->texture_roughness_name); emissive_texture != nullptr)
+                                    {
+                                        iter->SetEmissiveTexture(emissive_texture);
+                                    }
+                                    else
+                                    {
+                                        iter->SetEmissiveTexture(nullptr);
+                                    }
                                 }
                                 iter->Bind();
                             }
