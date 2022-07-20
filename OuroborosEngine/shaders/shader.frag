@@ -29,17 +29,33 @@ void main()
         }
         else if(light.type == 1) {
 
-            float cutoff = radians(light.cutoff);
-            float outer_cutoff = radians(light.out_cutoff);
+         
 
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
+              att = 1/(oout.att*oout.att);
             L = normalize(L);
-            float theta = max(dot(-L, normalize(light.dir)), 0.0);
-            att = 1 / (oout.att * oout.att);
-
-            float epsilon = cutoff - outer_cutoff;
-            att *= clamp((theta - outer_cutoff) / epsilon, 0, 1);
+            // float theta = dot(L, normalize(-light.dir));
+            // float epsilon = light.cutoff - light.out_cutoff;
+            // att *= clamp((theta - light.out_cutoff) / epsilon, 0, 1);
+        
+        float cutoff = radians(light.cutoff) ;
+        float outcutoff = radians(light.out_cutoff) ;
+        float alpha = dot(-L,normalize(light.dir)); 
+        float Spotlighteffect=0;
+         if(alpha < outcutoff)
+         {
+    	    Spotlighteffect=0;
+         }
+         else if(alpha < cutoff)
+         {
+    	    Spotlighteffect=1;
+         }
+         else
+         {
+    	    Spotlighteffect=pow((alpha-cos(outcutoff))/(cos(cutoff)-cos(outcutoff)),light.falloff);
+         }
+         att *= Spotlighteffect;
         }
         else if(light.type == 2) {
             L = -normalize(light.dir);
