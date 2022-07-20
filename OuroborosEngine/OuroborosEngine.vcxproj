@@ -98,7 +98,7 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)external\lib\lib;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\lib-vc2022;$(VULKAN_SDK)lib;%(AdditionalLibraryDirectories);$(SolutionDir)external\lib\yaml-cpp\build\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yaml-cpp.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libyaml-cppmd.lib;glfw3.lib;opengl32.lib;glu32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /y /d /e /i "$(ProjectDir)external\lib\lib" "$(TargetDir)external\lib\lib" </Command>

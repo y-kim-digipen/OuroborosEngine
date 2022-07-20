@@ -8,6 +8,8 @@ layout(set = 1, binding = 0) uniform Test {
     float att;
 } oout;
 
+float test_att = 0.1;
+
 void main() 
 {
     vec3 Lo = vec3(0);
@@ -24,7 +26,7 @@ void main()
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
             // att = 1 / (d * d);
-            att = 1/(oout.att*oout.att);
+            att = 1/(test_att*test_att);
             L = normalize(L);
         }
         else if(light.type == 1) {
@@ -33,7 +35,7 @@ void main()
 
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
-              att = 1/(oout.att*oout.att);
+              att = 1/(test_att*test_att);
             L = normalize(L);
             // float theta = dot(L, normalize(-light.dir));
             // float epsilon = light.cutoff - light.out_cutoff;

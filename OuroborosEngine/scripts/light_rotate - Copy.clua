@@ -1,0 +1,36 @@
+radius = 2
+start_degree = 180
+current_degree = 0
+speed = 1.0
+function Init(ent_ID, dt)
+    current_degree = start_degree
+
+end
+
+function Update(ent_ID, dt)
+    current_degree = current_degree + dt * speed
+    -- print(current_degree)
+    ecs_manager = GetECS_Manager()
+    local has_transform_component = ecs_manager:HasTransformComponent(ent_ID)
+    if has_transform_component then
+        local transform_component = ecs_manager:GetTransformComponent(ent_ID)
+    --     -- ecs_manager:GetTransformComponent(ent_ID).rotation.y = ecs_manager:GetTransformComponent(ent_ID).rotation.y + rotation_amount;
+        current_pos = vec3.new()
+        current_pos.x = sin(current_degree) * radius
+        current_pos.y = transform_component.pos.y;
+        current_pos.z = cos(current_degree) * radius
+    ecs_manager:GetTransformComponent(ent_ID).pos = current_pos
+    end
+
+    local has_light_component = ecs_manager:HasLightComponent(ent_ID)
+    if has_light_component then
+        local pos = vec3.new();
+        pos = ecs_manager:GetTransformComponent(ent_ID).pos
+        local target_dir = vec3.new(-pos.x, -pos.y, -pos.z)
+        ecs_manager:GetLightComponent(ent_ID).data.dir = target_dir
+    end
+end
+
+function CleanUp(ent_ID, dt)
+
+end

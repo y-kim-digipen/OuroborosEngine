@@ -150,6 +150,7 @@ namespace OE
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
+		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
 		Renderer::ShaderConfig shader_config3{
 					"shader",
