@@ -20,19 +20,19 @@ namespace OE
 
 	void Engine::ECS_TestSetup()
 	{
-		auto& ent = ecs_manager.CreateEntity();
-		ecs_manager.AddComponent<TransformComponent>(ent.myID, glm::vec3{ 0.f, 1.f, 0.f });
-		ecs_manager.AddComponent<VelocityComponent>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
-		auto& ent2 = ecs_manager.CreateEntity();
-		ecs_manager.AddComponent<LifeTimeComponent>(ent2.myID, 5);
-		ecs_manager.AddComponent<MeshComponent>(ent2.myID);
-		auto& ent3 = ecs_manager.CreateEntity();
-		ecs_manager.AddComponent<BoolWrapperComponent>(ent3.myID, false);
+		//auto& ent = ecs_manager.CreateEntity();
+		//ecs_manager.AddComponent<TransformComponent>(ent.myID, glm::vec3{ 0.f, 1.f, 0.f });
+		//ecs_manager.AddComponent<VelocityComponent>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
+		//auto& ent2 = ecs_manager.CreateEntity();
+		//ecs_manager.AddComponent<LifeTimeComponent>(ent2.myID, 5);
+		//ecs_manager.AddComponent<MeshComponent>(ent2.myID);
+		//auto& ent3 = ecs_manager.CreateEntity();
+		//ecs_manager.AddComponent<BoolWrapperComponent>(ent3.myID, false);
 
-		auto& ent4 = ecs_manager.CreateEntity();
-		ecs_manager.AddComponent<TransformComponent>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
-		ecs_manager.AddComponent<VelocityComponent>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
-		ecs_manager.AddComponent<TagComponent>(ent4.myID, "TestEntity");
+		//auto& ent4 = ecs_manager.CreateEntity();
+		//ecs_manager.AddComponent<TransformComponent>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
+		//ecs_manager.AddComponent<VelocityComponent>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
+		//ecs_manager.AddComponent<TagComponent>(ent4.myID, "TestEntity");
 
 		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
 			{
@@ -91,7 +91,12 @@ namespace OE
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::AttatchedComponent, std::to_string(ent));
-					if(script != nullptr && script->script_path.empty() == false)
+					if(script == nullptr)
+					{
+						script = OE::Engine::lua_script_manager.CreateScript(std::to_string(ent), OE::Script::ScriptType::AttatchedComponent);
+						script->ChangeScript(script_component.name);
+					}
+					if(script->script_path.empty() == false)
 					{
 						script->Update(ent, dt);
 
@@ -185,7 +190,7 @@ namespace OE
 		SetupModule();
 
 		//scene_serializer.SerializeScene("test.yaml");
-		scene_serializer.DeserializeScene("1.yaml");
+		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		//Profiler::Start();
 	}
 
