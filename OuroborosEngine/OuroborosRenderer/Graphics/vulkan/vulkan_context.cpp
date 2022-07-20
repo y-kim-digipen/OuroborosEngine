@@ -1126,7 +1126,7 @@ namespace Renderer
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
         VkClearValue clear_color = {
-            {{0.2f,0.3f, 0.1f, 1.0f}}
+            {{0.01f,0.01f, 0.01f, 1.f}}
         };
 
         VkClearValue depth_clear;
