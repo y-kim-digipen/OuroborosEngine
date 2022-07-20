@@ -76,7 +76,7 @@ namespace Renderer
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData) {
 
-        //return VK_FALSE;
+        return VK_FALSE;
 
         switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
@@ -107,7 +107,7 @@ namespace Renderer
         SpirvHelper::Init();
         CreateInstance(major, minor);
 #if defined(_DEBUG)
-        CreateDebugUtilMessage();
+        //CreateDebugUtilMessage();
 #endif //_DEBUG
         CreateSurface();
         PickPhysicalDevice();
@@ -624,7 +624,7 @@ namespace Renderer
             | VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
         debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT
             | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
-        debugCreateInfo.pfnUserCallback = (PFN_vkDebugUtilsMessengerCallbackEXT)debugCallback;
+        //debugCreateInfo.pfnUserCallback = (PFN_vkDebugUtilsMessengerCallbackEXT)debugCallback;
         debugCreateInfo.pUserData = 0;
         ;
         //vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger);
@@ -634,7 +634,7 @@ namespace Renderer
         PFN_vkCreateDebugUtilsMessengerEXT myvkCreateDebugUtilsMessengerEXT = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(vulkan_type.instance, "vkCreateDebugUtilsMessengerEXT"));
 
 
-        VK_CHECK(myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
+        //VK_CHECK(myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
         //VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     }
 #endif
