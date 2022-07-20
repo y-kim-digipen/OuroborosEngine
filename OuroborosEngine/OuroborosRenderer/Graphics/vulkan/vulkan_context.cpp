@@ -384,7 +384,7 @@ namespace Renderer
             while (!draw_queue.empty())
             {
                 const auto& front = draw_queue.front();
-                 
+                  
                 auto* transform = front.transform;
                 auto* mesh = front.mesh;
                 auto* shader = front.shader;
