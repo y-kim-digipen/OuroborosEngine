@@ -77,7 +77,9 @@
 xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
 xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
-xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
+xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"
+xcopy /y /d /e /i "$(SolutionDir)images" "$(TargetDir)images"
+xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -108,7 +110,9 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
 xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"
 xcopy /y /d "$(SolutionDir)external\lib\lua-5.4.2\lua54.dll"  "$(TargetDir)"
 xcopy /y /d /e /i "$(SolutionDir)shaders" "$(TargetDir)shaders"
-xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
+xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"
+xcopy /y /d /e /i "$(SolutionDir)images" "$(TargetDir)images"
+xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
