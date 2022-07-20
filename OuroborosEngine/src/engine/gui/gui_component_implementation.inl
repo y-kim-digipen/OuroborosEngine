@@ -315,10 +315,7 @@ namespace OE
 				}
 
 			}
-			else
-			{
-				material_component.texture_metalroughness_name = "";
-			}
+		
 
 			is_changed |= ImGui::Checkbox("Metallic_check", reinterpret_cast<bool*>(&material_component.data.has_metalic_texture));
 			if (material_component.data.has_metalic_texture)
@@ -347,7 +344,11 @@ namespace OE
 					ImGui::Image(*TextureID, ImVec2(100, 100));
 				}
 			}
-			
+
+			if(!material_component.data.has_metalroughness_texture  && !material_component.data.has_metalic_texture)
+			{
+				material_component.texture_metalroughness_name = "";
+			}
 
 
 			is_changed |= ImGui::Checkbox("roughness/smoothness_check", reinterpret_cast<bool*>(&material_component.data.has_roughness_texture));
