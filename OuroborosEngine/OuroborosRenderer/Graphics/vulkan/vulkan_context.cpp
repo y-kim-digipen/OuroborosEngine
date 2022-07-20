@@ -580,7 +580,7 @@ namespace Renderer
 
                                 if (iter->GetMaterialData()->has_emissive_texture == true)
                                 {
-                                    if (auto emissive_texture = texture_manager_->GetTexture(material->texture_roughness_name); emissive_texture != nullptr)
+                                    if (auto emissive_texture = texture_manager_->GetTexture(material->texture_emissive_name); emissive_texture != nullptr)
                                     {
                                         iter->SetEmissiveTexture(emissive_texture);
                                     }
@@ -1126,7 +1126,7 @@ namespace Renderer
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
         VkClearValue clear_color = {
-            {{0.2f,0.3f, 0.1f, 1.0f}}
+            {{0.01f,0.01f, 0.01f, 1.f}}
         };
 
         VkClearValue depth_clear;

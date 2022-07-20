@@ -145,16 +145,16 @@ namespace OE
 						ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::FLOAT:
-						ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first),0.1f);
 						break;
 					case Renderer::DataType::FLOAT2:
-						ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::FLOAT3:
-						ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::FLOAT4:
-						ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first));
+						ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::INT:
 						ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
@@ -173,6 +173,7 @@ namespace OE
 					case Renderer::DataType::MAT4:
 						break;
 					}
+					shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
 
 				}
 			}

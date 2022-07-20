@@ -233,6 +233,7 @@ namespace Renderer
 		{
 			char* ptr = reinterpret_cast<char*>(this->data) + member_vars[member_var_name].offset;
 			memcpy(ptr , data_, member_vars[member_var_name].size);
+			UploadToGPU(member_vars[member_var_name].offset,member_vars[member_var_name].size);
 			return 0;
 		}
 
