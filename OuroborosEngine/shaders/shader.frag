@@ -28,13 +28,18 @@ void main()
             L = normalize(L);
         }
         else if(light.type == 1) {
+
+            float cutoff = radians(light.cutoff);
+            float outer_cutoff = radians(light.out_cutoff);
+
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
-            att = 1 / (d * d);
             L = normalize(L);
-            float theta = dot(L, normalize(-light.dir));
-            float epsilon = light.cutoff - light.out_cutoff;
-            att *= clamp((theta - light.out_cutoff) / epsilon, 0, 1);
+            float theta = max(dot(-L, normalize(light.dir)), 0.0);
+            att = 1 / (oout.att * oout.att);
+
+            float epsilon = cutoff - outer_cutoff;
+            att *= clamp((theta - outer_cutoff) / epsilon, 0, 1);
         }
         else if(light.type == 2) {
             L = -normalize(light.dir);
@@ -65,14 +70,14 @@ void main()
 
         vec3 F0 = vec3(0.04);
         F0 = mix(F0, albedo, metallic);
-        vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
+        vec3 F = FresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
         float G = GeometrySmith(N, V, L,roughness);
 
         vec3 Ks = F;
         vec3 Kd = vec3(1.0) - Ks;
         Kd *= 1.0 - metallic;
 
-        vec3 specular = (D * F * G) / max(4 * max(dot(V, N), 0.0) * max(dot(L, N), 0.0), 0.0001);
+        vec3 specular = (D * F * G) / 4 * max(dot(V, N), 0.0) * max(dot(L, N), 0.0) + 0.0001f;
         Lo += (Kd * albedo / PI + specular) * radiance * max(dot(L, N), 0.0);
     }
 

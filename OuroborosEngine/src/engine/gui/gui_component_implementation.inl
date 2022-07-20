@@ -212,7 +212,6 @@ namespace OE
 			if (ImGui::Button("save"))
 			{
 				material_component.is_save = true;
-				material_component.flag = true;
 			}
 
 			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;

@@ -48,7 +48,6 @@ namespace Renderer {
 		{
 			if (line_buffer.find(include_indentifier) != line_buffer.npos)
 			{
-
 				line_buffer.erase(0, include_indentifier.size());
 				line_buffer.erase(0, 2);
 				line_buffer.erase(line_buffer.size() - 1, 1);
