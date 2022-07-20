@@ -29,8 +29,7 @@ void main()
         }
         else if(light.type == 1) {
 
-            float cutoff = radians(light.cutoff);
-            float outer_cutoff = radians(light.out_cutoff);
+         
 
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
