@@ -5,6 +5,7 @@
 #include "../input/InputManager.h"
 #include "../src/engine/engine_settings.h"
 #include "../src/engine/engine.h"
+#include "component_serialization_impl.h"
 
 namespace OE
 {
@@ -33,6 +34,25 @@ namespace OE
 				master_asset_manager.GetManager<TAssetManager>().Serialize(out);
 			});
 		out << YAML::EndMap;
+
+		//Material info
+		out << YAML::Key << "Material";
+		out << YAML::Value;
+		out << YAML::BeginMap;
+		const auto& material_manager
+		= OE::Engine::window->GetWindowData().RenderContextData
+			->material_manager->GetMaterialDatum();
+		for (const auto& [key, material] : material_manager)
+		{
+			out << YAML::Key << key;
+			out << YAML::Value;
+			out << YAML::BeginMap;
+			std::cout << typeid(decltype(*(material->GetMaterialData()))).name() << std::endl;
+			out << *(material->GetMaterialData());
+			out << YAML::EndMap;
+		}
+		out << YAML::EndMap;
+
 		//ECS info
 		out << YAML::Key << "ECS";
 		out << YAML::Value;
@@ -88,34 +108,51 @@ namespace OE
 		ecs_manager.Clear();
 		YAML::Node scene_file = YAML::LoadFile(file_name);
 
-		
-		auto asset_node = scene_file["Asset"];
-		master_asset_manager.CleanUp();
-		
-		for (YAML::iterator it = asset_node.begin(); it != asset_node.end(); ++it)
 		{
-			const std::string& asset_manager_name = it->first.as<std::string>();
-			YAML::Node asset_sequence_node = it->second;
+			auto asset_node = scene_file["Asset"];
+			master_asset_manager.CleanUp();
 
-			bool stop_search = false;
-			brigand::for_each<Asset_Manager>([asset_manager_name, stop_search, &master_asset_manager, asset_sequence_node](auto t) mutable
-				{
-					if(stop_search == false)
+			for (YAML::iterator it = asset_node.begin(); it != asset_node.end(); ++it)
+			{
+				const std::string& asset_manager_name = it->first.as<std::string>();
+				YAML::Node asset_sequence_node = it->second;
+
+				bool stop_search = false;
+				brigand::for_each<Asset_Manager>([asset_manager_name, stop_search, &master_asset_manager, asset_sequence_node](auto t) mutable
 					{
-						using TAssetManager = typename decltype(t)::type;
-						if (asset_manager_name == typeid(TAssetManager).name())
+						if (stop_search == false)
 						{
-							auto& asset_manager = master_asset_manager.GetManager<TAssetManager>();
-
-							for(YAML::iterator it = asset_sequence_node.begin(); it != asset_sequence_node.end(); ++it)
+							using TAssetManager = typename decltype(t)::type;
+							if (asset_manager_name == typeid(TAssetManager).name())
 							{
-								const std::string& asset_name = it->as<std::string>();
-								asset_manager.LoadAsset(asset_name);
+								auto& asset_manager = master_asset_manager.GetManager<TAssetManager>();
+
+								for (YAML::iterator it = asset_sequence_node.begin(); it != asset_sequence_node.end(); ++it)
+								{
+									const std::string& asset_name = it->as<std::string>();
+									asset_manager.LoadAsset(asset_name);
+								}
+								stop_search = true;
 							}
-							stop_search = true;
 						}
-					}
-				});
+					});
+			}
+		}
+
+		{
+			OE::Engine::window->GetWindowData().RenderContextData
+				->material_manager->ClearMaterialDatum();
+
+			auto material_node = scene_file["Material"];
+			for (YAML::iterator it = material_node.begin(); it != material_node.end(); ++it)
+			{
+				const std::string& key = it->first.as<std::string>();
+				YAML::Node data_node = it->second;
+				Asset::MaterialData data;
+				data_node >> data;
+				OE::Engine::window->GetWindowData().RenderContextData
+					->material_manager->AddMaterial(key, data);
+			}
 		}
 
 

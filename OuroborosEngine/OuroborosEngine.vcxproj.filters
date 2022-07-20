@@ -96,6 +96,15 @@
     <ClInclude Include="src\engine\serializer\scene_serializer.h">
       <Filter>engine\serializer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\serializer\component_serialization_impl.h">
+      <Filter>engine\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\serializer\assets_serialization_impl.h">
+      <Filter>engine\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\serializer\shared_serialization_impl.h">
+      <Filter>engine\serializer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

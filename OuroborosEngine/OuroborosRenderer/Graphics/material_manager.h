@@ -16,6 +16,14 @@ namespace Renderer {
 		virtual int AddMaterial(std::string material_name, const Asset::MaterialData& data) = 0;
 		virtual Material* GetMaterial(const std::string& material_name) = 0;
 		virtual int ChangeMaterial(std::string material_name, const Asset::MaterialData& data) = 0;
+		void ClearMaterialDatum()
+		{
+			material_map.clear();
+		}
+		const auto& GetMaterialDatum() const
+		{
+			return material_map;
+		}
 	protected:
 		std::unordered_map<std::string, std::unique_ptr<Material>> material_map;
 	};

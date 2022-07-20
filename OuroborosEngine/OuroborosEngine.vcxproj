@@ -133,7 +133,10 @@ xcopy /y /d /e /i "$(SolutionDir)model" "$(TargetDir)model"</Command>
     <ClInclude Include="src\engine\modules\script_asset_manager.h" />
     <ClInclude Include="src\engine\scripting\lua_script_manager.h" />
     <ClInclude Include="src\engine\scripting\script.h" />
+    <ClInclude Include="src\engine\serializer\assets_serialization_impl.h" />
+    <ClInclude Include="src\engine\serializer\component_serialization_impl.h" />
     <ClInclude Include="src\engine\serializer\scene_serializer.h" />
+    <ClInclude Include="src\engine\serializer\shared_serialization_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />

@@ -639,41 +639,41 @@ namespace Renderer
         instance_create_info.pApplicationInfo = &app_info;
 
 #if defined(_DEBUG)
-        const char* required_layer_names[] =
-        {
-           "VK_LAYER_KHRONOS_validation"
-        };
+        //const char* required_layer_names[] =
+        //{
+        //   "VK_LAYER_KHRONOS_validation"
+        //};
 
-        unsigned required_layer_count = sizeof(required_layer_names) / sizeof(const char*);
+        //unsigned required_layer_count = sizeof(required_layer_names) / sizeof(const char*);
 
-        unsigned available_layer_count = 0;
-        VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, nullptr));
-        std::vector<VkLayerProperties> available_properties(available_layer_count);
-        VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, available_properties.data()));
+        //unsigned available_layer_count = 0;
+        //VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, nullptr));
+        //std::vector<VkLayerProperties> available_properties(available_layer_count);
+        //VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, available_properties.data()));
 
-        for (unsigned i = 0; i < required_layer_count; ++i)
-        {
-            std::cout << "Searching validation layer: " << required_layer_names[i] << "..." << std::endl;
-            bool is_found = false;;
-            for (unsigned l = 0; l < available_layer_count; ++l)
-            {
-                if (strcmp(required_layer_names[i], available_properties.at(l).layerName) == 0)
-                {
-                    std::cout << "found" << std::endl;
-                    is_found = true;
-                    break;
-                }
-            }
+        //for (unsigned i = 0; i < required_layer_count; ++i)
+        //{
+        //    std::cout << "Searching validation layer: " << required_layer_names[i] << "..." << std::endl;
+        //    bool is_found = false;;
+        //    for (unsigned l = 0; l < available_layer_count; ++l)
+        //    {
+        //        if (strcmp(required_layer_names[i], available_properties.at(l).layerName) == 0)
+        //        {
+        //            std::cout << "found" << std::endl;
+        //            is_found = true;
+        //            break;
+        //        }
+        //    }
 
-            if (!is_found)
-            {
-                std::cout << required_layer_names[i] << "is missing!\n";
-                return false;
-            }
-        }
+        //    if (!is_found)
+        //    {
+        //        std::cout << required_layer_names[i] << "is missing!\n";
+        //        return false;
+        //    }
+        //}
 
-        instance_create_info.enabledLayerCount = required_layer_count;
-        instance_create_info.ppEnabledLayerNames = required_layer_names;
+        //instance_create_info.enabledLayerCount = required_layer_count;
+        //instance_create_info.ppEnabledLayerNames = required_layer_names;
 #endif //_DEBUG
 
         //TODO: this should be formatted as a function of inside the platform

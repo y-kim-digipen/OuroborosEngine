@@ -7,24 +7,36 @@ Asset:
     - shader
     - shader2
   class OE::ScriptAssetManager:
-    - ..\OuroborosEngine\scripts\self_rotate.clua
     - ..\OuroborosEngine\scripts\test1 - Copy (2).slua
+Material:
+  material:
+    albedo: [0.2039216, 0.2431373, 0.1647059]
+    metallic: 1
+    roughness: 2
+    ao: 3
+    has_albedo_texture: 1
+    has_normal_texture: 1
+    has_metalroughness_texture: 1
+    has_ao_texture: 1
+    has_metalic_texture: 1
+    has_roughness_texture: 1
+    has_emissive_texture: 0
+    is_roughness_texture_inverted: 0
+  material1:
+    albedo: [0.2039216, 0.2431373, 0.1647059]
+    metallic: 1
+    roughness: 2
+    ao: 3
+    has_albedo_texture: 1
+    has_normal_texture: 1
+    has_metalroughness_texture: 1
+    has_ao_texture: 1
+    has_metalic_texture: 1
+    has_roughness_texture: 1
+    has_emissive_texture: 0
+    is_roughness_texture_inverted: 0
 ECS:
   0:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-    Component:
-      struct TransformComponent:
-        pos: [0, 1, 0]
-        scale: [1, 1, 1]
-        rotation: [1, 0, 0]
-      struct VelocityComponent:
-        vel: [2, 3, 0]
-  1:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: no
@@ -36,7 +48,7 @@ ECS:
         life_time: 5
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\cube.obj
-  2:
+  1:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: no
@@ -46,7 +58,7 @@ ECS:
     Component:
       struct BoolWrapperComponent:
         bool_type: true
-  3:
+  2:
     System:
       struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: yes
