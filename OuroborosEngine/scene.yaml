@@ -16,6 +16,7 @@ Asset:
     - ..\OuroborosEngine\model\DamagedHelmet.obj
     - ..\OuroborosEngine\model\GAMEBOY.obj
     - ..\OuroborosEngine\model\bulb.obj
+    - ..\OuroborosEngine\model\plane.obj
   class OE::ShaderAssetManager:
     - shader
     - shader2
@@ -29,18 +30,31 @@ Material:
     roughness: 0
     ao: 0
     has_albedo_texture: 1
-    has_normal_texture: 0
+    has_normal_texture: 1
     has_metalroughness_texture: 0
-    has_ao_texture: 0
-    has_metalic_texture: 0
-    has_roughness_texture: 0
-    has_emissive_texture: 0
+    has_ao_texture: 1
+    has_metalic_texture: 1
+    has_roughness_texture: 1
+    has_emissive_texture: 1
     is_roughness_texture_inverted: 0
   game_boy_material:
-    albedo: [1, 0, 0]
-    metallic: 0
-    roughness: 0
-    ao: 0
+    albedo: [0, 0, 0]
+    metallic: 1
+    roughness: 0.36
+    ao: 1
+    has_albedo_texture: 1
+    has_normal_texture: 1
+    has_metalroughness_texture: 0
+    has_ao_texture: 1
+    has_metalic_texture: 1
+    has_roughness_texture: 1
+    has_emissive_texture: 1
+    is_roughness_texture_inverted: 0
+  plane_material:
+    albedo: [0, 0, 0]
+    metallic: 0.35
+    roughness: 0.33
+    ao: 2.2
     has_albedo_texture: 0
     has_normal_texture: 0
     has_metalroughness_texture: 0
@@ -59,9 +73,9 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [-0.7, 0, 0]
-        scale: [1, 1, 1]
-        rotation: [1, 3593.486, 0]
+        pos: [-0.3, 0, 0]
+        scale: [0.5, 0.5, 0.5]
+        rotation: [1, 5623.672, 0]
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\DamagedHelmet.obj
       struct ShaderComponent:
@@ -81,7 +95,7 @@ ECS:
           has_roughness_texture: 1
           has_emissive_texture: 1
           is_roughness_texture_inverted: 0
-        flag: true
+        flag: false
         is_save: false
         is_light: false
         texture_albedo_name: ..\OuroborosEngine\images\helmet_image\Default_albedo.jpg
@@ -103,7 +117,7 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [1.9, 0, 0]
+        pos: [0.5, -0.1, 0]
         scale: [5, 5, 5]
         rotation: [1, 1776.139, 0]
       struct MeshComponent:
@@ -113,10 +127,10 @@ ECS:
       struct MaterialComponent:
         name: game_boy_material
         material_data:
-          albedo: [1, 0, 0]
-          metallic: 0
-          roughness: 0
-          ao: 0
+          albedo: [0, 0, 0]
+          metallic: 1
+          roughness: 0.36
+          ao: 1
           has_albedo_texture: 1
           has_normal_texture: 1
           has_metalroughness_texture: 0
@@ -125,7 +139,7 @@ ECS:
           has_roughness_texture: 1
           has_emissive_texture: 1
           is_roughness_texture_inverted: 0
-        flag: true
+        flag: false
         is_save: false
         is_light: false
         texture_albedo_name: ..\OuroborosEngine\images\gameboy_textures\mat_default_albedo.jpeg
@@ -147,15 +161,15 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [-0.3776578, 0, -1.96402]
-        scale: [3, 3, 3]
+        pos: [1.189371, 0.3, -1.607917]
+        scale: [1, 1, 1]
         rotation: [1, 0, 0]
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\bulb.obj
       struct ShaderComponent:
         name: shader
       struct MaterialComponent:
-        name: material
+        name: red_bulb
         material_data:
           albedo: [1, 0, 0]
           metallic: 0
@@ -169,8 +183,8 @@ ECS:
           has_roughness_texture: 0
           has_emissive_texture: 0
           is_roughness_texture_inverted: 0
-        flag: false
-        is_save: false
+        flag: true
+        is_save: true
         is_light: true
         texture_albedo_name: ""
         texture_normal_name: ""
@@ -180,12 +194,103 @@ ECS:
         texture_roughness_name: ""
       struct LightComponent:
         init: false
-        data.pos: [-0.368937, 0, -1.965677]
+        data.pos: [1.199651, 0.3, -1.600262]
+        data.cutoff: 80
+        data.diffuse: [1, 0, 0]
+        data.out_cutoff: 56
+        data.dir: [-1.189371, -0.3, 1.607917]
+        data.falloff: 1
+        data.type: 1
+      struct ScriptComponent:
+        name: ..\OuroborosEngine\scripts\light_rotate.clua
+  3:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        pos: [0, -0.6, 0]
+        scale: [10, 10, 10]
+        rotation: [1, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\OuroborosEngine\model\plane.obj
+      struct ShaderComponent:
+        name: shader
+      struct MaterialComponent:
+        name: plane_material
+        material_data:
+          albedo: [0, 0, 0]
+          metallic: 0.35
+          roughness: 0.33
+          ao: 2.2
+          has_albedo_texture: 0
+          has_normal_texture: 0
+          has_metalroughness_texture: 0
+          has_ao_texture: 0
+          has_metalic_texture: 0
+          has_roughness_texture: 0
+          has_emissive_texture: 0
+          is_roughness_texture_inverted: 0
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+  4:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: yes
+    Component:
+      struct TransformComponent:
+        pos: [-1.541713, 0.3, -1.274018]
+        scale: [1, 1, 1]
+        rotation: [1, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\OuroborosEngine\model\bulb.obj
+      struct ShaderComponent:
+        name: shader
+      struct MaterialComponent:
+        name: blue_bulb
+        material_data:
+          albedo: [0, 0.02941203, 1]
+          metallic: 0
+          roughness: 0
+          ao: 0
+          has_albedo_texture: 0
+          has_normal_texture: 0
+          has_metalroughness_texture: 0
+          has_ao_texture: 0
+          has_metalic_texture: 0
+          has_roughness_texture: 0
+          has_emissive_texture: 0
+          is_roughness_texture_inverted: 0
+        flag: true
+        is_save: true
+        is_light: true
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+      struct LightComponent:
+        init: false
+        data.pos: [-1.533536, 0.3, -1.283849]
         data.cutoff: 0
-        data.diffuse: [1, 1, 1]
+        data.diffuse: [0.002018457, 0.02160938, 0.06862748]
         data.out_cutoff: 0
-        data.dir: [0, 0, 0]
+        data.dir: [1.541713, -0.3, 1.274018]
         data.falloff: 0
-        data.type: 2
+        data.type: 1
       struct ScriptComponent:
         name: ..\OuroborosEngine\scripts\light_rotate.clua
