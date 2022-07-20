@@ -20,8 +20,8 @@ namespace _imgui_helper
 }
 namespace OE
 {
-	static std::vector<std::string> popup_menu_strings = 
-	{ "Add Component", "Add Entity", "Delete Entity", "Delete Component", "System"};
+	static std::vector<std::string> popup_menu_strings =
+	{ "Add Component", "Add Entity", "Delete Entity", "Delete Component", "System" };
 
 	enum PopupMenuTypes
 	{
@@ -58,113 +58,31 @@ namespace OE
 
 	static void EntityInfoPanelFunction()
 	{
+		static bool is_hovered = false;
+		static bool is_popup_menu_opened = false;
+		static int last_ent_hovered = -1;
 		auto& engine = Engine::Get();
 		using ComponentList = decltype(std::declval<ECS_Manager>().component_manager)::ComponentList;
 
-			if (!ImGui::IsPopupOpen(popup_menu_strings[COMPONENT_ADD].c_str()) 
-				&& !ImGui::IsPopupOpen(popup_menu_strings[COMPONENT_DELETE].c_str())
-				&& ImGui::BeginPopupContextWindow())
+		Engine::ecs_manager.ForEntities([](ecs_ID entID) mutable
 			{
-				if (ImGui::MenuItem(popup_menu_strings[ENTITY_ADD].c_str()))
-				{
-					Engine::ecs_manager.CreateEntity();
-				}
-				ImGui::EndPopup();
-			}
-
-		Engine::ecs_manager.ForEntities([](ecs_ID entID)
-			{
-				if(Engine::ecs_manager.GetEntity(entID).alive)
+				if (Engine::ecs_manager.GetEntity(entID).alive)
 				{
 					std::string strID = std::to_string(entID);
-					if (ImGui::CollapsingHeader(strID.c_str()))
+					bool collapsing_header_opened = ImGui::CollapsingHeader(strID.c_str());
+					if (collapsing_header_opened)
 					{
-						//auto item_min		= ImGui::GetItemRectMin();
-						//auto item_max		= ImGui::GetItemRectMax();
-						//auto cursor_pos		= ImGui::GetMousePosOnOpeningCurrentPopup();
-						//bool on_this_item = _imgui_helper::AABB(cursor_pos, item_min, item_max);
-
-						ImGui::PushID(entID);
-						if (ImGui::BeginPopupContextWindow(popup_menu_strings[COMPONENT_ADD].c_str()))
+						if (is_popup_menu_opened == false)
 						{
-							//std::string menu_str = "Add Component to"
-							if (ImGui::MenuItem(popup_menu_strings[ENTITY_DELETE].c_str()))
+							bool is_this_ent_hovered = ImGui::IsItemHovered();
+							is_hovered |= is_this_ent_hovered;
+							if (is_this_ent_hovered)
 							{
-								Engine::ecs_manager.DeleteEntity(entID);
+								last_ent_hovered = entID;
 							}
-							if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_ADD].c_str()))
-							{
-								using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
-
-								brigand::for_each<TComponents>([entID](auto type)
-									{
-										using TComponent = typename decltype(type)::type;
-										const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
-										if (has_this_component)
-										{
-											ImGui::BeginDisabled();
-										}
-										if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
-										{
-											OE::Engine::ecs_manager.AddComponent<TComponent>(entID);
-										}
-										if (has_this_component)
-										{
-											ImGui::EndDisabled();
-										}
-									});
-								ImGui::EndMenu();
-							}
-							if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_DELETE].c_str()))
-							{
-								using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
-
-								brigand::for_each<TComponents>([entID](auto type)
-									{
-										using TComponent = typename decltype(type)::type;
-										const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
-										if (!has_this_component)
-										{
-											ImGui::BeginDisabled();
-										}
-										if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
-										{
-											OE::Engine::ecs_manager.DeleteComponent<TComponent>(entID);
-										}
-										if (!has_this_component)
-										{
-											ImGui::EndDisabled();
-										}
-									});
-
-								ImGui::EndMenu();
-							}
-
-							if (ImGui::BeginMenu(popup_menu_strings[SYSTEM].c_str()))
-							{
-								using TSystems = decltype(Engine::ecs_manager)::SystemStorage::system_list;
-
-								brigand::for_each<TSystems>([entID](auto type)
-									{
-										using TSystem = typename decltype(type)::type::type;
-										const bool has_this_system = OE::Engine::ecs_manager.HasSystem<TSystem>(entID);
-										if (ImGui::MenuItem(typeid(TSystem).name(), nullptr, has_this_system))
-										{
-											if(!has_this_system)
-											{
-												OE::Engine::ecs_manager.AddSystem<TSystem>(entID);
-											}
-											else
-											{
-												OE::Engine::ecs_manager.DeleteSystem<TSystem>(entID);
-											}
-										}
-									});
-								ImGui::EndMenu();
-							}
-							ImGui::EndPopup();
 						}
 
+						ImGui::PushID(entID);
 						brigand::for_each<ComponentList>([entID](auto type)
 							{
 								using TComponent = typename decltype(type)::type;
@@ -175,9 +93,120 @@ namespace OE
 							});
 						ImGui::PopID();
 					}
+					else
+					{
+						if (is_popup_menu_opened == false)
+						{
+							bool is_this_ent_hovered = ImGui::IsItemHovered();
+							is_hovered |= is_this_ent_hovered;
+							if (is_this_ent_hovered)
+							{
+								last_ent_hovered = entID;
+							}
+						}
+					}
 				}
 			});
+		is_popup_menu_opened = ImGui::BeginPopupContextWindow();
+		if (is_popup_menu_opened)
+		{
+			if (!is_hovered)
+			{
+				if (ImGui::MenuItem(popup_menu_strings[ENTITY_ADD].c_str()))
+				{
+					Engine::ecs_manager.CreateEntity();
+				}
+			}
+
+			if (last_ent_hovered != -1)
+			{
+				ecs_ID entID = last_ent_hovered;
+				if (ImGui::MenuItem(popup_menu_strings[ENTITY_DELETE].c_str()))
+				{
+					Engine::ecs_manager.DeleteEntity(entID);
+				}
+				if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_ADD].c_str()))
+				{
+					using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
+
+					brigand::for_each<TComponents>([entID](auto type)
+						{
+							using TComponent = typename decltype(type)::type;
+							const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
+							if (has_this_component)
+							{
+								ImGui::BeginDisabled();
+							}
+							if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
+							{
+								OE::Engine::ecs_manager.AddComponent<TComponent>(entID);
+							}
+							if (has_this_component)
+							{
+								ImGui::EndDisabled();
+							}
+						});
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu(popup_menu_strings[COMPONENT_DELETE].c_str()))
+				{
+					using TComponents = decltype(Engine::ecs_manager.component_manager)::ComponentList;
+
+					brigand::for_each<TComponents>([entID](auto type)
+						{
+							using TComponent = typename decltype(type)::type;
+							const bool has_this_component = OE::Engine::ecs_manager.HasComponent<TComponent>(entID);
+							if (!has_this_component)
+							{
+								ImGui::BeginDisabled();
+							}
+							if (ImGui::MenuItem(typeid(TComponent).name(), nullptr, has_this_component))
+							{
+								OE::Engine::ecs_manager.DeleteComponent<TComponent>(entID);
+							}
+							if (!has_this_component)
+							{
+								ImGui::EndDisabled();
+							}
+						});
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu(popup_menu_strings[SYSTEM].c_str()))
+				{
+					using TSystems = decltype(Engine::ecs_manager)::SystemStorage::system_list;
+
+					brigand::for_each<TSystems>([entID](auto type)
+						{
+							using TSystem = typename decltype(type)::type::type;
+							const bool has_this_system = OE::Engine::ecs_manager.HasSystem<TSystem>(entID);
+							if (ImGui::MenuItem(typeid(TSystem).name(), nullptr, has_this_system))
+							{
+								if (!has_this_system)
+								{
+									OE::Engine::ecs_manager.AddSystem<TSystem>(entID);
+								}
+								else
+								{
+									OE::Engine::ecs_manager.DeleteSystem<TSystem>(entID);
+								}
+							}
+						});
+					ImGui::EndMenu();
+				}
+
+			}
+
+			ImGui::EndPopup();
+		}
+		else
+		{
+			last_ent_hovered = -1;
+			is_hovered = false;
+		}
 	}
+
 
 	static void AssetBrowserPanelFunction()
 	{
