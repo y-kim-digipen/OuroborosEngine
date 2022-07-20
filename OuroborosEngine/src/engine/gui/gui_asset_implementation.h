@@ -63,8 +63,27 @@ namespace OE
 
 		if (ImGui::SmallButton("Reload changes"))
 		{
-			const auto pScript = OE::Engine::lua_script_manager.GetScript(ScriptAssetManager::GetTypeFromExtension(extension), script_path.string());
+			auto type = ScriptAssetManager::GetTypeFromExtension(extension);
+			const auto pScript = OE::Engine::lua_script_manager.GetScript(type, script_path.string());
 			pScript->ChangeScript(script_path.string());
+
+			if(type == Script::ScriptType::Component)
+			{
+				OE::Engine::ecs_manager.ForEntitiesMatching<ScriptingSystem>(0.f, [script_path](OE::ecs_ID ent, float dt, ScriptComponent& script_component)
+				{
+					if(script_component.name == script_path)
+					{
+						const auto pScript = OE::Engine::lua_script_manager.GetScript(Script::ScriptType::AttatchedComponent, std::to_string(ent));
+						if(pScript)
+						{
+							pScript->ChangeScript(script_path.string());
+						}
+					}
+				}
+				);
+			}
+
+
 		}
 		//ImGui::TextWrapped(.c_str());
 	}
