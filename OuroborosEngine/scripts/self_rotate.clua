@@ -1,0 +1,22 @@
+elasped_time = 0.0
+
+function Init(ent_ID, dt)
+
+end
+
+function Update(ent_ID, dt)
+    elasped_time = elasped_time + dt
+    ecs_manager = GetECS_Manager()
+    local has_transform_component = ecs_manager:HasTransformComponent(ent_ID)
+    if has_transform_component then
+        local transform_component = ecs_manager:GetTransformComponent(ent_ID)
+        local rotation_amount = dt * 15
+
+        ecs_manager:GetTransformComponent(ent_ID).rotation.y = ecs_manager:GetTransformComponent(ent_ID).rotation.y + rotation_amount;
+
+    end
+end
+
+function CleanUp(ent_ID, dt)
+
+end

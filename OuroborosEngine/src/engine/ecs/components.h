@@ -64,7 +64,7 @@ struct LightComponent
 
 struct ScriptComponent
 {
-	std::string name = "..\\OuroborosEngine\\scripts\\componenttest.clua";
+	std::string name;
 };
 //===============
 #ifdef ENGINE

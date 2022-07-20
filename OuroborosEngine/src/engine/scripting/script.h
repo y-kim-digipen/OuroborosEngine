@@ -22,7 +22,7 @@ namespace OE
 	{
 		enum class ScriptType
 		{
-			Normal, Component, System, Count
+			Normal, Component, System, AttatchedComponent, Count
 		};
 
 		class Script

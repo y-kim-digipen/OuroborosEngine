@@ -503,7 +503,12 @@ namespace OE
 		ScriptComponent &script_component = OE::Engine::ecs_manager.GetComponent<ScriptComponent>(entID);
 		using Script = OE::Script::Script;
 		using ScriptType = OE::Script::ScriptType;
-		Script* script = Engine::lua_script_manager.GetScript(ScriptType::Component, script_component.name);
+		Script* script = Engine::lua_script_manager.GetScript(ScriptType::AttatchedComponent, strID);
+		if(script == nullptr)
+		{
+			script = Engine::lua_script_manager.CreateScript(strID, ScriptType::AttatchedComponent);
+		}
+
 		const std::string& using_script_path = script!= nullptr ? script->GetUsingScriptPath() : "";
 		if (ImGui::TreeNode(typeid(ScriptComponent).name()))
 		{
@@ -516,7 +521,7 @@ namespace OE
 					if(extension_str == ".clua")
 					{
 						bool selected = string == using_script_path;
-						if(ImGui::Selectable(string.c_str(), selected, selected || script_asset.first ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
+						if(ImGui::Selectable(string.c_str(), selected, selected /*|| script_asset.first == false*/ ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
 						{
 							script_component.name = string;
 							script->ChangeScript(string);
@@ -526,15 +531,15 @@ namespace OE
 							}*/
 						}
 					}
-					if (ImGui::Selectable("##None", using_script_path.empty(), using_script_path.empty() ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
-					{
-						script_component.name = "";
-						script->ChangeScript("");
-						/*if(pScript)
-						{
+					//if (ImGui::Selectable("##None", using_script_path.empty(), using_script_path.empty() ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None))
+					//{
+					//	script_component.name = "";
+					//	script->ChangeScript("");
+					//	/*if(pScript)
+					//	{
 
-						}*/
-					}
+					//	}*/
+					//}
 				}
 				ImGui::EndCombo();
 			}

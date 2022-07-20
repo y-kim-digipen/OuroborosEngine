@@ -90,8 +90,8 @@ namespace OE
 			{
 				if (ecs_manager.GetEntity(ent).alive)
 				{
-					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::Component, script_component.name);
-					if(script != nullptr)
+					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::AttatchedComponent, std::to_string(ent));
+					if(script != nullptr && script->script_path.empty() == false)
 					{
 						script->Update(ent, dt);
 
@@ -197,8 +197,8 @@ namespace OE
 		{
 			event_function();
 		}
-		auto& scripts = lua_script_manager.GetScripts(Script::ScriptType::Normal);
-		for (auto& script : scripts)
+		auto& scripts_set = lua_script_manager.GetScripts(Script::ScriptType::Normal);
+		for (auto& script : scripts_set)
 		{
 			script.second.Update(delta_timer.GetDeltaTime());
 		}
