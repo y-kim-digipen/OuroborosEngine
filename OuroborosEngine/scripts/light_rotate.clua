@@ -21,6 +21,14 @@ function Update(ent_ID, dt)
         current_pos.z = cos(current_degree) * radius
     ecs_manager:GetTransformComponent(ent_ID).pos = current_pos
     end
+
+    local has_light_component = ecs_manager:HasLightComponent(ent_ID)
+    if has_light_component then
+        local pos = vec3.new();
+        pos = ecs_manager:GetTransformComponent(ent_ID).pos
+        local target_dir = vec3.new(-pos.x, -pos.y, -pos.z)
+        ecs_manager:GetLightComponent(ent_ID).data.dir = target_dir
+    end
 end
 
 function CleanUp(ent_ID, dt)
