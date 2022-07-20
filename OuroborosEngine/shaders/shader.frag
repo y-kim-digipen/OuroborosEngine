@@ -4,6 +4,10 @@
 
 layout(location = 0) out vec4 outColor;
 
+layout(set = 1, binding = 0) uniform Test {
+    float att;
+} oout;
+
 void main() 
 {
     vec3 Lo = vec3(0);
@@ -19,7 +23,8 @@ void main()
         if(light.type == 0) {
             L = light.pos - vs_in.frag_pos;
             float d = length(L);
-            att = 1 / (d * d);
+            // att = 1 / (d * d);
+            att = 1/(oout.att*oout.att);
             L = normalize(L);
         }
         else if(light.type == 1) {

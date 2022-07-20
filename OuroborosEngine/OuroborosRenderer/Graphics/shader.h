@@ -45,7 +45,7 @@ namespace Renderer {
 
 			if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
 				uniform_buffer_object->UpdateData(name, data);
-				uniform_buffer_object->Bind();
+				//uniform_buffer_object->Bind();
 			}
 		}
 
