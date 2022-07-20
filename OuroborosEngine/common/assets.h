@@ -67,6 +67,10 @@ namespace Asset
         int has_normal_texture=0;
         int has_metalroughness_texture=0;
         int has_ao_texture=0;
+        int has_metalic_texture = 0;
+        int has_roughness_texture = 0;
+        int has_emissive_texture = 0;
+        int is_roughness_texture_inverted = 0;
     };
 
     struct LightData

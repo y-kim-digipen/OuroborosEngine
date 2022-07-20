@@ -37,6 +37,8 @@ struct MaterialComponent
 	std::string texture_normal_name = "";
 	std::string texture_metalroughness_name = "";
 	std::string texture_ao_name = "";
+	std::string texture_emissive_name = "";
+	std::string texture_roughness_name = "";
 };
 
 struct ShaderComponent

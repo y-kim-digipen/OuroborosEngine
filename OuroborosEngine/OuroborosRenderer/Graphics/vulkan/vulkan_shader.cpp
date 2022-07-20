@@ -202,6 +202,10 @@ namespace Renderer {
 
 	void VulkanShader::Bind()
 	{
+		if (pipeline == VK_NULL_HANDLE) {
+			vulkan_type->current_pipeline_layout = VK_NULL_HANDLE;
+			return;
+		}
 		uint32_t current_frame = vulkan_type->current_frame;
 		auto& frame_data = vulkan_type->frame_data[current_frame];
 
@@ -210,7 +214,7 @@ namespace Renderer {
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
 		// bind shader descriptor set 1
-		if(uniform_buffer_object.get() != nullptr)
+		if(uniform_buffer_object)
 			uniform_buffer_object->Bind();
 	}
 

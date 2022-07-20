@@ -4,32 +4,6 @@
 
 layout(location = 0) out vec4 outColor;
 
-layout(location = 0) in VS_IN 
-{
-    vec3 norm;
-    vec3 frag_pos;
-    vec3 cam_pos;
-    vec2 uv;
-    vec3 non_pure_normal;
-} vs_in;
-
-vec3 getNormalFromMap()
-{
-    vec3 tangentNormal = texture(normal_texture,  vs_in.uv).xyz * 2.0 - 1.0;
-
-    vec3 Q1  = dFdx(vs_in.frag_pos);
-    vec3 Q2  = dFdy(vs_in.frag_pos);
-    vec2 st1 = dFdx(vs_in.uv);
-    vec2 st2 = dFdy(vs_in.uv);
-
-    vec3 N   = normalize(vs_in.norm);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
-}
-
 void main() 
 {
     vec3 Lo = vec3(0);
@@ -65,7 +39,7 @@ void main()
         vec3 radiance = att * light.diffuse;
 
         vec3 V = normalize(vs_in.cam_pos - vs_in.frag_pos);
-        vec3 N = normalize(vs_in.norm);
+        vec3 N = normalize(vs_in.non_pure_normal);
         vec3 H = normalize(L + V);
 
         if(material.has_normal_texture != 0)
@@ -77,35 +51,11 @@ void main()
 		float metallic = 0.f;
         float roughness = 0.f;
       
-        if(material.has_albedo_texture != 0)
-        {
-            albedo = texture(albedo_texture, vs_in.uv).xyz;
-        }
-        else
-        {
-            albedo = material.albedo;
-        }
+        albedo = AlbedoValue();
+        metallic = MetalicValue();
+        roughness = RoughnessValue();
+        ao = AoValue();
    
-        if(material.has_metalroughness_texture != 0)
-        {
-            metallic = texture(metalroughness_texture, vs_in.uv).z;
-            roughness = texture(metalroughness_texture, vs_in.uv).y;
-        }
-        else
-        {
-            metallic = material.metallic;
-            roughness = material.roughness;
-        }
-        if(material.has_ao_texture != 0)
-        {
-            ao = texture(ao_texture, vs_in.uv).r;
-        }
-        else
-        {
-            ao = material.ao;
-        }
-
-        
         float D = DistributionGGX(N, H, roughness);
 
         vec3 F0 = vec3(0.04);
@@ -126,5 +76,11 @@ void main()
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
 
+    if(material.has_emissive_texture != 0)
+    {
+        color += EmissiveValue();   
+    }
+    
+ 
     outColor = vec4(color, 1.0);
 }
