@@ -92,6 +92,14 @@ namespace Renderer
 		vkCmdCopyBufferToImage(cmd, src_buffer->buffer, *dst_image, dst_image_layout, 1, &copyRegion);
 	}
 
+	void VulkanBuffer::Cleanup()
+	{
+		if (buffer != VK_NULL_HANDLE) {
+			vmaDestroyBuffer(vulkan_type->allocator, buffer, allocation);
+			buffer = VK_NULL_HANDLE;
+		}
+	}
+
 	VulkanVertexBuffer::VulkanVertexBuffer(Vulkan_type* vulkan_type, const std::vector<Vertex>& vertices) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ vertices.size() * sizeof(Vertex) };
@@ -108,6 +116,7 @@ namespace Renderer
 
 	VulkanVertexBuffer::~VulkanVertexBuffer()
 	{
+		buffer->Cleanup();
 		buffer.reset();
 		buffer = nullptr;
 	}
@@ -145,6 +154,15 @@ namespace Renderer
 		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
 	}
 
+	void VulkanVertexBuffer::Cleanup()
+	{
+		if (buffer != nullptr) {
+			buffer->Cleanup();
+			buffer.reset();
+			buffer = nullptr;
+		}
+	}
+
 	VulkanIndexBuffer::VulkanIndexBuffer(Vulkan_type* vulkan_type ,const std::vector<uint32_t>& data) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ data.size() * sizeof(uint32_t) };
@@ -171,6 +189,15 @@ namespace Renderer
 			VkDeviceSize offset = 0;
 			auto& frame = vulkan_type->frame_data[vulkan_type->current_frame];
 			vkCmdBindIndexBuffer(frame.command_buffer, buffer->buffer, offset, VK_INDEX_TYPE_UINT32);
+		}
+	}
+
+	void VulkanIndexBuffer::Cleanup()
+	{
+		if (buffer != nullptr) {
+			buffer->Cleanup();
+			buffer.reset();
+			buffer = nullptr;
 		}
 	}
 

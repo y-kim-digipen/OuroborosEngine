@@ -36,6 +36,7 @@ namespace Renderer
 		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) override;
 		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) override;
 		int DeleteMeshData(const std::string& mesh_name) override;
+		void Cleanup();
 
 
 	private:

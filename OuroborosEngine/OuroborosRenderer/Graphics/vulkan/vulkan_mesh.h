@@ -17,6 +17,7 @@ namespace Renderer {
 		VulkanMesh(Vulkan_type* vulkan_type);
 		~VulkanMesh() override;
 
+		void Cleanup();
 		bool CopyAssetData(const Asset::Mesh& mesh) override;
 		void Draw(const glm::mat4& model, const glm::mat3& normal_matrix) override;
 
