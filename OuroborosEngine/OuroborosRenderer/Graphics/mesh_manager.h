@@ -25,6 +25,8 @@ namespace Renderer
 		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh);
 		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) ;
 		int DeleteMeshData(const std::string& mesh_name);
+		void Cleanup();
+
 
 
 	private:

@@ -57,6 +57,8 @@ namespace Renderer
 		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
 		{
 			iter->second.reset();
+			//TODO(Austyn): erase vulkan_mesh
+			//mesh_map[mesh_name]
 			mesh_map.erase(iter);
 			return 0;
 		}
@@ -66,5 +68,11 @@ namespace Renderer
 		}
 
 		return 0;
+	}
+
+	void VulkanMeshManager::Cleanup()
+	{
+
+
 	}
 }

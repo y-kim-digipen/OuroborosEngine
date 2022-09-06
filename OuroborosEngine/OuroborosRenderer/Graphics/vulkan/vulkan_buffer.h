@@ -32,6 +32,7 @@ namespace Renderer
 		void UploadData(void* data, uint64_t buffer_size, uint32_t offset = 0);
 		void CopyBuffer(VkQueue queue, VulkanBuffer* src_buffer, uint32_t dst_offset);
 		static void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
+		void Cleanup();
 
 		VkBuffer buffer = nullptr;
 		VmaAllocation allocation = nullptr;
@@ -49,6 +50,7 @@ namespace Renderer
 		void Bind() const;
 		void UnBind() const{};
 		void AddData(const std::vector<Vertex>& vertices);
+		void Cleanup();
 		uint64_t GetCount() { return count; }
 
 	private:
@@ -66,6 +68,8 @@ namespace Renderer
 		~VulkanIndexBuffer();
 		void Bind() const;
 		void UnBind() const {}
+		void Cleanup();
+
 
 		void AddData(const std::vector<uint32_t>& data);
 		uint64_t GetCount() { return count; }

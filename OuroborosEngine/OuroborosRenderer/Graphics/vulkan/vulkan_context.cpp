@@ -202,21 +202,22 @@ namespace Renderer
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
         //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
+
+        //for(auto mesh : )
+
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
         for (auto image_view : vulkan_type.swapchain.image_views)
         {
             vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
         }
+
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
 
-
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
 
-
         SpirvHelper::Finalize();
-
     }
 
     void VulkanContext::CreateSurface()
