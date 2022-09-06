@@ -117,17 +117,13 @@
     <ClInclude Include="..\external\lib\imgui-docking\imstb_rectpack.h" />
     <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h" />
     <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h" />
-    <ClInclude Include="Graphics\buffer.h" />
     <ClInclude Include="Graphics\camera.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
     <ClInclude Include="Graphics\material.h" />
     <ClInclude Include="Graphics\material_manager.h" />
     <ClInclude Include="Graphics\mesh_manager.h" />
-    <ClInclude Include="Graphics\opengl\opengl_buffer.h" />
     <ClInclude Include="Graphics\opengl\opengl_imgui_manager.h" />
-    <ClInclude Include="Graphics\opengl\opengl_shader.h" />
-    <ClInclude Include="Graphics\shader.h" />
     <ClInclude Include="Graphics\shader_manager.h" />
     <ClInclude Include="Graphics\texture.h" />
     <ClInclude Include="Graphics\texture_manager.h" />
@@ -149,7 +145,6 @@
     <ClInclude Include="Graphics\vulkan\vulkan_texture.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_texture_manager.h" />
     <ClInclude Include="Graphics\window.h" />
-    <ClInclude Include="Graphics\opengl\opengl_context.h" />
     <ClInclude Include="Graphics\mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_image.h" />
   </ItemGroup>
@@ -161,15 +156,11 @@
     <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp" />
     <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp" />
     <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp" />
-    <ClCompile Include="Graphics\buffer.cpp" />
     <ClCompile Include="Graphics\camera.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />
     <ClCompile Include="Graphics\mesh_manager.cpp" />
-    <ClCompile Include="Graphics\opengl\opengl_context.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_imgui_manager.cpp" />
-    <ClCompile Include="Graphics\opengl\opengl_shader.cpp" />
-    <ClCompile Include="Graphics\shader.cpp" />
     <ClCompile Include="Graphics\shader_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />

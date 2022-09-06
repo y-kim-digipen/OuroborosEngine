@@ -73,8 +73,9 @@ namespace Renderer {
 
 	}
 
-	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) : Shader() , vulkan_type(vulkan_type), device(&vulkan_type->device)
+	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) :  vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
+		reload_next_frame = false;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -84,9 +85,12 @@ namespace Renderer {
 
 	void VulkanShader::Init(ShaderConfig* config)
 	{
-		Shader::Init(config);
+		reload_next_frame = false;
 
+		if (config != &this->config)
+			this->config = *config;
 		uint32_t stage_count = config->stage_count;
+
 		
 		std::vector<VkPipelineShaderStageCreateInfo> shader_stage_create_infos{};
 		std::array<std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4> layout_bindings_set;
@@ -219,7 +223,9 @@ namespace Renderer {
 
 	void VulkanShader::ShutDown()
 	{
-		Shader::ShutDown();
+		uniform_buffer_object.release();
+		uniform_buffer_object = nullptr;
+
 		descriptor_data.clear();
 		push_constant_ranges.clear();
 
@@ -385,5 +391,26 @@ namespace Renderer {
 		spvReflectDestroyShaderModule(&refl_module);
 		
 		return 0;
+	}
+
+
+	void* VulkanShader::GetMemberVariable(const std::string& name)
+	{
+		if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
+			return (char*)uniform_buffer_object->data + uniform_buffer_object->member_vars[name].offset;
+		}
+
+		return nullptr;
+	}
+
+	void ShaderConfig::operator=(const ShaderConfig& config)
+	{
+		name = config.name;
+
+		for (uint32_t i = 0; i < MAX_VALUE; ++i) {
+			stages[i] = config.stages[i];
+		}
+
+		stage_count = config.stage_count;
 	}
 }

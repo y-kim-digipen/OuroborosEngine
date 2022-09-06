@@ -25,3 +25,5 @@ namespace Renderer {
     void DestroyImage(Vulkan_type* vulkan_type, VulkanImage* image);
 }
 #endif // !VULKAN_IMAGE_H
+
+

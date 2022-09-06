@@ -32,9 +32,6 @@
     <ClInclude Include="Graphics\window.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\opengl\opengl_context.h">
-      <Filter>Source Files\Graphics\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_context.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
@@ -43,12 +40,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\shader.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\opengl\opengl_shader.h">
-      <Filter>Source Files\Graphics\opengl</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h">
       <Filter>Source Files\Graphics\vulkan\spirv</Filter>
@@ -60,9 +51,6 @@
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\mesh.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\buffer.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h">
@@ -128,9 +116,6 @@
     <ClInclude Include="Graphics\material_manager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\opengl\opengl_buffer.h">
-      <Filter>Source Files\Graphics\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\texture.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
@@ -154,20 +139,11 @@
     <ClCompile Include="Graphics\window.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\opengl\opengl_context.cpp">
-      <Filter>Source Files\Graphics\opengl</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_shader.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\shader.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\opengl\opengl_shader.cpp">
-      <Filter>Source Files\Graphics\opengl</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c">
       <Filter>Source Files\Graphics\vulkan\spirv</Filter>
@@ -231,9 +207,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_material_manager.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\buffer.cpp">
-      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_texture.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>

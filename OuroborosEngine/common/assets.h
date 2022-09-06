@@ -5,7 +5,6 @@
 #include <glm/gtx/hash.hpp>
 #include <imgui-docking/imgui.h>
 
-#include "../../OuroborosRenderer/Graphics/buffer.h"
 
 namespace Asset
 {

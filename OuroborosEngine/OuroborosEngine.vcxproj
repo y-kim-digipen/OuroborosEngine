@@ -62,6 +62,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +94,7 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)OuroborosRenderer;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\brigand\include;$(SolutionDir)external\lib\boost_1_79_0;$(SolutionDir)external\lib\glm;$(SoluitionDir)external\lib\sol2\include;$(SoluitionDir)external\lib\lua-5.4.2\include;$(SolutionDir)external\lib\yaml-cpp\include;$(SolutionDir)OuroborosEngine\common;$(SolutionDir)external\lib\stb;$(SolutionDir)external\lib\vulkan;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\SPIRV-Cross-master;$(ProjectDir)external/lib;$(ProjectDir)external/lib/;$(ProjectDir)external\lib\;$(SolutionDir)external\lib\brigand\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

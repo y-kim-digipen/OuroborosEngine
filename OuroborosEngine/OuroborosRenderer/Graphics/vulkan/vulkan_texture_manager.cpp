@@ -56,6 +56,14 @@ namespace Renderer
 
 	}
 
+	VulkanTextureImguiDescriptorPool::~VulkanTextureImguiDescriptorPool()
+	{
+		for(auto descriptorset : descriptor_sets_pool)
+		{
+			vkFreeDescriptorSets(vulkan_type->device.handle, vulkan_type->descriptor_pool, 1, &descriptorset);
+		}
+	}
+
 	VkDescriptorSet* VulkanTextureImguiDescriptorPool::GetImGuiTextureID()
 	{
 		if(NeedGrowCapacity())

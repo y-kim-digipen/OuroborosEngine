@@ -4,6 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 
 #include "engine_settings.h"
+#include "Graphics/vulkan/vulkan_shader.h"
 #include "gui/gui_component_panel.h"
 
 namespace OE

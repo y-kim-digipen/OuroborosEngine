@@ -11,6 +11,29 @@
 namespace Renderer {
 
 	enum class DataType;
+
+
+	class Context;
+
+	enum E_StageType {
+		VERTEX_SHADER,
+		FRAGMENT_SHADER,
+		MAX_VALUE
+	};
+
+	struct ShaderStage {
+		E_StageType type = MAX_VALUE;
+	};
+
+	struct ShaderConfig {
+		const char* name;
+		ShaderStage stages[MAX_VALUE];
+		uint32_t stage_count;
+
+		void operator=(const ShaderConfig& config);
+	};
+
+
 	constexpr int max_set_count = 4;
 
 	struct DescriptorSetBindingData
@@ -28,19 +51,33 @@ namespace Renderer {
 		uint32_t offset;
 	};
 
-	class VulkanShader : public Shader
+	class VulkanShader 
 	{
 	public:
 		VulkanShader() = delete;
+		VulkanShader(const VulkanShader& shader) = delete;
+		VulkanShader(VulkanShader&& shader) = delete;
+
 		VulkanShader(Vulkan_type* vulkan_type);
-		~VulkanShader() override;
+		~VulkanShader();
 
+		void Init(ShaderConfig* config);
+		void Bind();
+		void ShutDown();
+		void Reload();
+		void SetUniformValue(const char* name, void* data) {
 
-		void Init(ShaderConfig* config) override;
-		void Bind() override;
-		void ShutDown() override;
-		void Reload() override;
+			if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
+				uniform_buffer_object->UpdateData(name, data);
+				//uniform_buffer_object->Bind();
+			}
+		}
+		void* GetMemberVariable(const std::string& name);
 
+		std::unique_ptr<VulkanUniformBuffer> uniform_buffer_object;
+		bool reload_next_frame;
+
+		ShaderConfig config;
 		VkPipelineLayout pipeline_layout;
 	private:
 

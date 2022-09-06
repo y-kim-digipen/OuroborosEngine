@@ -23,7 +23,7 @@ namespace Renderer {
 			std::cout << material_name << " already exists\n";
 			return -1;
 		}
-
+		
 		material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type);
 		material_map[material_name]->InitMaterialData(std::move(material_data));
 		dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;

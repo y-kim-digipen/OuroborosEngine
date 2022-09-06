@@ -41,7 +41,7 @@ namespace Renderer
 		}
 	}
 
-	Shader* VulkanShaderManager::GetShader(const std::string& shader_name)
+	VulkanShader* VulkanShaderManager::GetShader(const std::string& shader_name)
 	{
 		if(auto iter = shader_map.find(shader_name); iter != shader_map.end())
 		{

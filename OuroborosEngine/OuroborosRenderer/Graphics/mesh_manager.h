@@ -6,6 +6,7 @@
 #include <glm/matrix.hpp>
 
 #include "../common/assets.h"
+#include "vulkan/vulkan_mesh.h"
 
 struct Vulkan_type;
 
@@ -14,32 +15,21 @@ namespace Renderer
 	class VulkanShaderManager;
 	class Mesh;
 
-	class MeshManager
-	{
-	public:
-		MeshManager() = default;
-		virtual ~MeshManager() = default;
-		virtual int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) = 0;
-		virtual int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) =0;
-		virtual int DeleteMeshData(const std::string& mesh_name) = 0;
-
-		protected:
-		std::unordered_map<std::string, std::unique_ptr<Mesh>> mesh_map;
-	};
 
 
-	class VulkanMeshManager : public MeshManager
+	class VulkanMeshManager 
 	{
 	public:
 		VulkanMeshManager(Vulkan_type* vulkan_type);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
-		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh) override;
-		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) override;
-		int DeleteMeshData(const std::string& mesh_name) override;
+		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh);
+		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) ;
+		int DeleteMeshData(const std::string& mesh_name);
 
 
 	private:
 		Vulkan_type* vulkan_type;
+		std::unordered_map<std::string, std::unique_ptr<VulkanMesh>> mesh_map;
 	};
 }
 

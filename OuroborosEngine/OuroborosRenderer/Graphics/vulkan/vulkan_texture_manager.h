@@ -15,6 +15,7 @@ namespace Renderer
 	{
 	public:
 		VulkanTextureImguiDescriptorPool(Vulkan_type* vulkan_type);
+		~VulkanTextureImguiDescriptorPool();
 		TextureID* GetImGuiTextureID();
 		void Init();
 		[[nodiscard]] bool NeedGrowCapacity() const;

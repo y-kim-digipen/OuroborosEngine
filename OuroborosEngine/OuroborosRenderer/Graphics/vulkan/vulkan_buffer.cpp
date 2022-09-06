@@ -1,6 +1,8 @@
 #include "vulkan_buffer.h"
 
 #include <iostream>
+#define VMA_IMPLEMENTATION
+#include "vk_mem_alloc.h"
 
 namespace Renderer
 {
@@ -197,7 +199,7 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) : UniformBuffer(), vulkan_type(vulkan_type), set_num(set_num)
+	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) :  vulkan_type(vulkan_type), set_num(set_num)
 	{
 		data = nullptr;
 	}
@@ -216,12 +218,14 @@ namespace Renderer
 
 	void VulkanUniformBuffer::UnBind() const
 	{
-		UniformBuffer::UnBind();
+		
 	}
 
 	void VulkanUniformBuffer::ShutDown()
 	{
-		UniformBuffer::ShutDown();
+		if (data != nullptr)
+			free(data);
+		data = nullptr;
 
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 			buffer[i].reset();
@@ -363,5 +367,31 @@ namespace Renderer
 		return buffer_size;
 	}
 
+
+	//temporary
+
+
+	void VulkanUniformBuffer::AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset)
+	{
+		if (member_vars.find(name) == member_vars.end()) {
+			member_vars[name].name = name;
+			member_vars[name].type = data_type;
+			member_vars[name].size = size;
+			member_vars[name].offset = offset;
+		}
+	}
+
+	//int UniformBuffer::UpdateData(const char* member_var_name, void* data)
+	//{
+	//	if (member_vars.find(member_var_name) != member_vars.end())
+	//	{
+	//		const UniformBufferMember& ub_mem = member_vars[member_var_name];
+	//		memcpy_s((char*)this->data + ub_mem.offset, ub_mem.size, data, ub_mem.size);
+
+	//		return 0;
+	//	}
+
+	//	return -1;
+	//}
 
 }

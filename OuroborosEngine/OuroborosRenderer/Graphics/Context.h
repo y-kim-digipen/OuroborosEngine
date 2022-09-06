@@ -13,7 +13,7 @@
 #include "mesh.h"
 #include "mesh_manager.h"
 #include "shader_manager.h"
-#include "material_manager.h"
+#include "vulkan/vulkan_material_manager.h"
 #include "texture_manager.h"
 #include "../common/assets.h"
 #include "../../../src/engine/ecs/components.h"
@@ -26,7 +26,7 @@ namespace Renderer
 {
 	struct ShaderConfig;
 	class Shader;
-	class UniformBuffer;
+	class VulkanUniformBuffer;
 	
 	constexpr uint32_t max_num_lights = 20;
 
@@ -71,8 +71,8 @@ namespace Renderer
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
-		std::unique_ptr<ShaderManager> shader_manager;
-		std::unique_ptr<MaterialMananger> material_manager;
+		std::unique_ptr<VulkanShaderManager> shader_manager;
+		std::unique_ptr<VulkanMaterialManager> material_manager;
 		std::unique_ptr<TextureManager> texture_manager_;;
 		
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
@@ -84,7 +84,7 @@ namespace Renderer
 		GLFWwindow* window;
 		
 		// global data ( scene data )
-		std::unique_ptr<UniformBuffer> global_ubo;
+		std::unique_ptr<VulkanUniformBuffer> global_ubo;
 
 		// key : entity id
 		// value : array index (in global_data)
