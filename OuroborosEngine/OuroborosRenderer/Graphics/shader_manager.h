@@ -8,8 +8,6 @@ struct Vulkan_type;
 
 namespace Renderer
 {
-	class Shader;
-
 	class VulkanShaderManager 
 	{
 	public:
