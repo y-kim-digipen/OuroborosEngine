@@ -23,6 +23,7 @@ namespace Renderer
 		void UploadData(const Asset::Image& data) override;
 		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
 		void UpdateColorType(int channel);
+		void Cleanup() override;
 	private:
 		Vulkan_type* vulkan_type = nullptr;
 		uint32_t width_ {0};

@@ -76,7 +76,7 @@ namespace Renderer {
 
 	VulkanMaterial::~VulkanMaterial()
 	{
-		vkDestroyDescriptorSetLayout(vulkan_type->device.handle, set_layout, nullptr);
+		Cleanup();
 	}
 
 	void VulkanMaterial::SetAlbedoTexture(std::shared_ptr<Texture> texture)
@@ -180,5 +180,10 @@ namespace Renderer {
 	{
 		Material::SetEmissiveTexture(texture);
 		data.has_emissive_texture = true;
+	}
+	void VulkanMaterial::Cleanup()
+	{
+		if (vulkan_type->device.handle != VK_NULL_HANDLE)
+			vkDestroyDescriptorSetLayout(vulkan_type->device.handle, set_layout, nullptr);
 	}
 }

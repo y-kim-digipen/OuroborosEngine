@@ -17,6 +17,7 @@ namespace Renderer
 		~VulkanShaderManager() = default;
 		int AddShader(ShaderConfig* config) ;
 		int DeleteShader(ShaderConfig* config) ;
+		void Cleanup();
 		VulkanShader* GetShader(const std::string& shader_name);
 		friend class VulkanMeshManager;
 

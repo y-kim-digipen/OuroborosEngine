@@ -16,13 +16,6 @@ namespace Renderer {
     }
     VulkanMesh::~VulkanMesh()
     {
-        Cleanup();
-    }
-
-    void VulkanMesh::Cleanup()
-    {
-        p_vertex_buffer->Cleanup();
-        p_index_buffer->Cleanup();
     }
 
     bool VulkanMesh::CopyAssetData(const Asset::Mesh& mesh)

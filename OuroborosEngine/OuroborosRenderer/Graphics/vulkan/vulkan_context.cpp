@@ -155,13 +155,12 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
          
-        global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0);
-        VulkanUniformBuffer* vk_global_ubo = (VulkanUniformBuffer*)global_ubo.get();
+        global_ubo = new VulkanUniformBuffer(&vulkan_type, 0);
 
-        vk_global_ubo->AddBinding(0, sizeof(global_data));
-        vk_global_ubo->AddBinding(1, sizeof(light_data));
+        global_ubo->AddBinding(0, sizeof(global_data));
+        global_ubo->AddBinding(1, sizeof(light_data));
 
-        ((VulkanUniformBuffer*)global_ubo.get())->SetupDescriptorSet(set_layout);
+        global_ubo->SetupDescriptorSet(set_layout);
 
  
         vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
@@ -171,11 +170,9 @@ namespace Renderer
     {
         Context::UpdateGlobalData();
 
-        VulkanUniformBuffer* vk_global_ubo = ((VulkanUniformBuffer*)global_ubo.get());
-
-        vk_global_ubo->AddData((void*)&global_data, 0,sizeof(global_data));
-        vk_global_ubo->AddData((void*)&light_data, sizeof(global_data), sizeof(light_data));
-        vk_global_ubo->UploadToGPU();
+        global_ubo->AddData((void*)&global_data, 0,sizeof(global_data));
+        global_ubo->AddData((void*)&light_data, sizeof(global_data), sizeof(light_data));
+        global_ubo->UploadToGPU();
     }
 
 	// Must be called after init_frame()
@@ -202,8 +199,12 @@ namespace Renderer
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
         //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
+        mesh_manager_.Cleanup();
+        material_manager->Cleanup();
+        shader_manager->Cleanup();
 
-        //for(auto mesh : )
+		delete global_ubo;
+        global_ubo = nullptr;
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
@@ -212,10 +213,14 @@ namespace Renderer
             vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
         }
 
+        DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
+
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
+        vmaDestroyAllocator(vulkan_type.allocator);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
 
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
+
 
         SpirvHelper::Finalize();
     }

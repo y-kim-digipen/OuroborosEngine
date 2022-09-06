@@ -24,6 +24,7 @@ namespace Renderer {
         virtual void SetMetalicTexture(std::shared_ptr<Texture> texture);
         virtual void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture);
         virtual void SetEmissiveTexture(std::shared_ptr<Texture> texture);
+        virtual void Cleanup();
         Asset::MaterialData* GetMaterialData();
 
 
@@ -86,6 +87,10 @@ namespace Renderer {
     inline void Material::SetEmissiveTexture(std::shared_ptr<Texture> texture)
     {
         texture_emissive = texture;
+    }
+
+    inline void Material::Cleanup()
+    {
     }
 
     inline Asset::MaterialData* Material::GetMaterialData() 

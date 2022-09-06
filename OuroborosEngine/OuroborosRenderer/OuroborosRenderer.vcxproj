@@ -159,6 +159,7 @@
     <ClCompile Include="Graphics\camera.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />
+    <ClCompile Include="Graphics\material_manager.cpp" />
     <ClCompile Include="Graphics\mesh_manager.cpp" />
     <ClCompile Include="Graphics\opengl\opengl_imgui_manager.cpp" />
     <ClCompile Include="Graphics\shader_manager.cpp" />

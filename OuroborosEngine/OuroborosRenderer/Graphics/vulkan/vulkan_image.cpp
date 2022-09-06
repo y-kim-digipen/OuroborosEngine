@@ -61,7 +61,7 @@ namespace Renderer {
             if (image->image_view != VK_NULL_HANDLE)
                 vkDestroyImageView(vulkan_type->device.handle, image->image_view, 0);
 
-            vkDestroyImage(vulkan_type->device.handle, image->image, 0);
+			vmaDestroyImage(vulkan_type->allocator, image->image, image->allocation);
         }
     }
 }

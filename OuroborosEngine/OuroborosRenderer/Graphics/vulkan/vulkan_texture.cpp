@@ -11,15 +11,11 @@ namespace Renderer
 
 	VulkanTexture::~VulkanTexture()
 	{
-		vkDestroySampler(vulkan_type->device.handle, sampler_, nullptr);
-		vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
-		vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
+		Cleanup();
 	}
 
 	void VulkanTexture::Bind()
 	{
-
-
 	}
 
 	void VulkanTexture::UploadData(const Asset::Image& data)
@@ -191,6 +187,15 @@ namespace Renderer
 				break;
 			default:
 				color_type = E_ColorType::UNSIGNED_CHAR3;
+		}
+	}
+
+	void VulkanTexture::Cleanup()
+	{
+		if (vulkan_type->device.handle != VK_NULL_HANDLE) {
+			vkDestroySampler(vulkan_type->device.handle, sampler_, nullptr);
+			vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
+			vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
 		}
 	}
 }

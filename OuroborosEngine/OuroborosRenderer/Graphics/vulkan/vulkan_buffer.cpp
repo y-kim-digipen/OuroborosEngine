@@ -27,7 +27,9 @@ namespace Renderer
 
 	VulkanBuffer::~VulkanBuffer()
 	{
-		vmaDestroyBuffer(vulkan_type->allocator, buffer, allocation);
+		if (buffer != VK_NULL_HANDLE) {
+			vmaDestroyBuffer(vulkan_type->allocator, buffer, allocation);
+		}
 	}
 
 

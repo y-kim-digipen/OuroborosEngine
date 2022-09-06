@@ -12,10 +12,6 @@ struct Vulkan_type;
 
 namespace Renderer
 {
-	class VulkanShaderManager;
-	class Mesh;
-
-
 
 	class VulkanMeshManager 
 	{
@@ -26,9 +22,6 @@ namespace Renderer
 		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) ;
 		int DeleteMeshData(const std::string& mesh_name);
 		void Cleanup();
-
-
-
 	private:
 		Vulkan_type* vulkan_type;
 		std::unordered_map<std::string, std::unique_ptr<VulkanMesh>> mesh_map;
