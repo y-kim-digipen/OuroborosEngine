@@ -14,6 +14,7 @@ namespace Renderer
 		virtual ~Texture() = default;
 		virtual void Bind() = 0;
 		virtual void UploadData(const Asset::Image& data) = 0;
+		virtual void Cleanup() = 0;
 	};
 
 }

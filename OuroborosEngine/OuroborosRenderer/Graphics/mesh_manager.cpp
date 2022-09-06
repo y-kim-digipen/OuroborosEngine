@@ -72,7 +72,6 @@ namespace Renderer
 
 	void VulkanMeshManager::Cleanup()
 	{
-
-
+		mesh_map.clear();
 	}
 }

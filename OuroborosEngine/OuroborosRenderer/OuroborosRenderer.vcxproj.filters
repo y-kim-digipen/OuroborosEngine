@@ -217,6 +217,9 @@
     <ClCompile Include="Graphics\vulkan\vulkan_initializers.cpp">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\material_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\vulkan\vulkan_type.inl">

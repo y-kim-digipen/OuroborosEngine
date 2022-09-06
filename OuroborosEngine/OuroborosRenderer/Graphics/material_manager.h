@@ -24,6 +24,7 @@ namespace Renderer {
 		{
 			return material_map;
 		}
+		virtual void Cleanup();
 	protected:
 		std::unordered_map<std::string, std::unique_ptr<Material>> material_map;
 	};

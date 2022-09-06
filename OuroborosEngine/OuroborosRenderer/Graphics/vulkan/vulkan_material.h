@@ -27,6 +27,7 @@ namespace Renderer {
 		void SetMetalicTexture(std::shared_ptr<Texture> texture) override;
 		void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture) override;
 		void SetEmissiveTexture(std::shared_ptr<Texture> texture) override;
+		void Cleanup() override;
 
 		bool is_changed = false;
 		VkDescriptorSetLayout set_layout{};

@@ -34,7 +34,7 @@ namespace Renderer
 		static void CopyBufferToImage(VkCommandBuffer cmd, VkImageLayout dst_image_layout, VulkanBuffer* src_buffer, VkImage* dst_image, VkExtent3D image_extent);
 		void Cleanup();
 
-		VkBuffer buffer = nullptr;
+		VkBuffer buffer = VK_NULL_HANDLE;
 		VmaAllocation allocation = nullptr;
 		uint64_t size;
 	private:
