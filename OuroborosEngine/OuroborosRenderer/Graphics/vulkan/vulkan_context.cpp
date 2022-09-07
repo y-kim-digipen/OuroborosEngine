@@ -95,8 +95,9 @@ namespace Renderer
         return VK_FALSE;
     }
 
-    VulkanContext::VulkanContext(GLFWwindow* window) : Context(window), mesh_manager_(&vulkan_type)
+    VulkanContext::VulkanContext(GLFWwindow* window) : Context(window)
     {
+        mesh_manager_ = std::make_unique<VulkanMeshManager>(&vulkan_type);
         material_manager = std::make_unique<VulkanMaterialManager>(&vulkan_type);
         texture_manager_ = std::make_unique<VulkanTextureManager>(&vulkan_type);
         shader_manager = std::make_unique<VulkanShaderManager>(&vulkan_type);
@@ -199,7 +200,7 @@ namespace Renderer
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
         //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
-        mesh_manager_.Cleanup();
+        mesh_manager_->Cleanup();
         material_manager->Cleanup();
         shader_manager->Cleanup();
 
@@ -216,11 +217,10 @@ namespace Renderer
         DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
 
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
-        vmaDestroyAllocator(vulkan_type.allocator);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
 
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
-
+        vmaDestroyAllocator(vulkan_type.allocator);
 
         SpirvHelper::Finalize();
     }
@@ -320,11 +320,8 @@ namespace Renderer
         VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
 
         VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore, VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
-
             
         VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
-
-
 
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
@@ -624,7 +621,7 @@ namespace Renderer
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {
-                    mesh_manager_.DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
+                    mesh_manager_->DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
                 }
                 draw_queue.pop();
             }
@@ -1221,16 +1218,8 @@ namespace Renderer
             vkDestroyImageView(vulkan_type.device.handle, image_view, nullptr);
         }
 
-
-    	//TODO :need to implement depth image clear
-
-
     	//TODO : need to destory descriptorPool
-
-
-
     	vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
-
     }
 
     int RateDeviceSuitability(VkPhysicalDevice device)

@@ -54,7 +54,6 @@ struct VulkanSwapchain
 	std::vector<VkImageView> image_views;
 	VulkanImage depth_image;
 	std::vector<VkFramebuffer> framebuffers;
-
 };
 
 struct VulkanDeferredFrameBuffer
@@ -120,7 +119,6 @@ struct Vulkan_type
 	uint32_t current_frame = 0;
 
 	VkCommandPool command_pool;
-
 
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;

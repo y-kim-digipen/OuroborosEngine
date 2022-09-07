@@ -41,7 +41,7 @@ namespace OE
 		static void Update();
 		static void PostUpdate();
 		static void CleanUp(){}
-		static void ShutDown() { /*Profiler::Exit();*/ }
+		static void ShutDown() { window->Shutdown(); }
 
 		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
 		{

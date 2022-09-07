@@ -235,8 +235,7 @@ namespace Renderer
 
 	VulkanUniformBuffer::~VulkanUniformBuffer()
 	{
-		free(data);
-		data = nullptr;
+		ShutDown();
 	}
 
 	void VulkanUniformBuffer::Bind() const

@@ -22,7 +22,7 @@ namespace Renderer {
 		int BeginFrame() override;
 		int EndFrame() override;
 
-		VulkanMeshManager mesh_manager_;
+		std::unique_ptr<VulkanMeshManager> mesh_manager_;
 	
 
 		Vulkan_type* GetVulkanType();
