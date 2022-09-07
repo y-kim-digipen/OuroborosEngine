@@ -76,7 +76,7 @@ namespace Renderer
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData) {
 
-        return VK_FALSE;
+        //return VK_FALSE;
 
         switch (messageSeverity) {
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
@@ -108,7 +108,7 @@ namespace Renderer
         SpirvHelper::Init();
         CreateInstance(major, minor);
 #if defined(_DEBUG)
-        //CreateDebugUtilMessage();
+        CreateDebugUtilMessage();
 #endif //_DEBUG
         CreateSurface();
         PickPhysicalDevice();
@@ -122,6 +122,10 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
+        new_material = new VulkanMaterial(&vulkan_type);
+        light_material = new VulkanMaterial(&vulkan_type);
+
+        
     }
 
     // Must be called after vulkan_context.init()
@@ -184,6 +188,8 @@ namespace Renderer
 
     void VulkanContext::Shutdown()
     {
+        delete new_material;
+        delete light_material;
         vkDeviceWaitIdle(vulkan_type.device.handle);
 
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -203,6 +209,7 @@ namespace Renderer
         mesh_manager_->Cleanup();
         material_manager->Cleanup();
         shader_manager->Cleanup();
+        texture_manager_->Cleanup();
 
 		delete global_ubo;
         global_ubo = nullptr;
@@ -215,13 +222,13 @@ namespace Renderer
         }
 
         DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
-
+        vmaDestroyAllocator(vulkan_type.allocator);
         vkDestroySwapchainKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, nullptr);
         vkDestroyDevice(vulkan_type.device.handle, nullptr);
 
+      
         vkDestroySurfaceKHR(vulkan_type.instance, vulkan_type.surface, 0);
-        vmaDestroyAllocator(vulkan_type.allocator);
-
+  
         SpirvHelper::Finalize();
     }
 
@@ -378,7 +385,7 @@ namespace Renderer
     {
         return &vulkan_type;
     }
-
+ 
     void VulkanContext::DrawQueue()
     {
 	    Context::DrawQueue();
@@ -419,100 +426,100 @@ namespace Renderer
                 {
                     if (material->flag)
                     {
-                        static VulkanMaterial new_material(&vulkan_type);
-                        new_material.InitMaterialData(std::move(material->data));
-                        new_material.is_changed = material->flag;
+                       
+                        new_material->InitMaterialData(std::move(material->data));
+                        new_material->is_changed = material->flag;
 
 
-                        if (new_material.GetMaterialData()->has_albedo_texture == true)
+                        if (new_material->GetMaterialData()->has_albedo_texture == true)
                         {
                             if (auto albedo_texture = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture != nullptr)
                             {
-                                new_material.SetAlbedoTexture(albedo_texture);
+                                new_material->SetAlbedoTexture(albedo_texture);
                             }
                             else
                             {
-                                new_material.SetAlbedoTexture(nullptr);
+                                new_material->SetAlbedoTexture(nullptr);
                             }
                         }
                     
 
-                        if (new_material.GetMaterialData()->has_normal_texture == true)
+                        if (new_material->GetMaterialData()->has_normal_texture == true)
                         {
                             if (auto normal_texture = texture_manager_->GetTexture(material->texture_normal_name); normal_texture != nullptr)
                             {
-                                new_material.SetNormalTexture(normal_texture);
+                                new_material->SetNormalTexture(normal_texture);
                             }
                             else
                             {
-                                new_material.SetNormalTexture(nullptr);
+                                new_material->SetNormalTexture(nullptr);
                             }
                         }
                       
 
-                        if (new_material.GetMaterialData()->has_metalroughness_texture == true)
+                        if (new_material->GetMaterialData()->has_metalroughness_texture == true)
                         {
                             if (auto metalrough_texture = texture_manager_->GetTexture(material->texture_metalroughness_name); metalrough_texture != nullptr)
                             {
-                                new_material.SetMetalRoughnessTexture(metalrough_texture);
+                                new_material->SetMetalRoughnessTexture(metalrough_texture);
                             }
                             else
                             {
-                                new_material.SetMetalRoughnessTexture(nullptr);
+                                new_material->SetMetalRoughnessTexture(nullptr);
                             }
                         }
 
-                        if(new_material.GetMaterialData()->has_metalic_texture == true)
+                        if(new_material->GetMaterialData()->has_metalic_texture == true)
                         {
                             if (auto metallic_texture = texture_manager_->GetTexture(material->texture_metalroughness_name); metallic_texture != nullptr)
                             {
-                                new_material.SetMetalicTexture(metallic_texture);
+                                new_material->SetMetalicTexture(metallic_texture);
                             }
                             else
                             {
-                                new_material.SetMetalicTexture(nullptr);
+                                new_material->SetMetalicTexture(nullptr);
                             }
                         }
 
-                        if(new_material.GetMaterialData()->has_roughness_texture == true)
+                        if(new_material->GetMaterialData()->has_roughness_texture == true)
                         {
                             if (auto roughSmooothness_texture = texture_manager_->GetTexture(material->texture_roughness_name); roughSmooothness_texture != nullptr)
                             {
-                                new_material.SetRoughSmoothnessTexture(roughSmooothness_texture);
+                                new_material->SetRoughSmoothnessTexture(roughSmooothness_texture);
                             }
                             else
                             {
-                                new_material.SetRoughSmoothnessTexture(nullptr);
+                                new_material->SetRoughSmoothnessTexture(nullptr);
                             }
                         }
 
-                        if (new_material.GetMaterialData()->has_emissive_texture == true)
+                        if (new_material->GetMaterialData()->has_emissive_texture == true)
                         {
                             if (auto emissive_texture = texture_manager_->GetTexture(material->texture_emissive_name); emissive_texture != nullptr)
                             {
-                                new_material.SetEmissiveTexture(emissive_texture);
+                                new_material->SetEmissiveTexture(emissive_texture);
                             }
                             else
                             {
-                                new_material.SetEmissiveTexture(nullptr);
+                                new_material->SetEmissiveTexture(nullptr);
                             }
                         }
                         
-                        if (new_material.GetMaterialData()->has_ao_texture == true)
+                        if (new_material->GetMaterialData()->has_ao_texture == true)
                         {
                             if (auto ao_texture_iter = texture_manager_->GetTexture(material->texture_ao_name); ao_texture_iter != nullptr)
                             {
-                                new_material.SetAOTexture(ao_texture_iter);
+                                new_material->SetAOTexture(ao_texture_iter);
                             }
                             else
                             {
-                                new_material.SetAOTexture(nullptr);
+                                new_material->SetAOTexture(nullptr);
                             }
                         }
 
                         
                         
-                        new_material.Bind();
+                        new_material->Bind();
 
                         if (material->is_save)
                         {
@@ -611,10 +618,9 @@ namespace Renderer
                 }
                 else
                 {
-                    static VulkanMaterial light_material(&vulkan_type);
-                    light_material.InitMaterialData(std::move(material->data));
-                    light_material.is_changed = true;
-                    light_material.Bind();
+                    light_material->InitMaterialData(std::move(material->data));
+                    light_material->is_changed = true;
+                    light_material->Bind();
                 }
 
                
@@ -625,6 +631,7 @@ namespace Renderer
                 }
                 draw_queue.pop();
             }
+      
     }
     
 
@@ -642,41 +649,41 @@ namespace Renderer
         instance_create_info.pApplicationInfo = &app_info;
 
 #if defined(_DEBUG)
-        //const char* required_layer_names[] =
-        //{
-        //   "VK_LAYER_KHRONOS_validation"
-        //};
+   /*     const char* required_layer_names[] =
+        {
+           "VK_LAYER_KHRONOS_validation"
+        };
 
-        //unsigned required_layer_count = sizeof(required_layer_names) / sizeof(const char*);
+        unsigned required_layer_count = sizeof(required_layer_names) / sizeof(const char*);
 
-        //unsigned available_layer_count = 0;
-        //VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, nullptr));
-        //std::vector<VkLayerProperties> available_properties(available_layer_count);
-        //VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, available_properties.data()));
+        unsigned available_layer_count = 0;
+        VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, nullptr));
+        std::vector<VkLayerProperties> available_properties(available_layer_count);
+        VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, available_properties.data()));
 
-        //for (unsigned i = 0; i < required_layer_count; ++i)
-        //{
-        //    std::cout << "Searching validation layer: " << required_layer_names[i] << "..." << std::endl;
-        //    bool is_found = false;;
-        //    for (unsigned l = 0; l < available_layer_count; ++l)
-        //    {
-        //        if (strcmp(required_layer_names[i], available_properties.at(l).layerName) == 0)
-        //        {
-        //            std::cout << "found" << std::endl;
-        //            is_found = true;
-        //            break;
-        //        }
-        //    }
+        for (unsigned i = 0; i < required_layer_count; ++i)
+        {
+            std::cout << "Searching validation layer: " << required_layer_names[i] << "..." << std::endl;
+            bool is_found = false;;
+            for (unsigned l = 0; l < available_layer_count; ++l)
+            {
+                if (strcmp(required_layer_names[i], available_properties.at(l).layerName) == 0)
+                {
+                    std::cout << "found" << std::endl;
+                    is_found = true;
+                    break;
+                }
+            }
 
-        //    if (!is_found)
-        //    {
-        //        std::cout << required_layer_names[i] << "is missing!\n";
-        //        return false;
-        //    }
-        //}
+            if (!is_found)
+            {
+                std::cout << required_layer_names[i] << "is missing!\n";
+                return false;
+            }
+        }
 
-        //instance_create_info.enabledLayerCount = required_layer_count;
-        //instance_create_info.ppEnabledLayerNames = required_layer_names;
+        instance_create_info.enabledLayerCount = required_layer_count;
+        instance_create_info.ppEnabledLayerNames = required_layer_names;*/
 #endif //_DEBUG
 
         //TODO: this should be formatted as a function of inside the platform

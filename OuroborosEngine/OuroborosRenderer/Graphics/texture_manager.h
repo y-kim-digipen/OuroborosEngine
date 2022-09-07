@@ -25,9 +25,16 @@ namespace Renderer
 			}
 
 		}
+		virtual int Cleanup()
+		{
+			textures_map.clear();
+			return 0;
+		}
 	protected:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> textures_map;
 	};
+
+	
 }
 
 #endif //!TEXTURE_MANAGER_H

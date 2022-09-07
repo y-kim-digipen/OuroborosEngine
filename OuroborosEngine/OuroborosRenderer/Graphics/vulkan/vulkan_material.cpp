@@ -185,5 +185,7 @@ namespace Renderer {
 	{
 		if (vulkan_type->device.handle != VK_NULL_HANDLE)
 			vkDestroyDescriptorSetLayout(vulkan_type->device.handle, set_layout, nullptr);
+
+		ubo.reset();
 	}
 }

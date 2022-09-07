@@ -1,6 +1,7 @@
 #ifndef VULKAN_CONTEXT_H
 #define VULKAN_CONTEXT_H
 
+#include "vulkan_material.h"
 #include "vulkan_texture_manager.h"
 #include "../context.h"
 
@@ -29,6 +30,8 @@ namespace Renderer {
 
 		void DrawQueue() override;
 
+		VulkanMaterial* new_material;
+		VulkanMaterial* light_material;
 	private:
 		void CreateSurface();
 		void CreateSwapChain();

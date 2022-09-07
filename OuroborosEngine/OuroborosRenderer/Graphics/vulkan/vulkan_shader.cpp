@@ -223,7 +223,7 @@ namespace Renderer {
 
 	void VulkanShader::ShutDown()
 	{
-		uniform_buffer_object.release();
+		uniform_buffer_object.reset();
 		uniform_buffer_object = nullptr;
 
 		descriptor_data.clear();

@@ -22,7 +22,7 @@ namespace Renderer
 
 	Window::~Window()
 	{
-		Shutdown();
+		//Shutdown();
 	}
 
 	void Window::BeginFrame()
@@ -139,7 +139,7 @@ namespace Renderer
 			window_data.RenderContextData->Shutdown();
 			//vkDestroyInstance(GetWindowData().RenderContextData->GetVulkanInstance(), nullptr);
 			
-
+			//vmaDestroyAllocator(dynamic_cast<VulkanContext*>(window_data.RenderContextData.get())->GetVulkanType()->allocator);
 		}
 			glfwDestroyWindow(window_data.window);
 
