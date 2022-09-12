@@ -16,25 +16,10 @@ namespace OE
 		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
-		//window->vulkan_imgui_manager.RegisterPanel("System", "Scripts", &OE::SystemInfoPanelFunction);
 	}
 
 	void Engine::ECS_TestSetup()
 	{
-		//auto& ent = ecs_manager.CreateEntity();
-		//ecs_manager.AddComponent<TransformComponent>(ent.myID, glm::vec3{ 0.f, 1.f, 0.f });
-		//ecs_manager.AddComponent<VelocityComponent>(ent.myID, glm::vec3{ 2.f, 3.f, 0.f });
-		//auto& ent2 = ecs_manager.CreateEntity();
-		//ecs_manager.AddComponent<LifeTimeComponent>(ent2.myID, 5);
-		//ecs_manager.AddComponent<MeshComponent>(ent2.myID);
-		//auto& ent3 = ecs_manager.CreateEntity();
-		//ecs_manager.AddComponent<BoolWrapperComponent>(ent3.myID, false);
-
-		//auto& ent4 = ecs_manager.CreateEntity();
-		//ecs_manager.AddComponent<TransformComponent>(ent4.myID, glm::vec3{ 4.f, 5.f, 0.f });
-		//ecs_manager.AddComponent<VelocityComponent>(ent4.myID, glm::vec3{ 6.f, 7.f, 0.f });
-		//ecs_manager.AddComponent<TagComponent>(ent4.myID, "TestEntity");
-
 		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
 			{
 				std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
