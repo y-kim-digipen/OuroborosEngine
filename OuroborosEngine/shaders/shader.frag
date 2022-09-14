@@ -116,7 +116,7 @@ void main()
             }
             case 2: // directional light
             {
-                radiance = 0.f;
+                radiance = vec3(0.0f);
                 break;
             }
         }
