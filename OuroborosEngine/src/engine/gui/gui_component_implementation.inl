@@ -172,6 +172,9 @@ namespace OE
 						break;
 					case Renderer::DataType::MAT4:
 						break;
+					case Renderer::DataType::SAMPLER2D:
+						//ImGui::
+						break;
 					}
 					shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
 
@@ -556,4 +559,175 @@ namespace OE
 		}
 
 	}
+
+	template<>
+	inline void ComponentDrawFunction<CubemapComponent>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		CubemapComponent& cubemap_component = OE::Engine::ecs_manager.GetComponent<CubemapComponent>(entID);
+		const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
+		if (ImGui::TreeNode(typeid(cubemap_component).name()))
+		{
+			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
+
+			if (ImGui::BeginCombo("front", cubemap_component.texture_front_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_front_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_front_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_front_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_front_name = "";
+			}
+
+			if (ImGui::BeginCombo("back", cubemap_component.texture_back_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_back_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_back_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_back_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_back_name = "";
+			}
+
+			if (ImGui::BeginCombo("top", cubemap_component.texture_top_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_top_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_top_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_top_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_top_name = "";
+			}
+
+			if (ImGui::BeginCombo("bottom", cubemap_component.texture_bottom_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_bottom_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_bottom_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_bottom_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_bottom_name = "";
+			}
+
+			if (ImGui::BeginCombo("left", cubemap_component.texture_left_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_left_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_left_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_left_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_left_name = "";
+			}
+
+			if (ImGui::BeginCombo("top", cubemap_component.texture_right_name.c_str()))
+			{
+				for (const auto& key : texture_map | std::views::keys)
+				{
+					const bool selected = cubemap_component.texture_right_name == key;
+					if (ImGui::Selectable(key.c_str(), selected))
+					{
+						cubemap_component.texture_right_name = key;
+					}
+					if (selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_right_name); texture)
+			{
+				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+				ImGui::Image(*TextureID, ImVec2(100, 100));
+			}
+			else
+			{
+				cubemap_component.texture_right_name = "";
+			}
+
+			ImGui::TreePop();
+		}
+	}
+
 }
