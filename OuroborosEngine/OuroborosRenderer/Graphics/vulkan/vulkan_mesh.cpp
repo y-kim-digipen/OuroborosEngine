@@ -42,5 +42,4 @@ namespace Renderer {
 
         vkCmdDrawIndexed(command_buffer, indices.size(), 1, 0, 0, 0);
     }
-
 }

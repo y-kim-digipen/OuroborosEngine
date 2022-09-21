@@ -43,7 +43,10 @@ namespace OE
             std::cerr << script->GetLastError() << std::endl;
         }
 
-        assets[file_name] = std::pair(res, Asset::Script(file_name));
+        Asset::Script script_asset;
+        script_asset.path = file_name;
+
+        assets[file_name] = std::pair(res, script_asset);
 
         return 0;
     }

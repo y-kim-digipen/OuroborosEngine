@@ -96,10 +96,10 @@
     <ClInclude Include="src\engine\serializer\scene_serializer.h">
       <Filter>engine\serializer</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\serializer\component_serialization_impl.h">
+    <ClInclude Include="src\engine\serializer\component_serialization_impl.inl">
       <Filter>engine\serializer</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\serializer\assets_serialization_impl.h">
+    <ClInclude Include="src\engine\serializer\assets_serialization_impl.inl">
       <Filter>engine\serializer</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\serializer\shared_serialization_impl.h">
@@ -133,6 +133,12 @@
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl">
       <Filter>engine\gui</Filter>
+    </None>
+    <None Include="src\engine\serializer\assets_deserialization_impl.inl">
+      <Filter>engine\serializer</Filter>
+    </None>
+    <None Include="src\engine\serializer\component_deserialization_impl.inl">
+      <Filter>engine\serializer</Filter>
     </None>
   </ItemGroup>
 </Project>

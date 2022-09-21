@@ -3,25 +3,87 @@
 #ifdef ENGINE
 #include <glm.hpp>
 #include <yaml-cpp/yaml.h>
-inline YAML::Emitter& operator << (YAML::Emitter& emitter, const glm::vec3& vec3)
+#include <iostream>
+
+#include "../ecs/components.h"
+#include "../common/assets.h"
+
+namespace _serialization_impl
 {
-	emitter << YAML::Flow << YAML::BeginSeq << vec3.x << vec3.y << vec3.z << YAML::EndSeq;
-	return emitter;
+	//arithmatic or string values
+	template<typename T, std::enable_if_t<std::is_arithmetic_v<T> || std::is_same_v<T, std::string>, void*> = nullptr>
+	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, void*)
+	{
+		emitter << val;
+		return emitter;
+	}
+
+	//glm::vec3
+	template<typename T, std::enable_if_t<std::is_same_v<T, glm::vec3>, void*> = nullptr>
+	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, void*)
+	{
+		emitter << YAML::Flow << YAML::BeginSeq << val.x << val.y << val.z << YAML::EndSeq;
+		return emitter;
+	}
+
+#include "assets_serialization_impl.inl"
+#include "component_serialization_impl.inl"
+
+	//Default
+	template<typename T>
+	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, ...)
+	{
+		std::cout << "Serialization implementation for " << typeid(T).name() << " does not exist!" << std::endl;
+		return emitter;
+	}
 }
 
-inline YAML::Node operator >> (YAML::Node node, glm::vec3& vec3)
+namespace _deserialization_impl
 {
-	YAML::iterator it = node.begin();
-	vec3.x = it++->as<float>();
-	vec3.y = it++->as<float>();
-	vec3.z = it->as<float>();
-	return node;
+	//arithmatic or string values
+	template<typename T,
+		std::enable_if_t<std::is_arithmetic_v<T> || std::is_same_v<T, std::string>, void*> = nullptr>
+	YAML::Node _deserialize(YAML::Node node, T& val, void*)
+	{
+		val = node.as<T>();
+		return node;
+	}
+
+	//glm::vec3
+	template<typename T,
+		std::enable_if_t<std::is_same_v<T, glm::vec3>, void*> = nullptr>
+	YAML::Node _deserialize(YAML::Node node, T& val, void*)
+	{
+		YAML::iterator it = node.begin();
+		val.x = it++->as<float>();
+		val.y = it++->as<float>();
+		val.z = it->as<float>();
+		return node;
+	}
+
+#include "assets_deserialization_impl.inl"
+#include "component_deserialization_impl.inl"
+
+	//Default
+	template<typename T>
+	YAML::Node _deserialize(YAML::Node node, T& val, ...)
+	{
+		std::cout << "Deserialization implementation for " << typeid(T).name() << " does not exist!" << std::endl;
+		return node;
+	}
+}
+
+
+template<typename T>
+YAML::Node operator >> (YAML::Node node, T& t)
+{
+	return _deserialization_impl::_deserialize(node, t, nullptr);
 }
 
 template<typename T>
-inline YAML::Node operator >> (YAML::Node node, T& val)
+YAML::Emitter& operator << (YAML::Emitter& emitter, const T& t)
 {
-	val = node.as<T>();
-	return node;
+	return _serialization_impl::_serialize(emitter, t, nullptr);
 }
+
 #endif

@@ -49,9 +49,9 @@ void main()
         vec3 L;
         float att, d;
 
-        if(light_type > 2){
+        if(light_type == 2){
             L = -normalize(light_dir);
-            att = 1;
+            // att = 10;
         }
         else{
             vec3 relative_vec = light_pos - vs_in.frag_pos;
@@ -62,6 +62,7 @@ void main()
             att =  CalculateAttenuation(oout.c1, oout.c2, oout.c3, d);
         }
 
+
         //Variables for for PBR
         vec3 H  = normalize(L + V);
         float D = DistributionGGX(N, H, roughness);
@@ -69,7 +70,6 @@ void main()
         vec3 F0 = vec3(0.04f);
         F0      = mix(F0, albedo, metallic);
         vec3 F  = FresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
-        // vec3 F  = fresnelSchlick(cosTheta, F0);
 
         float NDF   = DistributionGGX(N, H, roughness);
 
@@ -88,8 +88,6 @@ void main()
                 const float cos_theta           = cos(radians(light.cutoff));
                 
                 float spot_light_effect   = 0.f;
-
-
 
                 const float L_dot_D             = dot(L, light_dir);
 
@@ -116,10 +114,13 @@ void main()
             }
             case 2: // directional light
             {
-                radiance = 0.f;
+                radiance = light.diffuse ;
                 break;
             }
         }
+
+        radiance *= max(1.f, oout.att);
+
         float NdotL = dot(N, L);
         float G = GeometrySmith(N, V, L, roughness);
 
@@ -134,6 +135,7 @@ void main()
         vec3 Kd = vec3(1.f) - Ks;
 
         Kd *= 1.f - metallic;
+
         Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
     }
 
