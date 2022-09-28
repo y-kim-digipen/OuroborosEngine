@@ -11,14 +11,14 @@ namespace Renderer {
 
 	class VulkanMaterialManager : public MaterialMananger {
 	public:
-		VulkanMaterialManager(Vulkan_type* vulkan_type);
+		VulkanMaterialManager(VulkanType* vulkan_type);
 		~VulkanMaterialManager() override;
 		int AddMaterial(std::string material_name, const Asset::MaterialData& material_data) override;
 		int ChangeMaterial(std::string material_name, const Asset::MaterialData& data) override;
 		Material* GetMaterial(const std::string& material_name) override;
 		friend class VulkanTextureManager;
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 	};
 
 }

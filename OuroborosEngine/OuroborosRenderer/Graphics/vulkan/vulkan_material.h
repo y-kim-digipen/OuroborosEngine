@@ -17,7 +17,7 @@ namespace Renderer {
 
 	public:
 		//VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
-		VulkanMaterial(Vulkan_type* vulkan_type);
+		VulkanMaterial(VulkanType* vulkan_type);
 		~VulkanMaterial() override;
 		void SetAlbedoTexture(std::shared_ptr<Texture> texture) override;
 		void Bind() override;
@@ -34,7 +34,7 @@ namespace Renderer {
 		std::unique_ptr<VulkanUniformBuffer> ubo;
 	
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 	
 		
 		//TODO: does this should go in parent class ???

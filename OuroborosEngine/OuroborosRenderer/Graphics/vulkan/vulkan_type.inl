@@ -99,7 +99,7 @@ struct VulkanFrameData
 
 
 
-struct Vulkan_type
+struct VulkanType
 {
 	
 #if defined(_DEBUG)

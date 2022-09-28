@@ -137,47 +137,73 @@ namespace OE
 					shader->reload_next_frame = true;
 				}
 
-				if(shader->uniform_buffer_object != nullptr)
-				for (const auto& member_variable : shader->uniform_buffer_object->member_vars) {
+				for (const auto& member_variable : shader->binding_block_members) {
+
+					bool is_changed = false;
 
 					switch (member_variable.second.type) {
 					case Renderer::DataType::BOOL:
-						ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
+						is_changed |= ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::FLOAT:
-						ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first),0.1f);
+						is_changed |= ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first),0.1f);
 						break;
 					case Renderer::DataType::FLOAT2:
-						ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::FLOAT3:
-						ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::FLOAT4:
-						ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
 						break;
 					case Renderer::DataType::INT:
-						ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						is_changed |= ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::INT2:
-						ImGui::DragInt2(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						is_changed |= ImGui::DragInt2(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::INT3:
-						ImGui::DragInt3(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						is_changed |= ImGui::DragInt3(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::INT4:
-						ImGui::DragInt4(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+						is_changed |= ImGui::DragInt4(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::MAT3:
 						break;
 					case Renderer::DataType::MAT4:
 						break;
-					case Renderer::DataType::SAMPLER2D:
-						//ImGui::
-						break;
 					}
-					shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
 
+					if (is_changed)
+						shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
+					/*
+					if (member_variable.second.type == Renderer::DataType::SAMPLER2D) {
+						if (ImGui::BeginCombo(member_variable.first.c_str(), material_component.texture_albedo_name.c_str()))
+						{
+							for (const auto& key : texture_map | std::views::keys)
+							{
+								const bool selected = material_component.texture_albedo_name == key;
+								if (ImGui::Selectable(key.c_str(), selected))
+								{
+									material_component.texture_albedo_name = key;
+									is_changed |= true;
+
+								}
+								if (selected) {
+									ImGui::SetItemDefaultFocus();
+								}
+							}
+							ImGui::EndCombo();
+						}
+						if (auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
+						{
+							const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+							dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+							ImGui::Image(*TextureID, ImVec2(100, 100));
+						}
+					}
+					*/
 				}
 			}
 
@@ -559,175 +585,4 @@ namespace OE
 		}
 
 	}
-
-	template<>
-	inline void ComponentDrawFunction<CubemapComponent>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		CubemapComponent& cubemap_component = OE::Engine::ecs_manager.GetComponent<CubemapComponent>(entID);
-		const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
-		if (ImGui::TreeNode(typeid(cubemap_component).name()))
-		{
-			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
-
-			if (ImGui::BeginCombo("front", cubemap_component.texture_front_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_front_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_front_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_front_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_front_name = "";
-			}
-
-			if (ImGui::BeginCombo("back", cubemap_component.texture_back_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_back_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_back_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_back_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_back_name = "";
-			}
-
-			if (ImGui::BeginCombo("top", cubemap_component.texture_top_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_top_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_top_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_top_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_top_name = "";
-			}
-
-			if (ImGui::BeginCombo("bottom", cubemap_component.texture_bottom_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_bottom_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_bottom_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_bottom_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_bottom_name = "";
-			}
-
-			if (ImGui::BeginCombo("left", cubemap_component.texture_left_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_left_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_left_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_left_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_left_name = "";
-			}
-
-			if (ImGui::BeginCombo("top", cubemap_component.texture_right_name.c_str()))
-			{
-				for (const auto& key : texture_map | std::views::keys)
-				{
-					const bool selected = cubemap_component.texture_right_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
-					{
-						cubemap_component.texture_right_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (auto texture = texture_manager->GetTexture(cubemap_component.texture_right_name); texture)
-			{
-				const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-				dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-				ImGui::Image(*TextureID, ImVec2(100, 100));
-			}
-			else
-			{
-				cubemap_component.texture_right_name = "";
-			}
-
-			ImGui::TreePop();
-		}
-	}
-
 }

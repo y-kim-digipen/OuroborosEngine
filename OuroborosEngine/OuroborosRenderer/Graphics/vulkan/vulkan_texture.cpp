@@ -4,7 +4,7 @@
 #include "vulkan_image.h"
 namespace Renderer
 {
-	VulkanTexture::VulkanTexture(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanTexture::VulkanTexture(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
@@ -162,8 +162,8 @@ namespace Renderer
 	{
 		VkDescriptorImageInfo image_buffer_info
 		{
-				.sampler     = sampler_,
-				.imageView   = image_view_,
+				.sampler = sampler_,
+				.imageView = image_view_,
 				.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		};
 
@@ -182,7 +182,7 @@ namespace Renderer
 	{
 		switch (channel)
 		{
-			case 4:
+			case 1:
 				color_type = E_ColorType::UNSIGNED_CHAR4;
 				break;
 			default:
@@ -197,5 +197,13 @@ namespace Renderer
 			vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
 			vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
 		}
+	}
+	VkDescriptorImageInfo VulkanTexture::GetImageInfo() const
+	{
+		return {
+			sampler_,
+			image_view_,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		};
 	}
 }

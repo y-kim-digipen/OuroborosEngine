@@ -1,7 +1,7 @@
 #include "vulkan_image.h"
 
 namespace Renderer {
-    void CreateImage(Vulkan_type* vulkan_type, VulkanImage* out_image,
+    void CreateImage(VulkanType* vulkan_type, VulkanImage* out_image,
         VkImageType image_type,
         uint32_t width,
         uint32_t height,
@@ -38,7 +38,7 @@ namespace Renderer {
         }
     }
 
-    void CreateImageView(Vulkan_type* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags)
+    void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags)
     {
         VkImageViewCreateInfo create_info{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
         create_info.image = out_image->image;
@@ -55,7 +55,7 @@ namespace Renderer {
         VK_CHECK(vkCreateImageView(vulkan_type->device.handle, &create_info, 0, &out_image->image_view));
     }
 
-    void DestroyImage(Vulkan_type* vulkan_type, VulkanImage* image)
+    void DestroyImage(VulkanType* vulkan_type, VulkanImage* image)
     {
         if (image->image != VK_NULL_HANDLE) {
             if (image->image_view != VK_NULL_HANDLE)

@@ -134,7 +134,7 @@ namespace Renderer
 
 	}
 
-	void VulkanImguiManager::VulkanInit(Vulkan_type* vulkan_type_)
+	void VulkanImguiManager::VulkanInit(VulkanType* vulkan_type_)
 	{
 		vulkan_type = vulkan_type_;
 	}

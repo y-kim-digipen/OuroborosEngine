@@ -2,11 +2,13 @@
 #define VULKAN_SHADER_H
 
 #include "vulkan_type.inl"
+#include "../shader.h"
+#include "vulkan_descriptor_set.h"
 
+#include <map>
 #include <unordered_map>
 #include <string>
 
-#include "../shader.h"
 
 namespace Renderer {
 
@@ -44,8 +46,9 @@ namespace Renderer {
 		VkDescriptorType type;	
 	};
 
-	struct DescriptorSetLayoutData {
-		std::string name;
+	struct BindingBlockMemberData
+	{
+		uint32_t binding_num;
 		DataType type;
 		uint32_t size;
 		uint32_t offset;
@@ -58,38 +61,51 @@ namespace Renderer {
 		VulkanShader(const VulkanShader& shader) = delete;
 		VulkanShader(VulkanShader&& shader) = delete;
 
-		VulkanShader(Vulkan_type* vulkan_type);
+		VulkanShader(VulkanType* vulkan_type);
 		~VulkanShader();
 
 		void Init(ShaderConfig* config);
 		void Bind();
 		void ShutDown();
 		void Reload();
+
 		void SetUniformValue(const char* name, void* data) {
 
+			/*
 			if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
-				uniform_buffer_object->UpdateData(name, data);
-				//uniform_buffer_object->Bind();
+				if (uniform_buffer_object->member_vars[name].type != DataType::SAMPLER2D)
+					uniform_buffer_object->UpdateData(name, data);
 			}
+			*/
 		}
+
+		//TODO: texture
+		//void SetUniformValue(const char* name, VulkanTexture* texture);
+
 		void* GetMemberVariable(const std::string& name);
 
-		std::unique_ptr<VulkanUniformBuffer> uniform_buffer_object;
+		DescriptorSet shader_set; // set num 1
+		std::map<uint32_t ,std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo
+		std::map<uint32_t ,std::shared_ptr<VulkanTexture>> uniform_texture_objects;
 		bool reload_next_frame;
 
 		ShaderConfig config;
 		VkPipelineLayout pipeline_layout;
+		VkPipeline pipeline;
+
+		//VkDescriptorSet descriptor_sets[max_set_count];
+		
+		// first = binding_num, second = member_data
+		std::map<std::string, BindingBlockMemberData> binding_block_members;
+
 	private:
 
 		int CreateShaderModule(VkShaderModule* out_shader_module,  const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);
 
 		VulkanDevice* device;
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 
 		VkDescriptorSetLayout descriptor_set_layouts[max_set_count];
-
-		VkPipeline pipeline;
-
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
 		std::vector<VkPushConstantRange> push_constant_ranges;
 	};

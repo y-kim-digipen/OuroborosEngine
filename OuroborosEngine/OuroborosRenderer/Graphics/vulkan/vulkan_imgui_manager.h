@@ -4,7 +4,7 @@
 #include <vulkan_core.h>
 
 #include "../imgui_manager.h"
-struct Vulkan_type;
+struct VulkanType;
 
 namespace Renderer
 {
@@ -13,7 +13,7 @@ namespace Renderer
 	public:
 		VulkanImguiManager();
 		void Init(GLFWwindow* window) override;
-		void VulkanInit(Vulkan_type* vulkan_type);
+		void VulkanInit(VulkanType* vulkan_type);
 		void BeginFrame() override;
 		void EndFrame() override;
 		void Shutdown() override;
@@ -22,7 +22,7 @@ namespace Renderer
 		void GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void GLFW_MouseButtonCallback(GLFWwindow* window, int key, int action, int mods);
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 		VkRenderPass imgui_render_pass;
 	};
 }

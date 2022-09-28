@@ -5,7 +5,7 @@
 #include "vulkan_texture_manager.h"
 #include "../context.h"
 
-struct Vulkan_type;
+struct VulkanType;
 
 namespace Renderer {
 
@@ -19,14 +19,13 @@ namespace Renderer {
 		void BindGlobalData() override;
 
 		void Shutdown() override;
-				
+
 		int BeginFrame() override;
 		int EndFrame() override;
 
 		std::unique_ptr<VulkanMeshManager> mesh_manager_;
-	
 
-		Vulkan_type* GetVulkanType();
+		VulkanType* GetVulkanType();
 
 		void DrawQueue() override;
 

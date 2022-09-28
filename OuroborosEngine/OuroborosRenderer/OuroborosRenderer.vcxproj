@@ -135,6 +135,7 @@
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_descriptor_set.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_initializers.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_material.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_descriptor_set.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_initializers.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_material.cpp" />

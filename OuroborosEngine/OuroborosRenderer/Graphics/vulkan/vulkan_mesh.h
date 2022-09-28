@@ -5,7 +5,7 @@
 #include "vulkan_buffer.h"
 #include <memory>
 
-struct Vulkan_type;
+struct VulkanType;
 
 namespace Renderer {
 
@@ -14,7 +14,7 @@ namespace Renderer {
 
 	class VulkanMesh : public Mesh {
 	public:
-		VulkanMesh(Vulkan_type* vulkan_type);
+		VulkanMesh(VulkanType* vulkan_type);
 		~VulkanMesh() override;
 
 		bool CopyAssetData(const Asset::Mesh& mesh) override;
@@ -23,7 +23,7 @@ namespace Renderer {
 		std::unique_ptr<VulkanVertexBuffer> p_vertex_buffer;
 		std::unique_ptr<VulkanIndexBuffer> p_index_buffer;
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 	};
 }
 

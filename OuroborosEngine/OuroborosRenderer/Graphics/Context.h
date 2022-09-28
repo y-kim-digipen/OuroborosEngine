@@ -13,8 +13,10 @@
 #include "mesh.h"
 #include "mesh_manager.h"
 #include "shader_manager.h"
-#include "vulkan/vulkan_material_manager.h"
 #include "texture_manager.h"
+#include "vulkan/vulkan_material_manager.h"
+#include "vulkan/vulkan_descriptor_set.h"
+
 #include "../common/assets.h"
 #include "../../../src/engine/ecs/components.h"
 
@@ -68,30 +70,28 @@ namespace Renderer
 		};
 
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
+
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
 		std::unique_ptr<VulkanShaderManager> shader_manager;
 		std::unique_ptr<VulkanMaterialManager> material_manager;
 		std::unique_ptr<TextureManager> texture_manager_;
-		
+	
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
 		void RemoveLight(uint32_t entity_id);
 		void UpdateLight(uint32_t entity_id, Asset::LightData* light_component);
-
 	protected:
 		std::queue<DrawData> draw_queue;
 		GLFWwindow* window;
 		
 		// global data ( scene data )
-		VulkanUniformBuffer* global_ubo;
-
+		std::vector <VulkanUniformBuffer> global_binding_ubo;
+		DescriptorSet global_set;
 		// key : entity id
 		// value : array index (in global_data)
 		std::unordered_map<uint32_t, uint32_t> light_map;
 	};
-
-
 }
 
 #endif // !CONTEXT_H

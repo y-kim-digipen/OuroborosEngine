@@ -16,7 +16,6 @@ namespace Renderer
 		virtual void UploadData(const Asset::Image& data) = 0;
 		virtual void Cleanup() = 0;
 	};
-
 }
 
 

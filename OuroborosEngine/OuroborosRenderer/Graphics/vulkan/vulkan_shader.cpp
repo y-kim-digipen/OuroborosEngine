@@ -73,7 +73,7 @@ namespace Renderer {
 
 	}
 
-	VulkanShader::VulkanShader(Vulkan_type* vulkan_type) :  vulkan_type(vulkan_type), device(&vulkan_type->device)
+	VulkanShader::VulkanShader(VulkanType* vulkan_type) :  vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
 		reload_next_frame = false;
 	}
@@ -144,10 +144,51 @@ namespace Renderer {
 			VK_CHECK(vkCreateDescriptorSetLayout(device->handle, &set_layout_create_info, 0, &set_layout));
 			descriptor_set_layouts[i] = set_layout;
 
+			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+			alloc_info.descriptorSetCount = 1;
+			alloc_info.pSetLayouts = &descriptor_set_layouts[i];
+
+
+
+			/*
 			// set ubo descriptor set only for shader descriptor set #1
 			if (binding_count != 0 && (i == 1)) {
 				((VulkanUniformBuffer*)uniform_buffer_object.get())->SetupDescriptorSet(descriptor_set_layouts[i]);
 			}
+			*/
+		}
+
+		for (const auto& mem : binding_block_members) {
+			mem.first; // name
+			uint32_t binding_num = mem.second.binding_num;
+			mem.second.offset;
+			mem.second.size;
+			mem.second.type;
+
+			if (mem.second.type == DataType::SAMPLER2D) { //textures
+				if (uniform_texture_objects.find(binding_num) == uniform_texture_objects.end()) {
+					uniform_texture_objects[binding_num] = std::make_shared<VulkanTexture>(vulkan_type);
+				}
+			}
+			else { // buffers
+
+				if (uniform_buffer_objects.find(binding_num) == uniform_buffer_objects.end()) {
+					uniform_buffer_objects[binding_num] = std::make_unique<VulkanUniformBuffer>(
+						vulkan_type,
+						binding_num,
+						mem.second.size
+						);
+				}
+
+				uniform_buffer_objects[binding_num]->AddMember(
+					mem.first,
+					mem.second.type,
+					mem.second.size,
+					mem.second.offset
+				);
+			}
+
 		}
 
 		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
@@ -216,15 +257,12 @@ namespace Renderer {
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-		// bind shader descriptor set 1
-		if(uniform_buffer_object)
-			uniform_buffer_object->Bind();
+		//TODO: bind shader descriptor set 1
 	}
 
 	void VulkanShader::ShutDown()
 	{
-		uniform_buffer_object.reset();
-		uniform_buffer_object = nullptr;
+		//TODO: destroy ubo
 
 		descriptor_data.clear();
 		push_constant_ranges.clear();
@@ -284,10 +322,6 @@ namespace Renderer {
 
 			const SpvReflectDescriptorSet& refl_set = *pdescriptor_sets[i_set];
 	
-			if (refl_set.set == 1 && (uniform_buffer_object.get() == nullptr)) {
-				uniform_buffer_object = std::make_unique<VulkanUniformBuffer>(vulkan_type, refl_set.set);
-			}
-
 			for (uint32_t i_binding = 0; i_binding < refl_set.binding_count; ++i_binding) {
 				
 				const SpvReflectDescriptorBinding& refl_binding = *refl_set.bindings[i_binding];
@@ -314,6 +348,7 @@ namespace Renderer {
 					// dont add ubo var for material & object & global
 					if (refl_set.set == 1)
 					{
+
 						for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
 							DataType data_type = DataType::NONE;
@@ -345,22 +380,29 @@ namespace Renderer {
 							case SpvOp::SpvOpTypeBool:
 								data_type = DataType::BOOL;
 								break;
+							case SpvOp::SpvOpTypeSampler:
+								data_type = DataType::SAMPLER2D;
 							default:
 								DataType::NONE;
 							}
+							
+							std::string name = std::string(refl_binding.block.name) + std::string(".") + refl_binding.block.members[i].name;
 
-							uniform_buffer_object->AddMember(
+							binding_block_members[name].binding_num = refl_binding.binding;
+							binding_block_members[name].type = data_type;
+							binding_block_members[name].size = refl_binding.block.members[i].size;
+							binding_block_members[name].offset = refl_binding.block.members[i].offset;
+
+							/*
+							uniform_buffer_objects[refl_binding.binding]->AddMember(
 								std::string(refl_binding.block.name) + std::string(".") + refl_binding.block.members[i].name,
 								data_type,
 								refl_binding.block.members[i].size,
 								refl_binding.block.members[i].offset
 							);
-
+							*/
 						}
-
-						((VulkanUniformBuffer*)(uniform_buffer_object.get()))->AddBinding(refl_binding.binding, refl_binding.block.size);
 					}
-
 					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
 				}
 			}
@@ -396,8 +438,11 @@ namespace Renderer {
 
 	void* VulkanShader::GetMemberVariable(const std::string& name)
 	{
-		if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
-			return (char*)uniform_buffer_object->data + uniform_buffer_object->member_vars[name].offset;
+		if (binding_block_members.find(name) != binding_block_members.end()) {
+			uint32_t binding_num = binding_block_members[name].binding_num;
+			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end()) {
+				return (char*)uniform_buffer_objects[binding_num]->data + uniform_buffer_objects[binding_num]->member_vars[name].offset;
+			}
 		}
 
 		return nullptr;

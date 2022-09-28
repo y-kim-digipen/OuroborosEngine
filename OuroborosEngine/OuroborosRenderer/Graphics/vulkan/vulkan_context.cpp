@@ -29,7 +29,7 @@
 //#define GLFW_EXPOSE_NATIVE_WIN32s
 //#include <GLFW/glfw3native.h>
 
-static Vulkan_type vulkan_type;
+static VulkanType vulkan_type;
 
 namespace Renderer
 {
@@ -67,7 +67,7 @@ namespace Renderer
     VkFormat FindDepthFormat();
 
     //For Deferred rendering
-    void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
+    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
 
 
     static VKAPI_ATTR VkBool32 debugCallback(
@@ -135,55 +135,36 @@ namespace Renderer
           
         Vulkan_PipelineBuilder pipeline_builder;
 
-		//TODO: convert to dynamic descriptor & ubo buffer and combine per frame data to one buffer 
         const uint32_t binding_count = 2;
-        VkDescriptorSetLayoutBinding bindings[binding_count];
-        // camera data
-        bindings[0].binding = 0;
-        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[0].descriptorCount = 1;
-        bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        // light data
-        bindings[1].binding = 1;
-        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[1].descriptorCount = 1;
-        bindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-        VkDescriptorSetLayout set_layout;
+		global_binding_ubo.resize(binding_count);
+        global_binding_ubo[0].Init(&vulkan_type, 0, sizeof(global_data)); // camera data in binding slot 0
+        global_binding_ubo[1].Init(&vulkan_type, 1, sizeof(light_data)); // light data in binding slot 1
 
-        VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-        set_layout_create_info.bindingCount = binding_count;
-        set_layout_create_info.pBindings = bindings;
-         VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &set_layout_create_info, 0, &set_layout));
+        global_set.Init(&vulkan_type, 0)
+            .AddBufferBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, &global_binding_ubo[0])
+            .AddBufferBinding(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, &global_binding_ubo[1])
+            .Build();
 
-        //TODO: this might occur error, need to be test
-        vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &set_layout, 1, 0, 0);
-        vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout;
-         
-        global_ubo = new VulkanUniformBuffer(&vulkan_type, 0);
+        //TODO(Austyn): this might go wrong
+        vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &global_set.layout, 1, 0, 0);
+        vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout; 
 
-        global_ubo->AddBinding(0, sizeof(global_data));
-        global_ubo->AddBinding(1, sizeof(light_data));
-
-        global_ubo->SetupDescriptorSet(set_layout);
-
- 
-        vkDestroyDescriptorSetLayout(vulkan_type.device.handle, set_layout, nullptr);
     }
 
     void VulkanContext::UpdateGlobalData()
     {
         Context::UpdateGlobalData();
 
-        global_ubo->AddData((void*)&global_data, 0,sizeof(global_data));
-        global_ubo->AddData((void*)&light_data, sizeof(global_data), sizeof(light_data));
-        global_ubo->UploadToGPU();
+        global_binding_ubo[0].AddData((void*)&global_data, 0, sizeof(global_data));
+        global_binding_ubo[1].AddData((void*)&light_data, 0, sizeof(light_data));
     }
 
 	// Must be called after init_frame()
     void VulkanContext::BindGlobalData()
     {
-        global_ubo->Bind();
+        // bind descriptor set here
+        global_set.Bind();
     }
 
     void VulkanContext::Shutdown()
@@ -211,8 +192,11 @@ namespace Renderer
         shader_manager->Cleanup();
         texture_manager_->Cleanup();
 
-		delete global_ubo;
-        global_ubo = nullptr;
+        // delete global data
+        global_set.Cleanup();
+        for (auto& global_ubo : global_binding_ubo) {
+            global_ubo.Cleanup();
+        }
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
@@ -381,7 +365,7 @@ namespace Renderer
         return  0;
     }
 
-    Vulkan_type* VulkanContext::GetVulkanType()
+    VulkanType* VulkanContext::GetVulkanType()
     {
         return &vulkan_type;
     }
@@ -1394,7 +1378,7 @@ namespace Renderer
     }
 
     //deferred rendering
-    void CreateFrameAttachment(Vulkan_type* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment)
+    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment)
     {
         VkImageAspectFlags aspect_mask = 0;
         VkImageLayout image_layout;

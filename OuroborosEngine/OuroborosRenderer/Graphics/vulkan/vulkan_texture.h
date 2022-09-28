@@ -17,15 +17,16 @@ namespace Renderer
 	class VulkanTexture : public Texture
 	{
 	public:
-		VulkanTexture(Vulkan_type* vulkan_type);
+		VulkanTexture(VulkanType* vulkan_type);
 		~VulkanTexture();
 		void Bind() override;
 		void UploadData(const Asset::Image& data) override;
 		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
 		void UpdateColorType(int channel);
 		void Cleanup() override;
+		VkDescriptorImageInfo GetImageInfo() const;
 	private:
-		Vulkan_type* vulkan_type = nullptr;
+		VulkanType* vulkan_type = nullptr;
 		uint32_t width_ {0};
 		uint32_t height_ {0};
 

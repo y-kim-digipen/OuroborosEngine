@@ -8,7 +8,7 @@
 
 namespace Renderer
 {
-	VulkanMeshManager::VulkanMeshManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanMeshManager::VulkanMeshManager(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}

@@ -6,7 +6,7 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
+	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
 	{
 		VkDescriptorSetLayoutBinding binding{};
 		binding.binding = 0;
@@ -68,10 +68,8 @@ namespace Renderer {
 
 		ubo->AddBinding(0, sizeof(Asset::MaterialData));
 		ubo->SetupDescriptorSet(set_layout);
-		ubo->AddData(&data, 0, sizeof(data));
-		ubo->UploadToGPU();
-
-
+		ubo->AddData(0 ,&data, 0, sizeof(data));
+		ubo->UploadToGPU(0);
 	}
 
 	VulkanMaterial::~VulkanMaterial()
@@ -89,8 +87,8 @@ namespace Renderer {
 	{
 		if(is_changed)
 		{
-			ubo->AddData(&data, 0, sizeof(Asset::MaterialData));
-			ubo->UploadToGPU();
+			ubo->AddData(0, &data, 0, sizeof(Asset::MaterialData));
+			ubo->UploadToGPU(0);
 			is_changed = false;
 		}
 				if (data.has_albedo_texture)
