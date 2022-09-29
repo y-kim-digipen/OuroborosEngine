@@ -7,7 +7,6 @@
 #include "../ecs/ecs_base.h"
 #include "../engine.h"
 #include "../engine_settings.h"
-#include "../common/assets.h"
 #include "gui/gui_asset_implementation.h"
 #include "GUI_definedColors.h"
 
@@ -28,27 +27,8 @@ namespace OE
 		COMPONENT_ADD, ENTITY_ADD, ENTITY_DELETE, COMPONENT_DELETE, SYSTEM
 	};
 
-	template<typename T>
-	static void ImGuiDragDropCopy(T& source_and_target, ImGuiDragDropFlags flag = ImGuiDragDropFlags_None)
-	{
-		if (ImGui::BeginDragDropSource(flag))
-		{
-			ImGui::SetDragDropPayload(typeid(T).name(), &source_and_target, sizeof(T));
-			ImGui::Text("Copy");
-			ImGui::EndDragDropSource();
-		}
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(typeid(T).name()))
-			{
-				const T payload_data = *static_cast<const T*>(payload->Data);
-				source_and_target = payload_data;
-			}
-			ImGui::EndDragDropTarget();
-		}
-	};
 
-	static void FileSystemPanelFunction();
+	static void FileSystemPanelFunction(std::string title, bool* p_open);
 
 	template<typename TComponent>
 	void ComponentDrawFunction(ecs_ID entID)
@@ -56,8 +36,9 @@ namespace OE
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Component %s detail is not implemented", typeid(TComponent).name());
 	}
 
-	static void EntityInfoPanelFunction()
+	static void EntityInfoPanelFunction(std::string title, bool* p_open)
 	{
+		ImGui::Begin(title.c_str(), p_open);
 		static bool is_hovered = false;
 		static bool is_popup_menu_opened = false;
 		static int last_ent_hovered = -1;
@@ -205,13 +186,14 @@ namespace OE
 			last_ent_hovered = -1;
 			is_hovered = false;
 		}
+		ImGui::End();
 	}
 
 
-	static void AssetBrowserPanelFunction()
+	static void AssetBrowserPanelFunction(std::string title, bool* p_open)
 	{
 		using manager_list = decltype(std::declval<Engine>().asset_manager)::manager_list;
-
+		ImGui::Begin(title.c_str(), p_open);
 		if (ImGui::BeginTabBar(""))
 		{
 			brigand::for_each<manager_list>([](auto type)
@@ -248,16 +230,20 @@ namespace OE
 		//{
 		//	Engine::GetRenderWindow()->vulkan_imgui_manager.GetPanels()["System"]["AssetManager"].second = true;
 		//}
+		ImGui::End();
 	}
 
-	static void EngineInfoPanelFunction()
+	static void EngineInfoPanelFunction(std::string title, bool* p_open)
 	{
+		ImGui::Begin(title.c_str(), p_open);
 		ImGui::Text("dt : %f", Engine::delta_timer.GetDeltaTime());
 		ImGui::Text("FPS : %d", (int)(1.0 / Engine::delta_timer.GetDeltaTime()));
+		ImGui::End();
 	}
 
-	static void FileSystemPanelFunction()
+	static void FileSystemPanelFunction(std::string title, bool* p_open)
 	{
+		ImGui::Begin(title.c_str(), p_open);
 		static std::string directory_path = "..\\";
 
 		static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
@@ -378,10 +364,12 @@ namespace OE
 			std::string relative_path = std::filesystem::relative(path, "..\\").string();
 			OE::Engine::scene_serializer.SerializeScene( path.string());
 		}
+		ImGui::End();
 	}
 
-	static void SystemInfoPanelFunction()
+	static void SystemInfoPanelFunction(std::string title, bool* p_open)
 	{
+		ImGui::Begin(title.c_str(), p_open);
 		using system_list = ECS_Manager::SystemStorage::system_list;
 		using component_list = ECS_Manager::ComponentStorage;
 
@@ -495,6 +483,50 @@ namespace OE
 
 			ImGui::EndTabBar();
 		}
+		ImGui::End();
+	}
+
+	static void SliderSpeedFunction(std::string title, bool* p_open)
+	{
+		static int corner = 0;
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+		if (corner != -1)
+		{
+			const float PAD = 10.0f;
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+			ImVec2 work_size = viewport->WorkSize;
+			ImVec2 window_pos, window_pos_pivot;
+			window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+			window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+			window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
+			window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
+			ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			window_flags |= ImGuiWindowFlags_NoMove;
+		}
+		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+		if (ImGui::Begin(title.c_str(), p_open, window_flags))
+		{
+			ImGui::Text("(right - click to change position)");
+			ImGui::Separator();
+
+			ImGui::DragFloat("Speed", &Engine::window->vulkan_imgui_manager.slider_speed, Engine::window->vulkan_imgui_manager.GetSliderSpeed(),
+				0.f, 100.f);
+
+			if (ImGui::BeginPopupContextWindow())
+			{
+				if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
+				if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
+				if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
+				if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
+				if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+				if (p_open && ImGui::MenuItem("Close")) *p_open = false;
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::End();
 	}
 }
 

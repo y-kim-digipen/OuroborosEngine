@@ -16,30 +16,49 @@ namespace OE
 		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
 		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
+
+		window->vulkan_imgui_manager.RegisterPanel("System", "SliderSpeed", &OE::SliderSpeedFunction);
 	}
 
 	void Engine::ECS_TestSetup()
 	{
-		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
+		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
 			{
 				std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
 				std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
 				std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
 			});
 
-		ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
+		ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
 			{
 				std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
 				std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
 				std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::ecs_ID ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
+		ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::Status status, OE::ecs_ID ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
 			{
 				transform.pos += velocity.vel * dt;
 			});
-		ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
+
+		ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::Status status, OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
 			{
+				const bool has_shader = Engine::asset_manager.GetManager<ShaderAssetManager>().HasAsset(shader.name);
+				if(has_shader == false)
+				{
+					std::cerr << "From draw system : shader " + shader.name + " does not exist, draw call ignored" << std::endl;
+					shader.name = "";
+					return;
+				}
+				if(shader.name.empty())
+				{
+					std::cerr << "From draw system : mesh " + mesh.mesh_name + " does not exist, using default mesh" << std::endl;
+					mesh.mesh_name = "model/default_cube.obj";
+					return;
+				}
+				const bool has_mesh = Engine::asset_manager.GetManager<MeshAssetManager>().HasAsset(mesh.mesh_name);
+				//const bool has_textures = Engine::asset_manager.GetManager<MeshAssetManager>().HasAsset(mesh.mesh_name);
+
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if (ecs_manager.GetEntity(ent).alive)
 				{
@@ -50,12 +69,11 @@ namespace OE
 					//TODO: pass renderer camera data
 					context->global_data = camera.data;
 					context->UpdateGlobalData();
-			
-					context->AddDrawQueue(&transform, &material, &mesh, &shader);
+					context->AddDrawQueue(&transform, &material, &mesh , &shader);
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform, MaterialComponent& material)
+		ecs_manager.system_storage.RegisterSystemImpl<LightSystem>([](OE::Status status, OE::ecs_ID ent, float dt, ShaderComponent& shader, LightComponent& light, TransformComponent& transform, MaterialComponent& material)
 			{
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
@@ -72,8 +90,9 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::ecs_ID ent, float dt, ScriptComponent& script_component)
+		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::Status status, OE::ecs_ID ent, float dt, ScriptComponent& script_component)
 			{
+				//std::cout << static_cast<int>(status) << std::endl;
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::AttatchedComponent, std::to_string(ent));
@@ -84,7 +103,7 @@ namespace OE
 					}
 					if(script->script_path.empty() == false)
 					{
-						script->Update(ent, dt);
+						script->Update(status, ent, dt);
 
 						if (script->GetState() == Script::Script::State::Invalid)
 						{
@@ -96,11 +115,11 @@ namespace OE
 			});
 	}
 
-	void Engine::SetupModule()
+	void Engine::InitEssentialAssets()
 	{
-		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
-		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
-		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader2");
+		asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/default_cube.obj");
+		//asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
+		asset_manager.GetManager<ImageAssetManager>().LoadAsset("images/null.png");
 	}
 
 	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
@@ -174,10 +193,11 @@ namespace OE
 
 		
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
-		SetupModule();
 
 		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
+		InitEssentialAssets();
+
 		//Profiler::Start();
 	}
 
@@ -192,7 +212,7 @@ namespace OE
 		auto& scripts_set = lua_script_manager.GetScripts(Script::ScriptType::Normal);
 		for (auto& script : scripts_set)
 		{
-			script.second.Update(delta_timer.GetDeltaTime());
+			script.second.Update(Status::INIT,delta_timer.GetDeltaTime());
 		}
 
 		event_functions[EventFunctionType::PRE].clear();
@@ -205,7 +225,7 @@ namespace OE
 		{
 			static constexpr auto Get(/*M T<Args...>::* pm*/)
 			{
-				return std::mem_fn(&Script::Script::Update<Args...>);
+				return std::mem_fn(&Script::Script::Update<OE::Status, Args...>);
 			}
 		};
 
@@ -297,13 +317,10 @@ namespace OE
 					Script::Script* script = lua_script_manager.GetScript(Script::ScriptType::System, script_path);
 					if (script)
 					{
-						//_impl::MultiFunc2<Script::Script, void> caller(script, &Script::Script::Update<ecs_ID, float, BoolWrapperComponent&>);
-				/*		using Functor = _impl::as_expand_script_call<typename TSystem::required_components>;
-						Fu*/
 						using member_function = _impl::as_mem_fn<function_signature>;
 						auto func = member_function::Get(/*&Script::Script::Update*/);
 						//auto func = std::bind(bind, *script);
-						ecs_manager.ForEntitiesMatching<TSystem>(dt, script, func);
+						//ecs_manager.ForEntitiesMatching<TSystem>(dt, script, func);
 					}
 					break;
 				}
@@ -369,109 +386,3 @@ namespace OE
 	}
 
 }
-
-//template <typename R>
-	//class MultiFunc
-	//{
-	//	typedef void(*function_t)();
-	//	function_t m_func;
-	//public:
-	//	template <typename ...A1>
-	//	MultiFunc<R>(R(*f)(A1...))
-	//	{
-	//		m_func = (void(*)())f;
-	//	}
-
-	//	template <typename ...A1>
-	//	MultiFunc<R> operator =(R(*f)(A1...))
-	//	{
-	//		m_func = (void(*)())f;
-	//		return *this;
-	//	}
-
-
-	//	template <typename ...A1>
-	//	R operator()(A1... a1) const
-	//	{
-	//		R(*f)(A1...) = (R(*)(A1...))(m_func);
-	//		return (*f)(a1...);
-	//	}
-	//};
-
-	////X = parent class
-	////R = ReturnType
-	//template <typename X, typename R>
-	//class MultiFunc2
-	//{
-	//	typedef void(X::* function_t)();
-
-	//	function_t m_func;
-	//	X* m_obj;
-	//public:
-
-	//	template <typename ...A1>
-	//	MultiFunc2<X, R>(X* obj, R(X::* f)(A1...))
-	//	{
-	//		m_func = (void(X::*)())(f);
-	//		m_obj = obj;
-	//	}
-
-
-	//	template <typename ...A1>
-	//	MultiFunc2<X, R> operator =(R(X::* f)(A1...))
-	//	{
-	//		m_func = (void(X::*)())(f);
-	//		return *this;
-	//	}
-
-
-	//	template <typename ...A1>
-	//	R operator()(A1&&... a1) const
-	//	{
-	//		std::cout << sizeof...(A1) << std::endl;
-	//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
-
-	//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
-	//	}
-	//};
-
-	//template <typename X, typename R>
-	//class MultiFunc3
-	//{
-	//	typedef void(X::* function_t)();
-
-	//	function_t m_func;
-	//	X* m_obj;
-	//public:
-
-	//	template <typename ...A1>
-	//	MultiFunc3<X, R>(X* obj, R(X::* f)(A1...))
-	//	{
-	//		m_func = (void(X::*)())(f);
-	//		m_obj = obj;
-	//	}
-
-
-	//	template <typename ...A1>
-	//	MultiFunc3<X, R> operator =(R(X::* f)(A1...))
-	//	{
-	//		m_func = (void(X::*)())(f);
-	//		return *this;
-	//	}
-
-
-	//	template <typename ...A1>
-	//	R operator()(A1&&... a1) const
-	//	{
-	//		std::cout << sizeof...(A1) << std::endl;
-	//		R(X:: * fn_ptr)(A1...) = (R(X::*)(A1...))(m_func);
-
-	//		return ((*m_obj).*fn_ptr)(std::forward<A1>(a1)...);
-	//	}
-	//};
-
-	//template <typename... T>
-	//using expand_script_call_wrapper = MultiFunc3<Script::Script, void>;
-
-	//template <typename L>
-	//using as_expand_script_call = brigand::wrap<L, expand_script_call_wrapper>;

@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include "../common.h"
 
 namespace OE
 {
@@ -8,7 +9,7 @@ namespace OE
 		namespace _impl
 		{
 			template<typename ...TComponents>
-			using _system_function_wrapper = std::function<void(ecs_ID, float, TComponents&...)>;
+			using _system_function_wrapper = std::function<void(OE::Status, ecs_ID, float, TComponents&...)>;
 
 			template <typename L>
 			using as_system_function = brigand::wrap<L, _system_function_wrapper>;
@@ -22,7 +23,7 @@ namespace OE
 			using function_type = _impl::as_system_function<brigand::list<TRequiredComponents...>>;
 			using required_components = brigand::list<TRequiredComponents...>;
 
-			using function_signature = brigand::list< ecs_ID, float, TRequiredComponents&...>;
+			using function_signature = brigand::list< OE::Status, ecs_ID, float, TRequiredComponents&...>;
 		};
 	}
 }

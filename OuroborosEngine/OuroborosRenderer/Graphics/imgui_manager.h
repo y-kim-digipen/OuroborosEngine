@@ -12,9 +12,15 @@ namespace Renderer
 	class ImguiManager
 	{
 	public:
-		using GUI_PanelFunction = std::function<void()>;
+		using GUI_PanelFunction = std::function<void(std::string, bool*)>;
+
+		float slider_speed = 1.f;
 	public:
 		ImguiManager() = default;
+		float GetSliderSpeed() const 
+		{
+			return slider_speed;
+		}
 		virtual void Init(GLFWwindow* window) = 0;
 		virtual void Update()
 		{
@@ -68,9 +74,9 @@ namespace Renderer
 					auto& [function, open] = pair;
 					if (open)
 					{
-						ImGui::Begin(key.c_str(), &open);
-						function();
-						ImGui::End();
+						//ImGui::Begin(key.c_str(), &open);
+						function(key, &open);
+						//ImGui::End();
 					}
 				}
 			}

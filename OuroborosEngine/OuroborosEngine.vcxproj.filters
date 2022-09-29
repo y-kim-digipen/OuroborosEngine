@@ -8,9 +8,6 @@
     <Filter Include="engine">
       <UniqueIdentifier>{e9838a83-39a4-4bce-b108-926c37d2cc68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\modules">
-      <UniqueIdentifier>{53fb722a-4952-45df-9973-ec8e344f05d1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\scene">
       <UniqueIdentifier>{851a97b0-2ed8-42aa-8022-30868a3010c2}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,9 @@
     </Filter>
     <Filter Include="engine\serializer">
       <UniqueIdentifier>{fd2ff098-a17d-4802-8c07-9de1166cb593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\gui\modules">
+      <UniqueIdentifier>{53fb722a-4952-45df-9973-ec8e344f05d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,16 +67,16 @@
       <Filter>engine\input</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\modules\master_asset_manager.h">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\modules\mesh_asset_manager.h">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\modules\image_asset_manager.h">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\modules\shader_asset_manager.h">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\scripting\lua_script_manager.h">
       <Filter>engine\scripting</Filter>
@@ -85,7 +85,7 @@
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\modules\script_asset_manager.h">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\scripting\script.h">
       <Filter>engine\scripting</Filter>
@@ -105,6 +105,9 @@
     <ClInclude Include="src\engine\serializer\shared_serialization_impl.h">
       <Filter>engine\serializer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gui\GUIWrappedFunctions.h">
+      <Filter>engine\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -112,19 +115,19 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\modules\shader_asset_manager.cpp">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\scripting\lua_script_manager.cpp">
       <Filter>engine\scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\modules\script_asset_manager.cpp">
-      <Filter>engine\modules</Filter>
+      <Filter>engine\gui\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\serializer\scene_serializer.cpp">
       <Filter>engine\serializer</Filter>
