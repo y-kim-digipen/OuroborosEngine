@@ -26,6 +26,10 @@ namespace OE
         {
             return assets[asset_name].second;
         }
+		bool HasAsset(const std::string& asset_name)
+		{
+			return assets.contains(asset_name);
+		}
         bool HasAsset(std::string&& asset_name)
         {
             return assets.contains(asset_name);

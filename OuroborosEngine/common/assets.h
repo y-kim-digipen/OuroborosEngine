@@ -61,7 +61,8 @@ namespace Asset
 
     struct MaterialData : Asset
     {
-        alignas(16)  glm::vec3 albedo;
+        alignas(16)
+    	glm::vec3 albedo;
         float metallic;
         float roughness;
         float ao;

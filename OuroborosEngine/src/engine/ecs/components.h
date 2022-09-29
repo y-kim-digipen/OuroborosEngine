@@ -49,7 +49,7 @@ struct MaterialComponent : Component
 
 struct ShaderComponent : Component
 {
-	std::string name ="shader";
+	std::string name = "shader";
 };
 
 struct BoolWrapperComponent : Component

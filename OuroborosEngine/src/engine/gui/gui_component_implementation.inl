@@ -1,3 +1,5 @@
+#include "GUIWrappedFunctions.h"
+
 namespace OE
 {
 	template<>
@@ -27,7 +29,7 @@ namespace OE
 			}
 			ImGui::TreePop();
 		}
-		ImGuiDragDropCopy(mesh_component.mesh_name);
+		GUI_Input::ImGuiDragDropCopy(mesh_component.mesh_name);
 	}
 
 
@@ -39,16 +41,14 @@ namespace OE
 		TransformComponent& transform_component = OE::Engine::ecs_manager.GetComponent<TransformComponent>(entID);
 		if (ImGui::TreeNode(typeid(TransformComponent).name()))
 		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.pos), &transform_component.pos.x,0.1);
-			ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
+			GUI_Input::DragFloat3("Pos", &transform_component.pos.x);
+			GUI_Input::ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
 
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.scale), &transform_component.scale.x, 0.1);
-			ImGuiDragDropCopy(transform_component.scale, ImGuiDragDropFlags_SourceAllowNullID);
+			GUI_Input::DragFloat3("Scale", &transform_component.scale.x);
+			GUI_Input::ImGuiDragDropCopy(transform_component.scale, ImGuiDragDropFlags_SourceAllowNullID);
 
-			ImGui::DragFloat3(GET_VARIABLE_NAME(transform_component.rotation), &transform_component.rotation.x);
-			ImGuiDragDropCopy(transform_component.rotation, ImGuiDragDropFlags_SourceAllowNullID);
-
-			//ImGui::DragFloat ("GET_VARIABLE_NAME(transform_component.angle)", &transform_component.angle.x);
+			GUI_Input::DragFloat3("Rot", &transform_component.rotation.x);
+			GUI_Input::ImGuiDragDropCopy(transform_component.rotation, ImGuiDragDropFlags_SourceAllowNullID);
 
 			ImGui::TreePop();
 		}
@@ -61,10 +61,10 @@ namespace OE
 		VelocityComponent& velocity_component = OE::Engine::ecs_manager.GetComponent<VelocityComponent>(entID);
 		if (ImGui::TreeNode(typeid(VelocityComponent).name()))
 		{
-			ImGui::DragFloat3(GET_VARIABLE_NAME(velocity_component.vel), &velocity_component.vel.x);
+			GUI_Input::DragFloat3("Vel", &velocity_component.vel.x);
 			ImGui::TreePop();
 		}
-		ImGuiDragDropCopy(velocity_component.vel, ImGuiDragDropFlags_SourceAllowNullID);
+		GUI_Input::ImGuiDragDropCopy(velocity_component.vel, ImGuiDragDropFlags_SourceAllowNullID);
 	}
 
 	template<>
@@ -74,8 +74,8 @@ namespace OE
 		LifeTimeComponent& life_time_component = OE::Engine::ecs_manager.GetComponent<LifeTimeComponent>(entID);
 		if (ImGui::TreeNode(typeid(LifeTimeComponent).name()))
 		{
-			ImGui::DragFloat(GET_VARIABLE_NAME(life_time_component.life_time), &life_time_component.life_time);
-			ImGuiDragDropCopy(life_time_component.life_time);
+			GUI_Input::DragFloat("LifeTime", &life_time_component.life_time);
+			GUI_Input::ImGuiDragDropCopy(life_time_component.life_time);
 			ImGui::TreePop();
 		}
 	}
@@ -130,7 +130,7 @@ namespace OE
 				ImGui::EndCombo();
 			}
 
-			if (shader_map.find(shader_component.name) != shader_map.end()) {
+			if (shader_map.contains(shader_component.name)) {
 
 				if (ImGui::Button("Reload"))
 				{
@@ -146,16 +146,16 @@ namespace OE
 						is_changed |= ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
 						break;
 					case Renderer::DataType::FLOAT:
-						is_changed |= ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first),0.1f);
+						is_changed |= ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::window->vulkan_imgui_manager.GetSliderSpeed());
 						break;
 					case Renderer::DataType::FLOAT2:
-						is_changed |= ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::window->vulkan_imgui_manager.GetSliderSpeed());
 						break;
 					case Renderer::DataType::FLOAT3:
-						is_changed |= ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::window->vulkan_imgui_manager.GetSliderSpeed());
 						break;
 					case Renderer::DataType::FLOAT4:
-						is_changed |= ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), 0.1f);
+						is_changed |= ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::window->vulkan_imgui_manager.GetSliderSpeed());
 						break;
 					case Renderer::DataType::INT:
 						is_changed |= ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
@@ -173,6 +173,10 @@ namespace OE
 						break;
 					case Renderer::DataType::MAT4:
 						break;
+
+					//case Renderer::DataType::SAMPLER2D:
+						//ImGui::
+						//break;
 					}
 
 					if (is_changed)
@@ -212,8 +216,6 @@ namespace OE
 
 	}
 
-
-
 	template<>
 	inline void ComponentDrawFunction<MaterialComponent>(ecs_ID entID)
 	{
@@ -231,12 +233,214 @@ namespace OE
 				material_component.flag = true;
 			}
 
+			const auto& material_datum = Engine::window->GetWindowData().RenderContextData->material_manager->GetMaterialDatum();
+			static bool open = true;
+			if(ImGui::BeginCombo("Material", material_component.name.c_str()))
+			{
+				for (const auto& material : material_datum)
+				{
+					const char* material_name = material.first.c_str();
+					if(ImGui::Selectable(material_name, material_name == material_component.name))
+					{
+						
+					}
+				}
+
+				if (ImGui::Selectable("New"))
+				{
+					open = true;
+				}
+				ImGui::EndCombo();
+			}
+			//Make new material
+			static char material_name_buf[30];
+			if (open)
+			{
+				ImGui::Begin("Make new material", &open);
+
+				//Variables
+				static bool using_texture = false;
+				static float metallic = 0.0, roughness = 0.0, ao = 0.0;
+				static glm::vec3 albedo(0.0);
+
+				static std::string albedo_texture_name;
+				static std::string normal_texture_name;
+				static std::string metallic_roughness_texture_name;
+				static std::string metallic_texture_name;
+				static std::string roughness_texture_name;
+				static std::string ao_texture_name;
+				static std::string emissive_texture_name;
+
+				static bool use_metallic_roughness = false;
+				static bool invert_roughness = false;
+
+				const bool has_same_name = material_datum.contains(material_name_buf);
+				ImGui::InputTextWithHint("##name", "name", material_name_buf, 30);
+				ImGui::SameLine();
+				if (has_same_name)
+				{
+					ImGui::TextColored(ImVec4(0.6f, 0.f, 0.f, 1.f), "Already exist", material_name_buf);
+				}
+				else
+				{
+					if (ImGui::Button("Save"))
+					{
+						{
+							material_component.name = material_name_buf;
+							material_component.texture_albedo_name.clear();
+							material_component.texture_normal_name.clear();
+							material_component.texture_metalroughness_name.clear();
+							material_component.texture_roughness_name.clear();
+							material_component.texture_ao_name.clear();
+							material_component.texture_emissive_name.clear();
+						}
+
+
+						auto& material_manager = Engine::window->GetWindowData().RenderContextData->material_manager;
+						Asset::MaterialData material_data;
+						if(using_texture == false)
+						{
+							material_data.albedo = albedo;
+							material_data.metallic = metallic;
+							material_data.roughness = roughness;
+							material_data.ao = ao;
+						}
+						else
+						{
+							material_data.has_albedo_texture = !albedo_texture_name.empty();
+							material_data.has_normal_texture = !normal_texture_name.empty();
+							material_data.has_metalroughness_texture = !metallic_roughness_texture_name.empty();
+							material_data.has_metalic_texture = !metallic_texture_name.empty();
+							material_data.has_roughness_texture = !roughness_texture_name.empty();
+							material_data.has_ao_texture = !ao_texture_name.empty();
+							material_data.has_emissive_texture = !emissive_texture_name.empty();
+							material_data.is_roughness_texture_inverted = invert_roughness;
+						}
+
+						material_component.data = material_data;
+
+						material_manager->AddMaterial(material_name_buf, material_data);
+						if(using_texture)
+						{
+							auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
+							auto material = material_manager->GetMaterial(material_name_buf);
+							if(material_data.has_albedo_texture)
+							{
+								material_component.texture_albedo_name = albedo_texture_name;
+								material->SetAlbedoTexture(texture_manager->GetTexture(albedo_texture_name));
+							}
+							if (material_data.has_normal_texture)
+							{
+								material_component.texture_normal_name = normal_texture_name;
+								material->SetNormalTexture(texture_manager->GetTexture(normal_texture_name));
+							}
+							if (material_data.has_metalroughness_texture)
+							{
+								material_component.texture_metalroughness_name = metallic_roughness_texture_name;
+								material->SetMetalRoughnessTexture(texture_manager->GetTexture(metallic_roughness_texture_name));
+							}
+							if (material_data.has_metalic_texture)
+							{
+								material_component.texture_metalroughness_name = metallic_texture_name;
+								material->SetMetalicTexture(texture_manager->GetTexture(metallic_texture_name));
+							}
+							if (material_data.has_roughness_texture)
+							{
+								material_component.texture_roughness_name = roughness_texture_name;
+								material->SetRoughSmoothnessTexture(texture_manager->GetTexture(roughness_texture_name));
+							}
+							if (material_data.has_ao_texture)
+							{
+								material_component.texture_ao_name = ao_texture_name;
+								material->SetAOTexture(texture_manager->GetTexture(ao_texture_name));
+							}
+							if (material_data.has_emissive_texture)
+							{
+								material_component.texture_emissive_name = emissive_texture_name;
+								material->SetEmissiveTexture(texture_manager->GetTexture(emissive_texture_name));
+							}
+						}
+
+						//Cleanup
+						{
+							using_texture = false;
+							metallic = 0.0, roughness = 0.0, ao = 0.0;
+							albedo = glm::vec3(0.0);
+							albedo_texture_name.clear();
+							normal_texture_name.clear();
+							metallic_roughness_texture_name.clear();
+							metallic_texture_name.clear();
+							roughness_texture_name.clear();
+							ao_texture_name.clear();
+							emissive_texture_name.clear();
+							use_metallic_roughness = false;
+							invert_roughness = false;
+						}
+					}
+				}
+
+
+				ImGui::Checkbox("Using Texture", &using_texture);
+				ImGui::Separator();
+				if(using_texture)
+				{
+					if(ImGui::Checkbox("combine metallic roughness", &use_metallic_roughness))
+					{
+						if (use_metallic_roughness)
+						{
+							metallic_texture_name.clear();
+							roughness_texture_name.clear();
+						}
+						else
+						{
+							metallic_roughness_texture_name.clear();
+						}
+					}
+					ImGui::Separator();
+					OE::GUI_Input::TextureSelectable("albedo", albedo_texture_name);
+					ImGui::Separator();
+					OE::GUI_Input::TextureSelectable("normal", normal_texture_name);
+					ImGui::Separator();
+
+					if(use_metallic_roughness)
+					{
+						OE::GUI_Input::TextureSelectable("metallic / roughness", metallic_roughness_texture_name);
+						ImGui::Separator();
+					}
+					else
+					{
+						OE::GUI_Input::TextureSelectable("metallic", metallic_texture_name);
+						ImGui::Separator();
+						OE::GUI_Input::TextureSelectable("roughness", roughness_texture_name);
+						ImGui::Checkbox("Invert", &invert_roughness);
+						ImGui::Separator();
+					}
+
+					OE::GUI_Input::TextureSelectable("ao", ao_texture_name);
+					ImGui::Separator();
+					OE::GUI_Input::TextureSelectable("emissive", emissive_texture_name);
+				}
+				else
+				{
+					ImGui::ColorEdit3("albedo", &albedo.x);
+					GUI_Input::DragFloat("metallic", &metallic, 0.0, 1.0);
+					GUI_Input::DragFloat("roughness", &roughness, 0.0f, 1.0f);
+					GUI_Input::DragFloat("ao", &ao, 0.0, 1.0);
+				}
+
+				ImGui::End();
+			}
+			else
+			{
+				memset(buffer, 0, 30);
+			}
+
+
 			bool is_changed = ImGui::ColorEdit3(GET_VARIABLE_NAME(material.albedo), &material_component.data.albedo.x);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.metallic), &material_component.data.metallic, 0.01f, 0.0f, 1.0f);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.roughness), &material_component.data.roughness, 0.01f, 0.0f, 1.0f);
-			is_changed |= ImGui::DragFloat(GET_VARIABLE_NAME(material.ao), &material_component.data.ao, 0.1f);
 
-
+			is_changed |=  GUI_Input::DragFloat3("metallic", &material_component.data.metallic, 0.0, 1.0);
+			is_changed |=  GUI_Input::DragFloat3("roughness", &material_component.data.roughness, 0.0f, 1.0f);
+			is_changed |=  GUI_Input::DragFloat3("ao", &material_component.data.ao, 0.0, 1.0);
 
 			if (ImGui::Button("save"))
 			{
@@ -244,7 +448,6 @@ namespace OE
 			}
 
 			const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
-
 
 			is_changed |= ImGui::Checkbox("AlbedoTexture_check", reinterpret_cast<bool*>(&material_component.data.has_albedo_texture));
 
@@ -267,22 +470,21 @@ namespace OE
 					}
 					ImGui::EndCombo();
 				}
+
 				if (auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
 				{
 					const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
 					dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
 					ImGui::Image(*TextureID, ImVec2(100, 100));
 				}
-
 			}
 			else
 			{
 				material_component.texture_albedo_name = "";
 			}
-
-		
+			//ImGui::EndMEnu
 			
-
+			
 
 			is_changed |= ImGui::Checkbox("NormalTexture_check", reinterpret_cast<bool*>(&material_component.data.has_normal_texture));
 			if (material_component.data.has_normal_texture)
@@ -384,22 +586,39 @@ namespace OE
 			is_changed |= ImGui::Checkbox("roughness/smoothness_check", reinterpret_cast<bool*>(&material_component.data.has_roughness_texture));
 			if (material_component.data.has_roughness_texture)
 			{
-				if (ImGui::BeginCombo("Rough/SmoothnessTexture", material_component.texture_roughness_name.c_str()))
+				//ImGui::
+
+				//const float current_item_width = treenode_size;
+				static ImGuiTextFilter filter;
+				static const std::string text = "Rough/Smoothness";
+				float text_width = ImGui::CalcTextSize(text.c_str()).x;
+				ImGui::Text(text.c_str());
+				ImGui::SameLine();
+
+				if (ImGui::BeginCombo("##"/*text.c_str()*/, material_component.texture_roughness_name.c_str()))
 				{
 					for (const auto& key : texture_map | std::views::keys)
 					{
-						const bool selected = material_component.texture_roughness_name == key;
-						if (ImGui::Selectable(key.c_str(), selected))
+						if (filter.PassFilter(key.c_str()))
 						{
-							material_component.texture_roughness_name = key;
-							is_changed |= true;
-						}
-						if (selected) {
-							ImGui::SetItemDefaultFocus();
+							const bool selected = material_component.texture_roughness_name == key;
+
+							if (ImGui::Selectable(key.c_str(), selected))
+							{
+								material_component.texture_roughness_name = key;
+								is_changed |= true;
+							}
+							if (selected) {
+								ImGui::SetItemDefaultFocus();
+							}
 						}
 					}
 					ImGui::EndCombo();
 				}
+				//ImGui::SameLine(current_item_width * 0.5f, text_width);
+				//filter.Draw("Filter", current_item_width * 0.2f);
+				ImGui::NewLine();
+
 				ImGui::Checkbox("is_smoothness", reinterpret_cast<bool*>(&material_component.data.is_roughness_texture_inverted));
 				if (auto texture = texture_manager->GetTexture(material_component.texture_roughness_name); texture)
 				{
@@ -420,6 +639,12 @@ namespace OE
 			{
 				if (ImGui::BeginCombo("AOTexture", material_component.texture_ao_name.c_str()))
 				{
+					if(ImGui::BeginPopupContextWindow())
+					{
+						char buf[25];
+						ImGui::InputText("#Filter", buf, 25);
+						ImGui::EndPopup();
+					}
 					for (const auto& key : texture_map | std::views::keys)
 					{
 						const bool selected = material_component.texture_ao_name == key;
@@ -434,11 +659,15 @@ namespace OE
 					}
 					ImGui::EndCombo();
 				}
-				if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name); texture)
+				if (auto texture = texture_manager->GetTexture(material_component.texture_ao_name))
 				{
 					const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
 					dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-					ImGui::Image(*TextureID, ImVec2(100, 100));
+					//todo
+					if(ImGui::IsItemHovered())
+					{
+						ImGui::Image(*TextureID, ImVec2(100, 100));
+					}
 				}
 			}
 			else
@@ -500,12 +729,12 @@ namespace OE
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
-			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.dir.x);
-			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x);
-			ImGui::DragFloat(GET_VARIABLE_NAME(light.inner_cut_off), &light_component.data.cutoff);
-			ImGui::DragFloat(GET_VARIABLE_NAME(light.outer_cut_off), &light_component.data.out_cutoff);
-			ImGui::DragFloat(GET_VARIABLE_NAME(light.falloff), &light_component.data.falloff);
-			ImGui::InputInt(GET_VARIABLE_NAME(light.type), &light_component.data.type);
+			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.dir.x, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
+			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.inner_cut_off), &light_component.data.cutoff, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.outer_cut_off), &light_component.data.out_cutoff, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
+			ImGui::DragFloat(GET_VARIABLE_NAME(light.falloff), &light_component.data.falloff, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
+			ImGui::InputInt(GET_VARIABLE_NAME(light.type), &light_component.data.type, Engine::window->vulkan_imgui_manager.GetSliderSpeed());
 			ImGui::TreePop();
 		}
 
@@ -586,3 +815,5 @@ namespace OE
 
 	}
 }
+
+

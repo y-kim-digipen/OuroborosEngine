@@ -15,6 +15,7 @@ extern "C"
 
 #include <sol/sol.hpp>
 #include <string>
+#include "../../src/engine/common.h"
 
 namespace OE
 {
@@ -50,7 +51,7 @@ namespace OE
 			sol::protected_function GetFunction(std::string func_name);
 
 			template<typename ... Args>
-			void Update(Args&& ... args);
+			void Update(Status status, Args&& ... args);
 
 			std::string script_path;
 			sol::state sol_state;
@@ -109,16 +110,16 @@ namespace OE
 		}
 
 		template <typename ...Args>
-		void Script::Update(Args&&... args)
+		void Script::Update(Status status, Args&&... args)
 		{
 			switch (state)
 			{
 			case State::Unloaded:
 			{
-					if(script_path.empty())
-					{
-						break;
-					}
+				if(script_path.empty())
+				{
+					break;
+				}
 				if (bool res = RunScript())
 				{
 					state = State::Init;

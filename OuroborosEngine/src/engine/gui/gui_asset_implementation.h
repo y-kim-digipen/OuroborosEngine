@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "../common/assets.h"
+#include "../../src/engine/common.h"
 #include "engine.h"
 
 namespace OE
@@ -69,18 +70,18 @@ namespace OE
 
 			if(type == Script::ScriptType::Component)
 			{
-				OE::Engine::ecs_manager.ForEntitiesMatching<ScriptingSystem>(0.f, [script_path](OE::ecs_ID ent, float dt, ScriptComponent& script_component)
-				{
-					if(script_component.name == script_path)
-					{
-						const auto pScript = OE::Engine::lua_script_manager.GetScript(Script::ScriptType::AttatchedComponent, std::to_string(ent));
-						if(pScript)
-						{
-							pScript->ChangeScript(script_path.string());
-						}
-					}
-				}
-				);
+				//OE::Engine::ecs_manager.ForEntitiesMatching<ScriptingSystem>(0.f, [script_path](OE::Status status, OE::ecs_ID ent, float dt, ScriptComponent& script_component)
+				//{
+				//	if(script_component.name == script_path)
+				//	{
+				//		const auto pScript = OE::Engine::lua_script_manager.GetScript(Script::ScriptType::AttatchedComponent, std::to_string(ent));
+				//		if(pScript)
+				//		{
+				//			pScript->ChangeScript(script_path.string());
+				//		}
+				//	}
+				//}
+				//);
 			}
 
 
