@@ -96,12 +96,13 @@ namespace OE
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::AttatchedComponent, std::to_string(ent));
-					if(script == nullptr)
+					if (script == nullptr)
 					{
 						script = OE::Engine::lua_script_manager.CreateScript(std::to_string(ent), OE::Script::ScriptType::AttatchedComponent);
 						script->ChangeScript(script_component.name);
 					}
-					if(script->script_path.empty() == false)
+
+					if (script->script_path.empty() == false)
 					{
 						script->Update(status, ent, dt);
 
@@ -113,6 +114,24 @@ namespace OE
 					}
 				}
 			});
+
+		ecs_manager.system_storage.RegisterSystemImpl<CubemapSystem>([](OE::ecs_ID ent, float dt, CubemapComponent& cubemap, ShaderComponent& shader)
+			{
+				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+
+				if (ecs_manager.GetEntity(ent).alive)
+				{
+					//contex
+						// Addqueue(Cubemapcomponent a);
+					context->AddCubemapDrawQueue(&cubemap, &shader);
+
+					//context
+					//texture_manager->Gettexture()
+					//context->shader_manager[].bind
+					//cubemap->Draw();
+				}
+			});
+
 	}
 
 	void Engine::InitEssentialAssets()
@@ -151,7 +170,6 @@ namespace OE
 		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
 		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
 
-
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
@@ -165,6 +183,9 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
+		
+		//TODO: cubemap init
+		window->GetWindowData().RenderContextData->cubemap;
 
 		//init engine module
 		SetupGUI();

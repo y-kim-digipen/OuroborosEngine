@@ -172,6 +172,9 @@ namespace OE
 						break;
 					case Renderer::DataType::MAT4:
 						break;
+					//case Renderer::DataType::SAMPLER2D:
+						//ImGui::
+						//break;
 					}
 					shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
 
