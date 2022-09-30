@@ -44,11 +44,6 @@ namespace Renderer
 		draw_queue.push({ transform,material, mesh, shader });
 	}
 
-	void Context::AddCubemapDrawQueue(CubemapComponent* cubemap, ShaderComponent* shader)
-	{
-		cubemap_draw_queue.push({ cubemap, shader });
-	}
-
 	int Context::AddLight(uint32_t entity_id, Asset::LightData* light_component)
 	{
 		// if there is slot left

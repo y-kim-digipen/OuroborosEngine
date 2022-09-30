@@ -27,17 +27,20 @@ namespace Renderer {
 
 		DescriptorSet& Init(VulkanType* vk_type, uint32_t set_num);
 
-		DescriptorSet& AddBufferBinding(
+		DescriptorSet& AddBindingLayout(
 			uint32_t binding_num,
 			VkDescriptorType descriptor_type,
-			VkShaderStageFlags stage_flags,
-			VulkanUniformBuffer* vulkan_ubo
-			);
+			VkShaderStageFlags stage_flags
+		);
 
-		DescriptorSet& AddTextureBinding(
+		// must call binding layout first
+		DescriptorSet& AddBinding(
 			uint32_t binding_num,
-			VkDescriptorType descriptor_type,
-			VkShaderStageFlags stage_flags,
+			VulkanUniformBuffer* vulkan_ubo
+		);
+		// must call binding layout first
+		DescriptorSet& AddBinding(
+			uint32_t binding_num,
 			VulkanTexture* vulkan_texture
 		);
 

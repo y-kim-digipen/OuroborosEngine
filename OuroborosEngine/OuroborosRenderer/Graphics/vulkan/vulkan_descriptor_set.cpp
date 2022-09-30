@@ -10,7 +10,6 @@ namespace Renderer {
         return *this;
     }
 
-
     /*
     typedef struct VkDescriptorBufferInfo {
     VkBuffer        buffer;
@@ -26,7 +25,7 @@ typedef struct VkDescriptorImageInfo {
     
     */
 
-    DescriptorSet& DescriptorSet::AddBufferBinding(uint32_t binding_num, VkDescriptorType descriptor_type, VkShaderStageFlags stage_flags, VulkanUniformBuffer* vulkan_ubo)
+    DescriptorSet& DescriptorSet::AddBindingLayout(uint32_t binding_num, VkDescriptorType descriptor_type, VkShaderStageFlags stage_flags)
     {
 
         if (layout_bindings.size() <= binding_num) {
@@ -38,24 +37,21 @@ typedef struct VkDescriptorImageInfo {
         layout_bindings[binding_num].descriptorCount = 1;
         layout_bindings[binding_num].stageFlags = stage_flags;
 
-        for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-            frame_data->buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
-        }
 
         return *this;
 	}
 
-    DescriptorSet& DescriptorSet::AddTextureBinding(uint32_t binding_num, VkDescriptorType descriptor_type, VkShaderStageFlags stage_flags, VulkanTexture* vulkan_texture)
+    DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VulkanUniformBuffer* vulkan_ubo)
     {
-        if (layout_bindings.size() <= binding_num) {
-            layout_bindings.resize(binding_num + 1);
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+            frame_data->buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
         }
+        
+        return *this;
+    }
 
-        layout_bindings[binding_num].binding = binding_num;
-        layout_bindings[binding_num].descriptorType = descriptor_type;
-        layout_bindings[binding_num].descriptorCount = 1;
-        layout_bindings[binding_num].stageFlags = stage_flags;
-
+    DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VulkanTexture* vulkan_texture)
+    {
         for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             images_info[binding_num] = vulkan_texture->GetImageInfo();
         }

@@ -6,70 +6,23 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type) : vulkan_type(vulkan_type) , ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 2))
+	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
 	{
-		VkDescriptorSetLayoutBinding binding{};
-		binding.binding = 0;
-		binding.descriptorCount = 1;
-		binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		set.Init(vulkan_type, 2)
+			.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+			.AddBindingLayout(6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
 
-		VkDescriptorSetLayoutBinding sampler_layout_binding_1{};
-		sampler_layout_binding_1.binding				= 1;
-		sampler_layout_binding_1.descriptorCount		= 1;
-		sampler_layout_binding_1.descriptorType		= VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_1.pImmutableSamplers	= nullptr;
-		sampler_layout_binding_1.stageFlags			= VK_SHADER_STAGE_FRAGMENT_BIT;
+		ubo->AddData(&data, 0, sizeof(data));
 
-		VkDescriptorSetLayoutBinding sampler_layout_binding_2{};
-		sampler_layout_binding_2.binding = 2;
-		sampler_layout_binding_2.descriptorCount = 1;
-		sampler_layout_binding_2.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_2.pImmutableSamplers = nullptr;
-		sampler_layout_binding_2.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-		VkDescriptorSetLayoutBinding sampler_layout_binding_3{};
-		sampler_layout_binding_3.binding = 3;
-		sampler_layout_binding_3.descriptorCount = 1;
-		sampler_layout_binding_3.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_3.pImmutableSamplers = nullptr;
-		sampler_layout_binding_3.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-		VkDescriptorSetLayoutBinding sampler_layout_binding_4{};
-		sampler_layout_binding_4.binding = 4;
-		sampler_layout_binding_4.descriptorCount = 1;
-		sampler_layout_binding_4.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_4.pImmutableSamplers = nullptr;
-		sampler_layout_binding_4.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-		VkDescriptorSetLayoutBinding sampler_layout_binding_5{};
-		sampler_layout_binding_5.binding = 5;
-		sampler_layout_binding_5.descriptorCount = 1;
-		sampler_layout_binding_5.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_5.pImmutableSamplers = nullptr;
-		sampler_layout_binding_5.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-		VkDescriptorSetLayoutBinding sampler_layout_binding_6{};
-		sampler_layout_binding_6.binding = 6;
-		sampler_layout_binding_6.descriptorCount = 1;
-		sampler_layout_binding_6.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding_6.pImmutableSamplers = nullptr;
-		sampler_layout_binding_6.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		
-
-		std::array<VkDescriptorSetLayoutBinding, 7> bindings = { binding, sampler_layout_binding_1, sampler_layout_binding_2, sampler_layout_binding_3, sampler_layout_binding_4, sampler_layout_binding_5, sampler_layout_binding_6 };
-
-		VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-		set_layout_create_info.bindingCount = 7;
-		set_layout_create_info.pBindings    = bindings.data();
-
-
-		VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
-
-		ubo->AddBinding(0, sizeof(Asset::MaterialData));
-		ubo->SetupDescriptorSet(set_layout);
-		ubo->AddData(0 ,&data, 0, sizeof(data));
-		ubo->UploadToGPU(0);
+		//ubo->AddBinding(0, sizeof(Asset::MaterialData));
+		//ubo->SetupDescriptorSet(set_layout);
+		//ubo->AddData(0 ,&data, 0, sizeof(data));
+		//ubo->UploadToGPU(0);
 	}
 
 	VulkanMaterial::~VulkanMaterial()
@@ -85,62 +38,62 @@ namespace Renderer {
 
 	void VulkanMaterial::Bind()
 	{
-		if(is_changed)
+		if (is_changed)
 		{
-			ubo->AddData(0, &data, 0, sizeof(Asset::MaterialData));
-			ubo->UploadToGPU(0);
-			is_changed = false;
+			//ubo->AddData(0, &data, 0, sizeof(Asset::MaterialData));
+			//ubo->UploadToGPU(0);
+			//is_changed = false;
 		}
-				if (data.has_albedo_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_albedo.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);
-					}
-				}
-				if (data.has_normal_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_normal.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 2);
-					}
-				}
-				if (data.has_metalroughness_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_metalroughness.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
-					}
-				}
-				if (data.has_ao_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 4);
-					}
-				}
-				if(data.has_metalic_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
-					}
-				}
-				if (data.has_roughness_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 5);
-					}
-				}
-				if (data.has_emissive_texture)
-				{
-					if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_emissive.get()); ptr != nullptr)
-					{
-						ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 6);
-					}
-				}
-			
+		if (data.has_albedo_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_albedo.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 1);
+			}
+		}
+		if (data.has_normal_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_normal.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 2);
+			}
+		}
+		if (data.has_metalroughness_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_metalroughness.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
+			}
+		}
+		if (data.has_ao_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 4);
+			}
+		}
+		if (data.has_metalic_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 3);
+			}
+		}
+		if (data.has_roughness_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_ao.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 5);
+			}
+		}
+		if (data.has_emissive_texture)
+		{
+			if (auto* const ptr = dynamic_cast<VulkanTexture*>(texture_emissive.get()); ptr != nullptr)
+			{
+				ptr->UpdateToDescripterSet(ubo->descriptor_set[vulkan_type->current_frame], 6);
+			}
+		}
+
 		ubo->Bind();
 	}
 
@@ -181,8 +134,7 @@ namespace Renderer {
 	}
 	void VulkanMaterial::Cleanup()
 	{
-		if (vulkan_type->device.handle != VK_NULL_HANDLE)
-			vkDestroyDescriptorSetLayout(vulkan_type->device.handle, set_layout, nullptr);
+		set.Cleanup();
 
 		ubo.reset();
 	}

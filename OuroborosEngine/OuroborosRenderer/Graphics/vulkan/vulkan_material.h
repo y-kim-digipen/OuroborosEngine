@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "vulkan_texture.h"
+#include "vulkan_descriptor_set.h"
 
 namespace Renderer {
 
@@ -30,14 +31,12 @@ namespace Renderer {
 		void Cleanup() override;
 
 		bool is_changed = false;
-		VkDescriptorSetLayout set_layout{};
+
 		std::unique_ptr<VulkanUniformBuffer> ubo;
-	
+		DescriptorSet set;
+
 	private:
 		VulkanType* vulkan_type;
-	
-		
-		//TODO: does this should go in parent class ???
 	};
 }
 

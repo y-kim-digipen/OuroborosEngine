@@ -123,9 +123,7 @@ namespace Renderer
         CreateSyncObjects();
         CreateDescriptorPool();
         new_material = new VulkanMaterial(&vulkan_type);
-        light_material = new VulkanMaterial(&vulkan_type);
-
-        
+        light_material = new VulkanMaterial(&vulkan_type);       
     }
 
     // Must be called after vulkan_context.init()
@@ -142,8 +140,8 @@ namespace Renderer
         global_binding_ubo[1].Init(&vulkan_type, 1, sizeof(light_data)); // light data in binding slot 1
 
         global_set.Init(&vulkan_type, 0)
-            .AddBufferBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, &global_binding_ubo[0])
-            .AddBufferBinding(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, &global_binding_ubo[1])
+            .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT).AddBinding(0, &global_binding_ubo[0])
+            .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT).AddBinding(1, &global_binding_ubo[1])
             .Build();
 
         //TODO(Austyn): this might go wrong
@@ -414,7 +412,6 @@ namespace Renderer
                         new_material->InitMaterialData(std::move(material->data));
                         new_material->is_changed = material->flag;
 
-
                         if (new_material->GetMaterialData()->has_albedo_texture == true)
                         {
                             if (auto albedo_texture = texture_manager_->GetTexture(material->texture_albedo_name); albedo_texture != nullptr)
@@ -501,8 +498,6 @@ namespace Renderer
                             }
                         }
 
-                        
-                        
                         new_material->Bind();
 
                         if (material->is_save)
