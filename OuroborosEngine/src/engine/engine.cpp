@@ -115,22 +115,7 @@ namespace OE
 				}
 			});
 
-		ecs_manager.system_storage.RegisterSystemImpl<CubemapSystem>([](OE::ecs_ID ent, float dt, CubemapComponent& cubemap, ShaderComponent& shader)
-			{
-				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
-
-				if (ecs_manager.GetEntity(ent).alive)
-				{
-					//contex
-						// Addqueue(Cubemapcomponent a);
-					context->AddCubemapDrawQueue(&cubemap, &shader);
-
-					//context
-					//texture_manager->Gettexture()
-					//context->shader_manager[].bind
-					//cubemap->Draw();
-				}
-			});
+	
 
 	}
 
@@ -185,7 +170,7 @@ namespace OE
 		window->GetWindowData().RenderContextData->InitGlobalData();
 		
 		//TODO: cubemap init
-		window->GetWindowData().RenderContextData->cubemap;
+		//window->GetWindowData().RenderContextData->cubemap;
 
 		//init engine module
 		SetupGUI();
