@@ -424,7 +424,7 @@ namespace Renderer
 
                 if (!material->is_light)
                 {
-                    if (material->flag)
+                   /* if (material->flag)
                     {
                        
                         new_material->InitMaterialData(std::move(material->data));
@@ -608,13 +608,13 @@ namespace Renderer
                         }
                     }
                     else
-                    {
+                    {*/
                         if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
                         {
                             iter->Bind();
                         }
 	                    
-                    }
+                    //}
                 }
                 else
                 {

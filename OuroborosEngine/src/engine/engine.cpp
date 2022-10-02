@@ -200,6 +200,7 @@ namespace OE
 		
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 
+		ImageAssetManager().LoadAsset("images/null.png");
 		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		InitEssentialAssets();
