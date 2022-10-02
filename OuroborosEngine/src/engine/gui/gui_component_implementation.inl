@@ -263,6 +263,7 @@ namespace OE
 				static float metallic = 0.0, roughness = 0.0, ao = 0.0;
 				static glm::vec3 albedo(0.0);
 
+				static std::string none_texture = "images/null.png";
 				static std::string albedo_texture_name;
 				static std::string normal_texture_name;
 				static std::string metallic_roughness_texture_name;
@@ -329,35 +330,71 @@ namespace OE
 								material_component.texture_albedo_name = albedo_texture_name;
 								material->SetAlbedoTexture(texture_manager->GetTexture(albedo_texture_name));
 							}
+							else
+							{
+								material_component.texture_albedo_name = "";
+								material->SetAlbedoTexture(texture_manager->GetTexture(none_texture));
+							}
 							if (material_data.has_normal_texture)
 							{
 								material_component.texture_normal_name = normal_texture_name;
 								material->SetNormalTexture(texture_manager->GetTexture(normal_texture_name));
+							}
+							else
+							{
+								material_component.texture_normal_name = "";
+								material->SetNormalTexture(texture_manager->GetTexture(none_texture));
 							}
 							if (material_data.has_metalroughness_texture)
 							{
 								material_component.texture_metalroughness_name = metallic_roughness_texture_name;
 								material->SetMetalRoughnessTexture(texture_manager->GetTexture(metallic_roughness_texture_name));
 							}
+							else
+							{
+								material_component.texture_metalroughness_name = "";
+								material->SetMetalRoughnessTexture(texture_manager->GetTexture(none_texture));
+							}
 							if (material_data.has_metalic_texture)
 							{
 								material_component.texture_metalroughness_name = metallic_texture_name;
 								material->SetMetalicTexture(texture_manager->GetTexture(metallic_texture_name));
 							}
+							else
+							{
+								material_component.texture_metalroughness_name = "";
+								material->SetMetalicTexture(texture_manager->GetTexture(none_texture));
+							}
+
 							if (material_data.has_roughness_texture)
 							{
 								material_component.texture_roughness_name = roughness_texture_name;
 								material->SetRoughSmoothnessTexture(texture_manager->GetTexture(roughness_texture_name));
+							}
+							else
+							{
+								material_component.texture_roughness_name = "";
+								material->SetRoughSmoothnessTexture(texture_manager->GetTexture(none_texture));
 							}
 							if (material_data.has_ao_texture)
 							{
 								material_component.texture_ao_name = ao_texture_name;
 								material->SetAOTexture(texture_manager->GetTexture(ao_texture_name));
 							}
+							else
+							{
+								material_component.texture_ao_name = "";
+								material->SetAOTexture(texture_manager->GetTexture(none_texture));
+							}
 							if (material_data.has_emissive_texture)
 							{
 								material_component.texture_emissive_name = emissive_texture_name;
 								material->SetEmissiveTexture(texture_manager->GetTexture(emissive_texture_name));
+							}
+							else
+							{
+								material_component.texture_emissive_name = "";
+								material->SetAOTexture(texture_manager->GetTexture(none_texture));
 							}
 						}
 

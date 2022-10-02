@@ -406,10 +406,10 @@ namespace Renderer
 
                 if (!material->is_light)
                 {
-                    if (material->flag)
-                    {
+                    /*if (material->flag)
+                    {*/
                        
-                        new_material->InitMaterialData(std::move(material->data));
+                        /*new_material->InitMaterialData(std::move(material->data));
                         new_material->is_changed = material->flag;
 
                         if (new_material->GetMaterialData()->has_albedo_texture == true)
@@ -498,9 +498,9 @@ namespace Renderer
                             }
                         }
 
-                        new_material->Bind();
+                        new_material->Bind();*/
 
-                        if (material->is_save)
+                      /*  if (material->is_save)
                         {
                             material_manager->ChangeMaterial(material->name, material->data);
                             if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
@@ -584,16 +584,16 @@ namespace Renderer
                             material->flag = false;
                             material->is_save = false;
                             material_manager->GetMaterial(material->name)->Bind();
-                        }
-                    }
+                        }*/
+                   /* }
                     else
-                    {
+                    {*/
                         if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
                         {
                             iter->Bind();
                         }
 	                    
-                    }
+                    //}
                 }
                 else
                 {
