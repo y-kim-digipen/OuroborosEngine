@@ -39,10 +39,6 @@ struct VulkanImage {
 	VkImageView image_view;
 	VkFormat format;
 };
-struct VulkanFrameBufferAttachment
-{
-	VulkanImage vulkan_image;
-};
 
 struct VulkanSwapchain
 {
@@ -56,14 +52,29 @@ struct VulkanSwapchain
 	std::vector<VkFramebuffer> framebuffers;
 };
 
+using VulkanFrameBufferAttachment = VulkanImage;
+
 struct VulkanDeferredFrameBuffer
 {
 	VulkanFrameBufferAttachment position;
 	VulkanFrameBufferAttachment normal;
 	VulkanFrameBufferAttachment albedo;
+	VulkanFrameBufferAttachment metalic_roughness;
+	VulkanFrameBufferAttachment emissive;
+	VulkanFrameBufferAttachment ao;
+	VulkanFrameBufferAttachment roughness;
 	VulkanFrameBufferAttachment depth;
 	VkFramebuffer frame_buffer;
 	VkRenderPass render_pass;
+
+	int32_t width;
+	int32_t height;
+
+	VkSampler color_sampler;
+	VkCommandBuffer off_screen_command_buffer = VK_NULL_HANDLE;
+	VkSemaphore offscreenSemaphore = VK_NULL_HANDLE;
+	VkDescriptorSetLayout layout;
+	VkDescriptorSet descriptor_set;
 };
 struct QueueFamilyIndices
 {
@@ -120,6 +131,8 @@ struct Vulkan_type
 
 	VkCommandPool command_pool;
 
+	VulkanDeferredFrameBuffer deferred_frame_buffer;
+	
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
 	VkPipelineLayout current_pipeline_layout = VK_NULL_HANDLE;

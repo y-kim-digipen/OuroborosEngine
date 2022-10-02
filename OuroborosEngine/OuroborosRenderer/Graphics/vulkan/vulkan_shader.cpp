@@ -150,8 +150,8 @@ namespace Renderer {
 			}
 		}
 
-		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
-		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+		pipeline_builder.color_blend_attachment = VulkanInitializer_pipeline::PipelineColorBlendAttachmentState();
+		pipeline_builder.input_assembly = VulkanInitializer_pipeline::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 
 		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
@@ -184,9 +184,9 @@ namespace Renderer {
 		pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
 
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
-		pipeline_builder.multisampling =  VulkanInitializer::PipelineMultisampleStateCreateInfo();
-		pipeline_builder.rasterizer = VulkanInitializer::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
-		pipeline_builder.depth_stencil = VulkanInitializer::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
+		pipeline_builder.multisampling =  VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo();
+		pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
+		pipeline_builder.depth_stencil = VulkanInitializer_pipeline::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
 									, .height = static_cast<float>(vulkan_type->swapchain.extent.height),.minDepth = 0.f, .maxDepth = 1.f };

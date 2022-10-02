@@ -46,7 +46,7 @@ namespace Renderer
 	}
     VkPipelineLayout Vulkan_PipelineBuilder::BuildPipeLineLayout(VkDevice device, VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
     {
-        VkPipelineLayoutCreateInfo create_info = VulkanInitializer::PipelineLayoutCreateInfo(p_set_layouts, layout_count, p_constant_ranges, constant_count);
+        VkPipelineLayoutCreateInfo create_info = VulkanInitializer_pipeline::PipelineLayoutCreateInfo(p_set_layouts, layout_count, p_constant_ranges, constant_count);
 		VK_CHECK(vkCreatePipelineLayout(device, &create_info, 0, &pipeline_layout));
 
         return pipeline_layout;

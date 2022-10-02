@@ -93,13 +93,13 @@ namespace Renderer
 
 			VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
 			set_layout_create_info.bindingCount = 1;
-			set_layout_create_info.pBindings = bindings.data();
+			set_layout_create_info.pBindings	= bindings.data();
 			VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+			alloc_info.descriptorPool	  = vulkan_type->descriptor_pool;
 			alloc_info.descriptorSetCount = 1;
-			alloc_info.pSetLayouts = &set_layout;
+			alloc_info.pSetLayouts		  = &set_layout;
 
 			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_sets_pool[i]));
 		}
@@ -129,13 +129,13 @@ namespace Renderer
 
 			VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
 			set_layout_create_info.bindingCount = 1;
-			set_layout_create_info.pBindings = bindings.data();
+			set_layout_create_info.pBindings	= bindings.data();
 			VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type->device.handle, &set_layout_create_info, 0, &set_layout));
 
 			VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-			alloc_info.descriptorPool = vulkan_type->descriptor_pool;
+			alloc_info.descriptorPool	  = vulkan_type->descriptor_pool;
 			alloc_info.descriptorSetCount = 1;
-			alloc_info.pSetLayouts = &set_layout;
+			alloc_info.pSetLayouts		  = &set_layout;
 
 			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set));
 			descriptor_sets_pool.push_back(descriptor_set);

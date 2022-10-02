@@ -31,7 +31,7 @@ namespace Renderer
 		VkPipelineDepthStencilStateCreateInfo depth_stencil;
 	};
 
-	struct VulkanInitializer
+	struct VulkanInitializer_pipeline
 	{
 		static VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo(VkShaderStageFlagBits stage, VkShaderModule shader_module);
 		static VkPipelineVertexInputStateCreateInfo PipelineVertexInputStageCreateInfo();
@@ -43,7 +43,7 @@ namespace Renderer
 		static VkPipelineDepthStencilStateCreateInfo DepthStencilCreateInfo(bool b_depth_test, bool b_depth_write, VkCompareOp compare_op);
 	};
 
-	inline VkPipelineShaderStageCreateInfo VulkanInitializer::PipelineShaderStageCreateInfo(VkShaderStageFlagBits stage,
+	inline VkPipelineShaderStageCreateInfo VulkanInitializer_pipeline::PipelineShaderStageCreateInfo(VkShaderStageFlagBits stage,
 		VkShaderModule shader_module)
 	{
 		VkPipelineShaderStageCreateInfo shader_stage_create_info{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO };
@@ -54,7 +54,7 @@ namespace Renderer
 		return shader_stage_create_info;
 	}
 
-	inline VkPipelineVertexInputStateCreateInfo VulkanInitializer::PipelineVertexInputStageCreateInfo()
+	inline VkPipelineVertexInputStateCreateInfo VulkanInitializer_pipeline::PipelineVertexInputStageCreateInfo()
 	{
 		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
@@ -64,7 +64,7 @@ namespace Renderer
 		return pipeline_vertex_input_state_create_info;
 	}
 
-	inline VkPipelineInputAssemblyStateCreateInfo VulkanInitializer::PipelineInputAssemblyStateCreateInfo(
+	inline VkPipelineInputAssemblyStateCreateInfo VulkanInitializer_pipeline::PipelineInputAssemblyStateCreateInfo(
 		VkPrimitiveTopology topology)
 	{
 		VkPipelineInputAssemblyStateCreateInfo pipeline_input_assembly_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
@@ -75,7 +75,7 @@ namespace Renderer
 
 	}
 
-	inline VkPipelineRasterizationStateCreateInfo VulkanInitializer::PipelineRasterizationStateCreateInfo(
+	inline VkPipelineRasterizationStateCreateInfo VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(
 		VkPolygonMode polygon_mode)
 	{
 		VkPipelineRasterizationStateCreateInfo pipeline_rasterization_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
@@ -95,7 +95,7 @@ namespace Renderer
 		return pipeline_rasterization_state_create_info;
 	}
 
-	inline VkPipelineMultisampleStateCreateInfo VulkanInitializer::PipelineMultisampleStateCreateInfo()
+	inline VkPipelineMultisampleStateCreateInfo VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo()
 	{
 		VkPipelineMultisampleStateCreateInfo pipeline_multisample_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO };
 
@@ -109,7 +109,7 @@ namespace Renderer
 		return pipeline_multisample_state_create_info;
 	}
 
-	inline VkPipelineColorBlendAttachmentState VulkanInitializer::PipelineColorBlendAttachmentState()
+	inline VkPipelineColorBlendAttachmentState VulkanInitializer_pipeline::PipelineColorBlendAttachmentState()
 	{
 		VkPipelineColorBlendAttachmentState pipeline_color_blend_attachment_state{};
 		pipeline_color_blend_attachment_state.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
@@ -118,7 +118,7 @@ namespace Renderer
 		return pipeline_color_blend_attachment_state;
 	}
 
-	inline VkPipelineLayoutCreateInfo VulkanInitializer::PipelineLayoutCreateInfo(VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
+	inline VkPipelineLayoutCreateInfo VulkanInitializer_pipeline::PipelineLayoutCreateInfo(VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
 	{
 		VkPipelineLayoutCreateInfo pipeline_layout_create_info{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
 
@@ -132,7 +132,7 @@ namespace Renderer
 		return pipeline_layout_create_info;
 	}
 
-	inline VkPipelineDepthStencilStateCreateInfo VulkanInitializer::DepthStencilCreateInfo(bool b_depth_test,
+	inline VkPipelineDepthStencilStateCreateInfo VulkanInitializer_pipeline::DepthStencilCreateInfo(bool b_depth_test,
 		bool b_depth_write, VkCompareOp compare_op)
 	{
 		VkPipelineDepthStencilStateCreateInfo info = {};
