@@ -10,6 +10,7 @@
 #include "Graphics/vulkan/vulkan_texture_manager.h"
 namespace OE
 {
+
     ImageAssetManager::~ImageAssetManager()
     {
         for (const auto& val : assets | std::views::values)

@@ -263,7 +263,7 @@ namespace OE
 				static float metallic = 0.0, roughness = 0.0, ao = 0.0;
 				static glm::vec3 albedo(0.0);
 
-				static std::string none_texture = "images/null.png";
+				static const std::string none_texture = "images/null.png";
 				static std::string albedo_texture_name;
 				static std::string normal_texture_name;
 				static std::string metallic_roughness_texture_name;
@@ -325,7 +325,7 @@ namespace OE
 						{
 							auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
 							auto material = material_manager->GetMaterial(material_name_buf);
-							if(material_data.has_albedo_texture)
+							if (material_data.has_albedo_texture)
 							{
 								material_component.texture_albedo_name = albedo_texture_name;
 								material->SetAlbedoTexture(texture_manager->GetTexture(albedo_texture_name));
