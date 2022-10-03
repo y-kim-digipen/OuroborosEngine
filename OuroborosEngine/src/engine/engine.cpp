@@ -193,7 +193,7 @@ namespace OE
 
 		ImageAssetManager().LoadAsset("images/null.png");
 		auto* context_data = (window->GetWindowData().RenderContextData.get());
-		context_data->material_manager->SetNoneTexture(context_data->texture_manager_->GetTexture("image/null.png"));
+		context_data->material_manager->SetNoneTexture(context_data->texture_manager_->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
 
 		//scene_serializer.SerializeScene("test.yaml");

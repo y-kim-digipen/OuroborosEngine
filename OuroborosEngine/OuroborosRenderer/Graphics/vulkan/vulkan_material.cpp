@@ -17,6 +17,16 @@ namespace Renderer {
 			.AddBindingLayout(5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
 			.AddBindingLayout(6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
 
+			texture_albedo = none_texture;
+			texture_normal = none_texture;
+			texture_emissive = none_texture;
+			texture_emissive = none_texture;
+			texture_metallic = none_texture;
+			texture_metalroughness = none_texture;
+			texture_ao = none_texture;
+			texture_rough_smoothness = none_texture;
+	
+
 		set.AddBinding(0, none_texture.get())
 			.AddBinding(1, none_texture.get())
 			.AddBinding(2, none_texture.get())
@@ -26,13 +36,7 @@ namespace Renderer {
 			.AddBinding(6, none_texture.get())
 			.Build();
 
-		SetAlbedoTexture(none_texture);
-		SetMetalRoughnessTexture(none_texture);
-		SetNormalTexture(none_texture);
-		SetMetalicTexture(none_texture);
-		SetRoughSmoothnessTexture(none_texture);
-		SetEmissiveTexture(none_texture);
-		SetAOTexture(none_texture);
+
 
 		ubo->AddData(&data, 0, sizeof(data));
 
