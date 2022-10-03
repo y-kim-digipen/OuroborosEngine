@@ -6,7 +6,7 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
+	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type, std::shared_ptr<Texture> none_texture) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
 	{
 		set.Init(vulkan_type, 2)
 			.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -16,6 +16,14 @@ namespace Renderer {
 			.AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
 			.AddBindingLayout(5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
 			.AddBindingLayout(6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
+
+		SetAlbedoTexture(none_texture);
+		SetMetalRoughnessTexture(none_texture);
+		SetNormalTexture(none_texture);
+		SetMetalicTexture(none_texture);
+		SetRoughSmoothnessTexture(none_texture);
+		SetEmissiveTexture(none_texture);
+		SetAOTexture(none_texture);
 
 		ubo->AddData(&data, 0, sizeof(data));
 

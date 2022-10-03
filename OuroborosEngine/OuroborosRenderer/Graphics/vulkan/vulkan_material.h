@@ -18,7 +18,7 @@ namespace Renderer {
 
 	public:
 		//VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
-		VulkanMaterial(VulkanType* vulkan_type);
+		VulkanMaterial(VulkanType* vulkan_type ,std::shared_ptr<Texture> noneTexutre);
 		~VulkanMaterial() override;
 		void SetAlbedoTexture(std::shared_ptr<Texture> texture) override;
 		void Bind() override;
