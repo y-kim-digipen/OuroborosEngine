@@ -23,7 +23,7 @@ namespace Renderer {
 		std::unordered_map<uint32_t ,VkDescriptorImageInfo> images_info; // texture info is read-only data, so dont need to be in frame data
 
 		std::vector<VkDescriptorSetLayoutBinding> layout_bindings;
-		VkDescriptorSetLayout layout;
+		VkDescriptorSetLayout layout = VK_NULL_HANDLE;
 
 		DescriptorSet& Init(VulkanType* vk_type, uint32_t set_num);
 

@@ -122,8 +122,7 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
-        new_material = new VulkanMaterial(&vulkan_type);
-        light_material = new VulkanMaterial(&vulkan_type);       
+    
     }
 
     // Must be called after vulkan_context.init()
@@ -167,8 +166,6 @@ namespace Renderer
 
     void VulkanContext::Shutdown()
     {
-        delete new_material;
-        delete light_material;
         vkDeviceWaitIdle(vulkan_type.device.handle);
 
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -403,7 +400,7 @@ namespace Renderer
 
             	//TODO: Maybe later, material update should be in update and sorted function
                   
-
+                /*
                 if (!material->is_light)
                 {
 
@@ -420,7 +417,7 @@ namespace Renderer
                     light_material->is_changed = true;
                     light_material->Bind();
                 }
-
+                */
                
 
                 //TODO: Bind Object Descriptor set 3 in future
