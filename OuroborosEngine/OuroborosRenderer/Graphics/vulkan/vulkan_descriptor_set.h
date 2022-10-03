@@ -41,7 +41,7 @@ namespace Renderer {
 		// must call binding layout first
 		DescriptorSet& AddBinding(
 			uint32_t binding_num,
-			VulkanTexture* vulkan_texture
+			Texture* vulkan_texture
 		);
 
 		// build descriptor set layout & create descriptor sets

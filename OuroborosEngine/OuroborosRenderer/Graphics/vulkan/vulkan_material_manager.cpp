@@ -63,7 +63,7 @@ namespace Renderer {
 		return material_map[material_name].get();
 	}
 
-	void VulkanMaterialManager::SetNoneTexture(std::shared_ptr<VulkanTexture> texture)
+	void VulkanMaterialManager::SetNoneTexture(std::shared_ptr<Texture> texture)
 	{
 		m_non_texture = texture;
 	}

@@ -6,7 +6,7 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type, std::shared_ptr<VulkanTexture> none_texture) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
+	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type, std::shared_ptr<Texture> none_texture) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
 	{
 		set.Init(vulkan_type, 2)
 			.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)

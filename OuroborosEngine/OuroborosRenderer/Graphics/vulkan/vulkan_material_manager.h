@@ -17,10 +17,10 @@ namespace Renderer {
 		int ChangeMaterial(std::string material_name, const Asset::MaterialData& data) override;
 		Material* GetMaterial(const std::string& material_name) override;
 		friend class VulkanTextureManager;
-		void SetNoneTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetNoneTexture(std::shared_ptr<Texture> texture) override;
 	private:
 		VulkanType* vulkan_type;
-		std::shared_ptr<VulkanTexture> m_non_texture;
+		std::shared_ptr<Texture> m_non_texture;
 	};
 
 }

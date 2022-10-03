@@ -25,7 +25,7 @@ namespace Renderer {
 			return material_map;
 		}
 		virtual void Cleanup();
-		virtual void SetNoneTexture(std::shared_ptr<VulkanTexture> texture) = 0;
+		virtual void SetNoneTexture(std::shared_ptr<Texture> texture) = 0;
 	protected:
 		std::unordered_map<std::string, std::unique_ptr<Material>> material_map;
 	};
