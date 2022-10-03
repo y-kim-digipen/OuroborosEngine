@@ -173,41 +173,10 @@ namespace OE
 						break;
 					case Renderer::DataType::MAT4:
 						break;
-
-					//case Renderer::DataType::SAMPLER2D:
-						//ImGui::
-						//break;
 					}
 
 					if (is_changed)
 						shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
-					/*
-					if (member_variable.second.type == Renderer::DataType::SAMPLER2D) {
-						if (ImGui::BeginCombo(member_variable.first.c_str(), material_component.texture_albedo_name.c_str()))
-						{
-							for (const auto& key : texture_map | std::views::keys)
-							{
-								const bool selected = material_component.texture_albedo_name == key;
-								if (ImGui::Selectable(key.c_str(), selected))
-								{
-									material_component.texture_albedo_name = key;
-									is_changed |= true;
-
-								}
-								if (selected) {
-									ImGui::SetItemDefaultFocus();
-								}
-							}
-							ImGui::EndCombo();
-						}
-						if (auto texture = texture_manager->GetTexture(material_component.texture_albedo_name); texture)
-						{
-							const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-							dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
-							ImGui::Image(*TextureID, ImVec2(100, 100));
-						}
-					}
-					*/
 				}
 			}
 

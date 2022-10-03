@@ -29,7 +29,7 @@ namespace Renderer {
     DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VulkanUniformBuffer* vulkan_ubo)
     {
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-            frame_data->buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
+            frame_data[i].buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
         }
         
 		if (layout != VK_NULL_HANDLE) {
@@ -96,11 +96,10 @@ namespace Renderer {
         for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &frame_data[i].set));
 
-            std::vector<VkWriteDescriptorSet> set_writes(binding_count);
+            std::vector<VkWriteDescriptorSet> set_writes;
 
             // first(key) = binding_num, second(value) = buffer_info
             for (const auto& buffer_info : frame_data[i].buffers_info) {
-
 
                 VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
                 set_write.dstSet = frame_data[i].set;

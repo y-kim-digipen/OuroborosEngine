@@ -200,7 +200,7 @@ namespace Renderer
 	}
 	VkDescriptorImageInfo VulkanTexture::GetImageInfo() const
 	{
-		return {
+		return VkDescriptorImageInfo{
 			sampler_,
 			image_view_,
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

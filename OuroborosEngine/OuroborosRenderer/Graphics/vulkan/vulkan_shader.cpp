@@ -159,6 +159,9 @@ namespace Renderer {
 			*/
 		}
 
+		// key = binding_num, value = size
+		std::unordered_map<uint32_t, uint32_t> binding_block_size;
+
 		for (const auto& mem : binding_block_members) {
 			mem.first; // name
 			uint32_t binding_num = mem.second.binding_num;
@@ -172,22 +175,31 @@ namespace Renderer {
 				}
 			}
 			else { // buffers
+				binding_block_size[binding_num] += mem.second.size;
+			}
 
-				if (uniform_buffer_objects.find(binding_num) == uniform_buffer_objects.end()) {
-					uniform_buffer_objects[binding_num] = std::make_unique<VulkanUniformBuffer>(
-						vulkan_type,
-						binding_num,
-						mem.second.size
-						);
-				}
+		}
 
+		for (const auto& itr : binding_block_size) {
+			if (uniform_buffer_objects.find(itr.first) == uniform_buffer_objects.end()) {
+				uniform_buffer_objects[itr.first] = std::make_unique<VulkanUniformBuffer>(
+					vulkan_type,
+					itr.first,
+					itr.second
+					);
+			}
+		}
+
+		for (const auto& mem : binding_block_members) {
+			uint32_t binding_num = mem.second.binding_num;
+
+			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end())
 				uniform_buffer_objects[binding_num]->AddMember(
 					mem.first,
 					mem.second.type,
 					mem.second.size,
 					mem.second.offset
 				);
-			}
 
 		}
 
@@ -436,7 +448,7 @@ namespace Renderer {
 	}
 
 
-	void* VulkanShader::GetMemberVariable(const std::string& name)
+	void* VulkanShader::GetMemberVariable(const std::string& name, uint32_t binding_num /*= -1*/)
 	{
 		if (binding_block_members.find(name) != binding_block_members.end()) {
 			uint32_t binding_num = binding_block_members[name].binding_num;

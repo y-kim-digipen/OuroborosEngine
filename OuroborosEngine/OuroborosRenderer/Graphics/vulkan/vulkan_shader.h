@@ -82,7 +82,7 @@ namespace Renderer {
 		//TODO: texture
 		//void SetUniformValue(const char* name, VulkanTexture* texture);
 
-		void* GetMemberVariable(const std::string& name);
+		void* GetMemberVariable(const std::string& name, uint32_t binding_num = -1);
 
 		DescriptorSet shader_set; // set num 1
 		std::map<uint32_t ,std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo
