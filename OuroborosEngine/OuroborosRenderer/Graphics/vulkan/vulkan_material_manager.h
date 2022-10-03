@@ -20,7 +20,7 @@ namespace Renderer {
 		void SetNoneTexture(std::shared_ptr<Texture> texture);
 	private:
 		VulkanType* vulkan_type;
-		std::shared_ptr<Texture> m_non_texture;
+		std::shared_ptr<VulkanTexture> m_non_texture;
 	};
 
 }
