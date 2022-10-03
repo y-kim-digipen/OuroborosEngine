@@ -17,6 +17,7 @@ namespace Renderer {
 			.AddBindingLayout(5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
 			.AddBindingLayout(6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
 
+		
 		SetAlbedoTexture(none_texture);
 		SetMetalRoughnessTexture(none_texture);
 		SetNormalTexture(none_texture);

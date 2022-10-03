@@ -6,7 +6,7 @@
 #include "engine_settings.h"
 #include "Graphics/vulkan/vulkan_shader.h"
 #include "gui/gui_component_panel.h"
-
+#include "../OuroborosRenderer/Graphics/texture.h"
 namespace OE
 {
 	void Engine::SetupGUI()
