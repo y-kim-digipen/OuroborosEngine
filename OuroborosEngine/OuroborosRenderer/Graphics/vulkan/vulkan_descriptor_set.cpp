@@ -10,21 +10,6 @@ namespace Renderer {
         return *this;
     }
 
-    /*
-    typedef struct VkDescriptorBufferInfo {
-    VkBuffer        buffer;
-    VkDeviceSize    offset;
-    VkDeviceSize    range;
-} VkDescriptorBufferInfo;
-
-typedef struct VkDescriptorImageInfo {
-    VkSampler        sampler;
-    VkImageView      imageView;
-    VkImageLayout    imageLayout;
-} VkDescriptorImageInfo;
-    
-    */
-
     DescriptorSet& DescriptorSet::AddBindingLayout(uint32_t binding_num, VkDescriptorType descriptor_type, VkShaderStageFlags stage_flags)
     {
 
@@ -47,6 +32,22 @@ typedef struct VkDescriptorImageInfo {
             frame_data->buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
         }
         
+		if (layout != VK_NULL_HANDLE) {
+            for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+
+                frame_data[i].buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
+
+				VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                set_write.dstSet = frame_data[i].set;
+                set_write.dstBinding = binding_num;
+                set_write.descriptorCount = 1;
+                set_write.descriptorType = layout_bindings[binding_num].descriptorType;
+                set_write.pBufferInfo = &frame_data[i].buffers_info[binding_num];
+
+				vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
+            }
+        }
+
         return *this;
     }
 
@@ -55,6 +56,25 @@ typedef struct VkDescriptorImageInfo {
         for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             images_info[binding_num] = vulkan_texture->GetImageInfo();
         }
+
+		if (layout != VK_NULL_HANDLE) {
+            images_info[binding_num] = vulkan_texture->GetImageInfo();
+
+            for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+
+				VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                set_write.dstSet = frame_data[i].set;
+                set_write.dstBinding = binding_num;
+                set_write.descriptorCount = 1;
+                set_write.descriptorType = layout_bindings[binding_num].descriptorType;
+                set_write.pImageInfo = &images_info[binding_num];
+
+				vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
+            }
+
+
+        }
+
 
         return *this;
     }
@@ -100,7 +120,6 @@ typedef struct VkDescriptorImageInfo {
                 set_write.descriptorCount = 1;
                 set_write.descriptorType = layout_bindings[image_info.first].descriptorType;
                 set_write.pImageInfo = &image_info.second;
-
                 set_writes.push_back(set_write);
             }
 

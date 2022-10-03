@@ -293,7 +293,10 @@ namespace Renderer
 
 		char* mem = (char*)data + offset;
 		memcpy_s(mem, block_info.size, data_, buffer_size);
-		buffer[vulkan_type->current_frame]->UploadData(data_, buffer_size, offset);
+
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+			buffer[i]->UploadData(data_, buffer_size, offset);
+		}
 
 		return 0;
 	}
