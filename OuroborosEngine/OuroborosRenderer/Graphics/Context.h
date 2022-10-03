@@ -86,7 +86,7 @@ namespace Renderer
 		GLFWwindow* window;
 		
 		// global data ( scene data )
-		std::vector <VulkanUniformBuffer> global_binding_ubo;
+		std::vector<std::unique_ptr<VulkanUniformBuffer>> global_binding_ubo;
 		DescriptorSet global_set;
 		// key : entity id
 		// value : array index (in global_data)

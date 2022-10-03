@@ -135,12 +135,12 @@ namespace Renderer
         const uint32_t binding_count = 2;
 
 		global_binding_ubo.resize(binding_count);
-        global_binding_ubo[0].Init(&vulkan_type, 0, sizeof(global_data)); // camera data in binding slot 0
-        global_binding_ubo[1].Init(&vulkan_type, 1, sizeof(light_data)); // light data in binding slot 1
+        global_binding_ubo[0] = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(global_data)); // camera data in binding slot 0
+        global_binding_ubo[1] = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 1, sizeof(light_data)); // light data in binding slot 1
 
         global_set.Init(&vulkan_type, 0)
-            .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT).AddBinding(0, &global_binding_ubo[0])
-            .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT).AddBinding(1, &global_binding_ubo[1])
+            .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT).AddBinding(0, global_binding_ubo[0].get())
+            .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT).AddBinding(1, global_binding_ubo[1].get())
             .Build();
 
         //TODO(Austyn): this might go wrong
@@ -153,8 +153,8 @@ namespace Renderer
     {
         Context::UpdateGlobalData();
 
-        global_binding_ubo[0].AddData((void*)&global_data, 0, sizeof(global_data));
-        global_binding_ubo[1].AddData((void*)&light_data, 0, sizeof(light_data));
+        global_binding_ubo[0]->AddData((void*)&global_data, 0, sizeof(global_data));
+        global_binding_ubo[1]->AddData((void*)&light_data, 0, sizeof(light_data));
     }
 
 	// Must be called after init_frame()
@@ -190,7 +190,7 @@ namespace Renderer
         // delete global data
         global_set.Cleanup();
         for (auto& global_ubo : global_binding_ubo) {
-            global_ubo.Cleanup();
+            global_ubo->Cleanup();
         }
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
