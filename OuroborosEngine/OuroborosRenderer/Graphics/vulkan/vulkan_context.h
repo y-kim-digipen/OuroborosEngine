@@ -34,6 +34,7 @@ namespace Renderer {
 
 		VulkanMaterial* new_material;
 		VulkanMaterial* light_material;
+		
 	private:
 		void CreateSurface();
 		void CreateSwapChain();

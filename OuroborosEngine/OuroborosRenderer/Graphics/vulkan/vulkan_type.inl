@@ -6,14 +6,22 @@
 
 #include <vector>
 #include <cassert>
+#include <memory>
 #include <optional>
 #include <vk_mem_alloc.h>
+
+
 
 #define VK_CHECK(call) \
 	do {	\
 		VkResult result_ = call; \
 		assert(result_ == VK_SUCCESS); \
 	} while(0)
+
+namespace Renderer
+{
+	class VulkanShader;
+}
 
 constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
@@ -59,10 +67,8 @@ struct VulkanDeferredFrameBuffer
 	VulkanFrameBufferAttachment position;
 	VulkanFrameBufferAttachment normal;
 	VulkanFrameBufferAttachment albedo;
-	VulkanFrameBufferAttachment metalic_roughness;
+	VulkanFrameBufferAttachment metalic_roughness_ao;
 	VulkanFrameBufferAttachment emissive;
-	VulkanFrameBufferAttachment ao;
-	VulkanFrameBufferAttachment roughness;
 	VulkanFrameBufferAttachment depth;
 	VkFramebuffer frame_buffer;
 	VkRenderPass render_pass;
@@ -75,6 +81,7 @@ struct VulkanDeferredFrameBuffer
 	VkSemaphore offscreenSemaphore = VK_NULL_HANDLE;
 	VkDescriptorSetLayout layout;
 	VkDescriptorSet descriptor_set;
+	std::shared_ptr<Renderer::VulkanShader> deferred_shader;
 };
 struct QueueFamilyIndices
 {

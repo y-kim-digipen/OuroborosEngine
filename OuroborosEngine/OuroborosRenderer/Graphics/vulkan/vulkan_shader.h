@@ -62,6 +62,7 @@ namespace Renderer {
 		~VulkanShader();
 
 		void Init(ShaderConfig* config);
+		void LightPassInit(ShaderConfig* config);
 		void Bind();
 		void ShutDown();
 		void Reload();

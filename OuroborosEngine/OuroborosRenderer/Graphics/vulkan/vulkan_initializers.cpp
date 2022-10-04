@@ -124,4 +124,22 @@ namespace Renderer
 		write_descriptor_set.descriptorCount = descriptor_count;
 		return write_descriptor_set;
 	}
+
+	VkDescriptorSetLayoutCreateInfo VulkanInitializer::DescriptorSetLayoutCreateInfo(std::vector<VkDescriptorSetLayoutBinding>& bindings)
+	{
+		VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info{};
+		descriptor_set_layout_create_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		descriptor_set_layout_create_info.pBindings = bindings.data();
+		descriptor_set_layout_create_info.bindingCount = static_cast<uint32_t>(bindings.size());
+		return descriptor_set_layout_create_info;
+	}
+
+	VkPipelineLayoutCreateInfo VulkanInitializer::pipelineLayoutCreateInfo(const VkDescriptorSetLayout* p_set_layouts,uint32_t set_layout_count)
+	{
+		VkPipelineLayoutCreateInfo pipeline_layout_create_info{};
+		pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+		pipeline_layout_create_info.setLayoutCount = set_layout_count;
+		pipeline_layout_create_info.pSetLayouts = p_set_layouts;
+		return pipeline_layout_create_info;
+	}
 }

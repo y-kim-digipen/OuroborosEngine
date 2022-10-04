@@ -54,6 +54,8 @@ namespace Renderer
     void CleanupSwapChain();
     int RateDeviceSuitability(VkPhysicalDevice device);
 
+
+
     bool IsDevicesSuitable(VkPhysicalDevice device);
     QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
     bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
@@ -70,6 +72,7 @@ namespace Renderer
     int CreateOffScreenFrameBuffer();
     int SetupDescriptorSet();
     int CreateDeferredShader();
+    int CreateDeferredDescriptorSetLayout();
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -1460,9 +1463,8 @@ namespace Renderer
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.normal);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.albedo);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.emissive);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.ao);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.metalic_roughness);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.roughness);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.metalic_roughness_ao);
+
      
         VkFormat attachment_depth_format;
         VkBool32 valid_depth_format = VulkanInitializer::GetSupportedDepthFormat(vulkan_type.device.physical_device, &attachment_depth_format);
@@ -1496,19 +1498,18 @@ namespace Renderer
         attachment_descriptions[1].format = vulkan_type.deferred_frame_buffer.normal.format;
         attachment_descriptions[2].format = vulkan_type.deferred_frame_buffer.albedo.format;
         attachment_descriptions[3].format = vulkan_type.deferred_frame_buffer.emissive.format;
-        attachment_descriptions[4].format = vulkan_type.deferred_frame_buffer.ao.format;
-        attachment_descriptions[5].format = vulkan_type.deferred_frame_buffer.metalic_roughness.format;
-        attachment_descriptions[6].format = vulkan_type.deferred_frame_buffer.roughness.format;
-        attachment_descriptions[7].format = vulkan_type.deferred_frame_buffer.depth.format;
+        attachment_descriptions[4].format = vulkan_type.deferred_frame_buffer.metalic_roughness_ao.format;
+        attachment_descriptions[5].format = vulkan_type.deferred_frame_buffer.depth.format;
 
         std::vector<VkAttachmentReference> color_references;
 
-        for(uint32_t idx =0; idx < 7; idx++)
+        for(uint32_t idx =0; idx < 5; idx++)
         {
             color_references.push_back({idx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL});
         }
 
-        VkAttachmentReference depth_reference{6,VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
+        // depth attachment
+        VkAttachmentReference depth_reference{5,VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
 
         VkSubpassDescription subpass{};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -1545,7 +1546,7 @@ namespace Renderer
 
         VK_CHECK(vkCreateRenderPass(vulkan_type.device.handle, &render_pass_info, nullptr, &vulkan_type.deferred_frame_buffer.render_pass));
 
-        std::array<VkImageView, 8> attachments;
+        std::array<VkImageView, 6> attachments;
 
         auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
 
@@ -1553,10 +1554,8 @@ namespace Renderer
         attachments[1] = deferred_framebuffer.normal.image_view;
         attachments[2] = deferred_framebuffer.albedo.image_view;
         attachments[3] = deferred_framebuffer.emissive.image_view;
-        attachments[4] = deferred_framebuffer.ao.image_view;
-        attachments[5] = deferred_framebuffer.metalic_roughness.image_view;
-        attachments[6] = deferred_framebuffer.roughness.image_view;
-        attachments[7] = deferred_framebuffer.depth.image_view;
+        attachments[4] = deferred_framebuffer.metalic_roughness_ao.image_view;
+        attachments[5] = deferred_framebuffer.depth.image_view;
 
         VkFramebufferCreateInfo framebuffer_create_info{};
         framebuffer_create_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -1597,13 +1596,11 @@ namespace Renderer
 
     	auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
 
-        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_normal   = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_albedo   = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_ao       = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_metalic_roughness = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        VkDescriptorImageInfo tex_descriptor_roughness = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.roughness.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_position             = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_normal               = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_albedo               = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_emissive             = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 
         VK_CHECK(vkAllocateDescriptorSets(vulkan_type.device.handle, &allocate_info, &vulkan_type.deferred_frame_buffer.descriptor_set));
@@ -1611,16 +1608,14 @@ namespace Renderer
         write_descriptor_sets =
         {
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,1, &tex_descriptor_position),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &tex_descriptor_normal),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &tex_descriptor_normal),
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &tex_descriptor_albedo),
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &tex_descriptor_emissive),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_ao),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 6, &tex_descriptor_metalic_roughness),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,7,&tex_descriptor_roughness),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_metalic_roughness_ao),
+
         };
 
         vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
-
 
 
 
@@ -1629,10 +1624,40 @@ namespace Renderer
 
     int CreateDeferredShader()
     {
+        ShaderConfig shader_config = { "shaders/shader_geometrypass", {Renderer::E_StageType::VERTEX_SHADER,
+                        Renderer::E_StageType::FRAGMENT_SHADER }, 2 };
 
 
+        auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
+        shader = std::make_shared<VulkanShader>(&vulkan_type);
+        shader->Init(&shader_config);
 
 
+        return 0;
+
+	}
+
+
+    int CreateDeferredDescriptorSetLayout()
+    {
+        std::vector<VkDescriptorSetLayoutBinding> set_layout_bindings =
+        {
+			VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT,1),
+        	VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,2),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,3),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,4),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,5),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,6),
+            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,7),
+        };
+
+        VkDescriptorSetLayoutCreateInfo  descriptor_layout = VulkanInitializer::DescriptorSetLayoutCreateInfo(set_layout_bindings);
+        VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &descriptor_layout, nullptr, &vulkan_type.deferred_frame_buffer.layout));
+
+        VkPipelineLayoutCreateInfo pipeline_layout_create_info = VulkanInitializer::pipelineLayoutCreateInfo(&vulkan_type.deferred_frame_buffer.layout, 1);
+        VK_CHECK(vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_create_info, nullptr, &vulkan_type.deferred_frame_buffer.deferred_shader->pipeline_layout));
+
+        return 0;
     }
 }
 
