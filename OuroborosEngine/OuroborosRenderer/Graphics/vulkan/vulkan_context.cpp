@@ -181,17 +181,18 @@ namespace Renderer
         {
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
+
+		// delete global data
+        global_set.Cleanup();
+        for (auto& global_ubo : global_binding_ubo) {
+            global_ubo->Cleanup();
+        }
+
         //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
         mesh_manager_->Cleanup();
         material_manager->Cleanup();
         shader_manager->Cleanup();
         texture_manager_->Cleanup();
-
-        // delete global data
-        global_set.Cleanup();
-        for (auto& global_ubo : global_binding_ubo) {
-            global_ubo->Cleanup();
-        }
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 

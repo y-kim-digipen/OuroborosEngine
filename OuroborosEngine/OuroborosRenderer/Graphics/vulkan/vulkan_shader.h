@@ -121,6 +121,7 @@ namespace Renderer {
 		VkDescriptorSetLayout descriptor_set_layouts[max_set_count];
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
 		std::vector<VkPushConstantRange> push_constant_ranges;
+		std::shared_ptr<VulkanTexture> default_texture;
 	};
 }
 #endif // !VULKAN_SHADER_H

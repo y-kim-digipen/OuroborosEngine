@@ -171,6 +171,9 @@ namespace Renderer {
 		image_asset.height = 1;
 		image_asset.channel = 1;
 
+		default_texture = std::make_shared<VulkanTexture>(vulkan_type);
+		default_texture->UploadData(image_asset);
+
 		for (const auto& mem : binding_block_members) {
 			mem.first; // name
 			uint32_t binding_num = mem.second.binding_num;
@@ -180,8 +183,7 @@ namespace Renderer {
 
 			if (mem.second.type == DataType::SAMPLER2D) { //textures
 				if (uniform_texture_objects.find(binding_num) == uniform_texture_objects.end()) {
-					uniform_texture_objects[binding_num] = std::make_shared<VulkanTexture>(vulkan_type);
-					uniform_texture_objects[binding_num]->UploadData(image_asset);
+					uniform_texture_objects[binding_num] = default_texture;
 				}
 			}
 			else { // buffers
@@ -304,13 +306,13 @@ namespace Renderer {
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-		//TODO: bind shader descriptor set 1
 		shader_set.Bind();
 	}
 
 	void VulkanShader::ShutDown()
 	{
-		//TODO: destroy ubo
+		default_texture.reset();
+
 		for (auto& ubo : uniform_buffer_objects) {
 			ubo.second.reset();
 		}
