@@ -17,7 +17,7 @@ namespace OE
         {
             stbi_image_free(val.second.image);
         }
-
+   
     }
 
     int ImageAssetManager::LoadAsset(const std::string& file_name)

@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-#include "vulkan_texture.h"
+#include "../texture.h"
 
 namespace Renderer
 {
-	VulkanTextureManager::VulkanTextureManager(Vulkan_type* vulkan_type) :vulkan_type(vulkan_type), vulkan_texture_imgui_descriptor_pool(vulkan_type)
+	VulkanTextureManager::VulkanTextureManager(VulkanType* vulkan_type) :vulkan_type(vulkan_type), vulkan_texture_imgui_descriptor_pool(vulkan_type)
 	{
 		
 	}
@@ -51,7 +51,7 @@ namespace Renderer
 
 	}
 
-	VulkanTextureImguiDescriptorPool::VulkanTextureImguiDescriptorPool(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type), descriptor_sets_pool(10, VkDescriptorSet())
+	VulkanTextureImguiDescriptorPool::VulkanTextureImguiDescriptorPool(VulkanType* vulkan_type) : vulkan_type(vulkan_type), descriptor_sets_pool(10, VkDescriptorSet())
 	{
 
 	}

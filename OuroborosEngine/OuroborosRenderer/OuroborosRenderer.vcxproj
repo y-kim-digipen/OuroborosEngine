@@ -135,6 +135,7 @@
     </ClInclude>
     <ClInclude Include="Graphics\vulkan\vulkan_context.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_buffer.h" />
+    <ClInclude Include="Graphics\vulkan\vulkan_descriptor_set.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_imgui_manager.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_initializers.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_material.h" />
@@ -142,7 +143,6 @@
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
-    <ClInclude Include="Graphics\vulkan\vulkan_texture.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_texture_manager.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Graphics\mesh.h" />
@@ -166,6 +166,7 @@
     <ClCompile Include="Graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
     <ClCompile Include="Graphics\vulkan\vulkan_context.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_buffer.cpp" />
+    <ClCompile Include="Graphics\vulkan\vulkan_descriptor_set.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_imgui_manager.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_initializers.cpp" />
     <ClCompile Include="Graphics\vulkan\vulkan_material.cpp" />

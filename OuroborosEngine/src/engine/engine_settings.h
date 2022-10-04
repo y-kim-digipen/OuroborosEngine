@@ -18,8 +18,7 @@ using ComponentList = OE::ECS::TypeList<
 	MaterialComponent,
 	TagComponent,
 	LightComponent,
-	ScriptComponent,
-	CubemapComponent
+	ScriptComponent
 >;
 
 using PhysicsSystem		= OE::ECS::System<TransformComponent, VelocityComponent>;
@@ -27,9 +26,7 @@ using TestSystem		= OE::ECS::System<BoolWrapperComponent>;
 using DrawSystem		= OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
 using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent>;
 using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
-using CubemapSystem		= OE::ECS::System<CubemapComponent, ShaderComponent>;
-
-using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem,  DrawSystem, LightSystem, ScriptingSystem, CubemapSystem>;
+using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem,  DrawSystem, LightSystem, ScriptingSystem>;
 
 using Signature0 = OE::ECS::types::Signature<TransformComponent, VelocityComponent>;
 using Signature1 = OE::ECS::types::Signature<LifeTimeComponent, MeshComponent>;

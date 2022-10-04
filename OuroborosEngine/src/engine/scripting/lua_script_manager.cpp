@@ -115,7 +115,7 @@ namespace OE
 				"GetShaderComponent"		, &ECS_Manager::GetComponent<ShaderComponent>,
 				"GetMaterialComponent"		, &ECS_Manager::GetComponent<MaterialComponent>,
 				"GetTagComponent"			, &ECS_Manager::GetComponent<TagComponent>,
-				"GetLightComponent"			, &ECS_Manager::GetComponent<LightComponent>,	
+				"GetLightComponent"			, &ECS_Manager::GetComponent<LightComponent>,
 				
 				"HasTransformComponent"		, &ECS_Manager::HasComponent<TransformComponent>,
 				"HasVelocityComponent"		, &ECS_Manager::HasComponent<VelocityComponent>,
@@ -215,7 +215,6 @@ namespace OE
 				, "init", &LightComponent::init
 				, "data", &LightComponent::data
 				);
-
 		}
 
 		void LuaScriptManager::RegisterGlobalFunction(sol::state& state)

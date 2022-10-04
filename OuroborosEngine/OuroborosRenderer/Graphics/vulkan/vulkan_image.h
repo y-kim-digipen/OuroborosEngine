@@ -3,12 +3,12 @@
 
 #include "vulkan_type.inl"
 
-struct Vulkan_type;
+struct VulkanType;
 struct VulkanImage;
 
 namespace Renderer {
     void CreateImage(
-        Vulkan_type* vulkan_type,
+        VulkanType* vulkan_type,
         VulkanImage* out_image,
         VkImageType image_type,
         uint32_t width,
@@ -21,8 +21,8 @@ namespace Renderer {
         VkImageAspectFlags aspect_flags
     );
 
-	void CreateImageView(Vulkan_type* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags);
-    void DestroyImage(Vulkan_type* vulkan_type, VulkanImage* image);
+	void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags);
+    void DestroyImage(VulkanType* vulkan_type, VulkanImage* image);
 }
 #endif // !VULKAN_IMAGE_H
 

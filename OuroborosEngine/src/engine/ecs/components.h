@@ -52,16 +52,6 @@ struct ShaderComponent : Component
 	std::string name = "shader";
 };
 
-struct CubemapComponent : Component
-{
-	std::string texture_front_name = "";
-	std::string texture_back_name = "";
-	std::string texture_top_name = "";
-	std::string texture_bottom_name = "";
-	std::string texture_left_name = "";
-	std::string texture_right_name = "";
-};
-
 struct BoolWrapperComponent : Component
 {
 	bool bool_type;

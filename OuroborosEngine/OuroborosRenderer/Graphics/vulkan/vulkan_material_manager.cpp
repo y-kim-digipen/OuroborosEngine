@@ -4,9 +4,11 @@
 
 #include <iostream>
 
+#include "vulkan_texture_manager.h"
+
 namespace Renderer {
 
-	VulkanMaterialManager::VulkanMaterialManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanMaterialManager::VulkanMaterialManager(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
@@ -23,12 +25,12 @@ namespace Renderer {
 			std::cout << material_name << " already exists\n";
 			return -1;
 		}
-		
-		material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type);
+
+		material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type,m_non_texture);
 		material_map[material_name]->InitMaterialData(std::move(material_data));
 		dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
+
 		return 0;
-		
 	}
 
 	int VulkanMaterialManager::ChangeMaterial(std::string material_name,const Asset::MaterialData& data)
@@ -36,14 +38,13 @@ namespace Renderer {
 		if (auto iter = material_map.find(material_name); iter != material_map.end())
 		{
 			iter->second->InitMaterialData(data);
-			
 		}
 		else
 		{
-			material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type);
+			material_map[material_name] = std::make_unique<VulkanMaterial>(vulkan_type, m_non_texture);
 			material_map[material_name]->InitMaterialData(data);
 		}
-			dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
+		dynamic_cast<VulkanMaterial*>(material_map[material_name].get())->is_changed = true;
 
 		return 0;
 	}
@@ -60,5 +61,10 @@ namespace Renderer {
 		}
 
 		return material_map[material_name].get();
+	}
+
+	void VulkanMaterialManager::SetNoneTexture(std::shared_ptr<VulkanTexture> texture)
+	{
+		m_non_texture = texture;
 	}
 }

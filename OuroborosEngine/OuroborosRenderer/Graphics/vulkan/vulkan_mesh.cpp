@@ -11,7 +11,7 @@ namespace Renderer {
       glm::vec3 padding;
     };
 
-    VulkanMesh::VulkanMesh(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+    VulkanMesh::VulkanMesh(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
     {
     }
     VulkanMesh::~VulkanMesh()

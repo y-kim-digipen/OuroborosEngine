@@ -6,7 +6,7 @@
 #include "engine_settings.h"
 #include "Graphics/vulkan/vulkan_shader.h"
 #include "gui/gui_component_panel.h"
-
+#include "../OuroborosRenderer/Graphics/texture.h"
 namespace OE
 {
 	void Engine::SetupGUI()
@@ -114,9 +114,6 @@ namespace OE
 					}
 				}
 			});
-
-	
-
 	}
 
 	void Engine::InitEssentialAssets()
@@ -154,24 +151,7 @@ namespace OE
 
 		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
 		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
-
-		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-		camera.data.projection[1][1] *= -1;
-		camera.data.view = camera.GetCameraMat();
-		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
-
-		Renderer::ShaderConfig shader_config3{
-					"shader",
-			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
-
-		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
-
-		window->GetWindowData().RenderContextData->InitGlobalData();
 		
-		//TODO: cubemap init
-		//window->GetWindowData().RenderContextData->cubemap;
-
 		//init engine module
 		SetupGUI();
 		delta_timer.Init();
@@ -197,13 +177,29 @@ namespace OE
 				}
 			});
 
-		
-		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
-
 		ImageAssetManager().LoadAsset("images/null.png");
+		auto* context_data = (window->GetWindowData().RenderContextData.get());
+		context_data->material_manager->SetNoneTexture(context_data->texture_manager_->GetTexture("images/null.png"));
+		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
+
 		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		InitEssentialAssets();
+
+		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		camera.data.projection[1][1] *= -1;
+		camera.data.view = camera.GetCameraMat();
+		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
+
+		Renderer::ShaderConfig shader_config3{
+					"shader",
+			{	Renderer::E_StageType::VERTEX_SHADER,
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
+
+		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
+
+		window->GetWindowData().RenderContextData->InitGlobalData();
+
 
 		//Profiler::Start();
 	}

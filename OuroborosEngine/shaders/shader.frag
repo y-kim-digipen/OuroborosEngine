@@ -11,6 +11,8 @@ layout(set = 1, binding = 0) uniform Test {
     float c3;
 } oout;
 
+layout(set = 1, binding = 1) uniform sampler2D texture_test;
+
 float test_att = 0.001;
 
 

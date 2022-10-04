@@ -8,7 +8,7 @@
 #include "../common/assets.h"
 #include "vulkan/vulkan_mesh.h"
 
-struct Vulkan_type;
+struct VulkanType;
 
 namespace Renderer
 {
@@ -16,14 +16,14 @@ namespace Renderer
 	class VulkanMeshManager 
 	{
 	public:
-		VulkanMeshManager(Vulkan_type* vulkan_type);
+		VulkanMeshManager(VulkanType* vulkan_type);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
 		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh);
 		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) ;
 		int DeleteMeshData(const std::string& mesh_name);
 		void Cleanup();
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 		std::unordered_map<std::string, std::unique_ptr<VulkanMesh>> mesh_map;
 	};
 }
