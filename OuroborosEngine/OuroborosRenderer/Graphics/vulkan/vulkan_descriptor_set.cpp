@@ -57,9 +57,7 @@ namespace Renderer {
     {
         vkQueueWaitIdle(vulkan_type->device.graphics_queue);
 
-        for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-            images_info[binding_num] = (vulkan_texture)->GetImageInfo();
-        }
+        images_info[binding_num] = (vulkan_texture)->GetImageInfo();
 
 		if (layout != VK_NULL_HANDLE) {
             images_info[binding_num] = (vulkan_texture)->GetImageInfo();
@@ -75,8 +73,6 @@ namespace Renderer {
 
 				vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
             }
-
-
         }
 
 
@@ -135,7 +131,7 @@ namespace Renderer {
         vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer,
             VK_PIPELINE_BIND_POINT_GRAPHICS,
             vulkan_type->current_pipeline_layout,
-            0,
+            num,
             1,
             &frame_data[vulkan_type->current_frame].set,
             0,

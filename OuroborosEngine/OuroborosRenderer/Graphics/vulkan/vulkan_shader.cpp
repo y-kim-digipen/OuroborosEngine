@@ -151,14 +151,6 @@ namespace Renderer {
 			alloc_info.descriptorSetCount = 1;
 			alloc_info.pSetLayouts = &descriptor_set_layouts[i];
 
-
-
-			/*
-			// set ubo descriptor set only for shader descriptor set #1
-			if (binding_count != 0 && (i == 1)) {
-				((VulkanUniformBuffer*)uniform_buffer_object.get())->SetupDescriptorSet(descriptor_set_layouts[i]);
-			}
-			*/
 		}
 
 		// key = binding_num, value = size
