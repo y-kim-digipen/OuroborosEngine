@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "vulkan_texture.h"
+#include "../texture.h"
 
 namespace Renderer
 {

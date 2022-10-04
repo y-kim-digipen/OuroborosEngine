@@ -251,6 +251,7 @@ namespace Renderer
 		this->vulkan_type = vulkan_type;
 		block_info.binding = binding_num;
 		block_info.size = size;
+		//block_info.size = pad_uniform_buffer_size(vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment, size);
 
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
@@ -313,6 +314,8 @@ namespace Renderer
 
 	void VulkanUniformBuffer::AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset)
 	{
+		//size = block_info.size = pad_uniform_buffer_size(vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment, size);
+
 		if (size + offset > block_info.size) {
 			std::cout << name << " member data is out of a uniform buffer size range" << std::endl;
 			return;
@@ -324,5 +327,15 @@ namespace Renderer
 			member_vars[name].size = size;
 			member_vars[name].offset = offset;
 		}
+	}
+	size_t pad_uniform_buffer_size(size_t min_ubo_alignment, size_t originalSize)
+	{
+		size_t alignedSize = originalSize;
+
+		if (min_ubo_alignment > 0) {
+			alignedSize = (alignedSize + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
+		}
+
+		return alignedSize;
 	}
 }

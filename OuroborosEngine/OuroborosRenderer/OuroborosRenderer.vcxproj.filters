@@ -119,9 +119,6 @@
     <ClInclude Include="Graphics\texture.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\vulkan\vulkan_texture.h">
-      <Filter>Source Files\Graphics\vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\texture_manager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>

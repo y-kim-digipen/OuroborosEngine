@@ -151,20 +151,6 @@ namespace OE
 
 		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
 		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
-
-		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-		camera.data.projection[1][1] *= -1;
-		camera.data.view = camera.GetCameraMat();
-		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
-
-		Renderer::ShaderConfig shader_config3{
-					"shader",
-			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
-
-		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
-
-		window->GetWindowData().RenderContextData->InitGlobalData();
 		
 		//init engine module
 		SetupGUI();
@@ -199,6 +185,21 @@ namespace OE
 		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		InitEssentialAssets();
+
+		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		camera.data.projection[1][1] *= -1;
+		camera.data.view = camera.GetCameraMat();
+		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
+
+		Renderer::ShaderConfig shader_config3{
+					"shader",
+			{	Renderer::E_StageType::VERTEX_SHADER,
+						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
+
+		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
+
+		window->GetWindowData().RenderContextData->InitGlobalData();
+
 
 		//Profiler::Start();
 	}

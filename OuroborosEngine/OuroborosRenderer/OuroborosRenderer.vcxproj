@@ -143,7 +143,6 @@
     <ClInclude Include="Graphics\vulkan\vulkan_mesh.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_pipeline.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_shader.h" />
-    <ClInclude Include="Graphics\vulkan\vulkan_texture.h" />
     <ClInclude Include="Graphics\vulkan\vulkan_texture_manager.h" />
     <ClInclude Include="Graphics\window.h" />
     <ClInclude Include="Graphics\mesh.h" />

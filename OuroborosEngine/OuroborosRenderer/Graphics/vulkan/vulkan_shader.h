@@ -43,7 +43,8 @@ namespace Renderer {
 		uint32_t set;
 		uint32_t binding;
 		uint32_t count;
-		VkDescriptorType type;	
+		VkDescriptorType type;
+		VkShaderStageFlags flags;
 	};
 
 	struct BindingBlockMemberData
@@ -52,6 +53,7 @@ namespace Renderer {
 		DataType type;
 		uint32_t size;
 		uint32_t offset;
+		const char* texture_name = "";
 	};
 
 	class VulkanShader 
@@ -71,18 +73,29 @@ namespace Renderer {
 
 		void SetUniformValue(const char* name, void* data) {
 
-			/*
-			if (uniform_buffer_object->member_vars.find(name) != uniform_buffer_object->member_vars.end()) {
-				if (uniform_buffer_object->member_vars[name].type != DataType::SAMPLER2D)
-					uniform_buffer_object->UpdateData(name, data);
+			if (binding_block_members.find(name) != binding_block_members.end()) {
+				uint32_t binding_num = binding_block_members[name].binding_num;
+				if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end()) {
+					uniform_buffer_objects[binding_num]->UpdateData(name, data);
+				}
 			}
-			*/
+		}
+
+		void SetUniformTexture(const char* name, std::shared_ptr<VulkanTexture> p_texture) {
+			if (binding_block_members.find(name) != binding_block_members.end()) {
+				uint32_t binding_num = binding_block_members[name].binding_num;
+				if (uniform_texture_objects.find(binding_num) != uniform_texture_objects.end()) {
+					uniform_texture_objects[binding_num] = p_texture;
+					shader_set.AddBinding(binding_num, p_texture.get());
+				}
+			}
 		}
 
 		//TODO: texture
 		//void SetUniformValue(const char* name, VulkanTexture* texture);
 
 		void* GetMemberVariable(const std::string& name, uint32_t binding_num = -1);
+		std::shared_ptr<VulkanTexture> GetTextureVariable(const std::string& name, uint32_t binding_num = -1);
 
 		DescriptorSet shader_set; // set num 1
 		std::map<uint32_t ,std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo

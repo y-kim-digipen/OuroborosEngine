@@ -1,4 +1,4 @@
-#include "vulkan_texture.h"
+#include "../texture.h"
 
 #include "vulkan_buffer.h"
 #include "vulkan_image.h"

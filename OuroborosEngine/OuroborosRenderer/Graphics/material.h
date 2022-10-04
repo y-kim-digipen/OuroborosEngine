@@ -7,8 +7,6 @@
 
 namespace Renderer {
 	class VulkanTexture;
-	class Texture;
-
 	class Material {
 
     public:
@@ -17,25 +15,25 @@ namespace Renderer {
         virtual void Bind() = 0;
         void InitMaterialData(const Asset::MaterialData&& other);
         void InitMaterialData(const Asset::MaterialData& other);
-    	virtual void SetAlbedoTexture(std::shared_ptr<Texture> texture);
-        virtual void SetAOTexture(std::shared_ptr<Texture> texture);
-        virtual void SetNormalTexture(std::shared_ptr<Texture> texture);
-        virtual void SetMetalRoughnessTexture(std::shared_ptr<Texture> texture);
-        virtual void SetMetalicTexture(std::shared_ptr<Texture> texture);
-        virtual void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture);
-        virtual void SetEmissiveTexture(std::shared_ptr<Texture> texture);
+    	virtual void SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetAOTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetNormalTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetMetalicTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture);
         virtual void Cleanup();
         Asset::MaterialData* GetMaterialData();
 
 
     protected:
-        std::shared_ptr<Texture> texture_albedo;
-        std::shared_ptr<Texture> texture_ao;
-        std::shared_ptr<Texture> texture_normal;
-        std::shared_ptr<Texture> texture_metalroughness;
-        std::shared_ptr<Texture> texture_metallic;
-        std::shared_ptr<Texture> texture_rough_smoothness;
-        std::shared_ptr<Texture> texture_emissive;
+        std::shared_ptr<VulkanTexture> texture_albedo;
+        std::shared_ptr<VulkanTexture> texture_ao;
+        std::shared_ptr<VulkanTexture> texture_normal;
+        std::shared_ptr<VulkanTexture> texture_metalroughness;
+        std::shared_ptr<VulkanTexture> texture_metallic;
+        std::shared_ptr<VulkanTexture> texture_rough_smoothness;
+        std::shared_ptr<VulkanTexture> texture_emissive;
 
         Asset::MaterialData data;
         Asset::Image* image_albedo = nullptr;
@@ -54,37 +52,37 @@ namespace Renderer {
         data = other;
     }
 
-    inline void Material::SetAlbedoTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture)
     {
 	    texture_albedo = texture;
     }
 
-    inline void Material::SetAOTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetAOTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_ao = texture;
     }
 
-    inline void Material::SetNormalTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetNormalTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_normal = texture;
     }
 
-    inline void Material::SetMetalRoughnessTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_metalroughness = texture;
     }
 
-    inline void Material::SetMetalicTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetMetalicTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_metallic = texture;
     }
 
-    inline void Material::SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_rough_smoothness = texture;
     }
 
-    inline void Material::SetEmissiveTexture(std::shared_ptr<Texture> texture)
+    inline void Material::SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture)
     {
         texture_emissive = texture;
     }

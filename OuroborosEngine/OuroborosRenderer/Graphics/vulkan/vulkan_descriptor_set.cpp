@@ -28,6 +28,8 @@ namespace Renderer {
 
     DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VulkanUniformBuffer* vulkan_ubo)
     {
+        vkQueueWaitIdle(vulkan_type->device.graphics_queue);
+
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             frame_data[i].buffers_info[binding_num] = vulkan_ubo->GetBufferInfo(i);
         }
@@ -51,14 +53,16 @@ namespace Renderer {
         return *this;
     }
 
-    DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, Texture* vulkan_texture)
+    DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VulkanTexture* vulkan_texture)
     {
+        vkQueueWaitIdle(vulkan_type->device.graphics_queue);
+
         for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-            images_info[binding_num] = dynamic_cast<VulkanTexture*>(vulkan_texture)->GetImageInfo();
+            images_info[binding_num] = (vulkan_texture)->GetImageInfo();
         }
 
 		if (layout != VK_NULL_HANDLE) {
-            images_info[binding_num] = dynamic_cast<VulkanTexture*>(vulkan_texture)->GetImageInfo();
+            images_info[binding_num] = (vulkan_texture)->GetImageInfo();
 
             for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 

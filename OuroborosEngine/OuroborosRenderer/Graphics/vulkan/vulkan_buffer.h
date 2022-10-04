@@ -23,6 +23,7 @@ namespace Renderer
 		uint32_t offset;
 	};
 
+	size_t pad_uniform_buffer_size(size_t min_ubo_alignment, size_t originalSize);
 
 	class VulkanBuffer
 	{

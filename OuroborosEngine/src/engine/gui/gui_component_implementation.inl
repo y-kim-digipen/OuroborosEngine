@@ -110,6 +110,8 @@ namespace OE
 		ShaderComponent& shader_component = Engine::ecs_manager.GetComponent<ShaderComponent>(entID);
 		const auto& shader = Engine::window->GetWindowData().RenderContextData->shader_manager->GetShader(shader_component.name);
 		const auto& shader_map = Engine::Get().asset_manager.GetManager<ShaderAssetManager>().GetAssetRawData();
+		const auto& texture_map =  Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
+		const auto& texture_manager = Engine::window->GetWindowData().RenderContextData->texture_manager_;
 
 		if (ImGui::TreeNode(typeid(ShaderComponent).name()))
 		{
@@ -137,7 +139,7 @@ namespace OE
 					shader->reload_next_frame = true;
 				}
 
-				for (const auto& member_variable : shader->binding_block_members) {
+				for (auto& member_variable : shader->binding_block_members) {
 
 					bool is_changed = false;
 
@@ -173,10 +175,28 @@ namespace OE
 						break;
 					case Renderer::DataType::MAT4:
 						break;
+					case Renderer::DataType::SAMPLER2D:
+						if (ImGui::BeginCombo("Textures", member_variable.second.texture_name))
+						{
+							for (const auto& key : texture_map | std::views::keys)
+							{
+								const bool selected = member_variable.second.texture_name == key;
+								if (ImGui::Selectable(key.c_str(), selected))
+								{
+									member_variable.second.texture_name = key.c_str();
+									shader->SetUniformTexture(member_variable.first.c_str(), texture_manager->GetTexture(key));
+								}
+								if (selected) {
+									ImGui::SetItemDefaultFocus();
+								}
+							}
+							ImGui::EndCombo();
+						}
 					}
 
-					if (is_changed)
+					if (is_changed) {
 						shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
+					}
 				}
 			}
 

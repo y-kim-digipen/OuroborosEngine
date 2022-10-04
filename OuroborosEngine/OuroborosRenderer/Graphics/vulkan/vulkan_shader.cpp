@@ -16,6 +16,7 @@
 #include <gtc/matrix_transform.hpp>
 
 #include "../mesh.h"
+#include "assets.h"
 
 namespace Renderer {
 
@@ -86,6 +87,7 @@ namespace Renderer {
 	void VulkanShader::Init(ShaderConfig* config)
 	{
 		reload_next_frame = false;
+		shader_set.Init(vulkan_type, 1);
 
 		if (config != &this->config)
 			this->config = *config;
@@ -162,6 +164,13 @@ namespace Renderer {
 		// key = binding_num, value = size
 		std::unordered_map<uint32_t, uint32_t> binding_block_size;
 
+		unsigned char pixels[] = { 0, 0, 0, 0 };
+		Asset::Image image_asset;
+		image_asset.image = pixels;
+		image_asset.width = 1;
+		image_asset.height = 1;
+		image_asset.channel = 1;
+
 		for (const auto& mem : binding_block_members) {
 			mem.first; // name
 			uint32_t binding_num = mem.second.binding_num;
@@ -172,16 +181,19 @@ namespace Renderer {
 			if (mem.second.type == DataType::SAMPLER2D) { //textures
 				if (uniform_texture_objects.find(binding_num) == uniform_texture_objects.end()) {
 					uniform_texture_objects[binding_num] = std::make_shared<VulkanTexture>(vulkan_type);
+					uniform_texture_objects[binding_num]->UploadData(image_asset);
 				}
 			}
 			else { // buffers
-				binding_block_size[binding_num] += mem.second.size;
+				binding_block_size[binding_num] = std::max(mem.second.size + mem.second.offset, binding_block_size[binding_num]);
 			}
-
 		}
 
 		for (const auto& itr : binding_block_size) {
 			if (uniform_buffer_objects.find(itr.first) == uniform_buffer_objects.end()) {
+
+				//uint32_t block_size = pad_uniform_buffer_size(vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment, itr.second);
+
 				uniform_buffer_objects[itr.first] = std::make_unique<VulkanUniformBuffer>(
 					vulkan_type,
 					itr.first,
@@ -192,7 +204,6 @@ namespace Renderer {
 
 		for (const auto& mem : binding_block_members) {
 			uint32_t binding_num = mem.second.binding_num;
-
 			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end())
 				uniform_buffer_objects[binding_num]->AddMember(
 					mem.first,
@@ -200,8 +211,32 @@ namespace Renderer {
 					mem.second.size,
 					mem.second.offset
 				);
-
 		}
+
+		for (const auto& set_data : descriptor_data) {
+			if (set_data.second.set == 1) {
+				const auto& set = set_data.second;
+
+				shader_set.AddBindingLayout(set.binding, set.type, set.flags);
+
+				// it is ubo
+				if (set.type >= VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER) {
+					shader_set.AddBinding(
+						set.binding,
+						uniform_buffer_objects[set.binding].get()
+					);
+				}
+				// texture
+				else { 
+					shader_set.AddBinding(
+						set.binding,
+						uniform_texture_objects[set.binding].get()
+					);
+				}
+			}
+		}
+
+		shader_set.Build();
 
 		pipeline_builder.color_blend_attachment = VulkanInitializer::PipelineColorBlendAttachmentState();
 		pipeline_builder.input_assembly = VulkanInitializer::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
@@ -270,12 +305,17 @@ namespace Renderer {
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
 		//TODO: bind shader descriptor set 1
+		shader_set.Bind();
 	}
 
 	void VulkanShader::ShutDown()
 	{
 		//TODO: destroy ubo
+		for (auto& ubo : uniform_buffer_objects) {
+			ubo.second.reset();
+		}
 
+		shader_set.Cleanup();
 		descriptor_data.clear();
 		push_constant_ranges.clear();
 
@@ -360,7 +400,6 @@ namespace Renderer {
 					// dont add ubo var for material & object & global
 					if (refl_set.set == 1)
 					{
-
 						for (uint32_t i = 0; i < refl_binding.block.member_count; ++i) {
 
 							DataType data_type = DataType::NONE;
@@ -374,14 +413,12 @@ namespace Renderer {
 
 								break;
 							case SpvOp::SpvOpTypeVector:
-
 								if (refl_binding.block.members[i].size == sizeof(glm::vec4))
 									data_type = DataType::FLOAT4;
 								else if (refl_binding.block.members[i].size == sizeof(glm::vec3))
 									data_type = DataType::FLOAT3;
 								else if (refl_binding.block.members[i].size == sizeof(glm::vec2))
 									data_type = DataType::FLOAT2;
-
 								break;
 							case SpvOp::SpvOpTypeFloat:
 								data_type = DataType::FLOAT;
@@ -404,18 +441,24 @@ namespace Renderer {
 							binding_block_members[name].type = data_type;
 							binding_block_members[name].size = refl_binding.block.members[i].size;
 							binding_block_members[name].offset = refl_binding.block.members[i].offset;
-
-							/*
-							uniform_buffer_objects[refl_binding.binding]->AddMember(
-								std::string(refl_binding.block.name) + std::string(".") + refl_binding.block.members[i].name,
-								data_type,
-								refl_binding.block.members[i].size,
-								refl_binding.block.members[i].offset
-							);
-							*/
+						}
+						
+						if (refl_binding.block.member_count == 0) {
+							binding_block_members[refl_binding.name].binding_num = refl_binding.binding;
+							binding_block_members[refl_binding.name].offset = 0;
+							binding_block_members[refl_binding.name].size = 0;
+							binding_block_members[refl_binding.name].type = DataType::SAMPLER2D;
 						}
 					}
-					descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type };
+
+					
+					if (descriptor_data.find(refl_binding.name) != descriptor_data.end()) {
+						descriptor_data[refl_binding.name].flags |= shader_type;
+					}
+					else {
+						descriptor_data[refl_binding.name] = { refl_binding.set ,refl_binding.binding, descriptor_count, (VkDescriptorType)refl_binding.descriptor_type};
+						descriptor_data[refl_binding.name].flags |= shader_type;
+					}
 				}
 			}
 		}
@@ -450,6 +493,12 @@ namespace Renderer {
 
 	void* VulkanShader::GetMemberVariable(const std::string& name, uint32_t binding_num /*= -1*/)
 	{
+		if (binding_num != -1) {
+			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end()) {
+				return (char*)uniform_buffer_objects[binding_num]->data + uniform_buffer_objects[binding_num]->member_vars[name].offset;
+			}
+		}
+
 		if (binding_block_members.find(name) != binding_block_members.end()) {
 			uint32_t binding_num = binding_block_members[name].binding_num;
 			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end()) {
@@ -458,6 +507,24 @@ namespace Renderer {
 		}
 
 		return nullptr;
+	}
+
+	std::shared_ptr<VulkanTexture> VulkanShader::GetTextureVariable(const std::string& name, uint32_t binding_num)
+	{
+		if (binding_num != -1) {
+			if (uniform_texture_objects.find(binding_num) != uniform_texture_objects.end()) {
+				return uniform_texture_objects[binding_num];
+			}
+		}
+
+		if (binding_block_members.find(name) != binding_block_members.end()) {
+			uint32_t binding_num = binding_block_members[name].binding_num;
+			if (uniform_buffer_objects.find(binding_num) != uniform_buffer_objects.end()) {
+				return uniform_texture_objects[binding_num];
+			}
+		}
+
+		return std::shared_ptr<VulkanTexture>();
 	}
 
 	void ShaderConfig::operator=(const ShaderConfig& config)

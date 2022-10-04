@@ -4,7 +4,7 @@
 #include "vulkan_type.inl"
 
 #include "vulkan_buffer.h"
-#include "vulkan_texture.h"
+#include "../texture.h"
 
 #include <unordered_map>
 
@@ -41,7 +41,7 @@ namespace Renderer {
 		// must call binding layout first
 		DescriptorSet& AddBinding(
 			uint32_t binding_num,
-			Texture* vulkan_texture
+			VulkanTexture* vulkan_texture
 		);
 
 		// build descriptor set layout & create descriptor sets

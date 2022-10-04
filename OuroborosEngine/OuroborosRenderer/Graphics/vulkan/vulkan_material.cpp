@@ -6,7 +6,7 @@
 
 namespace Renderer {
 
-	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type, std::shared_ptr<Texture> none_texture) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
+	VulkanMaterial::VulkanMaterial(VulkanType* vulkan_type, std::shared_ptr<VulkanTexture> none_texture) : vulkan_type(vulkan_type), ubo(std::make_unique<VulkanUniformBuffer>(vulkan_type, 0, sizeof(Asset::MaterialData)))
 	{
 		set.Init(vulkan_type, 2)
 			.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -27,7 +27,7 @@ namespace Renderer {
 			texture_rough_smoothness = none_texture;
 	
 
-		set.AddBinding(0, none_texture.get())
+		set.AddBinding(0, ubo.get())
 			.AddBinding(1, none_texture.get())
 			.AddBinding(2, none_texture.get())
 			.AddBinding(3, none_texture.get())
@@ -51,7 +51,7 @@ namespace Renderer {
 		Cleanup();
 	}
 
-	void VulkanMaterial::SetAlbedoTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		texture_albedo = texture;
 		data.has_albedo_texture = true;
@@ -118,37 +118,37 @@ namespace Renderer {
 		set.Bind();
 	}
 
-	void VulkanMaterial::SetAOTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetAOTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetAOTexture(texture);
 		data.has_ao_texture = true;
 	}
 
-	void VulkanMaterial::SetMetalRoughnessTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetMetalRoughnessTexture(texture);
 		data.has_metalroughness_texture = true;
 	}
 
-	void VulkanMaterial::SetNormalTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetNormalTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetNormalTexture(texture);
 		data.has_normal_texture = true;
 	}
 
-	void VulkanMaterial::SetMetalicTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetMetalicTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetMetalicTexture(texture);
 		data.has_metalic_texture = true;
 	}
 
-	void VulkanMaterial::SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetRoughSmoothnessTexture(texture);
 		data.has_roughness_texture = true;
 	}
 
-	void VulkanMaterial::SetEmissiveTexture(std::shared_ptr<Texture> texture)
+	void VulkanMaterial::SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture)
 	{
 		Material::SetEmissiveTexture(texture);
 		data.has_emissive_texture = true;
