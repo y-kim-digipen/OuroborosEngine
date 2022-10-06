@@ -18,8 +18,7 @@ Asset:
     - ..\OuroborosEngine\model\bulb.obj
     - ..\OuroborosEngine\model\plane.obj
   class OE::ShaderAssetManager:
-    - shader
-    - shader2
+    - shader_lightpass
   class OE::ScriptAssetManager:
     - ..\OuroborosEngine\scripts\light_rotate - Copy (2).clua
     - ..\OuroborosEngine\scripts\light_rotate - Copy.clua
@@ -94,7 +93,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\DamagedHelmet.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: damaged_helmet_material
         material_data:
@@ -138,7 +137,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\plane.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: plane_material
         material_data:
@@ -180,7 +179,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\bulb.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: material
         material_data:
@@ -231,7 +230,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\GAMEBOY.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: Gameboy_material
         material_data:
@@ -273,7 +272,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\bulb.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: material
         material_data:
@@ -324,7 +323,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\bulb.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: material
         material_data:
@@ -373,7 +372,7 @@ ECS:
         scale: [1, 1, 1]
         rotation: [1, 0, 0]
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: material
         material_data:

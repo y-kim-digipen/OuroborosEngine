@@ -34,9 +34,10 @@ namespace Renderer
 	void Window::Update()
 	{
 		//TODO: update global_data
-		VulkanContext* vulkan_context = (VulkanContext*)window_data.RenderContextData.get();
+		//before
+	/*	VulkanContext* vulkan_context = (VulkanContext*)window_data.RenderContextData.get();
 
-		vulkan_imgui_manager.Update();
+		vulkan_imgui_manager.Update();*/
 
 		// bind global data
 
@@ -74,6 +75,9 @@ namespace Renderer
 
 	void Window::EndFrame()
 	{
+		window_data.RenderContextData->DeferredEndFrame();
+		VulkanContext* vulkan_context = (VulkanContext*)window_data.RenderContextData.get();
+		vulkan_imgui_manager.Update();
 		vulkan_imgui_manager.EndFrame();
 		window_data.RenderContextData->EndFrame();
 

@@ -142,4 +142,33 @@ namespace Renderer
 		pipeline_layout_create_info.pSetLayouts = p_set_layouts;
 		return pipeline_layout_create_info;
 	}
+
+	VkPipelineColorBlendAttachmentState VulkanInitializer::PipelineColorBlendAttachmentState(
+		VkColorComponentFlags color_write_mask, VkBool32 blend_enable)
+	{
+		VkPipelineColorBlendAttachmentState pipeline_color_blend_attachment_state{};
+		pipeline_color_blend_attachment_state.colorWriteMask = color_write_mask;
+		pipeline_color_blend_attachment_state.blendEnable = blend_enable;
+		return pipeline_color_blend_attachment_state;
+	}
+
+	VkViewport VulkanInitializer::ViewPort(float width, float height, float min_depth, float max_depth)
+	{
+		VkViewport viewport{};
+		viewport.width = width;
+		viewport.height = height;
+		viewport.minDepth = min_depth;
+		viewport.maxDepth = max_depth;
+		return viewport;
+	}
+
+	VkRect2D VulkanInitializer::Rect2D(int32_t width, int32_t height, int32_t offsetX, int32_t offsetY)
+	{
+		VkRect2D rect2D{};
+		rect2D.extent.width = width;
+		rect2D.extent.height = height;
+		rect2D.offset.x = offsetX;
+		rect2D.offset.y = offsetY;
+		return rect2D;
+	}
 }

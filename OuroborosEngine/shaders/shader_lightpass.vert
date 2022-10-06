@@ -1,17 +1,8 @@
 #version 450
 
-layout(location = 0) in vec3 pos;
-layout(location = 1) in vec2 uv;
-
-layout(location = 0) VS_OUT
-{
-    vec4 vertexPosition; // interpolated vPosition
-    vec2 vertexUV; // interpolated vUV
-} vs_out;
-
+layout(location = 0) out vec2 vertexUV;
 void main()
 {
-    vs_out.vertexPosition =  vec4( vPosition, 1.0f );
-    vs_out.vertexUV = vUV;
-    gl_Position = vs_out.vertexPosition;
+    vertexUV = vec2((gl_VertexIndex << 1) & 2, gl_VertexIndex & 2);
+	gl_Position = vec4(vertexUV * 2.0f - 1.0f, 0.0f, 1.0f);
 }

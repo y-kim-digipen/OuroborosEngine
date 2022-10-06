@@ -73,6 +73,8 @@ namespace Renderer
     int SetupDescriptorSet();
     int CreateDeferredShader();
     int CreateDeferredDescriptorSetLayout();
+    int CreateDeferredCommandBuffer();
+    int CreateDeferredSyncObjects();
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -127,6 +129,14 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
+        //deferred
+        CreateOffScreenFrameBuffer();
+        CreateDeferredSyncObjects();
+        CreateDeferredCommandBuffer();
+        CreateDeferredDescriptorSetLayout();
+        CreateDeferredShader();
+        SetupDescriptorSet();
+        //buildDeferredCommandBuffer();
         new_material = new VulkanMaterial(&vulkan_type);
         light_material = new VulkanMaterial(&vulkan_type);
 
@@ -326,6 +336,8 @@ namespace Renderer
 
     }
 
+    
+
     int VulkanContext::BeginFrame()
     {
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
@@ -334,24 +346,28 @@ namespace Renderer
         VkResult result = vkAcquireNextImageKHR(vulkan_type.device.handle, vulkan_type.swapchain.handle, UINT64_MAX, frame_data.semaphore.image_available_semaphore, VK_NULL_HANDLE, &frame_data.swap_chain_image_index);
             
         VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
-
+     
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
-        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+        //RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+        buildDeferredCommandBuffer();
 
         return 0;
     }
 
-    int VulkanContext::EndFrame()
+    int VulkanContext::DeferredEndFrame()
     {
-
+        auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        //End offscreen rendering
         vkCmdEndRenderPass(frame_data.command_buffer);
         vkEndCommandBuffer(frame_data.command_buffer);
 
         auto& semaphore = frame_data.semaphore;
+        auto& offscreen_semaphore = vulkan_type.deferred_frame_buffer.offscreenSemaphore;
         VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
 
         VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
         submit.pWaitDstStageMask = &wait_stage;
 
         //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
@@ -359,12 +375,96 @@ namespace Renderer
         submit.pWaitSemaphores = &semaphore.image_available_semaphore;
 
         submit.signalSemaphoreCount = 1;
-        submit.pSignalSemaphores = &semaphore.render_finished_semaphore;
+        submit.pSignalSemaphores = &offscreen_semaphore;
+
 
         submit.commandBufferCount = 1;
         submit.pCommandBuffers = &frame_data.command_buffer;
 
         vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+
+        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+
+        
+        //descriptorset write
+        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+        std::vector<VkWriteDescriptorSet>write_descriptor_sets =
+        {
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,1, &tex_descriptor_position),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &tex_descriptor_normal),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &tex_descriptor_albedo),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &tex_descriptor_emissive),
+            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_metalic_roughness_ao),
+        };
+
+
+        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
+
+        // draw quad
+        shader_manager->GetShader("shader_lightpass")->Bind();
+
+        vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
+
+        return 0;
+    }
+
+    int VulkanContext::EndFrame()
+    {
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+
+        //before
+        //auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        //vkCmdEndRenderPass(frame_data.command_buffer);
+        //vkEndCommandBuffer(frame_data.command_buffer);
+
+        //auto& semaphore = frame_data.semaphore;
+        //VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+
+        //VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+        //submit.pWaitDstStageMask = &wait_stage;
+
+        ////TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
+        //submit.waitSemaphoreCount = 1;
+        //submit.pWaitSemaphores = &semaphore.image_available_semaphore;
+
+        //submit.signalSemaphoreCount = 1;
+        //submit.pSignalSemaphores = &semaphore.render_finished_semaphore;
+
+        //submit.commandBufferCount = 1;
+        //submit.pCommandBuffers = &frame_data.command_buffer;
+
+
+        ///
+        auto& semaphore = frame_data.semaphore;
+        auto& offscreen_semaphore = vulkan_type.deferred_frame_buffer.offscreenSemaphore;
+        VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+
+        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+        submit.pWaitDstStageMask = &wait_stage;
+
+        //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
+        submit.waitSemaphoreCount = 1;
+        submit.signalSemaphoreCount = 1;
+    	submit.commandBufferCount = 1;
+
+
+        vkCmdEndRenderPass(frame_data.command_buffer);
+        vkEndCommandBuffer(frame_data.command_buffer);
+
+        submit.pWaitSemaphores = &offscreen_semaphore;
+        submit.pSignalSemaphores = &semaphore.render_finished_semaphore;
+
+        submit.pCommandBuffers = &frame_data.command_buffer;
+        vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+        ///
 
         VkPresentInfoKHR present_info_khr{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
         present_info_khr.swapchainCount = 1;
@@ -418,10 +518,14 @@ namespace Renderer
 
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
-                if (shader_manager->GetShader(front.shader->name)->reload_next_frame)
+
+                //TODO : need to change deferred offscreen shader
+                /*if (shader_manager->GetShader(front.shader->name)->reload_next_frame)
                     shader_manager->GetShader(front.shader->name)->Reload();
 
-                shader_manager->GetShader(front.shader->name)->Bind(); // Bind pipeline & descriptor set 1
+                shader_manager->GetShader(front.shader->name)->Bind();*/ // Bind pipeline & descriptor set 1
+
+                vulkan_type.deferred_frame_buffer.deferred_shader->Bind();
 				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function
@@ -654,7 +758,7 @@ namespace Renderer
         instance_create_info.pApplicationInfo = &app_info;
 
 #if defined(_DEBUG)
-   /*     const char* required_layer_names[] =
+        const char* required_layer_names[] =
         {
            "VK_LAYER_KHRONOS_validation"
         };
@@ -688,7 +792,7 @@ namespace Renderer
         }
 
         instance_create_info.enabledLayerCount = required_layer_count;
-        instance_create_info.ppEnabledLayerNames = required_layer_names;*/
+        instance_create_info.ppEnabledLayerNames = required_layer_names;
 #endif //_DEBUG
 
         //TODO: this should be formatted as a function of inside the platform
@@ -1427,26 +1531,49 @@ namespace Renderer
     //first rendering
     int buildDeferredCommandBuffer()
     {
+         auto& deferred_frame_buffer = vulkan_type.deferred_frame_buffer;
+         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
 
-        VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
-        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_frame_buffer.offscreenSemaphore));
+   /*     if (deferred_frame_buffer.off_screen_command_buffer == VK_NULL_HANDLE)
+        {
+            CreateDeferredCommandBuffer();
+        }*/
+    	/*VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
+        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_frame_buffer.offscreenSemaphore));*/
 
         VkCommandBufferBeginInfo command_buffer_begin_info = VulkanInitializer::CommandBufferBeginInfo();
-        std::array<VkClearValue, 4> clear_values;
+        std::array<VkClearValue, 6> clear_values;
         clear_values[0].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[1].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[2].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-        clear_values[3].depthStencil = { 1.0f, 0 };
+        clear_values[3].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+        clear_values[4].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+        clear_values[5].depthStencil = { 1.0f, 0 };
 
 
-        auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
+ 
         VkRenderPassBeginInfo render_pass_begin_info = VulkanInitializer::RenderPassBeginInfo();
-        render_pass_begin_info.renderPass  = deferred_framebuffer.render_pass;
-        render_pass_begin_info.framebuffer = deferred_framebuffer.frame_buffer;
-        render_pass_begin_info.renderArea.extent.width = deferred_framebuffer.width;
-        render_pass_begin_info.renderArea.extent.height = deferred_framebuffer.height;
+        render_pass_begin_info.renderPass  = deferred_frame_buffer.render_pass;
+        render_pass_begin_info.framebuffer = deferred_frame_buffer.frame_buffer;
+        render_pass_begin_info.renderArea.extent.width = deferred_frame_buffer.width;
+        render_pass_begin_info.renderArea.extent.height = deferred_frame_buffer.height;
     	render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
         render_pass_begin_info.pClearValues = clear_values.data();
+
+
+
+        VK_CHECK(vkBeginCommandBuffer(frame_data.command_buffer, &command_buffer_begin_info));
+
+        vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+
+
+        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+        vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
+
+        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+
+        vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
+
 
 
         return 0;
@@ -1456,8 +1583,8 @@ namespace Renderer
     int CreateOffScreenFrameBuffer()
     {
         //TODO : Chanage magic numbers
-        vulkan_type.deferred_frame_buffer.width = 2048;
-        vulkan_type.deferred_frame_buffer.width = 2048;
+        vulkan_type.deferred_frame_buffer.width = 1600;
+        vulkan_type.deferred_frame_buffer.height = 900;
 
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.position);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.normal);
@@ -1472,9 +1599,9 @@ namespace Renderer
 
         CreateFrameAttachment(&vulkan_type, attachment_depth_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.depth);
 
-    	std::array<VkAttachmentDescription, 4> attachment_descriptions = {};
+    	std::array<VkAttachmentDescription, 6> attachment_descriptions = {};
 
-        for(uint32_t idx = 0; idx < 8; ++idx)
+        for(uint32_t idx = 0; idx < 6; ++idx)
         {
             attachment_descriptions[idx].samples = VK_SAMPLE_COUNT_1_BIT;
             attachment_descriptions[idx].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -1482,7 +1609,7 @@ namespace Renderer
             attachment_descriptions[idx].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             attachment_descriptions[idx].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
-            if(idx == 7)
+            if(idx == 5)
             {
                 attachment_descriptions[idx].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 attachment_descriptions[idx].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -1535,7 +1662,7 @@ namespace Renderer
         dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
         dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
-        VkRenderPassCreateInfo render_pass_info;
+        VkRenderPassCreateInfo render_pass_info{};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         render_pass_info.pAttachments = attachment_descriptions.data();
         render_pass_info.attachmentCount = static_cast<uint32_t>(attachment_descriptions.size());
@@ -1602,7 +1729,7 @@ namespace Renderer
         VkDescriptorImageInfo tex_descriptor_emissive             = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-
+        //TODO : DO I NEED TO ALLOCATE ONETIME?
         VK_CHECK(vkAllocateDescriptorSets(vulkan_type.device.handle, &allocate_info, &vulkan_type.deferred_frame_buffer.descriptor_set));
         //Deferred
         write_descriptor_sets =
@@ -1612,11 +1739,10 @@ namespace Renderer
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &tex_descriptor_albedo),
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &tex_descriptor_emissive),
             VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_metalic_roughness_ao),
-
         };
 
-        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
 
+        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
 
 
     	return 0;
@@ -1624,17 +1750,16 @@ namespace Renderer
 
     int CreateDeferredShader()
     {
-        ShaderConfig shader_config = { "shaders/shader_geometrypass", {Renderer::E_StageType::VERTEX_SHADER,
+        ShaderConfig shader_config = { "shader_geometrypass", {Renderer::E_StageType::VERTEX_SHADER,
                         Renderer::E_StageType::FRAGMENT_SHADER }, 2 };
-
+         
 
         auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
         shader = std::make_shared<VulkanShader>(&vulkan_type);
         shader->Init(&shader_config);
 
-
         return 0;
-
+         
 	}
 
 
@@ -1647,16 +1772,34 @@ namespace Renderer
             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,3),
             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,4),
             VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,5),
-            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,6),
-            VulkanInitializer::DescripterSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT,7),
         };
 
         VkDescriptorSetLayoutCreateInfo  descriptor_layout = VulkanInitializer::DescriptorSetLayoutCreateInfo(set_layout_bindings);
         VK_CHECK(vkCreateDescriptorSetLayout(vulkan_type.device.handle, &descriptor_layout, nullptr, &vulkan_type.deferred_frame_buffer.layout));
 
-        VkPipelineLayoutCreateInfo pipeline_layout_create_info = VulkanInitializer::pipelineLayoutCreateInfo(&vulkan_type.deferred_frame_buffer.layout, 1);
-        VK_CHECK(vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_create_info, nullptr, &vulkan_type.deferred_frame_buffer.deferred_shader->pipeline_layout));
+       /* VkPipelineLayoutCreateInfo pipeline_layout_create_info = VulkanInitializer::pipelineLayoutCreateInfo(&vulkan_type.deferred_frame_buffer.layout, 1);
+        VK_CHECK(vkCreatePipelineLayout(vulkan_type.device.handle, &pipeline_layout_create_info, nullptr, &vulkan_type.deferred_frame_buffer.deferred_shader->pipeline_layout));*/
 
+        return 0;
+    }
+
+    int CreateDeferredCommandBuffer()
+    {
+        VkCommandBufferAllocateInfo vk_command_buffer_allocate_info{};
+
+        vk_command_buffer_allocate_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        vk_command_buffer_allocate_info.commandPool = vulkan_type.command_pool;
+        vk_command_buffer_allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        vk_command_buffer_allocate_info.commandBufferCount = 1;
+
+        VK_CHECK(vkAllocateCommandBuffers(vulkan_type.device.handle, &vk_command_buffer_allocate_info, &vulkan_type.deferred_frame_buffer.off_screen_command_buffer));
+        return 0;
+    }
+
+    int CreateDeferredSyncObjects()
+    {
+        VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
+        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_frame_buffer.offscreenSemaphore));
         return 0;
     }
 }

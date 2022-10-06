@@ -25,7 +25,7 @@ namespace Renderer
 		VkRect2D scissor;
 
 		VkPipelineRasterizationStateCreateInfo rasterizer;
-		VkPipelineColorBlendAttachmentState color_blend_attachment;
+		std::vector<VkPipelineColorBlendAttachmentState> color_blend_attachments;
 		VkPipelineMultisampleStateCreateInfo multisampling;
 		VkPipelineLayout pipeline_layout;
 		VkPipelineDepthStencilStateCreateInfo depth_stencil;

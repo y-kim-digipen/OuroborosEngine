@@ -15,8 +15,8 @@ namespace Renderer
         VkPipelineColorBlendStateCreateInfo color_blend_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
         color_blend_state_create_info.logicOpEnable     = VK_FALSE;
         color_blend_state_create_info.logicOp           = VK_LOGIC_OP_COPY;
-        color_blend_state_create_info.attachmentCount   = 1;
-        color_blend_state_create_info.pAttachments      = &color_blend_attachment;
+        color_blend_state_create_info.attachmentCount   = color_blend_attachments.size();
+        color_blend_state_create_info.pAttachments      = color_blend_attachments.data();
 
         VkGraphicsPipelineCreateInfo pipeline_create_info{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
         pipeline_create_info.stageCount           = static_cast<uint32_t>(shader_stage_create_infos.size());
@@ -44,7 +44,9 @@ namespace Renderer
         return new_pipeline;
 
 	}
-    VkPipelineLayout Vulkan_PipelineBuilder::BuildPipeLineLayout(VkDevice device, VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
+
+
+	VkPipelineLayout Vulkan_PipelineBuilder::BuildPipeLineLayout(VkDevice device, VkDescriptorSetLayout* p_set_layouts, uint32_t layout_count, VkPushConstantRange* p_constant_ranges, uint32_t constant_count)
     {
         VkPipelineLayoutCreateInfo create_info = VulkanInitializer_pipeline::PipelineLayoutCreateInfo(p_set_layouts, layout_count, p_constant_ranges, constant_count);
 		VK_CHECK(vkCreatePipelineLayout(device, &create_info, 0, &pipeline_layout));

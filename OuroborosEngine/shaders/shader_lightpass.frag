@@ -16,8 +16,8 @@ void main()
     vec3 albedo = vec3(0.f);
     float ao = 0.f;
 
-    vec3 frag_pos = texture(viewPosBuffer, fs_in.vertexUV).rgb;
-    vec3 normal = texture(normalBuffer,s_in.vertexUV).rgb;
+    vec3 frag_pos = texture(viewPosBuffer, vertexUV).rgb;
+    vec3 normal = texture(normalBuffer,vertexUV).rgb;
     
  for(int i = 0; i < light_ubo.num_lights; ++i) 
     {
@@ -67,16 +67,16 @@ void main()
 
 
         vec3 V = normalize(global_ubo.cam_pos - frag_pos);
-        vec3 N = texture(normalBuffer, fs_in.vertexUV).rgb;
+        vec3 N = texture(normalBuffer, vertexUV).rgb;
         vec3 H = normalize(L + V);
 
         float metallic = 0.f;
         float roughness = 0.f;
 
-        albedo = texture(albedoBuffer, fs_in.vertexUV).rgb;
-        metallic = texture(metalroughnessBuffer,fs_in.vertexUV).r;
-        roughness = texture(metalRoughnessAoBuffer,fs_in.vertexUV).g;
-        ao = texture(metalRoughnessAoBuffer,fs_in.vertexUV).b;
+        albedo = texture(albedoBuffer, vertexUV).rgb;
+        metallic = texture(metalRoughnessAoBuffer,vertexUV).r;
+        roughness = texture(metalRoughnessAoBuffer,vertexUV).g;
+        ao = texture(metalRoughnessAoBuffer,vertexUV).b;
         
         
         float D = DistributionGGX(N, H, roughness);
@@ -100,7 +100,7 @@ void main()
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
 
-    color += texture(emissiveBuffer,fs_in.vertexUV).rgb;
+    color += texture(emissiveBuffer,vertexUV).rgb;
 
 
 

@@ -15,7 +15,7 @@ namespace Renderer {
     {
     }
     VulkanMesh::~VulkanMesh()
-    {
+    { 
     }
 
     bool VulkanMesh::CopyAssetData(const Asset::Mesh& mesh)
@@ -32,6 +32,7 @@ namespace Renderer {
     void VulkanMesh::Draw(const glm::mat4& model, const glm::mat3& normal_matrix)
     {
         VkCommandBuffer& command_buffer = vulkan_type->frame_data[vulkan_type->current_frame].command_buffer;
+        //VkCommandBuffer& command_buffer = vulkan_type->deferred_frame_buffer.off_screen_command_buffer;
 
         ModelConstant model_constant{ model, normal_matrix };
 

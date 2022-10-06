@@ -26,15 +26,10 @@ layout(set = 2, binding = 1) uniform sampler2D viewPosBuffer;
 layout(set = 2, binding = 2) uniform sampler2D normalBuffer;
 layout(set = 2, binding = 3) uniform sampler2D albedoBuffer;
 layout(set = 2, binding = 4) uniform sampler2D emissiveBuffer;
-layout(set = 2, binding = 5) uniform sampler2D aoBuffer;
-layout(set = 2, binding = 6) uniform sampler2D metalicRoughnessBuffer;
-layout(set = 2, binding = 7) uniform sampler2D roughnessBuffer;
+layout(set = 2, binding = 5) uniform sampler2D metalRoughnessAoBuffer;
 
-layout(location = 0) in VS_IN
-{
-    vec4 vertexPosition; // interpolated vPosition
-    vec2 vertexUV; // interpolated vUV
-} vs_in;
+
+layout(location = 0) in vec2 vertexUV;
 
 
 

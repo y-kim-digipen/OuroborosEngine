@@ -114,8 +114,8 @@ namespace OE
 	void Engine::SetupModule()
 	{
 		asset_manager.GetManager<MeshAssetManager>().LoadAsset("suzanne.obj");
-		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
-		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader2");
+	/*	asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
+		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader2");*/
 	}
 
 	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
@@ -154,7 +154,7 @@ namespace OE
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
 		Renderer::ShaderConfig shader_config3{
-					"shader",
+					"shader_lightpass",
 			{	Renderer::E_StageType::VERTEX_SHADER,
 						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
@@ -190,7 +190,7 @@ namespace OE
 		
 		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
 		SetupModule();
-
+		 
 		//scene_serializer.SerializeScene("test.yaml");
 		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		//Profiler::Start();

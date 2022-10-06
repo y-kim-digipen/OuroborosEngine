@@ -57,6 +57,7 @@ namespace Renderer
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
 		virtual int BeginFrame();
+		virtual int DeferredEndFrame();
 		virtual int EndFrame();
 		
 		struct DrawData
@@ -68,6 +69,7 @@ namespace Renderer
 		};
 
 		void AddDrawQueue(TransformComponent* transform, MaterialComponent* material, MeshComponent* mesh, ShaderComponent* shader);
+	
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;

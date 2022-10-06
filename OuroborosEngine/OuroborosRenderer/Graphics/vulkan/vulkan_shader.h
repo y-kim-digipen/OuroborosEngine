@@ -63,7 +63,10 @@ namespace Renderer {
 
 		void Init(ShaderConfig* config);
 		void LightPassInit(ShaderConfig* config);
+		//lightpass
 		void Bind();
+		//geometrypass
+		void BindDeferred();
 		void ShutDown();
 		void Reload();
 		void SetUniformValue(const char* name, void* data) {

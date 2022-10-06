@@ -21,6 +21,7 @@ namespace Renderer {
 		void Shutdown() override;
 				
 		int BeginFrame() override;
+		int DeferredEndFrame() override;
 		int EndFrame() override;
 
 		std::unique_ptr<VulkanMeshManager> mesh_manager_;
@@ -40,6 +41,7 @@ namespace Renderer {
 		void CreateSwapChain();
 		void RecreateSwapChain();
 	};
+
 }
 
 #endif // !VULKAN_CONTEXT_H

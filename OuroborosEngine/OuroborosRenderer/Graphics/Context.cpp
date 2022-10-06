@@ -32,6 +32,11 @@ namespace Renderer
 		return 0;
 	}
 
+	int Context::DeferredEndFrame()
+	{
+		return 0;
+	}
+
 	int Context::EndFrame()
 	{
 		return 0;

@@ -150,7 +150,13 @@ namespace Renderer {
 			}
 		}
 
-		pipeline_builder.color_blend_attachment = VulkanInitializer_pipeline::PipelineColorBlendAttachmentState();
+		pipeline_builder.color_blend_attachments = std::vector<VkPipelineColorBlendAttachmentState>{
+	VulkanInitializer_pipeline::PipelineColorBlendAttachmentState(),
+	VulkanInitializer_pipeline::PipelineColorBlendAttachmentState(),
+	VulkanInitializer_pipeline::PipelineColorBlendAttachmentState(),
+	VulkanInitializer_pipeline::PipelineColorBlendAttachmentState(),
+	VulkanInitializer_pipeline::PipelineColorBlendAttachmentState() };
+		
 		pipeline_builder.input_assembly = VulkanInitializer_pipeline::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 
 		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
@@ -195,7 +201,7 @@ namespace Renderer {
 
 		pipeline_layout = pipeline_builder.BuildPipeLineLayout(device->handle, descriptor_set_layouts, max_set_count, push_constant_ranges.data(), push_constant_ranges.size());
 		//build pipeline
-		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->render_pass, shader_stage_create_infos);
+		pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->deferred_frame_buffer.render_pass, shader_stage_create_infos);
 
 		for (uint32_t i = 0; i < E_StageType::MAX_VALUE; ++i) {
 			if (shader_stage_create_infos[i].module != VK_NULL_HANDLE)
@@ -270,38 +276,30 @@ namespace Renderer {
 			}
 		}
 
-		pipeline_builder.color_blend_attachment = VulkanInitializer_pipeline::PipelineColorBlendAttachmentState();
+
+		pipeline_builder.color_blend_attachments = std::vector<VkPipelineColorBlendAttachmentState>{ VulkanInitializer_pipeline::PipelineColorBlendAttachmentState() };
 		pipeline_builder.input_assembly = VulkanInitializer_pipeline::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 
 		VkPipelineVertexInputStateCreateInfo pipeline_vertex_input_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
 		//TODO: put in vertex_mesh class as a static
-		VkVertexInputBindingDescription input_binding_description;
-		input_binding_description.binding = 0;
-		input_binding_description.stride = sizeof(Vertex);
-		input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+		//VkVertexInputBindingDescription input_binding_description;
+		//input_binding_description.binding = 0;
+		//input_binding_description.stride = sizeof(Vertex);
+		//input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions(3);
+		//std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions(1);
 
-		input_attribute_descriptions[0].binding = 0;
-		input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-		input_attribute_descriptions[0].location = 0;
-		input_attribute_descriptions[0].offset = offsetof(Vertex, position);
+		//input_attribute_descriptions[0].binding = 0;
+		//input_attribute_descriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+		//input_attribute_descriptions[0].location = 0;
+		//input_attribute_descriptions[0].offset = 0;
+		////input_attribute_descriptions[0].offset = offsetof(Vertex, uv);
 
-		input_attribute_descriptions[1].binding = 0;
-		input_attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		input_attribute_descriptions[1].location = 1;
-		input_attribute_descriptions[1].offset = offsetof(Vertex, normal);
-
-		input_attribute_descriptions[2].binding = 0;
-		input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-		input_attribute_descriptions[2].location = 2;
-		input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
-
-		pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
-		pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
-		pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
-		pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
+		//pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
+		//pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
+		//pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
+		//pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
 
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling = VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo();
@@ -341,6 +339,22 @@ namespace Renderer {
 		
 		// bind shader descriptor set 1
 		if(uniform_buffer_object)
+			uniform_buffer_object->Bind();
+	}
+
+	void VulkanShader::BindDeferred()
+	{
+		if (pipeline == VK_NULL_HANDLE) {
+			vulkan_type->current_pipeline_layout = VK_NULL_HANDLE;
+			return;
+		}
+
+		vulkan_type->current_pipeline_layout = pipeline_layout;
+
+		vkCmdBindPipeline(vulkan_type->deferred_frame_buffer.off_screen_command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+
+		// bind shader descriptor set 1
+		if (uniform_buffer_object)
 			uniform_buffer_object->Bind();
 	}
 
