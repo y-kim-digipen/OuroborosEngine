@@ -1358,7 +1358,7 @@ namespace Renderer
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
 
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.width, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
     }
 
     //first rendering
@@ -1367,12 +1367,7 @@ namespace Renderer
          auto& deferred_frame_buffer = vulkan_type.deferred_frame_buffer;
          auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
 
-   /*     if (deferred_frame_buffer.off_screen_command_buffer == VK_NULL_HANDLE)
-        {
-            CreateDeferredCommandBuffer();
-        }*/
-    	/*VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
-        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_frame_buffer.offscreenSemaphore));*/
+
 
         VkCommandBufferBeginInfo command_buffer_begin_info = VulkanInitializer::CommandBufferBeginInfo();
         std::array<VkClearValue, 6> clear_values;
