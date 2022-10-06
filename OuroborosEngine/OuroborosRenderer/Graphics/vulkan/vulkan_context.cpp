@@ -136,6 +136,28 @@ namespace Renderer
         CreateDeferredDescriptorSetLayout();
         CreateDeferredShader();
         SetupDescriptorSet();
+        lightpass_set_.Init(&vulkan_type, 2);
+        lightpass_set_.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBindingLayout(2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBindingLayout(3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
+
+        auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
+        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+
+        lightpass_set_.AddBinding(0, &tex_descriptor_position).
+            AddBinding(1, &tex_descriptor_normal).
+            AddBinding(2, &tex_descriptor_albedo).
+            AddBinding(3, &tex_descriptor_emissive).
+            AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+        lightpass_set_.Build();
+        
         //buildDeferredCommandBuffer();
    
 
@@ -364,6 +386,8 @@ namespace Renderer
         submit.pCommandBuffers = &frame_data.command_buffer;
 
         vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+        VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
 
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
@@ -376,20 +400,20 @@ namespace Renderer
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        std::vector<VkWriteDescriptorSet>write_descriptor_sets =
-        {
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,1, &tex_descriptor_position),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &tex_descriptor_normal),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &tex_descriptor_albedo),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &tex_descriptor_emissive),
-            VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_metalic_roughness_ao),
-        };
 
+        lightpass_set_.AddBinding(0, &tex_descriptor_position).
+    	AddBinding(1,&tex_descriptor_normal).
+    	AddBinding(2,&tex_descriptor_albedo).
+    	AddBinding(3,&tex_descriptor_emissive).
+    	AddBinding(4,&tex_descriptor_metalic_roughness_ao);
 
-        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
-
+        
+        shader_manager->GetShader("shader_lightpass")->BindDeferred();
+        lightpass_set_.Bind();
+        global_set.Bind();
+       /* vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shader_manager->GetShader("shader_lightpass")->pipeline_layout, 0, 1, &deferred_framebuffer.descriptor_set, 0, nullptr);
+        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);*/
         // draw quad
-        shader_manager->GetShader("shader_lightpass")->Bind();
 
         vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
 
@@ -530,7 +554,10 @@ namespace Renderer
                     light_material->Bind();
                 }
                 */
-               
+               if(auto* find = material_manager->GetMaterial(material->name); find != nullptr )
+               {
+                   find->Bind();
+               }
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {
@@ -1055,6 +1082,14 @@ namespace Renderer
         render_pass_info.pClearValues = clear_values;
 
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+    	VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+        vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
+
+        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+
+        vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 
         //vkCmdBindPipeline(command_buffer, &VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type. )
 

@@ -34,6 +34,7 @@ namespace Renderer {
 		void CreateSurface();
 		void CreateSwapChain();
 		void RecreateSwapChain();
+		DescriptorSet lightpass_set_;
 	};
 
 }

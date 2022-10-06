@@ -11,22 +11,18 @@ struct Light
     int type; // 0 = point, 1 = spot, 2 = directional
 };
 
-layout(set = 0, binding = 0) uniform global_data {
-    mat4 projection;
-    mat4 view;
-    vec3 cam_pos;
-} global_ubo;
+
 
 layout(set = 0, binding = 1) uniform light_data {
     Light lights[20];
     int num_lights;
 } light_ubo;
 
-layout(set = 2, binding = 1) uniform sampler2D viewPosBuffer;
-layout(set = 2, binding = 2) uniform sampler2D normalBuffer;
-layout(set = 2, binding = 3) uniform sampler2D albedoBuffer;
-layout(set = 2, binding = 4) uniform sampler2D emissiveBuffer;
-layout(set = 2, binding = 5) uniform sampler2D metalRoughnessAoBuffer;
+layout(set = 2, binding = 0) uniform sampler2D viewPosBuffer;
+layout(set = 2, binding = 1) uniform sampler2D normalBuffer;
+layout(set = 2, binding = 2) uniform sampler2D albedoBuffer;
+layout(set = 2, binding = 3) uniform sampler2D emissiveBuffer;
+layout(set = 2, binding = 4) uniform sampler2D metalRoughnessAoBuffer;
 
 
 layout(location = 0) in vec2 vertexUV;

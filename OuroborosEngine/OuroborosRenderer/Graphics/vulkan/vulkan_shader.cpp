@@ -379,7 +379,24 @@ namespace Renderer {
 
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling = VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo();
-		pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
+
+
+		VkPipelineRasterizationStateCreateInfo pipeline_rasterization_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
+		pipeline_rasterization_state_create_info.depthClampEnable = VK_FALSE;
+		pipeline_rasterization_state_create_info.rasterizerDiscardEnable = VK_FALSE;
+
+		pipeline_rasterization_state_create_info.polygonMode = VK_POLYGON_MODE_FILL;
+		pipeline_rasterization_state_create_info.lineWidth = 1.0f;
+		pipeline_rasterization_state_create_info.cullMode = VK_CULL_MODE_FRONT_BIT;
+		pipeline_rasterization_state_create_info.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+
+		pipeline_rasterization_state_create_info.depthBiasEnable = VK_FALSE;
+		pipeline_rasterization_state_create_info.depthBiasConstantFactor = 0.f;
+		pipeline_rasterization_state_create_info.depthBiasClamp = 0.f;
+		pipeline_rasterization_state_create_info.depthBiasSlopeFactor = 0.f;
+
+		
+		pipeline_builder.rasterizer = pipeline_rasterization_state_create_info;
 		pipeline_builder.depth_stencil = VulkanInitializer_pipeline::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
@@ -424,8 +441,10 @@ namespace Renderer {
 		}
 
 		vulkan_type->current_pipeline_layout = pipeline_layout;
+		uint32_t current_frame = vulkan_type->current_frame;
+		auto& frame_data = vulkan_type->frame_data[current_frame];
 
-		vkCmdBindPipeline(vulkan_type->deferred_frame_buffer.off_screen_command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
 		// bind shader descriptor set 1
 

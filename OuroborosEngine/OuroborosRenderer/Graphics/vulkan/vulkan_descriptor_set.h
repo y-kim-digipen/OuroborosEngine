@@ -44,6 +44,11 @@ namespace Renderer {
 			VulkanTexture* vulkan_texture
 		);
 
+		DescriptorSet& AddBinding(
+			uint32_t binding_num,
+			VkDescriptorImageInfo* image_info
+		);
+
 		// build descriptor set layout & create descriptor sets
 		void Build();
 

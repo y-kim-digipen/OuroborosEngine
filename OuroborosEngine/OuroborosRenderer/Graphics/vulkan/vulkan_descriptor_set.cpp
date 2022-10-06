@@ -79,6 +79,28 @@ namespace Renderer {
         return *this;
     }
 
+    DescriptorSet& DescriptorSet::AddBinding(uint32_t binding_num, VkDescriptorImageInfo* image_info)
+    {
+        vkQueueWaitIdle(vulkan_type->device.graphics_queue);
+        images_info[binding_num] = *image_info;
+        if (layout != VK_NULL_HANDLE) {
+            images_info[binding_num] = *image_info;
+
+            for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+
+                VkWriteDescriptorSet set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                set_write.dstSet = frame_data[i].set;
+                set_write.dstBinding = binding_num;
+                set_write.descriptorCount = 1;
+                set_write.descriptorType = layout_bindings[binding_num].descriptorType;
+                set_write.pImageInfo = &images_info[binding_num];
+
+                vkUpdateDescriptorSets(vulkan_type->device.handle, 1, &set_write, 0, nullptr);
+            }
+        }
+        return *this;
+    }
+
     void DescriptorSet::Build()
     {
         VkDescriptorSetLayoutCreateInfo set_layout_create_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };

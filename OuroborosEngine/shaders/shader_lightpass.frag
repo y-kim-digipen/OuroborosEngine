@@ -3,7 +3,7 @@
 #include "common_light_pass_frag.glsl"
 
 layout(location = 0) out vec4 outColor;
-
+layout(location = 1) in vec3 cam_pos;
 float test_att = 0.1;
 
 void main()
@@ -62,7 +62,7 @@ void main()
         vec3 radiance = att * light.diffuse;
 
 
-        vec3 V = normalize(global_ubo.cam_pos - frag_pos);
+        vec3 V = normalize(cam_pos - frag_pos);
         vec3 N = texture(normalBuffer, vertexUV).rgb;
         vec3 H = normalize(L + V);
 
