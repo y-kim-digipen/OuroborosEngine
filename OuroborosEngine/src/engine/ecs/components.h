@@ -1,32 +1,38 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 #include <glm.hpp>
-#include <gtc/vec1.hpp>
 #include "../common/assets.h"
 
-struct TransformComponent
+struct Component{};
+
+struct TestComponent : Component
+{
+	int for_testing;
+};
+
+struct TransformComponent : Component
 {
 	glm::vec3 pos;
 	glm::vec3 scale= glm::vec3(1.f);
 	glm::vec3 rotation = {1.0f, 0.f,0.f};
 };
 
-struct VelocityComponent
+struct VelocityComponent : Component
 {
 	glm::vec3 vel;
 };
 
-struct LifeTimeComponent
+struct LifeTimeComponent : Component
 {
 	float life_time;
 };
 
-struct MeshComponent
+struct MeshComponent : Component
 {
 	std::string mesh_name;
 };
 
-struct MaterialComponent
+struct MaterialComponent : Component
 {
 	std::string name ="material";
 	Asset::MaterialData data{.albedo = {1.f,0.f,0.f}};
@@ -41,28 +47,28 @@ struct MaterialComponent
 	std::string texture_roughness_name = "";
 };
 
-struct ShaderComponent
+struct ShaderComponent : Component
 {
-	std::string name ="shader";
+	std::string name = "shader";
 };
 
-struct BoolWrapperComponent
+struct BoolWrapperComponent : Component
 {
 	bool bool_type;
 };
 
-struct TagComponent
+struct TagComponent : Component
 {
 	std::string tag;
 };
 
-struct LightComponent
+struct LightComponent : Component
 {
 	bool init = false;
 	Asset::LightData data;
 };
 
-struct ScriptComponent
+struct ScriptComponent : Component
 {
 	std::string name;
 };

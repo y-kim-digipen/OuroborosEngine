@@ -27,6 +27,7 @@ namespace Renderer
 	{
 		glfwSwapBuffers(window);
 	}
+
 	int Context::BeginFrame()
 	{
 		return 0;

@@ -6,7 +6,7 @@
 
 namespace Renderer
 {
-	VulkanBuffer::VulkanBuffer(Vulkan_type* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
+	VulkanBuffer::VulkanBuffer(VulkanType* vulkan_type, uint64_t buffer_size, VkBufferUsageFlags buffer_usage,
 		VmaMemoryUsage vma_usage) : vulkan_type(vulkan_type) ,size(buffer_size) {
 		VkBufferCreateInfo buffer_create_info{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
 		buffer_create_info.size = buffer_size;
@@ -104,7 +104,16 @@ namespace Renderer
 		}
 	}
 
-	VulkanVertexBuffer::VulkanVertexBuffer(Vulkan_type* vulkan_type, const std::vector<Vertex>& vertices) : vulkan_type(vulkan_type)
+	VkDescriptorBufferInfo VulkanBuffer::GetBufferInfo() const
+	{
+		return {
+			buffer,
+			0,
+			size
+		};
+	}
+
+	VulkanVertexBuffer::VulkanVertexBuffer(VulkanType* vulkan_type, const std::vector<Vertex>& vertices) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ vertices.size() * sizeof(Vertex) };
 		buffer_size = new_buffer_size;
@@ -167,7 +176,7 @@ namespace Renderer
 		}
 	}
 
-	VulkanIndexBuffer::VulkanIndexBuffer(Vulkan_type* vulkan_type ,const std::vector<uint32_t>& data) : vulkan_type(vulkan_type)
+	VulkanIndexBuffer::VulkanIndexBuffer(VulkanType* vulkan_type ,const std::vector<uint32_t>& data) : vulkan_type(vulkan_type)
 	{
 		uint64_t new_buffer_size{ data.size() * sizeof(uint32_t) };
 		buffer_size = new_buffer_size;
@@ -228,179 +237,90 @@ namespace Renderer
 	}
 
 
-	VulkanUniformBuffer::VulkanUniformBuffer(Vulkan_type* vulkan_type, uint32_t set_num) :  vulkan_type(vulkan_type), set_num(set_num)
-	{
-		data = nullptr;
+	VulkanUniformBuffer::VulkanUniformBuffer(VulkanType* vulkan_type, uint32_t binding_num, uint32_t size)	{
+		Init(vulkan_type, binding_num, size);
 	}
 
 	VulkanUniformBuffer::~VulkanUniformBuffer()
 	{
-		ShutDown();
+		Cleanup();
 	}
 
-	void VulkanUniformBuffer::Bind() const
+	void VulkanUniformBuffer::Init(VulkanType* vulkan_type, uint32_t binding_num, uint32_t size)
 	{
-		if (vulkan_type->current_pipeline_layout != VK_NULL_HANDLE)
-			vkCmdBindDescriptorSets(vulkan_type->frame_data[vulkan_type->current_frame].command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan_type->current_pipeline_layout, set_num, 1, &descriptor_set[vulkan_type->current_frame], 0, nullptr);
-	}
+		this->vulkan_type = vulkan_type;
+		block_info.binding = binding_num;
+		block_info.size = size;
+		//block_info.size = pad_uniform_buffer_size(vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment, size);
 
-	void VulkanUniformBuffer::UnBind() const
-	{
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+		}
 		
+		if (size != 0) {
+			data = malloc(size);
+			memset(data, 0, size);
+		}
 	}
 
-	void VulkanUniformBuffer::ShutDown()
+	void VulkanUniformBuffer::Cleanup()
 	{
-		if (data != nullptr)
-			free(data);
-		data = nullptr;
-
-		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-			buffer[i].reset();
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+			if (buffer[i] != nullptr)
+				buffer[i].reset();
+		}
 	}
 
 	int VulkanUniformBuffer::UpdateData(const char* member_var_name, void* data_)
 	{
-		if (member_vars.find(member_var_name) != member_vars.end()) 
+		auto itr = member_vars.find(member_var_name);
+
+		if (itr != member_vars.end()) 
 		{
-			char* ptr = reinterpret_cast<char*>(this->data) + member_vars[member_var_name].offset;
-			memcpy(ptr , data_, member_vars[member_var_name].size);
-			UploadToGPU(member_vars[member_var_name].offset,member_vars[member_var_name].size);
+			AddData(data_, member_vars[member_var_name].offset, member_vars[member_var_name].size);
 			return 0;
 		}
 
 		return -1;
 	}
 
-	int VulkanUniformBuffer::AddBinding(uint32_t binding_num, uint32_t buffer_size)
+	int VulkanUniformBuffer::AddData(void* data_, uint32_t offset, uint32_t buffer_size)
 	{
-		uint32_t current_binding_count = bindings.size();
-
-		if (current_binding_count > binding_num) {
-			std::cout << "Failed to add binding " << binding_num << std::endl;
-			return -1;
-		}
-
-		uint32_t offset = 0;
-
-		if (current_binding_count > 0) {
-			offset = bindings.back().offset + bindings.back().size;
-
-			// Calculate required alignment based on minimum device offset alignment
-			size_t min_ubo_alignment = vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment;
-			size_t aligned_size = offset;
-			if (min_ubo_alignment > 0) {
-				aligned_size = (aligned_size + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
-			}
-				
-			offset = aligned_size;
-		}
-
-		bindings.emplace_back(
-			binding_num,
-			offset,
-			buffer_size
-		);
-	}
-
-	// offset refers ubo block offset
-	int VulkanUniformBuffer::AddData(void* data, uint32_t offset, uint32_t buffer_size)
-	{
-		if (this->buffer_size < buffer_size)
+		if (block_info.size < buffer_size)
 		{
 			std::cout << "block size is bigger than the total block size!" << std::endl;
 			return  -1;
 		}
 
+		char* mem = (char*)data + offset;
+		memcpy_s(mem, block_info.size, data_, buffer_size);
 
-		// Calculate required alignment based on minimum device offset alignment
-		size_t min_ubo_alignment = vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment;
-		size_t aligned_size = offset;
-		if (min_ubo_alignment > 0) {
-			aligned_size = (aligned_size + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+			buffer[i]->UploadData(data_, buffer_size, offset);
 		}
-
-		offset = aligned_size;
-
-		char* mem = (char*)this->data + offset;
-
-		memcpy_s(mem, this->buffer_size, data, buffer_size);
 
 		return 0;
 	}
 
-	void VulkanUniformBuffer::UploadToGPU(uint32_t offset, uint32_t upload_size)
-	{
-		if (upload_size == 0)
-			upload_size = this->buffer_size;
-
-		auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, upload_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
-		staging_buffer->UploadData(data, upload_size, offset);
-
-		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-			buffer[i]->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), offset);
-	}
-
-	void VulkanUniformBuffer::SetupDescriptorSet(VkDescriptorSetLayout layout)
-	{
-		uint32_t binding_count = bindings.size();
-
-		if (binding_count < 0)
-		{
-			std::cout << "Cannot set up descriptor set! binding doesn't exists" << std::endl;
-			return;
-		}
-		
-		if (buffer_size == 0 || data == nullptr) {
-			buffer_size = bindings.back().offset + bindings.back().size;
-			data = malloc(buffer_size);
-			memset(data, 0, buffer_size);
-		}
-		VkDescriptorSetAllocateInfo alloc_info{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-		alloc_info.descriptorPool = vulkan_type->descriptor_pool;
-		alloc_info.descriptorSetCount = 1;
-		alloc_info.pSetLayouts = &layout;
-
-
-		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-
-			buffer[i] = std::make_shared<VulkanBuffer>(vulkan_type, buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
-
-			VK_CHECK(vkAllocateDescriptorSets(vulkan_type->device.handle, &alloc_info, &descriptor_set[i]));
-
-			std::vector<VkWriteDescriptorSet> set_writes(binding_count);
-			std::vector<VkDescriptorBufferInfo> buffer_info(binding_count);
-
-			for (uint32_t i_binding = 0; i_binding < binding_count; ++i_binding) {
-
-				buffer_info[i_binding] = {};
-				buffer_info[i_binding].buffer = buffer[i]->buffer;
-				buffer_info[i_binding].offset = bindings[i_binding].offset;
-				buffer_info[i_binding].range = bindings[i_binding].size;
-
-				set_writes[i_binding] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-				set_writes[i_binding].dstSet = descriptor_set[i];
-				set_writes[i_binding].dstBinding = bindings[i_binding].binding;
-				set_writes[i_binding].descriptorCount = 1;
-				set_writes[i_binding].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-				set_writes[i_binding].pBufferInfo = &buffer_info[i_binding];
-			}
-
-			vkUpdateDescriptorSets(vulkan_type->device.handle, binding_count, set_writes.data(), 0, nullptr);
-		}
-	}
-
 	uint64_t VulkanUniformBuffer::GetBufferSize() const
 	{
-		return buffer_size;
+		return block_info.size;
 	}
 
-
-	//temporary
-
+	VkDescriptorBufferInfo VulkanUniformBuffer::GetBufferInfo(uint32_t frame_num) const
+	{
+		return buffer[frame_num]->GetBufferInfo();
+	}
 
 	void VulkanUniformBuffer::AddMember(const std::string& name, DataType data_type, uint32_t size, uint32_t offset)
 	{
+		//size = block_info.size = pad_uniform_buffer_size(vulkan_type->device.properties.limits.minUniformBufferOffsetAlignment, size);
+
+		if (size + offset > block_info.size) {
+			std::cout << name << " member data is out of a uniform buffer size range" << std::endl;
+			return;
+		}
+
 		if (member_vars.find(name) == member_vars.end()) {
 			member_vars[name].name = name;
 			member_vars[name].type = data_type;
@@ -408,18 +328,14 @@ namespace Renderer
 			member_vars[name].offset = offset;
 		}
 	}
+	size_t pad_uniform_buffer_size(size_t min_ubo_alignment, size_t originalSize)
+	{
+		size_t alignedSize = originalSize;
 
-	//int UniformBuffer::UpdateData(const char* member_var_name, void* data)
-	//{
-	//	if (member_vars.find(member_var_name) != member_vars.end())
-	//	{
-	//		const UniformBufferMember& ub_mem = member_vars[member_var_name];
-	//		memcpy_s((char*)this->data + ub_mem.offset, ub_mem.size, data, ub_mem.size);
+		if (min_ubo_alignment > 0) {
+			alignedSize = (alignedSize + min_ubo_alignment - 1) & ~(min_ubo_alignment - 1);
+		}
 
-	//		return 0;
-	//	}
-
-	//	return -1;
-	//}
-
+		return alignedSize;
+	}
 }

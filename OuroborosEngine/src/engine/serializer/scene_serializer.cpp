@@ -2,10 +2,10 @@
 #include <../src/engine/engine.h>
 #include <fstream>
 
+#include "shared_serialization_impl.h"
 #include "../input/InputManager.h"
 #include "../src/engine/engine_settings.h"
 #include "../src/engine/engine.h"
-#include "component_serialization_impl.h"
 
 namespace OE
 {
@@ -87,7 +87,9 @@ namespace OE
 						if (has_component)
 						{
 							out << YAML::Key << typeid(TComponent).name();
-							out << YAML::Value << YAML::BeginMap << ecs_manager.GetComponent<TComponent>(entityID) << YAML::EndMap;
+							out << YAML::Value << 
+								YAML::BeginMap << ecs_manager.GetComponent<TComponent>(entityID)
+							<< YAML::EndMap;
 						}
 					}
 					);
@@ -149,6 +151,7 @@ namespace OE
 				const std::string& key = it->first.as<std::string>();
 				YAML::Node data_node = it->second;
 				Asset::MaterialData data;
+				//_deserialization_impl::_deserialize<Asset::MaterialData>(data_node, data, nullptr);
 				data_node >> data;
 				OE::Engine::window->GetWindowData().RenderContextData
 					->material_manager->AddMaterial(key, data);

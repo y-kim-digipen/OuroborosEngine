@@ -128,6 +128,7 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     <ClInclude Include="src\engine\ecs\system_manager.h" />
     <ClInclude Include="src\engine\engine_settings.h" />
     <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\gui\GUIWrappedFunctions.h" />
     <ClInclude Include="src\engine\gui\gui_asset_implementation.h" />
     <ClInclude Include="src\engine\gui\gui_component_panel.h" />
     <ClInclude Include="src\engine\gui\GUI_definedColors.h" />
@@ -139,8 +140,8 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     <ClInclude Include="src\engine\modules\script_asset_manager.h" />
     <ClInclude Include="src\engine\scripting\lua_script_manager.h" />
     <ClInclude Include="src\engine\scripting\script.h" />
-    <ClInclude Include="src\engine\serializer\assets_serialization_impl.h" />
-    <ClInclude Include="src\engine\serializer\component_serialization_impl.h" />
+    <ClInclude Include="src\engine\serializer\assets_serialization_impl.inl" />
+    <ClInclude Include="src\engine\serializer\component_serialization_impl.inl" />
     <ClInclude Include="src\engine\serializer\scene_serializer.h" />
     <ClInclude Include="src\engine\serializer\shared_serialization_impl.h" />
   </ItemGroup>
@@ -161,6 +162,8 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\gui\gui_component_implementation.inl" />
+    <None Include="src\engine\serializer\assets_deserialization_impl.inl" />
+    <None Include="src\engine\serializer\component_deserialization_impl.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

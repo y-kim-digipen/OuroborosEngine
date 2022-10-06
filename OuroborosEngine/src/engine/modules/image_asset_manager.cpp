@@ -10,17 +10,25 @@
 #include "Graphics/vulkan/vulkan_texture_manager.h"
 namespace OE
 {
+
     ImageAssetManager::~ImageAssetManager()
     {
         for (const auto& val : assets | std::views::values)
         {
             stbi_image_free(val.second.image);
         }
+   
     }
 
     int ImageAssetManager::LoadAsset(const std::string& file_name)
     {
-	    Asset::Image image{ nullptr, 0, 0 ,0, file_name };
+        Asset::Image image;
+        image.image = nullptr;
+        image.channel = 0;
+        image.width = 0;
+        image.height = 0;
+        image.filename = file_name;
+    	//{ nullptr, 0, 0 ,0, file_name };
         //int nrChannels;
         image.image = stbi_load(file_name.c_str(),
             &image.width, &image.height,

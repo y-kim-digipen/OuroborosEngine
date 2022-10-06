@@ -26,7 +26,7 @@ function Update(ent_ID, dt)
     if has_light_component then
         local pos = vec3.new();
         pos = ecs_manager:GetTransformComponent(ent_ID).pos
-        local target_dir = vec3.new(-pos.x, -pos.y, -pos.z)
+        local target_dir = vec3.new(pos.x, pos.y, pos.z)
         ecs_manager:GetLightComponent(ent_ID).data.dir = target_dir
     end
 end

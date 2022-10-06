@@ -84,8 +84,10 @@ namespace OE
 
 		static void SetupGUI();
 		static void ECS_TestSetup();
-		static void SetupModule();
+		//static void SetupModule();
 		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
+
+		static void InitEssentialAssets();
 	public: // Modules
 		inline static Asset_Manager asset_manager;
 		inline static std::unique_ptr<Renderer::Window> window;

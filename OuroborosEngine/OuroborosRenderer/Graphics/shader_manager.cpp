@@ -6,7 +6,7 @@
 
 namespace Renderer
 {
-	VulkanShaderManager::VulkanShaderManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanShaderManager::VulkanShaderManager(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
@@ -55,6 +55,7 @@ namespace Renderer
 		else
 		{
 			std::cout << shader_name << " doesn't exist! " << std::endl;
+			return nullptr;
 		}
 
 	}

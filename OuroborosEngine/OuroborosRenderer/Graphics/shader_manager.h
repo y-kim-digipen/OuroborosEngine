@@ -4,14 +4,14 @@
 #include <unordered_map>
 
 #include "vulkan/vulkan_shader.h"
-struct Vulkan_type;
+struct VulkanType;
 
 namespace Renderer
 {
 	class VulkanShaderManager 
 	{
 	public:
-		VulkanShaderManager(Vulkan_type* vulkan_type);
+		VulkanShaderManager(VulkanType* vulkan_type);
 		~VulkanShaderManager() = default;
 		int AddShader(ShaderConfig* config) ;
 		int DeleteShader(ShaderConfig* config) ;
@@ -20,7 +20,7 @@ namespace Renderer
 		friend class VulkanMeshManager;
 
 	private:
-		Vulkan_type* vulkan_type;
+		VulkanType* vulkan_type;
 		std::unordered_map<std::string, std::shared_ptr<VulkanShader>> shader_map;
 	};
 

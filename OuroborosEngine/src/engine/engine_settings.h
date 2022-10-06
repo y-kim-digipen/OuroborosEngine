@@ -8,14 +8,24 @@
 #include "modules/shader_asset_manager.h"
 #include "modules/script_asset_manager.h"
 
-using ComponentList = OE::ECS::TypeList<TransformComponent, VelocityComponent, LifeTimeComponent, MeshComponent, BoolWrapperComponent, ShaderComponent,MaterialComponent, TagComponent, LightComponent, ScriptComponent>;
+using ComponentList = OE::ECS::TypeList<
+	TransformComponent,
+	VelocityComponent,
+	LifeTimeComponent,
+	MeshComponent,
+	BoolWrapperComponent,
+	ShaderComponent,
+	MaterialComponent,
+	TagComponent,
+	LightComponent,
+	ScriptComponent
+>;
 
 using PhysicsSystem		= OE::ECS::System<TransformComponent, VelocityComponent>;
 using TestSystem		= OE::ECS::System<BoolWrapperComponent>;
 using DrawSystem		= OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
 using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent>;
 using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
-
 using SystemList = OE::ECS::types::SystemList<PhysicsSystem, TestSystem,  DrawSystem, LightSystem, ScriptingSystem>;
 
 using Signature0 = OE::ECS::types::Signature<TransformComponent, VelocityComponent>;

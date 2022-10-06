@@ -6,14 +6,14 @@
 
 namespace Renderer
 {
-	class Texture;
+	class VulkanTexture;
 	class TextureManager
 	{
 	public:
 		TextureManager() = default;
 		virtual int AddTexture(const std::string& name, const Asset::Image& image) = 0;
 		virtual int DeleteTexture(const std::string& name) = 0;
-		virtual std::shared_ptr<Texture> GetTexture(const std::string& name)
+		virtual std::shared_ptr<VulkanTexture> GetTexture(const std::string& name)
 		{
 			if(auto iter = textures_map.find(name); iter != textures_map.end())
 			{
@@ -31,7 +31,7 @@ namespace Renderer
 			return 0;
 		}
 	protected:
-		std::unordered_map<std::string, std::shared_ptr<Texture>> textures_map;
+		std::unordered_map<std::string, std::shared_ptr<VulkanTexture>> textures_map;
 	};
 
 	

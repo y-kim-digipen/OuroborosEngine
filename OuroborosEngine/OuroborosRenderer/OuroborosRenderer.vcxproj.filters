@@ -119,9 +119,6 @@
     <ClInclude Include="Graphics\texture.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\vulkan\vulkan_texture.h">
-      <Filter>Source Files\Graphics\vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\texture_manager.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
@@ -131,6 +128,7 @@
     <ClInclude Include="Graphics\vulkan\vulkan_initializers.h">
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\vulkan\vulkan_descriptor_set.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\context.cpp">
@@ -218,6 +216,9 @@
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\material_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\vulkan\vulkan_descriptor_set.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

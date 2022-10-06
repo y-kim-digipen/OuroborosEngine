@@ -1,10 +1,10 @@
-#include "vulkan_texture.h"
+#include "../texture.h"
 
 #include "vulkan_buffer.h"
 #include "vulkan_image.h"
 namespace Renderer
 {
-	VulkanTexture::VulkanTexture(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanTexture::VulkanTexture(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
@@ -21,21 +21,21 @@ namespace Renderer
 	void VulkanTexture::UploadData(const Asset::Image& data)
 	{
 
-		uint32_t width  = data.width;
+		uint32_t width = data.width;
 		uint32_t height = data.height;
 
 		VkExtent3D image_extent
 		{
-			.width  = width,
+			.width = width,
 			.height = height,
-			.depth  = 1,
+			.depth = 1,
 		};
 		UpdateColorType(data.channel);
-		
+
 		if (width != width_ || height != height_)
 		{
 
-			width_  = width;
+			width_ = width;
 			height_ = height;
 
 			VkFilter filter = VK_FILTER_NEAREST;
@@ -43,9 +43,9 @@ namespace Renderer
 
 			VkSamplerCreateInfo sampler_create_info
 			{
-				.sType		  = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-				.magFilter    = filter,
-				.minFilter    = filter,
+				.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+				.magFilter = filter,
+				.minFilter = filter,
 				.addressModeU = sampler_address_mode,
 				.addressModeV = sampler_address_mode,
 				.addressModeW = sampler_address_mode,
@@ -57,15 +57,15 @@ namespace Renderer
 			VkFormat color_format = ColorTypeToVulkanFormatType(color_type);
 			VkImageCreateInfo image_create_info
 			{
-				.sType		= VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-				.imageType  = VK_IMAGE_TYPE_2D,
-				.format     = color_format,
-				.extent		= image_extent,
-				.mipLevels  = 1,
-				.arrayLayers= 1,
-				.samples    = VK_SAMPLE_COUNT_1_BIT,
-				.tiling     = VK_IMAGE_TILING_OPTIMAL,
-				.usage      = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+				.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+				.imageType = VK_IMAGE_TYPE_2D,
+				.format = color_format,
+				.extent = image_extent,
+				.mipLevels = 1,
+				.arrayLayers = 1,
+				.samples = VK_SAMPLE_COUNT_1_BIT,
+				.tiling = VK_IMAGE_TILING_OPTIMAL,
+				.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
 				.sharingMode = VK_SHARING_MODE_EXCLUSIVE
 			};
 
@@ -75,16 +75,16 @@ namespace Renderer
 
 			VkImageViewCreateInfo image_view_create_info
 			{
-				.sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-				.image	  = image_,
+				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+				.image = image_,
 				.viewType = VK_IMAGE_VIEW_TYPE_2D,
-				.format   = color_format,
+				.format = color_format,
 				.subresourceRange = {
-					.aspectMask		= VK_IMAGE_ASPECT_COLOR_BIT,
-					.baseMipLevel	= 0,
-					.levelCount		= 1,
+					.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+					.baseMipLevel = 0,
+					.levelCount = 1,
 					.baseArrayLayer = 0,
-					.layerCount		= 1,
+					.layerCount = 1,
 				}
 			};
 
@@ -93,77 +93,77 @@ namespace Renderer
 
 		//TODO : need to fix the proper data type(jpg, png)
 
-			const uint32_t data_size = width_ * height_ * 4;
+		const uint32_t data_size = width_ * height_ * 4;
 
-			const auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, data_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
-			staging_buffer->UploadData(reinterpret_cast<int*>(data.image), data_size);
+		const auto staging_buffer = std::make_shared<VulkanBuffer>(vulkan_type, data_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+		staging_buffer->UploadData(reinterpret_cast<int*>(data.image), data_size);
 
-			VkImageSubresourceRange image_subresource_range
-			{
-				.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT,
-				.baseMipLevel   = 0,
-				.levelCount     = 1,
-				.baseArrayLayer = 0,
-				.layerCount     = 1
-			};
-
-
-			VkImageMemoryBarrier image_memory_barrier{
-				 .sType			   = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-				 .srcAccessMask    = 0,
-				 .dstAccessMask    = VK_ACCESS_TRANSFER_WRITE_BIT,
-				 .oldLayout		   = VK_IMAGE_LAYOUT_UNDEFINED,   
-			   	 .newLayout		   = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				 .image			   = image_,
-				 .subresourceRange = image_subresource_range,
-			};
-
-			VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
-			allocate_info.level				  = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-			allocate_info.commandPool		  = vulkan_type->command_pool;
-			allocate_info.commandBufferCount  = 1;
-
-			VkCommandBuffer command_buffer;
-			vkAllocateCommandBuffers(vulkan_type->device.handle, &allocate_info, &command_buffer);
+		VkImageSubresourceRange image_subresource_range
+		{
+			.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+			.baseMipLevel = 0,
+			.levelCount = 1,
+			.baseArrayLayer = 0,
+			.layerCount = 1
+		};
 
 
-			//Record
-			VkCommandBufferBeginInfo command_buffer_begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-			command_buffer_begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+		VkImageMemoryBarrier image_memory_barrier{
+			 .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+			 .srcAccessMask = 0,
+			 .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+			 .oldLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+			 .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			 .image = image_,
+			 .subresourceRange = image_subresource_range,
+		};
+
+		VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
+		allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocate_info.commandPool = vulkan_type->command_pool;
+		allocate_info.commandBufferCount = 1;
+
+		VkCommandBuffer command_buffer;
+		vkAllocateCommandBuffers(vulkan_type->device.handle, &allocate_info, &command_buffer);
+
+
+		//Record
+		VkCommandBufferBeginInfo command_buffer_begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+		command_buffer_begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
 			vkBeginCommandBuffer(command_buffer, &command_buffer_begin_info);
 
-			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0,nullptr, 0, nullptr, 1, &image_memory_barrier);
+		vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
 
-			VulkanBuffer::CopyBufferToImage(command_buffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				staging_buffer.get(), &image_, image_extent);
+		VulkanBuffer::CopyBufferToImage(command_buffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			staging_buffer.get(), &image_, image_extent);
 
 
-			image_memory_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-			image_memory_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_memory_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		image_memory_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-			image_memory_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-			image_memory_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		image_memory_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		image_memory_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
+		vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
 
-			vkEndCommandBuffer(command_buffer);
+		vkEndCommandBuffer(command_buffer);
 
-			VkSubmitInfo submit_info { VK_STRUCTURE_TYPE_SUBMIT_INFO };
-			submit_info.commandBufferCount = 1;
-			submit_info.pCommandBuffers	   = &command_buffer;
+		VkSubmitInfo submit_info{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+		submit_info.commandBufferCount = 1;
+		submit_info.pCommandBuffers = &command_buffer;
 
-			vkQueueSubmit(vulkan_type->device.graphics_queue, 1, &submit_info, VK_NULL_HANDLE);
-			vkQueueWaitIdle(vulkan_type->device.graphics_queue);
+		vkQueueSubmit(vulkan_type->device.graphics_queue, 1, &submit_info, VK_NULL_HANDLE);
+		vkQueueWaitIdle(vulkan_type->device.graphics_queue);
 
-			vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
+		vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
 	}
 
 	void VulkanTexture::UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding)
 	{
 		VkDescriptorImageInfo image_buffer_info
 		{
-				.sampler     = sampler_,
-				.imageView   = image_view_,
+				.sampler = sampler_,
+				.imageView = image_view_,
 				.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		};
 
@@ -182,7 +182,7 @@ namespace Renderer
 	{
 		switch (channel)
 		{
-			case 4:
+			case 1:
 				color_type = E_ColorType::UNSIGNED_CHAR4;
 				break;
 			default:
@@ -197,5 +197,13 @@ namespace Renderer
 			vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
 			vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
 		}
+	}
+	VkDescriptorImageInfo VulkanTexture::GetImageInfo() const
+	{
+		return VkDescriptorImageInfo{
+			sampler_,
+			image_view_,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		};
 	}
 }

@@ -8,7 +8,10 @@
 
 namespace Asset
 {
-    struct Mesh
+    struct Asset
+    {
+    };
+    struct Mesh : Asset
     {
         struct Vertex
         {
@@ -28,7 +31,7 @@ namespace Asset
         inline static std::list<std::string> supported_formats { ".obj" };
     };
     
-    struct Image
+    struct Image : Asset
     {
         unsigned char* image;
         int width, height;
@@ -37,28 +40,29 @@ namespace Asset
         inline static std::list<std::string> supported_formats{ ".jpg", ".jpeg", ".png" };
     };
 
-    struct Shader
+    struct Shader : Asset
     {
         std::string name;
         inline static std::list<std::string> supported_formats{ ".vert", ".frag" };
     };
 
-    struct Script
+    struct Script : Asset
     {
         std::string path;
         inline static std::list<std::string> supported_formats{ ".lua" , ".clua", ".slua"};
     };
 
-    struct CameraData
+    struct CameraData : Asset
     {
         glm::mat4 projection;
         glm::mat4 view;
         glm::vec3 position;
     };
 
-    struct MaterialData
+    struct MaterialData : Asset
     {
-        alignas(16)  glm::vec3 albedo;
+        alignas(16)
+    	glm::vec3 albedo;
         float metallic;
         float roughness;
         float ao;
@@ -72,7 +76,7 @@ namespace Asset
         int is_roughness_texture_inverted = 0;
     };
 
-    struct LightData
+    struct LightData : Asset
     {
         alignas(16)   glm::vec3 pos;
 		float cutoff;

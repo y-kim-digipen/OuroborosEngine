@@ -8,7 +8,7 @@
 
 namespace Renderer
 {
-	VulkanMeshManager::VulkanMeshManager(Vulkan_type* vulkan_type) : vulkan_type(vulkan_type)
+	VulkanMeshManager::VulkanMeshManager(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
 	{
 
 	}
@@ -40,13 +40,14 @@ namespace Renderer
 		}
 		else
 		{
-			//std::cout << mesh_name << " (mesh) is doesn't exist! try to added mesh" << std::endl;
-			throw std::runtime_error(mesh_name + "(mesh) is doesn't exist!");
+			std::cout << mesh_name << " (mesh) is doesn't exist!" << std::endl;
+			//throw std::runtime_error(mesh_name + "(mesh) is doesn't exist!");
 			//int result = AddMesh(mesh_name);
 			//if (result == 0)
 			//{
 			//	mesh_map.find(mesh_name)->second->Draw(model, normal_matrix);
 			//}
+			return -1;
 		}
 
 		return 0;

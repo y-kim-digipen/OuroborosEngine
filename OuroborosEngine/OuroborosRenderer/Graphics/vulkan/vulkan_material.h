@@ -7,7 +7,8 @@
 
 #include <memory>
 
-#include "vulkan_texture.h"
+#include "../texture.h"
+#include "vulkan_descriptor_set.h"
 
 namespace Renderer {
 
@@ -17,27 +18,25 @@ namespace Renderer {
 
 	public:
 		//VulkanMaterial(Vulkan_type* vulkan_type, Material* material);
-		VulkanMaterial(Vulkan_type* vulkan_type);
+		VulkanMaterial(VulkanType* vulkan_type ,std::shared_ptr<VulkanTexture> noneTexutre);
 		~VulkanMaterial() override;
-		void SetAlbedoTexture(std::shared_ptr<Texture> texture) override;
+		void SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture) override;
 		void Bind() override;
-		void SetAOTexture(std::shared_ptr<Texture> texture) override;
-		void SetMetalRoughnessTexture(std::shared_ptr<Texture> texture) override;
-		void SetNormalTexture(std::shared_ptr<Texture> texture) override;
-		void SetMetalicTexture(std::shared_ptr<Texture> texture) override;
-		void SetRoughSmoothnessTexture(std::shared_ptr<Texture> texture) override;
-		void SetEmissiveTexture(std::shared_ptr<Texture> texture) override;
+		void SetAOTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetNormalTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetMetalicTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture) override;
+		void SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture) override;
 		void Cleanup() override;
 
 		bool is_changed = false;
-		VkDescriptorSetLayout set_layout{};
+
 		std::unique_ptr<VulkanUniformBuffer> ubo;
-	
+		DescriptorSet set;
+
 	private:
-		Vulkan_type* vulkan_type;
-	
-		
-		//TODO: does this should go in parent class ???
+		VulkanType* vulkan_type;
 	};
 }
 
