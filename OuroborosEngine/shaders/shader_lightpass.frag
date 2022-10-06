@@ -4,10 +4,6 @@
 
 layout(location = 0) out vec4 outColor;
 
-layout(set = 1, binding = 0) uniform Test {
-    float att;
-} oout;
-
 float test_att = 0.1;
 
 void main()
@@ -36,7 +32,7 @@ void main()
         {
             L = light.pos - frag_pos;
             float d = length(L);
-            att = 1/(oout.att*oout.att);
+            att = 1/(test_att*test_att);
             L = normalize(L);
             
             float cutoff = radians(light.cutoff);
