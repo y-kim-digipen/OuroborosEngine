@@ -18,7 +18,7 @@ namespace Renderer {
 
 	int VulkanMaterialManager::AddMaterial(std::string material_name,const Asset::MaterialData& material_data)
 	{
-		if (material_map.find(material_name) != material_map.end())
+		if (material_map.contains(material_name))
 		{
 			std::cout << material_name << " already exists\n";
 			return -1;
@@ -53,7 +53,7 @@ namespace Renderer {
 
 	Material* VulkanMaterialManager::GetMaterial(const std::string& material_name)
 	{
-		if (material_map.find(material_name) == material_map.end())
+		if (!material_map.contains(material_name))
 		{
 			std::cout << material_name << " doesn't exists\n";
 			return nullptr;

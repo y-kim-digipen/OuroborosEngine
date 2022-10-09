@@ -25,6 +25,7 @@ namespace Renderer
 			std::shared_ptr<VulkanTexture> new_texture = std::make_shared<VulkanTexture>(vulkan_type);
 			new_texture->UploadData(image);
 			textures_map.insert({ name,new_texture });
+			name_map.insert({ new_texture, name });
 			return 0;
 		}
 		else
@@ -39,6 +40,7 @@ namespace Renderer
 	{
 		if(auto iter = textures_map.find(name); iter != textures_map.end())
 		{
+			name_map.erase(iter->second);
 			textures_map.erase(iter);
 			return 0;
 		}

@@ -5,21 +5,9 @@
 
 #include "engine_settings.h"
 #include "Graphics/vulkan/vulkan_shader.h"
-#include "gui/gui_component_panel.h"
 
 namespace OE
 {
-	void Engine::SetupGUI()
-	{
-		window->vulkan_imgui_manager.RegisterPanel("File", "FileBrowser", &OE::FileSystemPanelFunction, false);
-		window->vulkan_imgui_manager.RegisterPanel("System", "AssetManager", &OE::AssetBrowserPanelFunction, false);
-		window->vulkan_imgui_manager.RegisterPanel("System", "EngineInfo", &OE::EngineInfoPanelFunction, false);
-		window->vulkan_imgui_manager.RegisterPanel("ECS", "Entities", &OE::EntityInfoPanelFunction);
-		window->vulkan_imgui_manager.RegisterPanel("ECS", "SystemInfo", &OE::SystemInfoPanelFunction);
-
-		window->vulkan_imgui_manager.RegisterPanel("System", "SliderSpeed", &OE::SliderSpeedFunction);
-	}
-
 	void Engine::ECS_TestSetup()
 	{
 		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
@@ -57,8 +45,6 @@ namespace OE
 					return;
 				}
 				const bool has_mesh = Engine::asset_manager.GetManager<MeshAssetManager>().HasAsset(mesh.mesh_name);
-				//const bool has_textures = Engine::asset_manager.GetManager<MeshAssetManager>().HasAsset(mesh.mesh_name);
-
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if (ecs_manager.GetEntity(ent).alive)
 				{
@@ -92,7 +78,6 @@ namespace OE
 
 		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::Status status, OE::ecs_ID ent, float dt, ScriptComponent& script_component)
 			{
-				//std::cout << static_cast<int>(status) << std::endl;
 				if (ecs_manager.GetEntity(ent).alive)
 				{
 					auto script = OE::Engine::lua_script_manager.GetScript(OE::Script::ScriptType::AttatchedComponent, std::to_string(ent));
@@ -114,30 +99,12 @@ namespace OE
 					}
 				}
 			});
-
-		ecs_manager.system_storage.RegisterSystemImpl<CubemapSystem>([](OE::ecs_ID ent, float dt, CubemapComponent& cubemap, ShaderComponent& shader)
-			{
-				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
-
-				if (ecs_manager.GetEntity(ent).alive)
-				{
-					//contex
-						// Addqueue(Cubemapcomponent a);
-					context->AddCubemapDrawQueue(&cubemap, &shader);
-
-					//context
-					//texture_manager->Gettexture()
-					//context->shader_manager[].bind
-					//cubemap->Draw();
-				}
-			});
-
 	}
 
 	void Engine::InitEssentialAssets()
 	{
 		asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/default_cube.obj");
-		//asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
+		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
 		asset_manager.GetManager<ImageAssetManager>().LoadAsset("images/null.png");
 	}
 
@@ -155,11 +122,6 @@ namespace OE
 
 	void Engine::Init()
 	{
-		//Profiler::Init();
-		/*
-		target_fps = 240;
-		target_dt = 1.0f / (target_fps * 2);*/
-		//Init engine
 		Engine& engine = Get();
 		scene_serializer.Init();
 		ECS_TestSetup();
@@ -183,12 +145,8 @@ namespace OE
 		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
-		
-		//TODO: cubemap init
-		window->GetWindowData().RenderContextData->cubemap;
 
 		//init engine module
-		SetupGUI();
 		delta_timer.Init();
 
 		std::vector<int> key_supports{
@@ -202,24 +160,17 @@ namespace OE
 		input.Init(window->GetWindowData().window, key_supports);
 		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
 			{
-				if (mode == Input::PRESSED)
-				{
-					std::cout << "Pressed" << std::endl;
-				}
-				else
-				{
-					std::cout << "Released" << std::endl;
-				}
+				//if (mode == Input::PRESSED)
+				//{
+				//	std::cout << "Pressed" << std::endl;
+				//}
+				//else
+				//{
+				//	std::cout << "Released" << std::endl;
+				//}
 			});
 
-		
-		(window->GetWindowData().RenderContextData.get())->material_manager->AddMaterial("material", Asset::MaterialData());
-
-		//scene_serializer.SerializeScene("test.yaml");
-		scene_serializer.DeserializeScene("..\\OuroborosEngine\\ook.yaml");
 		InitEssentialAssets();
-
-		//Profiler::Start();
 	}
 
 	void Engine::PreUpdate()
@@ -294,14 +245,8 @@ namespace OE
 		{
 			Engine::camera.MouseInput(offset, 0);
 		}
-
-
 		if (Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-	
-		/*	const float offset = DeltaTime::GetDeltaTime() * 5.f;
-			if(Input::glfw)
-			Engine::camera.MouseInput(0,)*/
 
 		}
 
@@ -339,9 +284,7 @@ namespace OE
 					if (script)
 					{
 						using member_function = _impl::as_mem_fn<function_signature>;
-						auto func = member_function::Get(/*&Script::Script::Update*/);
-						//auto func = std::bind(bind, *script);
-						//ecs_manager.ForEntitiesMatching<TSystem>(dt, script, func);
+						auto func = member_function::Get();
 					}
 					break;
 				}
@@ -365,6 +308,7 @@ namespace OE
 		event_functions[EventFunctionType::POST].clear();
 		window->BeginFrame();
 		window->Update();
+		gui_manager.Update();
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 		window->EndFrame();
 		input.Update();
@@ -386,15 +330,6 @@ namespace OE
 	void Engine::DeltaTime::PostUpdate()
 	{
 		std::chrono::duration<double, std::milli> work_time = start - end;
-
-		//if (work_time.count() < target_dt * 1000)
-		//{
-		//	std::chrono::duration<double, std::milli> delta_ms(target_dt * 1000 - work_time.count());
-		//	auto delta_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
-		//	std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
-		//}
-
-
 		end = std::chrono::steady_clock::now();
 		const std::chrono::duration delta_tick = end - start;
 		dt = std::chrono::duration<double>(delta_tick).count();

@@ -39,8 +39,6 @@ namespace Renderer
 		void OnResize();
 		
 		VulkanImguiManager vulkan_imgui_manager;
-	private:
-		void Init(const WindowProperties& window_properties);
 
 		struct WindowData
 		{
@@ -50,6 +48,9 @@ namespace Renderer
 			unsigned int height; /*= std::numeric_limits<unsigned int>::max();*/
 			std::shared_ptr<Context> RenderContextData;
 		};
+
+	private:
+		void Init(const WindowProperties& window_properties);
 		WindowData window_data;
 	};
 

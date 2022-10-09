@@ -1,13 +1,9 @@
 #include "image_asset_manager.h"
-
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <ranges>
-
-#include "Graphics/vulkan/vulkan_context.h"
 #include "../engine.h"
-#include "Graphics/vulkan/vulkan_texture_manager.h"
 namespace OE
 {
     ImageAssetManager::~ImageAssetManager()
@@ -40,14 +36,14 @@ namespace OE
 
         assets.try_emplace(file_name, std::make_pair(true, image));
 
-        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager_;
+        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager;
         texture_manager->AddTexture(file_name, image);
         return true;
     }
 
     int ImageAssetManager::UnloadAsset(const std::string& name)
     {
-        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager_;
+        auto& texture_manager = Engine().Get().window->GetWindowData().RenderContextData->texture_manager;
         texture_manager->DeleteTexture(name);
         return true;
     }

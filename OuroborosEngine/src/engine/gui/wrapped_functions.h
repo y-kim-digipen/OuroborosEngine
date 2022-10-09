@@ -30,12 +30,12 @@ namespace OE
 
 		inline bool DragFloat(const std::string& name, float* val, float min = 0, float max = 0)
 		{
-			return ImGui::DragFloat(name.c_str(), val, OE::Engine::window->vulkan_imgui_manager.slider_speed, min, max);
+			return ImGui::DragFloat(name.c_str(), val, OE::Engine::gui_manager.GetSliderSpeed(), min, max);
 		}
 
 		inline bool DragFloat3(const std::string& name, float* val, float min = 0, float max = 0)
 		{
-			return ImGui::DragFloat3(name.c_str(), val, OE::Engine::window->vulkan_imgui_manager.slider_speed, min, max);
+			return ImGui::DragFloat3(name.c_str(), val, OE::Engine::gui_manager.GetSliderSpeed(), min, max);
 		}
 
 		inline void Image(ImTextureID tex_id, bool hover = false, ImVec2 size = ImVec2())
@@ -84,7 +84,7 @@ namespace OE
 			}
 			if(!texture_name.empty())
 			{
-				const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager_;
+				const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager;
 				if (const auto texture = texture_manager->GetTexture(texture_name))
 				{
 					const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();

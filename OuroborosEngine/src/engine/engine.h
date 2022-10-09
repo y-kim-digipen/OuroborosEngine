@@ -13,6 +13,7 @@
 #include "Graphics/Window.h"
 #include "Graphics/shader.h"
 #include "input/InputManager.h"
+#include "gui/GUI_manager.h"
 #include "scripting/lua_script_manager.h"
 
 #include "serializer/scene_serializer.h"
@@ -81,8 +82,7 @@ namespace OE
 	private:
 		//todo to be removed
 		inline static Renderer::Camera camera;
-
-		static void SetupGUI();
+		
 		static void ECS_TestSetup();
 		//static void SetupModule();
 		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
@@ -96,6 +96,7 @@ namespace OE
 		inline static ECS_Manager ecs_manager;
 		inline static Script::LuaScriptManager lua_script_manager;
 		inline static SceneSerializer scene_serializer;
+		inline static GUI::GUI_manager gui_manager;
 	};
 
 	inline Engine& Engine::Get()

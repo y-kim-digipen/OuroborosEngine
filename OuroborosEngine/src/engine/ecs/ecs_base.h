@@ -578,7 +578,6 @@ namespace OE
 					current_status = Status::INIT;
 					break;
 				case Status::INIT:
-					//GetEntity(entity_ID).bitset[settings::template SystemBit<TSystem>()] = true;
 					current_status = Status::UPDATE;
 					break;
 				case Status::UPDATE:

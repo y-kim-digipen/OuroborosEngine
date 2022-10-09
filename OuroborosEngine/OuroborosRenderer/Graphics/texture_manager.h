@@ -7,8 +7,10 @@
 namespace Renderer
 {
 	class Texture;
+
 	class TextureManager
 	{
+
 	public:
 		TextureManager() = default;
 		virtual int AddTexture(const std::string& name, const Asset::Image& image) = 0;
@@ -23,7 +25,14 @@ namespace Renderer
 			{
 				return nullptr;
 			}
-
+		}
+		virtual std::string GetName(std::shared_ptr<Texture> texture)
+		{
+			if(name_map.contains(texture))
+			{
+				return name_map[texture];
+			}
+			return "";
 		}
 		virtual int Cleanup()
 		{
@@ -32,6 +41,7 @@ namespace Renderer
 		}
 	protected:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> textures_map;
+		std::unordered_map<std::shared_ptr<Texture>, std::string> name_map;
 	};
 
 	
