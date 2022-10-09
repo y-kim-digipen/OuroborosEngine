@@ -7,6 +7,7 @@
 #include "modules/mesh_asset_manager.h"
 #include "modules/shader_asset_manager.h"
 #include "modules/script_asset_manager.h"
+#include "modules/material_asset_manager.h"
 
 using ComponentList = OE::ECS::TypeList<
 	TransformComponent,
@@ -40,4 +41,4 @@ using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, System
 
 using ECS_Manager = OE::ECS::Manager<OESettings>;
 
-using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager, OE::ShaderAssetManager, OE::ScriptAssetManager>;
+using Asset_Manager = OE::MasterAssetManager<OE::ImageAssetManager, OE::MeshAssetManager, OE::ShaderAssetManager, OE::ScriptAssetManager, OE::MaterialAssetManager>;

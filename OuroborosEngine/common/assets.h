@@ -4,6 +4,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
 #include <imgui-docking/imgui.h>
+#include "shared.h"
 
 
 namespace Asset
@@ -59,6 +60,24 @@ namespace Asset
         glm::vec3 position;
     };
 
+    struct Material : Asset
+    {
+        Material() = default;
+        Material(const Material& other)
+        {
+            *this = other;
+        }
+        Material& operator=(const Material& other)
+        {
+            name = other.name;
+            pbr_mat = other.pbr_mat;
+            return *this;
+        }
+        std::string name;
+        Shared::PBR_Structure pbr_mat{Shared::MaterialMode::NONE_TEXTURE};
+        inline static std::list<std::string> supported_formats;
+    };
+
     struct MaterialData : Asset
     {
         alignas(16)
@@ -73,7 +92,7 @@ namespace Asset
         int has_metalic_texture = 0;
         int has_roughness_texture = 0;
         int has_emissive_texture = 0;
-        int is_roughness_texture_inverted = 0;
+        int is_smoothness = 0;
     };
 
     struct LightData : Asset

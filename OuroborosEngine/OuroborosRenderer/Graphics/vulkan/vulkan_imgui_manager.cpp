@@ -159,8 +159,6 @@ namespace Renderer
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 		}
-	
-
 	}
 
 	void VulkanImguiManager::Shutdown()
@@ -173,7 +171,7 @@ namespace Renderer
 	void VulkanImguiManager::Update()
 	{
 		ImguiManager::Update();
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 	}
 
 	void VulkanImguiManager::GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

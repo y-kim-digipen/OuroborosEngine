@@ -16,6 +16,7 @@ namespace Renderer {
 		virtual int AddMaterial(std::string material_name, const Asset::MaterialData& data) = 0;
 		virtual Material* GetMaterial(const std::string& material_name) = 0;
 		virtual int ChangeMaterial(std::string material_name, const Asset::MaterialData& data) = 0;
+		virtual int ChangeMaterialName(std::string original_name, std::string name_to_change);
 		void ClearMaterialDatum()
 		{
 			material_map.clear();

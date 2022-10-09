@@ -216,7 +216,7 @@
       <Filter>Source Files\Graphics\vulkan</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\material_manager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\vulkan\vulkan_descriptor_set.cpp">
       <Filter>Source Files</Filter>

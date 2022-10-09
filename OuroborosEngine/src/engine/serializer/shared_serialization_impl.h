@@ -11,15 +11,25 @@
 namespace _serialization_impl
 {
 	//arithmatic or string values
-	template<typename T, std::enable_if_t<std::is_arithmetic_v<T> || std::is_same_v<T, std::string>, void*> = nullptr>
+	template<typename T,
+		std::enable_if_t<std::is_arithmetic_v<T>, void*> = nullptr>
 	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, void*)
 	{
 		emitter << val;
 		return emitter;
 	}
 
+	template<typename T,
+		std::enable_if_t<std::is_same_v<T, std::string>, void*> = nullptr>
+	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, void*)
+	{
+		emitter.Write(val);
+		return emitter;
+	}
+
 	//glm::vec3
-	template<typename T, std::enable_if_t<std::is_same_v<T, glm::vec3>, void*> = nullptr>
+	template<typename T,
+		std::enable_if_t<std::is_same_v<T, glm::vec3>, void*> = nullptr>
 	YAML::Emitter& _serialize(YAML::Emitter& emitter, T& val, void*)
 	{
 		emitter << YAML::Flow << YAML::BeginSeq << val.x << val.y << val.z << YAML::EndSeq;
@@ -49,6 +59,13 @@ namespace _deserialization_impl
 		return node;
 	}
 
+	template<typename T,
+		std::enable_if_t<std::is_same_v<T, const char*>, void*> = nullptr>
+	YAML::Node _deserialize(YAML::Node node, T& val, void*)
+	{
+		return _deserialize(node, std::string(val), nullptr);
+	}
+
 	//glm::vec3
 	template<typename T,
 		std::enable_if_t<std::is_same_v<T, glm::vec3>, void*> = nullptr>
@@ -73,7 +90,6 @@ namespace _deserialization_impl
 	}
 }
 
-
 template<typename T>
 YAML::Node operator >> (YAML::Node node, T& t)
 {
@@ -81,7 +97,7 @@ YAML::Node operator >> (YAML::Node node, T& t)
 }
 
 template<typename T>
-YAML::Emitter& operator << (YAML::Emitter& emitter, const T& t)
+YAML::Emitter& operator << (YAML::Emitter& emitter, T& t)
 {
 	return _serialization_impl::_serialize(emitter, t, nullptr);
 }

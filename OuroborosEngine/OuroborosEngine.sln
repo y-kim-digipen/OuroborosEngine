@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8106C151-1E1B-402B-BF19-B9B201189DAD}"
 	ProjectSection(SolutionItems) = preProject
 		common\assets.h = common\assets.h
+		common\shared.h = common\shared.h
 	EndProjectSection
 EndProject
 Global

@@ -3,43 +3,36 @@
 
 #include "../../common/assets.h"
 #include <glm/vec3.hpp>
+#include <array>
+namespace OE
+{
+    namespace GUI
+    {
+        class MaterialConfigure;
+    }
+}
 
 
 namespace Renderer {
 	class VulkanTexture;
 	class Material {
-
+        friend class OE::GUI::MaterialConfigure;
     public:
         Material() = default;
         virtual ~Material() = default;
         virtual void Bind() = 0;
         void InitMaterialData(const Asset::MaterialData&& other);
         void InitMaterialData(const Asset::MaterialData& other);
-    	virtual void SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetAOTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetNormalTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetMetalicTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture);
-        virtual void SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture);
+        virtual void SetTexture(Shared::PBR_TEXTURE_TYPES type, std::shared_ptr<VulkanTexture> texture);
         virtual void Cleanup();
         Asset::MaterialData* GetMaterialData();
-
+        int& DoUseTexture(Shared::PBR_TEXTURE_TYPES type);
+        std::shared_ptr<VulkanTexture> GetTexture(Shared::PBR_TEXTURE_TYPES type);
 
     protected:
-        std::shared_ptr<VulkanTexture> texture_albedo;
-        std::shared_ptr<VulkanTexture> texture_ao;
-        std::shared_ptr<VulkanTexture> texture_normal;
-        std::shared_ptr<VulkanTexture> texture_metalroughness;
-        std::shared_ptr<VulkanTexture> texture_metallic;
-        std::shared_ptr<VulkanTexture> texture_rough_smoothness;
-        std::shared_ptr<VulkanTexture> texture_emissive;
+        std::array<std::shared_ptr<VulkanTexture>, Shared::PBR_TEXTURE_TYPES::COUNT> textures;
 
         Asset::MaterialData data;
-        Asset::Image* image_albedo = nullptr;
-        Asset::Image* image_emissive = nullptr;
-        Asset::Image* image_metalRoughness = nullptr;
-        Asset::Image* image_normal = nullptr;
     };
 
     inline void Material::InitMaterialData(const Asset::MaterialData&& other)
@@ -52,39 +45,9 @@ namespace Renderer {
         data = other;
     }
 
-    inline void Material::SetAlbedoTexture(std::shared_ptr<VulkanTexture> texture)
+    inline void Material::SetTexture(Shared::PBR_TEXTURE_TYPES type, std::shared_ptr<VulkanTexture> texture)
     {
-	    texture_albedo = texture;
-    }
-
-    inline void Material::SetAOTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_ao = texture;
-    }
-
-    inline void Material::SetNormalTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_normal = texture;
-    }
-
-    inline void Material::SetMetalRoughnessTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_metalroughness = texture;
-    }
-
-    inline void Material::SetMetalicTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_metallic = texture;
-    }
-
-    inline void Material::SetRoughSmoothnessTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_rough_smoothness = texture;
-    }
-
-    inline void Material::SetEmissiveTexture(std::shared_ptr<VulkanTexture> texture)
-    {
-        texture_emissive = texture;
+        textures[type] = texture;
     }
 
     inline void Material::Cleanup()
@@ -94,6 +57,34 @@ namespace Renderer {
     inline Asset::MaterialData* Material::GetMaterialData() 
     {
         return &data;
+    }
+
+    inline int& Material::DoUseTexture(Shared::PBR_TEXTURE_TYPES type)
+    {
+        switch (type)
+        {
+        case Shared::ALBEDO:
+            return data.has_albedo_texture;
+        case Shared::NORMAL:
+            return data.has_normal_texture;
+        case Shared::METALLIC_ROUGHNESS:
+            return data.has_metalroughness_texture;
+        case Shared::METALLIC:
+            return data.has_metalic_texture;
+        case Shared::ROUGHNESS:
+            return data.has_roughness_texture;
+        case Shared::AO:
+            return data.has_ao_texture;
+        case Shared::EMISSIVE:
+            return data.has_emissive_texture;
+        default:
+            assert(false);
+        }
+    }
+
+    inline std::shared_ptr<VulkanTexture> Material::GetTexture(Shared::PBR_TEXTURE_TYPES type)
+    {
+        return textures[type];
     }
 }
 #endif // !MATERIAL_H

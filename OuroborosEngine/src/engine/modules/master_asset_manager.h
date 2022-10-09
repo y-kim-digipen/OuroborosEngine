@@ -4,14 +4,25 @@
 #include <yaml-cpp/yaml.h>
 #include <brigand/algorithms.hpp>
 #include <iostream>
+
+#include "../../OuroborosEngine/src/engine/serializer/shared_serialization_impl.h"
 namespace OE
 {
 	template<typename TAsset>
 	class AssetManager
 	{
 	public:
-		using asset_type = TAsset;
+		using AssetType = TAsset;
 		virtual ~AssetManager() = default;
+		virtual int LoadAsset(const std::string& name, AssetType asset)
+		{
+			if(assets.contains(name))
+			{
+				return 1;
+			}
+			assets.try_emplace(name, std::make_pair(true, asset));
+			return 0;
+		}
 		virtual int LoadAsset(const std::string& name) = 0;
 		virtual int UnloadAsset(const std::string& name)
 		{
@@ -53,18 +64,23 @@ namespace OE
 			assets.clear();
 		}
 
-		void Serialize(YAML::Emitter& emitter) const
+		void Serialize(YAML::Emitter& emitter)
 		{
-			emitter << YAML::BeginSeq;
-			for (auto element : assets)
+			emitter << YAML::BeginMap;
+			for (auto& [key, value] : assets)
 			{
-				std::cout << element.first << std::endl;
-				emitter << std::string(element.first);
+				emitter << YAML::Key << std::string(key);
+				emitter << YAML::Value << YAML::BeginMap << value.second << YAML::EndMap;
 			}
-			emitter << YAML::EndSeq;
+			emitter << YAML::EndMap;
+		}
+
+		virtual void Deserialize(std::string asset_name, YAML::Node node)
+		{
+			LoadAsset(asset_name);
 		}
 	protected:
-		std::map<std::string, std::pair<bool, TAsset>> assets;
+		std::map<std::string, std::pair<bool, AssetType>> assets;
 	};
 
 	template<typename ...TManagers>

@@ -77,8 +77,8 @@ namespace Renderer
 		LightGlobalData light_data;
 		std::unique_ptr<VulkanShaderManager> shader_manager;
 		std::unique_ptr<VulkanMaterialManager> material_manager;
-		std::unique_ptr<TextureManager> texture_manager_;
-	
+		std::unique_ptr<TextureManager> texture_manager;
+		
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
 		void RemoveLight(uint32_t entity_id);
 		void UpdateLight(uint32_t entity_id, Asset::LightData* light_component);
