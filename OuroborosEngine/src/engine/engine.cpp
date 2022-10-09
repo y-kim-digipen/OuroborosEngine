@@ -103,13 +103,10 @@ namespace OE
 	void Engine::InitEssentialAssets()
 	{
 		asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/default_cube.obj");
-		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader");
-
 		ImageAssetManager().LoadAsset("images/null.png");
 		auto* context_data = (window->GetWindowData().RenderContextData.get());
 		context_data->material_manager->SetNoneTexture(context_data->texture_manager->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
-
 	}
 
 	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
@@ -321,6 +318,27 @@ namespace OE
 			event_function();
 		}
 		event_functions[EventFunctionType::POST].clear();
+
+
+		for (const auto& event_function : event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddStartContextEvent(event_function);
+		}
+		event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].clear();
+
+		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddAfterEndDeferredEvent(event_function);
+		}
+		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
+
+		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddEndContextEvent(event_function);
+		}
+		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
+
+
 		window->BeginFrame();
 		window->Update();
 		gui_manager.Update();

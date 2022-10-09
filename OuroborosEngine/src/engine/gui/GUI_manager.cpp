@@ -6,6 +6,7 @@
 #include "system_configure.h"
 #include "slider_speed.h"
 #include "material_configure.h"
+#include "viewport.h"
 #include "../engine.h"
 
 OE::GUI::_manager_internal::Behavior* OE::GUI::_manager_internal::MenuNode::FindBehavior(
@@ -200,6 +201,20 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.f)
 		if (open)
 		{
 			created = new SliderSpeed;
+			AddPanel(created);
+		}
+		else
+		{
+			RemovePanel(created);
+		}
+	});
+
+	RegisterMenuItem({ "System"}, "Viewport", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
+	{
+		open = !open;
+		if (open)
+		{
+			created = new ViewPort;
 			AddPanel(created);
 		}
 		else

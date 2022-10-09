@@ -365,6 +365,13 @@ namespace Renderer
         //RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
         buildDeferredCommandBuffer();
 
+        while(!start_context_events.empty())
+        {
+            auto& event = start_context_events.front();
+            event();
+            start_context_events.pop();
+        }
+
         return 0;
     }
 
@@ -453,11 +460,18 @@ namespace Renderer
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
 
-        ImGui::Begin("viewport");
-        const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
-        UpdateViewportDescriptorSet(*TextureID, 0);
-        ImGui::Image(*TextureID, ImVec2(800, 600));
-        ImGui::End();
+        //ImGui::Begin("viewport");
+        //const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+        //UpdateViewportDescriptorSet(*TextureID, 0);
+        //ImGui::Image(*TextureID, ImVec2(800, 600));
+        //ImGui::End();
+
+        while (!end_deferred_endframe_events.empty())
+        {
+            auto& event = end_deferred_endframe_events.front();
+            event();
+            end_deferred_endframe_events.pop();
+        }
 
 
         return 0;
@@ -488,7 +502,12 @@ namespace Renderer
 
         //submit.commandBufferCount = 1;
         //submit.pCommandBuffers = &frame_data.command_buffer;
-
+        while (!end_context_events.empty())
+        {
+            auto& event = end_context_events.front();
+            event();
+            end_context_events.pop();
+        }
 
         ///
         auto& semaphore = frame_data.semaphore;
@@ -630,7 +649,22 @@ namespace Renderer
             }
       
     }
-    
+
+    void VulkanContext::AddStartContextEvent(EventType f)
+    {
+        start_context_events.push(f);
+    }
+
+    void VulkanContext::AddAfterEndDeferredEvent(EventType f)
+    {
+        end_deferred_endframe_events.push(f);
+    }
+
+    void VulkanContext::AddEndContextEvent(EventType f)
+    {
+        end_context_events.push(f);
+    }
+
 
     int CreateInstance(int major, int minor)
     {

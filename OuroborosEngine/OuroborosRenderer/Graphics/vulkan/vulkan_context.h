@@ -9,6 +9,8 @@ struct VulkanType;
 
 namespace Renderer {
 
+	using EventType = std::function<void(void)>;
+
 	class VulkanContext : public Context {
 	public:
 		VulkanContext(GLFWwindow* window);
@@ -33,11 +35,19 @@ namespace Renderer {
 
 		void DrawQueue() override;
 
+		void AddStartContextEvent(EventType f);
+		void AddAfterEndDeferredEvent(EventType f);
+		void AddEndContextEvent(EventType f);
+
 	private:
 		void CreateSurface();
 		void CreateSwapChain();
 		void RecreateSwapChain();
 		DescriptorSet lightpass_set_;
+
+		std::queue<EventType> start_context_events;
+		std::queue<EventType> end_deferred_endframe_events;
+		std::queue<EventType> end_context_events;
 	};
 
 }

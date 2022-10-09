@@ -133,6 +133,7 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     <ClInclude Include="src\engine\gui\base.h" />
     <ClInclude Include="src\engine\gui\entities_info.h" />
     <ClInclude Include="src\engine\gui\file_browser.h" />
+    <ClInclude Include="src\engine\gui\viewport.h" />
     <ClInclude Include="src\engine\gui\wrapped_functions.h" />
     <ClInclude Include="src\engine\gui\asset_draw.h" />
     <ClInclude Include="src\engine\gui\material_configure.h" />
@@ -164,6 +165,7 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     <ClCompile Include="src\engine\gui\GUI_manager.cpp" />
     <ClCompile Include="src\engine\gui\slider_speed.cpp" />
     <ClCompile Include="src\engine\gui\system_configure.cpp" />
+    <ClCompile Include="src\engine\gui\viewport.cpp" />
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\material_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp" />

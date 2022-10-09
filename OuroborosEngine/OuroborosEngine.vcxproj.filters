@@ -138,6 +138,9 @@
     <ClInclude Include="src\engine\modules\material_asset_manager.h">
       <Filter>engine\modules</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\gui\viewport.h">
+      <Filter>engine\gui\panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="src\engine\modules\material_asset_manager.cpp">
       <Filter>engine\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gui\viewport.cpp">
+      <Filter>engine\gui\panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
