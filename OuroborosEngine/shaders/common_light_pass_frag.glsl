@@ -11,8 +11,6 @@ struct Light
     int type; // 0 = point, 1 = spot, 2 = directional
 };
 
-
-
 layout(set = 0, binding = 1) uniform light_data {
     Light lights[20];
     int num_lights;
