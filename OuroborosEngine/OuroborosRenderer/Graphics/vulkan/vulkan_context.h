@@ -24,6 +24,9 @@ namespace Renderer {
 		int DeferredEndFrame() override;
 		int EndFrame() override;
 
+
+		void UpdateViewportDescriptorSet(VkDescriptorSet descriptor_set, int dest_binding);
+
 		std::unique_ptr<VulkanMeshManager> mesh_manager_;
 
 		VulkanType* GetVulkanType();
