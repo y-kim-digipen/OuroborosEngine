@@ -83,6 +83,9 @@ namespace Renderer
     void ViewportRecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
 
 
+    //Shadow_mapping
+
+
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
@@ -588,35 +591,12 @@ namespace Renderer
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 
 
-                //TODO : need to change deferred offscreen shader
-                /*if (shader_manager->GetShader(front.shader->name)->reload_next_frame)
-                    shader_manager->GetShader(front.shader->name)->Reload();
-
-                shader_manager->GetShader(front.shader->name)->Bind();*/ // Bind pipeline & descriptor set 1
-
                 vulkan_type.deferred_frame_buffer.deferred_shader->Bind();
 				BindGlobalData();
 
             	//TODO: Maybe later, material update should be in update and sorted function
                   
-                /*
-                if (!material->is_light)
-                {
-
-                        if (auto* iter = material_manager->GetMaterial(material->name); iter != nullptr)
-                        {
-                            iter->Bind();
-                        }
-	                    
-           
-                }
-                else
-                {
-                    light_material->InitMaterialData(std::move(material->data));
-                    light_material->is_changed = true;
-                    light_material->Bind();
-                }
-                */
+              
                if(auto* find = material_manager->GetMaterial(material->name); find != nullptr )
                {
                    find->Bind();
