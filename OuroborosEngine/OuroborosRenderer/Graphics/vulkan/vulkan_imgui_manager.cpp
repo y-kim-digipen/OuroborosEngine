@@ -148,6 +148,9 @@ namespace Renderer
 
 	void VulkanImguiManager::EndFrame()
 	{
+
+
+
 		ImGuiIO& io = ImGui::GetIO();
 		ImGui::Render();
 		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), vulkan_type->frame_data[vulkan_type->current_frame].command_buffer);

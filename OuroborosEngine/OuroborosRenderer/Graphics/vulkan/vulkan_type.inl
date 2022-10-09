@@ -60,6 +60,17 @@ struct VulkanSwapchain
 	std::vector<VkFramebuffer> framebuffers;
 };
 
+
+struct ViewPortFramebuffer
+{
+	std::vector<VulkanImage> viewport_vulkan_images;
+	VkRenderPass render_pass;
+	VkPipeline viewport_pipeline;
+	std::vector<VkFramebuffer> frame_buffers;
+	VkSampler color_sampler;
+	VkSemaphore viewport_semaphore;
+};
+
 using VulkanFrameBufferAttachment = VulkanImage;
 
 struct VulkanDeferredFrameBuffer
@@ -139,7 +150,7 @@ struct VulkanType
 	VkCommandPool command_pool;
 
 	VulkanDeferredFrameBuffer deferred_frame_buffer;
-	
+	ViewPortFramebuffer viewport_frame_buffer;
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
 	VkPipelineLayout current_pipeline_layout = VK_NULL_HANDLE;

@@ -76,6 +76,13 @@ namespace Renderer
     int CreateDeferredCommandBuffer();
     int CreateDeferredSyncObjects();
 
+
+    //For Viewport Rendering
+    int CreateViewportImage();
+    int CreateViewportFramebuffer();
+    void ViewportRecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
+
+
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
@@ -136,6 +143,9 @@ namespace Renderer
         CreateDeferredDescriptorSetLayout();
         CreateDeferredShader();
         SetupDescriptorSet();
+
+        CreateViewportImage();
+        CreateViewportFramebuffer();
         lightpass_set_.Init(&vulkan_type, 2);
         lightpass_set_.AddBindingLayout(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -390,8 +400,8 @@ namespace Renderer
         VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
 
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
-        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
-
+        ViewportRecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+    
         
         //descriptorset write
         VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -411,11 +421,44 @@ namespace Renderer
         shader_manager->GetShader("shader_lightpass")->BindDeferred();
         lightpass_set_.Bind();
         global_set.Bind();
-       /* vkCmdBindDescriptorSets(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shader_manager->GetShader("shader_lightpass")->pipeline_layout, 0, 1, &deferred_framebuffer.descriptor_set, 0, nullptr);
-        vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);*/
+
         // draw quad
 
         vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
+
+        vkCmdEndRenderPass(frame_data.command_buffer);
+        vkEndCommandBuffer(frame_data.command_buffer);
+
+        submit.pWaitDstStageMask = &wait_stage;
+
+        //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
+        submit.waitSemaphoreCount = 1;
+        submit.signalSemaphoreCount = 1;
+        submit.commandBufferCount = 1;
+
+        submit.waitSemaphoreCount = 1;
+        submit.pWaitSemaphores = &offscreen_semaphore;
+        //submit.pWaitSemaphores = &semaphore.image_available_semaphore;
+
+        submit.signalSemaphoreCount = 1;
+        submit.pSignalSemaphores =  & vulkan_type.viewport_frame_buffer.viewport_semaphore;
+
+
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &frame_data.command_buffer;
+        vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+        VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
+
+        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+        RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
+
+        ImGui::Begin("viewport");
+        const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager_.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+        UpdateViewportDescriptorSet(*TextureID, 0);
+        ImGui::Image(*TextureID, ImVec2(800, 600));
+        ImGui::End();
+
 
         return 0;
     }
@@ -465,7 +508,7 @@ namespace Renderer
         vkCmdEndRenderPass(frame_data.command_buffer);
         vkEndCommandBuffer(frame_data.command_buffer);
 
-        submit.pWaitSemaphores = &offscreen_semaphore;
+        submit.pWaitSemaphores = &vulkan_type.viewport_frame_buffer.viewport_semaphore;
         submit.pSignalSemaphores = &semaphore.render_finished_semaphore;
 
         submit.pCommandBuffers = &frame_data.command_buffer;
@@ -490,6 +533,26 @@ namespace Renderer
 
         dynamic_cast<VulkanTextureManager*>(texture_manager_.get())->vulkan_texture_imgui_descriptor_pool.ResetCount();
         return  0;
+    }
+
+    void VulkanContext::UpdateViewportDescriptorSet(VkDescriptorSet descriptor_set, int dest_binding)
+    {
+        VkDescriptorImageInfo image_buffer_info
+        {
+                .sampler = vulkan_type.viewport_frame_buffer.color_sampler,
+                .imageView = vulkan_type.viewport_frame_buffer.viewport_vulkan_images[vulkan_type.current_frame].image_view,
+                .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+        };
+
+        VkWriteDescriptorSet descriptor_set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+        descriptor_set_write.dstSet = descriptor_set;
+        descriptor_set_write.dstBinding = 0;
+        descriptor_set_write.dstArrayElement = 0;
+        descriptor_set_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        descriptor_set_write.descriptorCount = 1;
+        descriptor_set_write.pImageInfo = &image_buffer_info;
+
+        vkUpdateDescriptorSets(vulkan_type.device.handle, 1, &descriptor_set_write, 0, nullptr);
     }
 
     VulkanType* VulkanContext::GetVulkanType()
@@ -1628,7 +1691,191 @@ namespace Renderer
     {
         VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
         VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_frame_buffer.offscreenSemaphore));
+        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.viewport_frame_buffer.viewport_semaphore));
         return 0;
     }
+
+    int CreateViewportImage()
+    {
+        auto& viewport_framebuffer = vulkan_type.viewport_frame_buffer;
+        auto& swapchain = vulkan_type.swapchain;
+
+        const uint32_t size = vulkan_type.swapchain.images.size();
+        vulkan_type.viewport_frame_buffer.viewport_vulkan_images.resize(size);
+
+        for(uint32_t idx = 0; idx < size; idx++)
+        {
+            CreateFrameAttachment(&vulkan_type, VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &viewport_framebuffer.viewport_vulkan_images[idx]);
+        }
+        return 0;
+    }
+
+    int CreateViewportFramebuffer()
+    {
+        auto& viewport_framebuffer = vulkan_type.viewport_frame_buffer;
+
+        const uint32_t size = viewport_framebuffer.viewport_vulkan_images.size();
+        viewport_framebuffer.frame_buffers.resize(size);
+
+        VkAttachmentDescription color_attachment{};
+        color_attachment.format = vulkan_type.swapchain.image_format;
+        color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        color_attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+        VkAttachmentReference colorAttachmentRef{};
+        colorAttachmentRef.attachment = 0;
+        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        VkAttachmentDescription depth_attachment{};
+        depth_attachment.format = vulkan_type.swapchain.depth_image.format;
+        depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        depth_attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        VkAttachmentReference depth_attachment_ref{};
+        depth_attachment_ref.attachment = 1;
+        depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        VkSubpassDescription subpass{};
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpass.colorAttachmentCount = 1;
+        subpass.pColorAttachments = &colorAttachmentRef;
+        subpass.pDepthStencilAttachment = &depth_attachment_ref;
+
+        const uint32_t attachment_count = 2;
+        VkAttachmentDescription attachment[attachment_count] = {
+            color_attachment,
+            depth_attachment
+        };
+
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+
+        VkSubpassDependency depth_dependency{};
+        depth_dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        depth_dependency.dstSubpass = 0;
+        depth_dependency.srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        depth_dependency.dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        depth_dependency.srcAccessMask = 0;
+        depth_dependency.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+
+        const uint32_t dependency_count = 2;
+        VkSubpassDependency dependencies[dependency_count] = {
+            dependency,
+            depth_dependency
+        };
+
+        VkRenderPassCreateInfo render_pass_info{};
+        render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        render_pass_info.attachmentCount = attachment_count;
+        render_pass_info.pAttachments = attachment;
+        render_pass_info.subpassCount = 1;
+        render_pass_info.pSubpasses = &subpass;
+        render_pass_info.dependencyCount = dependency_count;
+        render_pass_info.pDependencies = dependencies;
+
+
+    	if (vkCreateRenderPass(vulkan_type.device.handle, &render_pass_info, nullptr, &viewport_framebuffer.render_pass) != VK_SUCCESS)
+        {
+            throw std::runtime_error("failed to create render pass!");
+        }
+
+        for(int idx = 0; idx < size; ++idx)
+        {
+            std::array<VkImageView, 2> attachments = {
+                    viewport_framebuffer.viewport_vulkan_images[idx].image_view,
+                    vulkan_type.swapchain.depth_image.image_view};
+
+            VkFramebufferCreateInfo framebuffer_create_info{};
+            framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebuffer_create_info.renderPass = viewport_framebuffer.render_pass;
+            framebuffer_create_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+            framebuffer_create_info.pAttachments = attachments.data();
+            framebuffer_create_info.width = vulkan_type.swapchain.extent.width;
+            framebuffer_create_info.height = vulkan_type.swapchain.extent.height;
+            framebuffer_create_info.layers = 1;
+
+
+            VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &viewport_framebuffer.frame_buffers[idx]));
+        }
+
+        VkSamplerCreateInfo sampler_create_info = VulkanInitializer::SamplerCreateInfo();
+        sampler_create_info.magFilter = VK_FILTER_NEAREST;
+        sampler_create_info.minFilter = VK_FILTER_NEAREST;
+        sampler_create_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        sampler_create_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        sampler_create_info.addressModeV = sampler_create_info.addressModeU;
+        sampler_create_info.addressModeW = sampler_create_info.addressModeU;
+        sampler_create_info.mipLodBias = 0.f;
+        sampler_create_info.maxAnisotropy = 1.f;
+        sampler_create_info.minLod = 0.f;
+        sampler_create_info.maxLod = 1.f;
+        sampler_create_info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+
+        VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &sampler_create_info, nullptr, &viewport_framebuffer.color_sampler));
+
+    }
+
+    void ViewportRecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index)
+    {
+        VkCommandBufferBeginInfo begin_info{};
+        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        begin_info.pInheritanceInfo = nullptr;
+
+        if (vkBeginCommandBuffer(command_buffer, &begin_info) != VK_SUCCESS)
+        {
+            throw std::runtime_error("failed to begin recording command buffer");
+        }
+
+        //TODO : Depth buffer need to implement
+
+        VkRenderPassBeginInfo render_pass_info{};
+        render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        render_pass_info.renderPass = vulkan_type.viewport_frame_buffer.render_pass;
+        render_pass_info.framebuffer = vulkan_type.viewport_frame_buffer.frame_buffers[image_index];
+
+        render_pass_info.renderArea.offset = { 0,0 };
+        render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
+
+        VkClearValue clear_color = {
+            {{0.01f,0.01f, 0.01f, 1.f}}
+        };
+
+        VkClearValue depth_clear;
+        depth_clear.depthStencil.depth = 1.f;
+        depth_clear.depthStencil.stencil = 0;
+        VkClearValue clear_values[] = { clear_color, depth_clear };
+
+        render_pass_info.clearValueCount = 2;
+        render_pass_info.pClearValues = clear_values;
+
+        vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+        vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
+
+        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+
+        vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
+
+
+    }
+
 }
 
