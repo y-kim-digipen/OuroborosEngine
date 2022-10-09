@@ -141,47 +141,65 @@ namespace OE
 					shader->reload_next_frame = true;
 				}
 
-				//if (shader->uniform_buffer_object != nullptr)
-				//	for (const auto& member_variable : shader->uniform_buffer_object->member_vars) {
+				for (auto& member_variable : shader->binding_block_members) {
+					bool is_changed = false;
+						switch (member_variable.second.type) {
+						case Renderer::DataType::BOOL:
+							is_changed |= ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
+							break;
+						case Renderer::DataType::FLOAT:
+							is_changed |= ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
+							break;
+						case Renderer::DataType::FLOAT2:
+							is_changed |= ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
+							break;
+						case Renderer::DataType::FLOAT3:
+							is_changed |= ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
+							break;
+						case Renderer::DataType::FLOAT4:
+							is_changed |= ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
+							break;
+						case Renderer::DataType::INT:
+							is_changed |= ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+							break;
+						case Renderer::DataType::INT2:
+							is_changed |= ImGui::DragInt2(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+							break;
+						case Renderer::DataType::INT3:
+							is_changed |= ImGui::DragInt3(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+							break;
+						case Renderer::DataType::INT4:	
+							is_changed |= ImGui::DragInt4(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first));
+							break;
+						case Renderer::DataType::MAT3:
+							break;
+						case Renderer::DataType::MAT4:
+							break;
+						case Renderer::DataType::SAMPLER2D:
+							if (ImGui::BeginCombo("Textures", member_variable.second.texture_name))
+							{
+								const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
+								const auto& texture_manager = Engine::window->GetWindowData().RenderContextData->texture_manager;
+								for (const auto& key : texture_map | std::views::keys)
+								{
+									const bool selected = member_variable.second.texture_name == key;
+									if (ImGui::Selectable(key.c_str(), selected))
+									{
+										member_variable.second.texture_name = key.c_str();
+										shader->SetUniformTexture(member_variable.first.c_str(), texture_manager->GetTexture(key));
+									}
+									if (selected) {
+										ImGui::SetItemDefaultFocus();
+									}
+								}
+								ImGui::EndCombo();
+							}
+						}
 
-				//		switch (member_variable.second.type) {
-				//		case Renderer::DataType::BOOL:
-				//			ImGui::Checkbox(member_variable.first.c_str(), (bool*)shader->GetMemberVariable(member_variable.first));
-				//			break;
-				//		case Renderer::DataType::FLOAT:
-				//			ImGui::DragFloat(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::FLOAT2:
-				//			ImGui::DragFloat2(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::FLOAT3:
-				//			ImGui::DragFloat3(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::FLOAT4:
-				//			ImGui::DragFloat4(member_variable.first.c_str(), (float*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::INT:
-				//			ImGui::DragInt(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::INT2:
-				//			ImGui::DragInt2(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::INT3:
-				//			ImGui::DragInt3(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::INT4:
-				//			ImGui::DragInt4(member_variable.first.c_str(), (int*)shader->GetMemberVariable(member_variable.first), Engine::gui_manager.GetSliderSpeed());
-				//			break;
-				//		case Renderer::DataType::MAT3:
-				//			break;
-				//		case Renderer::DataType::MAT4:
-				//			break;
-				//			//case Renderer::DataType::SAMPLER2D:
-				//				//ImGui::
-				//				//break;
-				//		}
-				//		shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
-				//	}
+						if (is_changed) {
+							shader->SetUniformValue(member_variable.first.c_str(), shader->GetMemberVariable(member_variable.first));
+						}
+					}
 			}
 
 			ImGui::TreePop();
