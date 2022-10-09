@@ -110,9 +110,9 @@ namespace Renderer
 
     VulkanContext::VulkanContext(GLFWwindow* window) : Context(window)
     {
-        mesh_manager_ = std::make_unique<VulkanMeshManager>(&vulkan_type);
+        mesh_manager = std::make_unique<VulkanMeshManager>(&vulkan_type);
         material_manager = std::make_unique<VulkanMaterialManager>(&vulkan_type);
-        texture_manager_ = std::make_unique<VulkanTextureManager>(&vulkan_type);
+        texture_manager = std::make_unique<VulkanTextureManager>(&vulkan_type);
         shader_manager = std::make_unique<VulkanShaderManager>(&vulkan_type);
 	}
 
@@ -238,10 +238,10 @@ namespace Renderer
         }
 
         //TODO(Austyn): Destroy Mesh(buffer), Material(DescriptorSet), Shader, Allocator (vma)
-        mesh_manager_->Cleanup();
+        mesh_manager->Cleanup();
         material_manager->Cleanup();
         shader_manager->Cleanup();
-        texture_manager_->Cleanup();
+        texture_manager->Cleanup();
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
@@ -454,7 +454,7 @@ namespace Renderer
         RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
 
         ImGui::Begin("viewport");
-        const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager_.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+        const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
         UpdateViewportDescriptorSet(*TextureID, 0);
         ImGui::Image(*TextureID, ImVec2(800, 600));
         ImGui::End();
@@ -531,7 +531,7 @@ namespace Renderer
 
         vulkan_type.current_frame = (vulkan_type.current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 
-        dynamic_cast<VulkanTextureManager*>(texture_manager_.get())->vulkan_texture_imgui_descriptor_pool.ResetCount();
+        dynamic_cast<VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.ResetCount();
         return  0;
     }
 
@@ -624,7 +624,7 @@ namespace Renderer
 
                 //TODO: Bind Object Descriptor set 3 in future
                 if (mesh->mesh_name.size() != 0) {
-                    mesh_manager_->DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
+                    mesh_manager->DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
                 }
                 draw_queue.pop();
             }

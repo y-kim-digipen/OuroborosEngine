@@ -197,13 +197,12 @@ namespace OE
 		{
 			event_function();
 		}
+		event_functions[EventFunctionType::PRE].clear();
 		auto& scripts_set = lua_script_manager.GetScripts(Script::ScriptType::Normal);
 		for (auto& script : scripts_set)
 		{
 			script.second.Update(Status::INIT,delta_timer.GetDeltaTime());
 		}
-
-		event_functions[EventFunctionType::PRE].clear();
 	}
 
 	namespace _impl
@@ -308,11 +307,11 @@ namespace OE
 
 			});
 
-		for (auto& event_function : event_functions[EventFunctionType::ONTIME])
+		for (auto& event_function : event_functions[EventFunctionType::ONUPDATE])
 		{
 			event_function();
 		}
-		event_functions[EventFunctionType::ONTIME].clear();
+		event_functions[EventFunctionType::ONUPDATE].clear();
 	}
 
 	void Engine::PostUpdate()

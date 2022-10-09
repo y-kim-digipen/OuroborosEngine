@@ -83,7 +83,7 @@ namespace OE
         auto& vulkan_mesh_manager
 		                        = static_cast<Renderer::VulkanContext*>
 		                        (Engine().Get().window->GetWindowData().RenderContextData.get())
-		                        ->mesh_manager_;
+		                        ->mesh_manager;
         vulkan_mesh_manager->CopyAssetData(file_path.c_str(), mesh);
         return 0;
     }
@@ -98,7 +98,7 @@ namespace OE
         auto& vulkan_mesh_manager
             = static_cast<Renderer::VulkanContext*>
             (Engine().Get().window.get()->GetWindowData().RenderContextData.get())
-            ->mesh_manager_;
+            ->mesh_manager;
         vulkan_mesh_manager->DeleteMeshData(name);
         return 0;
 	}
@@ -110,7 +110,7 @@ namespace OE
             auto& vulkan_mesh_manager
                 = static_cast<Renderer::VulkanContext*>
                 (Engine().Get().window.get()->GetWindowData().RenderContextData.get())
-                ->mesh_manager_;
+                ->mesh_manager;
             vulkan_mesh_manager->DeleteMeshData(key);
         }
 		AssetManager<Asset::Mesh>::CleanUp();

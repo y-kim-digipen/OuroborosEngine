@@ -104,7 +104,7 @@ namespace Renderer {
 		DescriptorSet shader_set; // set num 1
 		std::map<uint32_t ,std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo
 		std::map<uint32_t ,std::shared_ptr<VulkanTexture>> uniform_texture_objects;
-		bool reload_next_frame;
+		//bool reload_next_frame;
 
 		ShaderConfig config;
 		VkPipelineLayout pipeline_layout;

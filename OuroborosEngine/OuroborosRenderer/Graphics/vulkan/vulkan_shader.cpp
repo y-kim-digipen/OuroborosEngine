@@ -76,7 +76,6 @@ namespace Renderer {
 
 	VulkanShader::VulkanShader(VulkanType* vulkan_type) :  vulkan_type(vulkan_type), device(&vulkan_type->device)
 	{
-		reload_next_frame = false;
 	}
 
 	VulkanShader::~VulkanShader()
@@ -86,7 +85,6 @@ namespace Renderer {
 
 	void VulkanShader::Init(ShaderConfig* config)
 	{
-		reload_next_frame = false;
 		shader_set.Init(vulkan_type, 1);
 
 		if (config != &this->config)
@@ -287,7 +285,6 @@ namespace Renderer {
 
 	void VulkanShader::LightPassInit(ShaderConfig* config)
 	{
-		reload_next_frame = false;
 		shader_set.Init(vulkan_type, 1);
 
 

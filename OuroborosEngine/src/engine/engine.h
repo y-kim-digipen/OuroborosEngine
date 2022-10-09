@@ -31,7 +31,7 @@ namespace OE
 	public:
 		enum EventFunctionType
 		{
-			PRE, ONTIME, POST, COUNT
+			PRE, ONUPDATE, POST, START_OF_RENDERER_CONTEXT, END_OF_RENDERER_CONTEXT, COUNT,
 		};
 
 		static Engine& Get();

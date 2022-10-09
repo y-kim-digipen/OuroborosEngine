@@ -27,7 +27,7 @@ namespace Renderer {
 
 		void UpdateViewportDescriptorSet(VkDescriptorSet descriptor_set, int dest_binding);
 
-		std::unique_ptr<VulkanMeshManager> mesh_manager_;
+		std::unique_ptr<VulkanMeshManager> mesh_manager;
 
 		VulkanType* GetVulkanType();
 

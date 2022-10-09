@@ -138,7 +138,7 @@ namespace OE
 
 				if (ImGui::Button("Reload"))
 				{
-					shader->reload_next_frame = true;
+					Engine::RegisterEvent(Engine::PRE, std::bind(&Renderer::VulkanShader::Reload, shader));
 				}
 
 				for (auto& member_variable : shader->binding_block_members) {

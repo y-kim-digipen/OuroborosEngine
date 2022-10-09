@@ -21,7 +21,7 @@ namespace Renderer
 
 		ImGui::StyleColorsDark();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		VkDescriptorPoolSize pool_sizes[] =
 		{
@@ -148,9 +148,6 @@ namespace Renderer
 
 	void VulkanImguiManager::EndFrame()
 	{
-
-
-
 		ImGuiIO& io = ImGui::GetIO();
 		ImGui::Render();
 		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), vulkan_type->frame_data[vulkan_type->current_frame].command_buffer);
