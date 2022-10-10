@@ -44,7 +44,7 @@ int OE::MaterialAssetManager::LoadAsset(const std::string& name, AssetType asset
 			auto GetTexture = [](const std::string& texture_name)
 			{
 				return Engine::window->GetWindowData().RenderContextData->texture_manager->GetTexture(texture_name);
-			};
+			}; 
 
 			for(int i = 0; i < Shared::COUNT; ++i)
 			{

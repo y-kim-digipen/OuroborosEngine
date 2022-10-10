@@ -103,7 +103,8 @@ namespace OE
 	void Engine::InitEssentialAssets()
 	{
 		asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/default_cube.obj");
-		ImageAssetManager().LoadAsset("images/null.png");
+		asset_manager.GetManager<ImageAssetManager>().LoadAsset("images/null.png");
+		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader_lightpass");
 		auto* context_data = (window->GetWindowData().RenderContextData.get());
 		context_data->material_manager->SetNoneTexture(context_data->texture_manager->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
@@ -139,12 +140,14 @@ namespace OE
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
-		Renderer::ShaderConfig shader_config3{
-					"shader_lightpass",
-			{	Renderer::E_StageType::VERTEX_SHADER,
-						Renderer::E_StageType::FRAGMENT_SHADER	},2 };
+		//Renderer::ShaderConfig shader_config3{
+		//			"shader_lightpass",
+		//	{	Renderer::E_StageType::VERTEX_SHADER,
+		//				Renderer::E_StageType::FRAGMENT_SHADER	},2 };
 
-		(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
+
+		//(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
+
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
@@ -320,28 +323,31 @@ namespace OE
 		event_functions[EventFunctionType::POST].clear();
 
 
-		for (const auto& event_function : event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT])
-		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddStartContextEvent(event_function);
-		}
-		event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].clear();
 
-		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
-		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddAfterEndDeferredEvent(event_function);
-		}
-		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
 
-		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
-		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddEndContextEvent(event_function);
-		}
-		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
+
+
 
 
 		window->BeginFrame();
 		window->Update();
 		gui_manager.Update();
+		for (const auto& event_function : event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddStartContextEvent(event_function);
+		}
+		event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].clear();
+		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddAfterEndDeferredEvent(event_function);
+		}
+		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
+		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT])
+		{
+			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddEndContextEvent(event_function);
+		}
+		event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT].clear();
+
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 
 		window->EndFrame();

@@ -179,6 +179,7 @@ namespace OE
 					});
 				}
 			}
+		Engine::Get().InitEssentialAssets();
 		}
 
 	void SceneSerializer::CleanUp()

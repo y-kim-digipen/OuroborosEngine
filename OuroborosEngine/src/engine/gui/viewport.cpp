@@ -2,7 +2,8 @@
 #include "../engine.h"
 void OE::GUI::ViewPort::Draw()
 {
-	Engine::RegisterEvent(Engine::EventFunctionType::END_OF_RENDERER_END_FRAME, std::bind(&ViewPort::draw_internal, this));
+    auto fn = std::bind(&ViewPort::draw_internal, this);
+	Engine::RegisterEvent(Engine::EventFunctionType::END_OF_RENDERER_END_FRAME, fn);
 }
 
 void OE::GUI::ViewPort::draw_internal()
