@@ -13,6 +13,8 @@ namespace OE
 {
 	namespace GUI
 	{
+
+		class SliderSpeed;
 		class GUI_Base;
 		namespace _manager_internal
 		{
@@ -65,6 +67,7 @@ namespace OE
 
 		class GUI_manager
 		{
+			friend class SliderSpeed;
 		public:
 			GUI_manager();
 			void Update();

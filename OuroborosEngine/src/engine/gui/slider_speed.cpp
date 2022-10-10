@@ -30,9 +30,9 @@ namespace OE
 			{
 				ImGui::Text("(right - click to change position)");
 				ImGui::Separator();
-
-				float slider_speed = Engine::gui_manager.GetSliderSpeed();
-				ImGui::InputFloat("Speed", &slider_speed, 0.f, 100.f, "%.5f");
+				
+				ImGui::InputFloat("Speed", &Engine::gui_manager.slider_speed);
+				
 
 				if (ImGui::BeginPopupContextWindow())
 				{

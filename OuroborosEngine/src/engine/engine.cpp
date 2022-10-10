@@ -185,6 +185,7 @@ namespace OE
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
+		//scene_serializer.DeserializeScene("../../123.yaml");
 
 		//Profiler::Start();
 	}
