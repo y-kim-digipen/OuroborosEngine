@@ -83,14 +83,14 @@ namespace Renderer {
 		{
 			if (auto* const ptr = textures[Shared::METALLIC].get(); ptr != nullptr)
 			{
-				set.AddBinding(5, ptr);
+				set.AddBinding(3, ptr);
 			}
 		}
 		if (data.has_roughness_texture)
 		{
 			if (auto* const ptr = textures[Shared::ROUGHNESS].get(); ptr != nullptr)
 			{
-				set.AddBinding(6, ptr);
+				set.AddBinding(5, ptr);
 			}
 		}
 		if (data.has_emissive_texture)
@@ -98,7 +98,7 @@ namespace Renderer {
 			if (auto* const ptr = textures[Shared::EMISSIVE].get(); ptr != nullptr)
 			{
 
-				set.AddBinding(7, ptr);
+				set.AddBinding(6, ptr);
 			}
 		}
 

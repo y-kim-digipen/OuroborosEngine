@@ -181,7 +181,15 @@ float RoughnessValue()
 vec3 EmissiveValue()
 {
     vec3 result = vec3(0.f);
-    result = texture(emissive_texture, vs_in.uv).rgb;
+    if(material.has_emissive_texture !=0)
+    {
+        result = texture(emissive_texture, vs_in.uv).rgb;
+    }
+    else
+    {
+        result = vec3(0.f);
+    }
+    
     return result;
 }
 

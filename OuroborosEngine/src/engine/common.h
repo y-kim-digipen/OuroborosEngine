@@ -14,5 +14,5 @@ namespace OE
     #define GET_VARIABLE_NAME(Variable) (#Variable)
 	#define GET_CLASS_NAME(CLASS) ("CLASS")
 
-    enum class Status { CREATED, INIT, UPDATE, DESTROYED, CLEANUP, COUNT };
+    enum class Status { NONE, CREATED, INIT, UPDATE, DESTROYED, CLEANUP, COUNT };
 }

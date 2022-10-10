@@ -46,7 +46,7 @@ namespace OE
 
 		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
 		{
-			event_functions[type].emplace_back(std::move(fn));
+			event_functions[type].emplace_back(fn);
 		}
 
 		static auto GetGLFWWindow()
@@ -87,8 +87,8 @@ namespace OE
 		//static void SetupModule();
 		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
 
-		static void InitEssentialAssets();
 	public: // Modules
+		static void InitEssentialAssets();
 		inline static Asset_Manager asset_manager;
 		inline static std::unique_ptr<Renderer::Window> window;
 		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);

@@ -148,7 +148,7 @@ void OE::GUI::MaterialConfigure::draw_internal()
 				//}
 				open = false;
 			}
-
+			filter.Draw();
 			ImGui::Checkbox("Using Texture", &using_texture);
 			ImGui::Separator();
 			if (using_texture)
@@ -166,28 +166,28 @@ void OE::GUI::MaterialConfigure::draw_internal()
 					}
 				}
 				ImGui::Separator();
-				OE::GUI_Input::TextureSelectable("albedo", texture_names[Shared::ALBEDO]);
+				OE::GUI_Input::TextureSelectable("albedo", texture_names[Shared::ALBEDO], &filter);
 				ImGui::Separator();
-				OE::GUI_Input::TextureSelectable("normal", texture_names[Shared::NORMAL]);
+				OE::GUI_Input::TextureSelectable("normal", texture_names[Shared::NORMAL], &filter);
 				ImGui::Separator();
 
 				if (use_metallic_roughness)
 				{
-					OE::GUI_Input::TextureSelectable("metallic / roughness", texture_names[Shared::METALLIC_ROUGHNESS]);
+					OE::GUI_Input::TextureSelectable("metallic / roughness", texture_names[Shared::METALLIC_ROUGHNESS], &filter);
 					ImGui::Separator();
 				}
 				else
 				{
-					OE::GUI_Input::TextureSelectable("metallic", texture_names[Shared::METALLIC]);
+					OE::GUI_Input::TextureSelectable("metallic", texture_names[Shared::METALLIC], &filter);
 					ImGui::Separator();
-					OE::GUI_Input::TextureSelectable("roughness", texture_names[Shared::ROUGHNESS]);
+					OE::GUI_Input::TextureSelectable("roughness", texture_names[Shared::ROUGHNESS], &filter);
 					ImGui::Checkbox("Invert", &invert_roughness);
 					ImGui::Separator();
 				}
 
-				OE::GUI_Input::TextureSelectable("ao", texture_names[Shared::AO]);
+				OE::GUI_Input::TextureSelectable("ao", texture_names[Shared::AO], &filter);
 				ImGui::Separator();
-				OE::GUI_Input::TextureSelectable("emissive", texture_names[Shared::EMISSIVE]);
+				OE::GUI_Input::TextureSelectable("emissive", texture_names[Shared::EMISSIVE], &filter);
 			}
 			else
 			{
