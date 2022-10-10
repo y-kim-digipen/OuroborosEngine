@@ -30,6 +30,8 @@ namespace OE
 			std::array<std::string, Shared::COUNT> texture_names;
 			bool use_metallic_roughness = false;
 			bool invert_roughness = false;
+
+			ImGuiTextFilter filter;
 		};
 	}
 }

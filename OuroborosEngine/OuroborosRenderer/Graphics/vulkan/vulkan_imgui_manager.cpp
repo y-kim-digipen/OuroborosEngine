@@ -21,7 +21,7 @@ namespace Renderer
 
 		ImGui::StyleColorsDark();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		VkDescriptorPoolSize pool_sizes[] =
 		{

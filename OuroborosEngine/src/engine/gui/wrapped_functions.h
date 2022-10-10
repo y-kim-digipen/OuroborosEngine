@@ -53,21 +53,24 @@ namespace OE
 			}
 		}
 
-		inline void TextureSelectable(const std::string& label, std::string& texture_name)
+		inline void TextureSelectable(const std::string& label, std::string& texture_name, ImGuiTextFilter* filter = nullptr)
 		{
-			const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
+			//const auto& texture_map = Engine::Get().asset_manager.GetManager<ImageAssetManager>().GetAssetRawData();
+			const auto& texture_map=  Engine::window->GetWindowData().RenderContextData->texture_manager->GetRawData();
 
-			static ImGuiTextFilter filter;
-			filter.Draw();
+			//if(filter)
+			//{
+			//	filter->Draw();
+			//}
 			if (ImGui::BeginCombo(label.c_str(), texture_name.c_str()))
 			{
-				if (ImGui::Selectable("##", texture_name.empty()))
-				{
-					texture_name.clear();
-				}
+				//if (ImGui::Selectable("##", texture_name.empty()))
+				//{
+				//	texture_name.clear();
+				//}
 				for (const auto& key : texture_map | std::views::keys)
 				{
-					if (filter.PassFilter(key.c_str()))
+					if (filter ? filter->PassFilter(key.c_str()) : true)
 					{
 						const bool selected = texture_name == key;
 
