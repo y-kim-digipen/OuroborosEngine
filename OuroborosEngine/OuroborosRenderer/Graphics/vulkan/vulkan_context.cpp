@@ -473,6 +473,12 @@ namespace Renderer
             end_deferred_endframe_events.pop();
         }
 
+        ImGui::Begin("viewport");
+
+        const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+		UpdateViewportDescriptorSet(*TextureID, 0);
+        ImGui::Image(*TextureID, ImVec2(800, 600));
+        ImGui::End();
 
         return 0;
     }
@@ -650,17 +656,17 @@ namespace Renderer
       
     }
 
-    void VulkanContext::AddStartContextEvent(EventType f)
+    void VulkanContext::AddStartContextEvent(const EventType& f)
     {
         start_context_events.push(f);
     }
 
-    void VulkanContext::AddAfterEndDeferredEvent(EventType f)
+    void VulkanContext::AddAfterEndDeferredEvent(const EventType& f)
     {
         end_deferred_endframe_events.push(f);
     }
 
-    void VulkanContext::AddEndContextEvent(EventType f)
+    void VulkanContext::AddEndContextEvent(const EventType& f)
     {
         end_context_events.push(f);
     }

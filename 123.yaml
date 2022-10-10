@@ -33,7 +33,7 @@ Asset:
       is_smoothness: false
       use_combined_metallic_roughness: false
       albedo: ..\OuroborosEngine\images\gameboy_textures\mat_default_albedo.jpeg
-      normal: ..\OuroborosEngine\images\gameboy_textures\mat_default_albedo.jpeg
+      normal: ..\OuroborosEngine\images\gameboy_textures\mat_default_normal.png
       metallic: ..\OuroborosEngine\images\gameboy_textures\mat_default_metallic.jpeg
       roughness: ..\OuroborosEngine\images\gameboy_textures\mat_default_roughness.jpeg
       ao: ..\OuroborosEngine\images\gameboy_textures\mat_default_AO.jpeg
@@ -61,7 +61,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\plane.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: PlaneMaterial
         material_data:
@@ -93,7 +93,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\GAMEBOY.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: Gameboy Material
         material_data:
@@ -123,7 +123,7 @@ ECS:
       struct MeshComponent:
         mesh_name: model/default_cube.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: PlaneMaterial
         material_data:

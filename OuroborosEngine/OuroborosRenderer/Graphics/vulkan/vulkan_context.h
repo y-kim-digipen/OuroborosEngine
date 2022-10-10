@@ -35,9 +35,9 @@ namespace Renderer {
 
 		void DrawQueue() override;
 
-		void AddStartContextEvent(EventType f);
-		void AddAfterEndDeferredEvent(EventType f);
-		void AddEndContextEvent(EventType f);
+		void AddStartContextEvent(const EventType& f);
+		void AddAfterEndDeferredEvent(const EventType& f);
+		void AddEndContextEvent(const EventType& f);
 
 	private:
 		void CreateSurface();

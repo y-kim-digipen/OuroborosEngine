@@ -209,19 +209,19 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.f)
 		}
 	});
 
-	RegisterMenuItem({ "System"}, "Viewport", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
-	{
-		open = !open;
-		if (open)
-		{
-			created = new ViewPort;
-			AddPanel(created);
-		}
-		else
-		{
-			RemovePanel(created);
-		}
-	});
+	//RegisterMenuItem({ "System"}, "Viewport", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
+	//{
+	//	open = !open;
+	//	if (open)
+	//	{
+	//		created = new ViewPort;
+	//		AddPanel(created);
+	//	}
+	//	else
+	//	{
+	//		RemovePanel(created);
+	//	}
+	//});
 }
 
 void OE::GUI::GUI_manager::Update()
