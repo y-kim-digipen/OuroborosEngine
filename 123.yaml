@@ -12,12 +12,36 @@ Asset:
       {}
     ..\OuroborosEngine\images\gameboy_textures\mat_default_roughness.jpeg:
       {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png:
+      {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png:
+      {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png:
+      {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png:
+      {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png:
+      {}
+    ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-preview.jpg:
+      {}
+    ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Metallic.png:
+      {}
+    ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Normal-ogl.png:
+      {}
+    ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Roughness.png:
+      {}
+    ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png:
+      {}
+    ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png:
+      {}
     images/null.png:
       {}
   class OE::MeshAssetManager:
     ..\OuroborosEngine\model\GAMEBOY.obj:
       {}
     ..\OuroborosEngine\model\plane.obj:
+      {}
+    ..\OuroborosEngine\model\sphere.obj:
       {}
     model/default_cube.obj:
       {}
@@ -38,21 +62,40 @@ Asset:
       roughness: ..\OuroborosEngine\images\gameboy_textures\mat_default_roughness.jpeg
       ao: ..\OuroborosEngine\images\gameboy_textures\mat_default_AO.jpeg
       emissive: ""
+    Gray Granite:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
+      normal: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
+      metallic: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png
+      roughness: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png
+      ao: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
+      emissive: ""
     PlaneMaterial:
       use_texture: false
       albedo: [0, 0, 0]
       metallic: 0
       roughness: 0
       ao: 0
+    Yoga Mat:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png
+      normal: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png
+      metallic: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Metallic.png
+      roughness: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Roughness.png
+      ao: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png
+      emissive: ""
 ECS:
   0:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
       struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-      struct OE::ECS::System<struct CubemapComponent,struct ShaderComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
         pos: [0, -1, 0]
@@ -79,12 +122,11 @@ ECS:
         tag: Plane
   1:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
       struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
-      struct OE::ECS::System<struct CubemapComponent,struct ShaderComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
         pos: [0, 0, 0]
@@ -109,19 +151,18 @@ ECS:
         texture_roughness_name: ""
   2:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
       struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
       struct OE::ECS::System<struct ScriptComponent>: yes
-      struct OE::ECS::System<struct CubemapComponent,struct ShaderComponent>: no
     Component:
       struct TransformComponent:
-        pos: [-1.795516, 3, -0.8809775]
+        pos: [1.42598, 3, -1.402349]
         scale: [1, 1, 1]
         rotation: [1, 0, 0]
       struct MeshComponent:
-        mesh_name: model/default_cube.obj
+        mesh_name: ..\OuroborosEngine\model\sphere.obj
       struct ShaderComponent:
         name: shader
       struct MaterialComponent:
@@ -139,12 +180,41 @@ ECS:
         texture_roughness_name: ""
       struct LightComponent:
         init: false
-        data.pos: [-1.793583, 3, -0.8849068]
+        data.pos: [1.428492, 3, -1.39979]
         data.cutoff: 0
         data.diffuse: [0.8529412, 0.5059112, 0.5059112]
         data.out_cutoff: 0
-        data.dir: [-1.795516, 3, -0.8809775]
+        data.dir: [1.42598, 3, -1.402349]
         data.falloff: 0
         data.type: 0
       struct ScriptComponent:
         name: ..\OuroborosEngine\scripts\light_rotate.clua
+  3:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
+      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: yes
+    Component:
+      struct TransformComponent:
+        pos: [2, 0, 0]
+        scale: [0.5, 0.5, 0.5]
+        rotation: [0, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\OuroborosEngine\model\sphere.obj
+      struct ShaderComponent:
+        name: shader
+      struct MaterialComponent:
+        name: Yoga Mat
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""

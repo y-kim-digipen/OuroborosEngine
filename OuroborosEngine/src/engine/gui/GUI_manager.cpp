@@ -209,7 +209,7 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.f)
 		}
 	});
 
-	RegisterMenuItem({ "System"}, "Viewport", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
+	RegisterMenuItem({ "System", "Viewport" }, "Enable", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
 	{
 		open = !open;
 		if (open)
@@ -222,11 +222,54 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.f)
 			RemovePanel(created);
 		}
 	});
+
+	RegisterMenuItem({ "System", "Viewport" }, "Fit to frame", [this](bool& open) mutable
+	{
+		open = !open;
+	});
 }
 
 void OE::GUI::GUI_manager::Update()
 {
 	DrawMenu();
+
+	static bool opt_fullscreen = true;
+	static bool opt_padding = false;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+	// because it would be confusing to have two docking targets within each others.
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+	if (opt_fullscreen)
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	}
+	else
+	{
+		dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+	}
+
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+	// and handle the pass-thru hole, so we ask Begin() to not render a background.
+	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		window_flags |= ImGuiWindowFlags_NoBackground;
+
+	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+	// all active windows docked into it will lose their parent and become undocked.
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+
+	bool open;
+	ImGui::Begin("DockSpace Demo", &open, window_flags);
+	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	ImGui::End();
 
 	while (!add_queue_gui_panels.empty())
 	{
@@ -267,7 +310,6 @@ void OE::GUI::GUI_manager::RegisterMenuItem(const std::initializer_list<std::str
 void  OE::GUI::GUI_manager::AddPanel(GUI_Base* panel)
 {
 	add_queue_gui_panels.push(panel);
-	//gui_panels.push_back(panel);
 }
 
 void OE::GUI::GUI_manager::RemovePanel(GUI_Base* pointer)
@@ -284,8 +326,8 @@ float OE::GUI::GUI_manager::GetSliderSpeed()
 	return slider_speed;
 }
 
-void OE::GUI::GUI_manager::RunBehavior(const std::initializer_list<std::string>& categories,
-	const std::string& behavior_name) const
+OE::GUI::_manager_internal::Behavior* OE::GUI::GUI_manager::GetBehavior(
+	const std::initializer_list<std::string>& categories, const std::string& behavior_name) const
 {
 	std::queue<std::string> path;
 	for (const std::string& category : categories)
@@ -294,7 +336,13 @@ void OE::GUI::GUI_manager::RunBehavior(const std::initializer_list<std::string>&
 	}
 	//const auto found_behavior = head_menu->FindBehavior(behavior_name, path);
 	const auto found_behavior = head_menu->FindBehavior(behavior_name, path);
-	if(found_behavior)
+	return found_behavior;
+}
+
+void OE::GUI::GUI_manager::RunBehavior(const std::initializer_list<std::string>& categories,
+                                       const std::string& behavior_name) const
+{
+	if(const auto found_behavior = GetBehavior(categories, behavior_name))
 	{
 		(*found_behavior)();
 	}

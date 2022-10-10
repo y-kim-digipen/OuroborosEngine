@@ -39,6 +39,11 @@ namespace Renderer
 			textures_map.clear();
 			return 0;
 		}
+
+		const auto& GetRawData()
+		{
+			return textures_map;
+		}
 	protected:
 		std::unordered_map<std::string, std::shared_ptr<VulkanTexture>> textures_map;
 		std::unordered_map<std::shared_ptr<VulkanTexture>, std::string> name_map;

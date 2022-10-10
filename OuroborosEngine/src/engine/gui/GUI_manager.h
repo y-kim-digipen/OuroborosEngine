@@ -73,6 +73,7 @@ namespace OE
 			void RemovePanel(GUI_Base* pointer);
 			float GetSliderSpeed();
 
+			_manager_internal::Behavior* GetBehavior(const std::initializer_list<std::string>& categories, const std::string& behavior_name) const;
 			void RunBehavior(const std::initializer_list<std::string>& categories, const std::string& behavior_name) const;
 		private:
 			void DrawMenu();

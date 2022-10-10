@@ -87,7 +87,7 @@ namespace OE
 				using Bitset = typename TSetting::bitset;
 				ecs_ID myID{};
 				bool alive = false;
-				Bitset bitset{};
+				Bitset bitset;
 			};
 		}
 
@@ -407,10 +407,11 @@ namespace OE
 				Entity entity_created;
 				entity_created.alive = true;
 				entity_created.myID = created_entityID;
+				entity_created.bitset = Entity::Bitset();
 				++num_entities;
 				entity_storage[created_entityID] = entity_created;
+				//system_status[created_entityID]
 				return GetEntity(created_entityID);
-				//return entity_storage[num_entities++];
 			}
 
 			Entity& GetEntity(ecs_ID entityID)
@@ -515,7 +516,7 @@ namespace OE
 
 				Entity& entity = GetEntity(entityID);
 				auto systemIndex = settings::template SystemBit<TSystem>();
-				return entity.bitset[settings::template SystemBit<TSystem>()];
+				return entity.bitset[systemIndex];
 			}
 
 			void DeleteEntity(ecs_ID entityID)
