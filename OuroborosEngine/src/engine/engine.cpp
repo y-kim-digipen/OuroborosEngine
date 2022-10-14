@@ -183,11 +183,17 @@ namespace OE
 		//todo Move this into camera system and component
 		if(Input::GetMouseButton(GLFW_MOUSE_BUTTON_2).IsDown())
 		{
-			constexpr float movement_speed = 20;
+			constexpr float movement_speed = 10;
 			constexpr float mouse_sensitivity = 10;
+			constexpr float fast_move_factor = 2.f;
 			const float dt = DeltaTime::GetDeltaTime();
-			const float move_velocity = movement_speed * dt;
+			float move_velocity = movement_speed * dt;
 			const float mouse_move_velocity = mouse_sensitivity * dt;
+			if(Input::GetKeyboardButton(GLFW_KEY_LEFT_SHIFT).IsDown())
+			{
+				move_velocity *= fast_move_factor;
+			}
+
 			if (Input::GetKeyboardButton(GLFW_KEY_W).IsDown())
 			{
 				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, move_velocity);
