@@ -20,7 +20,7 @@ namespace Renderer
 		else
 		{
 			shader_map[config->name] = std::make_unique<VulkanShader>(vulkan_type);
-			shader_map[config->name]->LightPassInit(config);
+			shader_map[config->name]->Init(config);
 		}
 
 		return 0;

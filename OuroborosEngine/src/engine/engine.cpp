@@ -140,15 +140,6 @@ namespace OE
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
-		//Renderer::ShaderConfig shader_config3{
-		//			"shader_lightpass",
-		//	{	Renderer::E_StageType::VERTEX_SHADER,
-		//				Renderer::E_StageType::FRAGMENT_SHADER	},2 };
-
-
-		//(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
-
-
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
@@ -182,10 +173,7 @@ namespace OE
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
-
 		window->GetWindowData().RenderContextData->InitGlobalData();
-
-
 		//Profiler::Start();
 	}
 

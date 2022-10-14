@@ -33,10 +33,7 @@ layout(set = 2, binding = 2) uniform sampler2D albedoBuffer;
 layout(set = 2, binding = 3) uniform sampler2D emissiveBuffer;
 layout(set = 2, binding = 4) uniform sampler2D metalRoughnessAoBuffer;
 
-
 layout(location = 0) in vec2 vertexUV;
-
-
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {

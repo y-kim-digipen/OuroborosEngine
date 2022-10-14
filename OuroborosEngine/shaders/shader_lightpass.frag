@@ -1,6 +1,7 @@
 #version 450
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outUV;
 layout(location = 1) in vec3 cam_pos;
 layout(location = 2) in mat4 projection;
 
@@ -30,8 +31,6 @@ void main()
     vec4 uv = vec4(0.0f);
 
     SSR_raycast(uv, metallic, frag_pos, tex_size, tex_coord);
-
-
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
     {
@@ -105,12 +104,7 @@ void main()
     color = pow(color, vec3(1.0/2.2));
 
     color += texture(emissiveBuffer,vertexUV).rgb;
-    outColor = vec4(color, 1.0);
-    // color 
-    // uv
-    // no specular map (might need to use metallic & roughness)
-    vec4 blurred_color = vec4(mix(vec3(0), color, uv.b), uv.b);
-    outColor = mix(outColor, blurred_color, roughness);
-    //outColor = color;
+    outColor = texture(viewPosBuffer, vertexUV);
+    outUV = uv;
 }
 

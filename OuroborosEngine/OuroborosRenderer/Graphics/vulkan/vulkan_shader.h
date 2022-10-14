@@ -23,6 +23,12 @@ namespace Renderer {
 		MAX_VALUE
 	};
 
+	enum E_ShaderPass {
+		DEFERRED_PASS,	
+		LIGHT_PASS,
+		SSR_PASS
+	};
+
 	struct ShaderStage {
 		E_StageType type = MAX_VALUE;
 	};
@@ -31,7 +37,9 @@ namespace Renderer {
 		const char* name;
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
-
+		//TODO: renderpass
+		//E_ShaderPass pass_type; 
+		 
 		void operator=(const ShaderConfig& config);
 	};
 
@@ -66,12 +74,10 @@ namespace Renderer {
 		VulkanShader(VulkanType* vulkan_type);
 		~VulkanShader();
 
-		void Init(ShaderConfig* config);
-		void LightPassInit(ShaderConfig* config);
+		void Init(ShaderConfig* config, VkRenderPass renderpass = VK_NULL_HANDLE);
 		//lightpass
 		void Bind();
 		//geometrypass
-		void BindDeferred();
 		void ShutDown();
 		void Reload();
 
@@ -125,6 +131,8 @@ namespace Renderer {
 		VkDescriptorSetLayout descriptor_set_layouts[max_set_count];
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
 		std::vector<VkPushConstantRange> push_constant_ranges;
+		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions;
+		std::vector<VkPipelineColorBlendAttachmentState> pipeline_color_blend_attachments;
 		std::shared_ptr<VulkanTexture> default_texture;
 	};
 }

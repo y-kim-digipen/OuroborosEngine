@@ -7,7 +7,7 @@ namespace Renderer {
         for (const auto& element : mesh.vertices)
         {
 	        Vertex vertex;
-	        vertex.position = element.position;
+	        vertex.pos = element.position;
             vertex.normal = element.normal;
             vertex.uv = element.uv;
             vertices.push_back(vertex);
