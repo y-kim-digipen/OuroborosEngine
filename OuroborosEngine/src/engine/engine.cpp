@@ -4,7 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 
 #include "engine_settings.h"
-#include "Graphics/vulkan/vulkan_shader.h"
+
 namespace OE
 {
 	void Engine::ECS_TestSetup()
@@ -110,18 +110,6 @@ namespace OE
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
 	}
 
-	void Engine::GLFW_Keyboard_Callback(GLFWwindow* p_window, int key, int scancode, int action, int mods)
-	{
-		input.KeyboardCallback(p_window, key, scancode, action, mods);
-		window->vulkan_imgui_manager.GLFW_KeyboardCallback(p_window, key, scancode, action, mods);
-	}
-
-	void Engine::GLFW_MouseButton_Callback(GLFWwindow* p_window, int key, int action, int mods)
-	{
-		input.MouseButtonCallback(p_window, key, action, mods);
-		window->vulkan_imgui_manager.GLFW_MouseButtonCallback(p_window, key, action, mods);
-	}
-
 	void Engine::Init()
 	{
 		Engine& engine = Get();
@@ -130,23 +118,14 @@ namespace OE
 		
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
-
-		glfwSetKeyCallback(GetGLFWWindow(), GLFW_Keyboard_Callback);
-		glfwSetMouseButtonCallback(GetGLFWWindow(), GLFW_MouseButton_Callback);
-
+		window->Init();
+		OE::Input::Init();
+		window->vulkan_imgui_manager.Init(GetGLFWWindow());
 
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
-
-		//Renderer::ShaderConfig shader_config3{
-		//			"shader_lightpass",
-		//	{	Renderer::E_StageType::VERTEX_SHADER,
-		//				Renderer::E_StageType::FRAGMENT_SHADER	},2 };
-
-
-		//(window->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config3);
 
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
@@ -154,27 +133,6 @@ namespace OE
 		//init engine module
 		delta_timer.Init();
 
-		std::vector<int> key_supports{
-			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C,
-			GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_D,
-			GLFW_KEY_SPACE,
-			GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT,
-			GLFW_KEY_Y, GLFW_KEY_H, GLFW_KEY_G, GLFW_KEY_J
-		};
-
-		input.Init(window->GetWindowData().window, key_supports);
-		input.RegisterCallback(GLFW_KEY_SPACE, [](Input::Modes mode)
-			{
-				//if (mode == Input::PRESSED)
-				//{
-				//	std::cout << "Pressed" << std::endl;
-				//}
-				//else
-				//{
-				//	std::cout << "Released" << std::endl;
-				//}
-			});
-		
 		InitEssentialAssets();
 
 		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
@@ -184,10 +142,6 @@ namespace OE
 
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
-
-		//scene_serializer.DeserializeScene("../../123.yaml");
-
-		//Profiler::Start();
 	}
 
 	void Engine::PreUpdate()
@@ -226,47 +180,35 @@ namespace OE
 
 	void Engine::Update()
 	{
-		input.Update();
-		if (Input::Down(GLFW_KEY_W))
+		//todo Move this into camera system and component
+		if(Input::GetMouseButton(GLFW_MOUSE_BUTTON_2).IsDown())
 		{
-			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, DeltaTime::GetDeltaTime());
-		}
-		if (Input::Down(GLFW_KEY_S))
-		{
-			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, DeltaTime::GetDeltaTime());
-		}
-		if (Input::Down(GLFW_KEY_A))
-		{
-			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, DeltaTime::GetDeltaTime());
-		}
-		if (Input::Down(GLFW_KEY_D))
-		{
-			Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, DeltaTime::GetDeltaTime());
-		}
-		const float offset = 5.f * DeltaTime::GetDeltaTime();
-		if (Input::Down(GLFW_KEY_Y))
-		{
-			Engine::camera.MouseInput(0, offset);
-		}
-		if (Input::Down(GLFW_KEY_H))
-		{
-			Engine::camera.MouseInput(0, -offset);
-		}
+			constexpr float movement_speed = 20;
+			constexpr float mouse_sensitivity = 10;
+			const float dt = DeltaTime::GetDeltaTime();
+			const float move_velocity = movement_speed * dt;
+			const float mouse_move_velocity = mouse_sensitivity * dt;
+			if (Input::GetKeyboardButton(GLFW_KEY_W).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, move_velocity);
+			}
+			if (Input::GetKeyboardButton(GLFW_KEY_S).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, move_velocity);
+			}
+			if (Input::GetKeyboardButton(GLFW_KEY_A).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, move_velocity);
+			}
+			if (Input::GetKeyboardButton(GLFW_KEY_D).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, move_velocity);
+			}
 
-		if (Input::Down(GLFW_KEY_G))
-		{
-			Engine::camera.MouseInput(-offset, 0);
+			const glm::ivec2 mouse_move = Input::GetMouse().GetCursorMove();
+			Engine::camera.MouseInput(-mouse_move.x, -mouse_move.y, mouse_move_velocity);
 		}
-		if (Input::Down(GLFW_KEY_J))
-		{
-			Engine::camera.MouseInput(offset, 0);
-		}
-		if (Input::Down(GLFW_MOUSE_BUTTON_RIGHT))
-		{
-
-		}
-
-		input.Update();
+		
 		float dt = OE::Engine::DeltaTime::GetDeltaTime();
 
 		using system_storage = ECS_Manager::SystemStorage;
@@ -323,13 +265,6 @@ namespace OE
 		}
 		event_functions[EventFunctionType::POST].clear();
 
-
-
-
-
-
-
-
 		window->BeginFrame();
 		window->Update();
 		gui_manager.Update();
@@ -352,8 +287,7 @@ namespace OE
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 
 		window->EndFrame();
-		input.Update();
-
+		Input::Update();
 		delta_timer.PostUpdate();
 	}
 
@@ -377,7 +311,7 @@ namespace OE
 
 	}
 
-	double Engine::DeltaTime::GetDeltaTime()
+	float Engine::DeltaTime::GetDeltaTime()
 	{
 		return dt;
 	}

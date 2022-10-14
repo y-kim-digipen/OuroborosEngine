@@ -5,7 +5,7 @@
 namespace Renderer
 {
 	Camera::Camera(glm::vec3 position, glm::vec3 up_, float yaw, float pitch)
-	:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+	:front(glm::vec3(0.0f, 0.0f, -1.0f)), zoom(ZOOM)
 	{
 		data.position = position;
 		world_up = up_;
@@ -15,7 +15,7 @@ namespace Renderer
 	}
 
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-		:front(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), zoom(ZOOM)
+		:front(glm::vec3(0.0f, 0.0f, -1.0f)), zoom(ZOOM)
 	{
 		data.position = glm::vec3(posX, posY, posZ);
 		world_up = glm::vec3(upX, upY, upZ);
@@ -24,30 +24,26 @@ namespace Renderer
 		updateCameraVectors();
 	}
 
-	void Camera::KeyboardInput(Camera_MoveTo direction, double deltaTime)
+	void Camera::KeyboardInput(Camera_MoveTo direction, float vel)
 	{
-		float velocity = movement_speed * static_cast<float>(deltaTime);
 		if (direction == Camera_MoveTo::FORWARD)
-			data.position += front * velocity;
+			data.position += front * vel;
 		if (direction == Camera_MoveTo::BACKWARD)
-			data.position -= front * velocity;
+			data.position -= front * vel;
 		if (direction == Camera_MoveTo::LEFT)
-			data.position -= right * velocity;
+			data.position -= right * vel;
 		if (direction == Camera_MoveTo::RIGHT)
-			data.position += right * velocity;
+			data.position += right * vel;
 		if (direction == Camera_MoveTo::UP)
-			data.position += up * velocity;
+			data.position += up * vel;
 		if (direction == Camera_MoveTo::DOWN)
-			data.position -= up * velocity;
+			data.position -= up * vel;
 	}
 
-	void Camera::MouseInput(float xoffset, float yoffset, bool constrainPitch)
+	void Camera::MouseInput(float xoffset, float yoffset, float velocity, bool constrainPitch)
 	{
-		xoffset *= mouse_sensitivity;
-		yoffset *= mouse_sensitivity;
-
-		yaw += xoffset;
-		pitch += yoffset;
+		yaw += xoffset * velocity;
+		pitch += yoffset * velocity;
 
 		if (constrainPitch)
 		{

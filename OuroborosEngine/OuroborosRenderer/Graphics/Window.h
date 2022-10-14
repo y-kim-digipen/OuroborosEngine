@@ -28,7 +28,7 @@ namespace Renderer
 		Window(const WindowProperties& window_properties);
 		~Window();
 	
-
+		void Init();
 		WindowData GetWindowData() { return window_data; }
 		unsigned int GetWidth() { return window_data.width; }
 		unsigned int GetHeight() { return window_data.height; }
@@ -50,7 +50,7 @@ namespace Renderer
 		};
 
 	private:
-		void Init(const WindowProperties& window_properties);
+		WindowProperties window_properties;
 		WindowData window_data;
 	};
 

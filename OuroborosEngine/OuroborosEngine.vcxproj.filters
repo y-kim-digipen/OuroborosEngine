@@ -192,6 +192,9 @@
     <ClCompile Include="src\engine\gui\viewport.cpp">
       <Filter>engine\gui\panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\input\InputManager.cpp">
+      <Filter>engine\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\serializer\assets_deserialization_impl.inl">

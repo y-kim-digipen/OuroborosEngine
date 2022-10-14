@@ -66,11 +66,11 @@ namespace OE
 			static void Init();
 			static void PreUpdate();
 			static void PostUpdate();
-			static double GetDeltaTime();
+			static float GetDeltaTime();
 		private:
 			inline static time_point start;
 			inline static time_point end;
-			inline static double dt;
+			inline static float dt;
 		};
 		inline static DeltaTime delta_timer;
 
@@ -78,21 +78,17 @@ namespace OE
 		inline static int target_fps;
 		inline static double target_dt;
 		//Modules
-		inline static Input input;
 	private:
 		//todo to be removed
 		inline static Renderer::Camera camera;
 		
 		static void ECS_TestSetup();
-		//static void SetupModule();
-		static inline std::array<std::vector<std::function<void(void)>>, EventFunctionType::COUNT> event_functions;
+		static inline std::array<std::vector<std::function<void(void)>>, COUNT> event_functions;
 
 	public: // Modules
 		static void InitEssentialAssets();
 		inline static Asset_Manager asset_manager;
 		inline static std::unique_ptr<Renderer::Window> window;
-		static void GLFW_Keyboard_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void GLFW_MouseButton_Callback(GLFWwindow* window, int key, int action, int mods);
 		inline static ECS_Manager ecs_manager;
 		inline static Script::LuaScriptManager lua_script_manager;
 		inline static SceneSerializer scene_serializer;

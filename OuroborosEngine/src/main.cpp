@@ -6,9 +6,7 @@ int main()
     while (!glfwWindowShouldClose(OE::Engine::GetGLFWWindow()))
     {
         OE::Engine::PreUpdate();
-
         OE::Engine::Update();
-
         OE::Engine::PostUpdate();
     }
     OE::Engine::ShutDown();
