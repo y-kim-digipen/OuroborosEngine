@@ -106,5 +106,6 @@ void main()
     color += texture(emissiveBuffer,vertexUV).rgb;
     outColor = texture(viewPosBuffer, vertexUV);
     outUV = uv;
+    outColor = vec4(1.0, 0.0, 0.0, 1.0f);
 }
 

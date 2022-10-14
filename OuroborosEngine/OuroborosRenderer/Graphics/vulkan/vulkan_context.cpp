@@ -422,7 +422,6 @@ namespace Renderer
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-
         lightpass_set_.AddBinding(0, &tex_descriptor_position).
     	AddBinding(1,&tex_descriptor_normal).
     	AddBinding(2,&tex_descriptor_albedo).
@@ -434,7 +433,6 @@ namespace Renderer
         global_set.Bind();
 
         // draw quad
-
         vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
 
         vkCmdEndRenderPass(frame_data.command_buffer);
@@ -568,8 +566,8 @@ namespace Renderer
     {
         VkDescriptorImageInfo image_buffer_info
         {
-                .sampler = vulkan_type.light_pass.color_sampler,
-                .imageView = vulkan_type.light_pass.out_color_images[vulkan_type.current_frame].image_view,
+                .sampler = vulkan_type.ssr_pass.color_sampler,
+                .imageView = vulkan_type.ssr_pass.color_images[vulkan_type.current_frame].image_view,
                 .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
         };
 
@@ -1637,8 +1635,6 @@ namespace Renderer
 
         VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &sampler_create_info, nullptr, &deferred_framebuffer.color_sampler));
 
-
- 
         return 0;
     }
 
@@ -1702,7 +1698,7 @@ namespace Renderer
         framebuffer.frame_buffers.resize(size);
 
         VkAttachmentDescription color_attachment{};
-        color_attachment.format = framebuffer.out_color_images[0].format;
+        color_attachment.format = VK_FORMAT_R16G16B16A16_SFLOAT;
         color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
         color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -1716,7 +1712,7 @@ namespace Renderer
         color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
         VkAttachmentDescription uv_attachment{};
-        uv_attachment.format = framebuffer.out_uv_images[0].format;
+        uv_attachment.format = VK_FORMAT_R16G16B16A16_SFLOAT;
         uv_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
         uv_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         uv_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -1854,7 +1850,7 @@ namespace Renderer
         depth_clear.depthStencil.depth = 1.f;
         depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = { 
-            {{0.01f,0.01f, 0.01f, 1.f}},
+            {{0.0f, 0.0f, 0.0f, 0.f}},
             {{0.0f, 0.0f, 0.0f, 0.f}},
             depth_clear
         };
