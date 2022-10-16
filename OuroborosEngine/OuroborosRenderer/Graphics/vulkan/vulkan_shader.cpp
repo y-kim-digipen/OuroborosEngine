@@ -244,7 +244,10 @@ namespace Renderer {
 
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling =  VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo();
-		pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL);
+		if (!config->use_built_in_quad)
+			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT);
+		else
+			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT);
 		pipeline_builder.depth_stencil = VulkanInitializer_pipeline::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_LESS);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)

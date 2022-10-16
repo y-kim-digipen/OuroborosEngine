@@ -27,7 +27,7 @@ layout(set = 1, binding = 0) uniform ssr_params {
     float thickness;
 } ssr;
 
-layout(set = 2, binding = 0) uniform sampler2D viewPosBuffer;
+layout(set = 2, binding = 0) uniform sampler2D posBuffer;
 layout(set = 2, binding = 1) uniform sampler2D normalBuffer;
 layout(set = 2, binding = 2) uniform sampler2D albedoBuffer;
 layout(set = 2, binding = 3) uniform sampler2D emissiveBuffer;
@@ -75,13 +75,12 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-void SSR_raycast(out vec4 uv, float mask, vec4 frag_pos, vec2 tex_size, vec2 tex_coord) {
+vec4 SSR_raycast(vec4 uv, vec4 frag_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
-    if(frag_pos.w <= 0.0f || mask <= 0.001f) {
-        return;
+    if(frag_pos.w <= 0.0f) {
+        return vec4(0.0f);
     }
 
-    vec3 normal = texture(normalBuffer,vertexUV).rgb;
     vec3 unit_frag_pos = normalize(frag_pos.xyz); // vector from camera to fragment 
     vec3 pivot = normalize(reflect(unit_frag_pos, normal)); // refelcted vector
     
@@ -129,7 +128,7 @@ void SSR_raycast(out vec4 uv, float mask, vec4 frag_pos, vec2 tex_size, vec2 tex
         // first pass (search ray hit to any geometry)
         frag += increment;
         uv.xy = frag / tex_size;
-        geometry_pos = texture(viewPosBuffer, uv.xy);
+        geometry_pos = texture(posBuffer, uv.xy);
         search1 = use_x > 0 ? (frag.x - start_frag.x) / delta_pixel.x : (frag.y - start_frag.y) / delta_pixel.y;
         //search1 = mix( (frag.y - startFrag.y) / deltaY, (frag.x - startFrag.x) / deltaX, useX); (same as above)
         
@@ -155,7 +154,7 @@ void SSR_raycast(out vec4 uv, float mask, vec4 frag_pos, vec2 tex_size, vec2 tex
     for(int i = 0; i < second_step; ++i) {
         frag       = mix(start_frag.xy, end_frag.xy, search1);
         uv.xy      = frag / tex_size;
-        geometry_pos = texture(viewPosBuffer, uv.xy);
+        geometry_pos = texture(posBuffer, uv.xy);
         view_distance = (start_view.z * end_view.z) / mix(end_view.z, start_view.z, search1);
         if (depth > 0 && depth < ssr.thickness) {
             hit1 = 1;
@@ -174,4 +173,6 @@ void SSR_raycast(out vec4 uv, float mask, vec4 frag_pos, vec2 tex_size, vec2 tex
     }
     visibility = clamp(visibility, 0, 1);
     uv.ba = vec2(visibility);
+
+    return uv;
 }

@@ -37,6 +37,7 @@ namespace Renderer {
 		const char* name;
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
+		bool use_built_in_quad;
 		//TODO: renderpass
 		//E_ShaderPass pass_type; 
 		 

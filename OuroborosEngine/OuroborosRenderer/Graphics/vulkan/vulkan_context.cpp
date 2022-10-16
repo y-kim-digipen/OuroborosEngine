@@ -54,8 +54,6 @@ namespace Renderer
     void CleanupSwapChain();
     int RateDeviceSuitability(VkPhysicalDevice device);
 
-
-
     bool IsDevicesSuitable(VkPhysicalDevice device);
     QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
     bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
@@ -1641,7 +1639,7 @@ namespace Renderer
     int CreateDeferredShader()
     {
         ShaderConfig shader_config = { "shader_geometrypass", {Renderer::E_StageType::VERTEX_SHADER,
-                        Renderer::E_StageType::FRAGMENT_SHADER }, 2 };
+                        Renderer::E_StageType::FRAGMENT_SHADER }, 2, false };
          
 
         auto& shader = vulkan_type.deferred_pass.deferred_shader;
@@ -1998,7 +1996,7 @@ namespace Renderer
         auto& ssr = vulkan_type.ssr_pass;
 
         ShaderConfig shader_config = { "ssr_shader", {Renderer::E_StageType::VERTEX_SHADER,
-            Renderer::E_StageType::FRAGMENT_SHADER }, 2 };
+            Renderer::E_StageType::FRAGMENT_SHADER }, 2, true };
 
         auto& shader = ssr.ssr_shader;
         shader = std::make_unique<VulkanShader>(&vulkan_type);
