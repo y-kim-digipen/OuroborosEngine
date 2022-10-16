@@ -21,7 +21,7 @@ YAML::Emitter& _serialize(YAML::Emitter& emitter, T& material_data, void*)
 		emitter << YAML::Key << "use_combined_metallic_roughness" << YAML::Value << combine_metallic_roughness;
 
 		emitter << YAML::Key << "albedo" << YAML::Value << std::string(texture.texture_names[Shared::ALBEDO]);
-		emitter << YAML::Key << "normal" << YAML::Value << std::string(texture.texture_names[Shared::ALBEDO]);
+		emitter << YAML::Key << "normal" << YAML::Value << std::string(texture.texture_names[Shared::NORMAL]);
 		if (combine_metallic_roughness)
 		{
 			emitter << YAML::Key << "metallic_roughness" << YAML::Value << std::string(texture.texture_names[Shared::METALLIC_ROUGHNESS]);

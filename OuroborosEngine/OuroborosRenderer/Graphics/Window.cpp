@@ -13,11 +13,11 @@
 
 namespace Renderer
 {
-	Window::Window(const WindowProperties& window_properties)
+	Window::Window(const WindowProperties& window_properties) : window_properties{ window_properties }
 	{
 		// make unique pointer
-		Init(window_properties);
-	
+
+
 	}
 
 	Window::~Window()
@@ -83,7 +83,7 @@ namespace Renderer
 
 	}
 
-	void Window::Init(const WindowProperties& window_properties)
+	void Window::Init()
 	{
 		window_data.height = window_properties.Height;
 		window_data.width = window_properties.Width;
@@ -105,8 +105,6 @@ namespace Renderer
 			GLFW_IsInit = true;
 		}
 
-		
-
 		if(is_vulkan)
 		{
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -117,7 +115,7 @@ namespace Renderer
 			window_data.RenderContextData = std::make_shared<VulkanContext>(window_data.window);
 			window_data.RenderContextData->Init(1,2);
 			vulkan_imgui_manager.VulkanInit(dynamic_cast<VulkanContext*>(window_data.RenderContextData.get())->GetVulkanType());
-			vulkan_imgui_manager.Init(window_data.window);
+
 		}
 
 		
@@ -126,13 +124,6 @@ namespace Renderer
 			std::cout << "failed to Create window\n";
 		}
 
-
-
-		//window_data.RenderContextData->AddMesh("suzanne");
-
-
-
-		//to get the glfw callback
 		glfwSetWindowUserPointer(window_data.window, &window_data);
 	}
 

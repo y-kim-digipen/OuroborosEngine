@@ -48,8 +48,6 @@ namespace Renderer
 		VkDescriptorPool imguiPool;
 		VK_CHECK(vkCreateDescriptorPool(vulkan_type->device.handle, &pool_info, nullptr, &imguiPool));
 
-
-		ImGui_ImplGlfw_InitForVulkan(window, true);
 		ImGui_ImplVulkan_InitInfo init_info = {};
 		init_info.Instance			= vulkan_type->instance;
 		init_info.PhysicalDevice	= vulkan_type->device.physical_device;
@@ -102,6 +100,7 @@ namespace Renderer
 			throw std::runtime_error("Could not create Dear ImGui's render pass");
 		}*/
 
+		ImGui_ImplGlfw_InitForVulkan(window, true);
 		ImGui_ImplVulkan_Init(&init_info, vulkan_type->render_pass);
 
 		VkCommandBufferAllocateInfo allocInfo{};
@@ -131,7 +130,6 @@ namespace Renderer
 
 		vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &commandBuffer);
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
-
 	}
 
 	void VulkanImguiManager::VulkanInit(VulkanType* vulkan_type_)
@@ -168,7 +166,6 @@ namespace Renderer
 	void VulkanImguiManager::Update()
 	{
 		ImguiManager::Update();
-		//ImGui::ShowDemoWindow();
 	}
 
 	void VulkanImguiManager::GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

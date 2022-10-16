@@ -166,6 +166,7 @@ xcopy /y /d /e /i "$(SolutionDir)scripts" "$(TargetDir)scripts"</Command>
     <ClCompile Include="src\engine\gui\slider_speed.cpp" />
     <ClCompile Include="src\engine\gui\system_configure.cpp" />
     <ClCompile Include="src\engine\gui\viewport.cpp" />
+    <ClCompile Include="src\engine\input\InputManager.cpp" />
     <ClCompile Include="src\engine\modules\image_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\material_asset_manager.cpp" />
     <ClCompile Include="src\engine\modules\mesh_asset_manager.cpp" />

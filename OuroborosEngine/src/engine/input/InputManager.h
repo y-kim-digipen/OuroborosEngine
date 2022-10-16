@@ -1,107 +1,60 @@
 #pragma once
-#include <vector>
+#include <map>
+#include <vec2.hpp>
 #include <GLFW/glfw3.h>
-#include "../../engine/engine.h"
 
 namespace OE
 {
+	class Button
+	{
+		friend class Input;
+		friend class Mouse;
+	public:
+		bool IsDown() const { return current; }
+		bool IsReleased() const { return !current && old; }
+		bool IsPressed() const { return !old && current; }
+
+	private:
+		void Update() { old = current; }
+		bool old, current;
+	};
+
+	class Mouse
+	{
+		friend class Input;
+	public:
+		glm::ivec2 GetCursorPos() const { return current_cursor_pos; }
+		glm::ivec2 GetCursorMove() const { return current_cursor_pos - old_cursor_pos; }
+	private:
+		void Update();
+		std::map<uint64_t, Button> mouse_buttons;
+
+		glm::ivec2 old_cursor_pos{};
+		glm::ivec2 current_cursor_pos{};
+	};
+
 	class Input
 	{
+		friend class Engine;
 	public:
 		enum Modes
 		{
 			PRESSED, RELEASED
 		};
 
-		static void Init(GLFWwindow* window, std::vector<int> support_keys)
-		{
-			//glfwSetKeyCallback(window, KeyboardCallback);
-			//glfwSetMouseButtonCallback(window, MouseButtonCallback);
+		static const Mouse& GetMouse() { return mouse; }
+		static const Button& GetKeyboardButton(int32_t key) { return keyboard_buttons[key]; }
+		static const Button& GetMouseButton(int32_t key) { return mouse.mouse_buttons[key]; }
 
-			for (auto element : support_keys)
-			{
-				keys[element] = false;
-			}
-		}
-
-		static void Update()
-		{
-			old_keys = keys;
-		}
-
-		static bool Pressed(int key)
-		{
-			if (!HasKey(key))
-			{
-				return false;
-			}
-			return keys[key] && !old_keys[key];
-		}
-
-		static bool Released(int key)
-		{
-			if (!HasKey(key))
-			{
-				return false;
-			}
-			return !keys[key] && old_keys[key];
-		}
-
-		static bool Down(int key)
-		{
-			if (!HasKey(key))
-			{
-				return false;
-			}
-			return keys[key];
-		}
-
-		static void RegisterCallback(int key, std::function<void(Modes)>&& function, bool wake_on_register = true)
-		{
-			key_callbacks[key] = std::make_pair(wake_on_register, std::move(function));
-		}
-
-		static void RemoveCallback(int key)
-		{
-			key_callbacks.erase(key_callbacks.find(key));
-		}
-
-		static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			if (key_callbacks.contains(key) && key_callbacks[key].first)
-			{
-				key_callbacks[key].second(action == GLFW_PRESS ? PRESSED : RELEASED);
-			}
-			if (!HasKey(key))
-			{
-				return;
-			}
-			action == GLFW_PRESS ? keys[key] = true : keys[key] = false;
-		}
-
-		static void MouseButtonCallback(GLFWwindow* window, int key, int action, int mods)
-		{
-			if (key_callbacks.contains(key) && key_callbacks[key].first)
-			{
-				key_callbacks[key].second(action == GLFW_PRESS ? PRESSED : RELEASED);
-			}
-			if (!HasKey(key))
-			{
-				return;
-			}
-			action == GLFW_PRESS ? keys[key] = true : keys[key] = false;
-		}
 	private:
+		static void Init();
+		static void Update();
 
-
-		static bool HasKey(int key)
-		{
-			return keys.contains(key);
-		}
-
-		static inline std::map<int, bool> old_keys;
-		static inline std::map<int, bool> keys;
-
-		static inline std::map<int, std::pair<bool, std::function<void(Modes)>>> key_callbacks;
+		static void GLFW_KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void GLFW_CursorCallback(GLFWwindow* window, double xpos, double ypos);
+		static void GLFW_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	private:
+		static inline std::map<int32_t, Button> keyboard_buttons;
+		static inline Mouse mouse;
 	};
 }

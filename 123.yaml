@@ -12,6 +12,16 @@ Asset:
       {}
     ..\OuroborosEngine\images\gameboy_textures\mat_default_roughness.jpeg:
       {}
+    ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_albedo.png:
+      {}
+    ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_ao.png:
+      {}
+    ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_metallic.png:
+      {}
+    ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_normal-ogl.png:
+      {}
+    ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_roughness.png:
+      {}
     ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png:
       {}
     ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png:
@@ -48,6 +58,8 @@ Asset:
   class OE::ShaderAssetManager:
     shader: shader_lightpass
       {}
+    shader_lightpass:
+      {}
   class OE::ScriptAssetManager:
     ..\OuroborosEngine\scripts\light_rotate.clua:
       {}
@@ -67,7 +79,7 @@ Asset:
       is_smoothness: false
       use_combined_metallic_roughness: false
       albedo: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
-      normal: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
+      normal: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png
       metallic: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png
       roughness: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png
       ao: ..\OuroborosEngine\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
@@ -78,12 +90,22 @@ Asset:
       metallic: 0
       roughness: 0
       ao: 0
+    Tile:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_albedo.png
+      normal: ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_normal-ogl.png
+      metallic: ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_metallic.png
+      roughness: ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_roughness.png
+      ao: ..\OuroborosEngine\images\materials\base-white-tile-bl\base-white-tile_ao.png
+      emissive: ""
     Yoga Mat:
       use_texture: true
       is_smoothness: false
       use_combined_metallic_roughness: false
       albedo: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png
-      normal: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png
+      normal: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Normal-ogl.png
       metallic: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Metallic.png
       roughness: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Roughness.png
       ao: ..\OuroborosEngine\images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png
@@ -106,7 +128,7 @@ ECS:
       struct ShaderComponent:
         name: shader_lightpass
       struct MaterialComponent:
-        name: PlaneMaterial
+        name: Tile
         material_data:
           {}
         flag: false
@@ -151,14 +173,14 @@ ECS:
         texture_roughness_name: ""
   2:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
       struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
-      struct OE::ECS::System<struct ScriptComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: no
     Component:
       struct TransformComponent:
-        pos: [1.42598, 3, -1.402349]
+        pos: [-1.999951, 2, 0.01395325]
         scale: [1, 1, 1]
         rotation: [1, 0, 0]
       struct MeshComponent:
@@ -166,7 +188,7 @@ ECS:
       struct ShaderComponent:
         name: shader_lightpass
       struct MaterialComponent:
-        name: PlaneMaterial
+        name: Gray Granite
         material_data:
           {}
         flag: false
@@ -180,12 +202,12 @@ ECS:
         texture_roughness_name: ""
       struct LightComponent:
         init: false
-        data.pos: [1.428492, 3, -1.39979]
-        data.cutoff: 0
+        data.pos: [-1.999951, 2, 0.01395325]
+        data.cutoff: 40
         data.diffuse: [0.8529412, 0.5059112, 0.5059112]
-        data.out_cutoff: 0
-        data.dir: [1.42598, 3, -1.402349]
-        data.falloff: 0
+        data.out_cutoff: 20
+        data.dir: [0, -1, 0]
+        data.falloff: 0.1
         data.type: 0
       struct ScriptComponent:
         name: ..\OuroborosEngine\scripts\light_rotate.clua
