@@ -43,6 +43,13 @@ namespace Renderer
 		uint32_t num_of_lights;
 	};
 
+	struct SsrGlobalData {
+		glm::mat4 projection;
+		glm::mat4 view;
+		glm::vec3 position;
+		glm::mat4 inv_view;
+	};
+
 	class Context
 	{
 	public:
@@ -75,6 +82,7 @@ namespace Renderer
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
+		SsrGlobalData ssr_global_data;
 		std::unique_ptr<VulkanShaderManager> shader_manager;
 		std::unique_ptr<VulkanMaterialManager> material_manager;
 		std::unique_ptr<TextureManager> texture_manager;

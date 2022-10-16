@@ -22,13 +22,13 @@ namespace Renderer {
 
 			size_t offset = 0;
 			
-			if (member == "normal") {
+			if (strcmp(member, "normal") == 0) {
 				offset = offsetof(Vertex, normal);
 			}
-			else if (member == "pos") {
+			else if (strcmp(member, "pos") == 0) {
 				offset = offsetof(Vertex, pos);
 			}
-			else if(member == "uv") {
+			else if(strcmp(member, "uv") == 0) {
 				offset = offsetof(Vertex, uv);
 			}
 

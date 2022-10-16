@@ -135,6 +135,8 @@ namespace Renderer {
 		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions;
 		std::vector<VkPipelineColorBlendAttachmentState> pipeline_color_blend_attachments;
 		std::shared_ptr<VulkanTexture> default_texture;
+
+		bool use_shader_set = false;
 	};
 }
 #endif // !VULKAN_SHADER_H

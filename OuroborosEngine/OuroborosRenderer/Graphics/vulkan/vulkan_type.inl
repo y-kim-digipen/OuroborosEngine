@@ -22,6 +22,7 @@ namespace Renderer
 {
 	class VulkanShader;
 	class DescriptorSet;
+	class VulkanUniformBuffer;
 }
 
 constexpr int MAX_FRAMES_IN_FLIGHT = 3;
@@ -70,6 +71,9 @@ struct LightPass
 	std::vector<VkFramebuffer> frame_buffers;
 	VkSampler color_sampler;
 	VkSemaphore semaphore;
+
+	std::unique_ptr<Renderer::DescriptorSet> global_set; // set 0
+	std::unique_ptr<Renderer::VulkanUniformBuffer> global_ubo;
 };
 
 using VulkanFrameBufferAttachment = VulkanImage;

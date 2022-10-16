@@ -127,21 +127,12 @@ namespace OE
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
 
-
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
 		//init engine module
 		delta_timer.Init();
 
 		InitEssentialAssets();
-
-		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-		camera.data.projection[1][1] *= -1;
-		camera.data.view = camera.GetCameraMat();
-		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
-
-
-		window->GetWindowData().RenderContextData->InitGlobalData();
 	}
 
 	void Engine::PreUpdate()

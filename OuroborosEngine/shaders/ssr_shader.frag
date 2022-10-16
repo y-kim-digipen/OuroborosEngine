@@ -8,13 +8,11 @@ layout(set = 1, binding = 1) uniform sampler2D uv_buffer;
 
 void main()
 {
-
     vec4 color = texture(color_buffer, vertexUV);
     float roughness = color.w;
     color.w = 1.0f;
     vec4 uv = texture(uv_buffer, vertexUV);
-    vec3 reflected_color = texture(color_buffer, uv.xy).rgb;
-    vec4 blurred_color = vec4(mix(vec3(0), reflected_color, uv.b), uv.b);
+    vec4 reflected_color = vec4(texture(color_buffer, uv.xy).rgb, 1.0f);
 
-    outColor = mix(color, blurred_color, roughness);
+    outColor = mix(color, reflected_color, roughness);
 }

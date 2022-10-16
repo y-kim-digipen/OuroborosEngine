@@ -219,10 +219,13 @@ namespace Renderer {
 						uniform_texture_objects[set.binding].get()
 					);
 				}
+
+				use_shader_set = true;
 			}
 		}
-
-		shader_set.Build();
+		
+		if (use_shader_set)
+			shader_set.Build();
 
 		pipeline_builder.color_blend_attachments = pipeline_color_blend_attachments;
 		pipeline_builder.input_assembly = VulkanInitializer_pipeline::PipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
@@ -235,7 +238,28 @@ namespace Renderer {
 		input_binding_description.stride = sizeof(Vertex);
 		input_binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-		if (input_attribute_descriptions.size() > 0) {
+		if (input_attribute_descriptions.size() > 0)
+		{
+			input_attribute_descriptions[0].binding = 0;
+			input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+			input_attribute_descriptions[0].location = 0;
+			input_attribute_descriptions[0].offset = offsetof(Vertex, pos);
+
+			input_attribute_descriptions[1].binding = 0;
+			input_attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+			input_attribute_descriptions[1].location = 1;
+			input_attribute_descriptions[1].offset = offsetof(Vertex, normal);
+
+			input_attribute_descriptions[2].binding = 0;
+			input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+			input_attribute_descriptions[2].location = 2;
+			input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
+
+			pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
+			pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
+			pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
+			pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
+
 			pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
 			pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
 			pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
@@ -282,7 +306,8 @@ namespace Renderer {
 
 		vkCmdBindPipeline(frame_data.command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		
-		shader_set.Bind();
+		if (use_shader_set)
+			shader_set.Bind();
 	}
 
 	void VulkanShader::ShutDown()
@@ -477,6 +502,7 @@ namespace Renderer {
 						description.offset = Vertex::offset(refl_module.input_variables[i]->name);
 						input_attribute_descriptions.push_back(description);
 					}
+					
 				}
 			}
 			break;
@@ -497,7 +523,7 @@ namespace Renderer {
 					case SPV_REFLECT_FORMAT_R32G32B32_SFLOAT:
 						pipeline_color_blend_attachments[i] =
 							VulkanInitializer::PipelineColorBlendAttachmentState(
-								VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT,
+								VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
 								VK_FALSE
 							);
 

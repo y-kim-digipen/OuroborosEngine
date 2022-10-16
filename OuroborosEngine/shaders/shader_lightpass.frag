@@ -2,9 +2,13 @@
 
 layout(location = 0) out vec4 outColor;
 layout(location = 1) out vec4 outUV;
-layout(location = 1) in vec3 cam_pos;
-layout(location = 2) in mat4 projection;
-layout(location = 6) in mat4 view;
+
+layout(set = 0, binding = 0) uniform global_data {
+    mat4 projection;
+    mat4 view;
+    vec3 cam_pos;
+    mat4 inv_view;
+} global_ubo;
 
 #include "common_light_pass_frag.glsl"
 
@@ -33,15 +37,18 @@ void main()
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(cam_pos - frag_pos);
+    vec3 V = normalize(global_ubo.cam_pos - frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
-    vec4 view_pos = view * vec4(frag_pos, 1.0f);
-    vec2 tex_size = textureSize(posBuffer, 0).xy;
-
     vec4 uv = vec4(0.0f);
-    if(metallic > 0.0f)
-        uv = SSR_raycast(uv, view_pos, N, tex_size, vertexUV);
+    if(metallic > 0.01f) 
+    {
+        vec3 view_normal = normalize(vec3(global_ubo.inv_view * vec4(N, 0.0f)));
+        vec4 view_pos = global_ubo.view * vec4(frag_pos, 1.0f);
+        vec2 tex_size = textureSize(posBuffer, 0).xy;
+
+        //SSR_raycast(uv, view_pos, view_normal, tex_size, vertexUV);
+    }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
     {
@@ -150,7 +157,7 @@ void main()
     color = pow(color, vec3(1.0/2.2));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
-    
-    outColor = vec4(color, 1.0f);
+
+    outColor = vec4(color, roughness);
     outUV = uv;
 }

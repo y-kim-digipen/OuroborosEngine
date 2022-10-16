@@ -118,7 +118,6 @@ namespace Renderer
         shader_manager = std::make_unique<VulkanShaderManager>(&vulkan_type);
 	}
 
-
     void VulkanContext::Init(int major, int minor)
     {
         SpirvHelper::Init();
@@ -201,6 +200,15 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &global_set.layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout; 
 
+        vulkan_type.light_pass.global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(ssr_global_data) + 4.0f);
+        vulkan_type.light_pass.global_set = std::make_unique<DescriptorSet>();
+        vulkan_type.light_pass.global_set->Init(&vulkan_type, 0)
+            .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBinding(0, vulkan_type.light_pass.global_ubo.get())
+            .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBinding(1, global_binding_ubo[1].get())
+            .Build();
+
     }
 
     void VulkanContext::UpdateGlobalData()
@@ -209,6 +217,11 @@ namespace Renderer
 
         global_binding_ubo[0]->AddData((void*)&global_data, 0, sizeof(global_data));
         global_binding_ubo[1]->AddData((void*)&light_data, 0, sizeof(light_data));
+
+        memcpy_s(&ssr_global_data, sizeof(ssr_global_data), &global_data, sizeof(global_data));
+        ssr_global_data.inv_view = glm::inverse(glm::transpose(global_data.view));
+
+        vulkan_type.light_pass.global_ubo->AddData((void*)&ssr_global_data, 0, sizeof(ssr_global_data));
     }
 
 	// Must be called after init_frame()
@@ -428,7 +441,7 @@ namespace Renderer
 
         shader_manager->GetShader("shader_lightpass")->Bind();
         lightpass_set_.Bind();
-        global_set.Bind();
+        vulkan_type.light_pass.global_set->Bind();
 
         // draw quad
         vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
