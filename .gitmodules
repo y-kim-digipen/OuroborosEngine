@@ -1,3 +1,6 @@
 [submodule "OuroborosEngine/external/lib/yaml-cpp"]
 	path = OuroborosEngine/external/lib/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "OuroborosEngine\\OuroborosEngine\\external\\lib"]
+	path = OuroborosEngine\\OuroborosEngine\\external\\lib
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
