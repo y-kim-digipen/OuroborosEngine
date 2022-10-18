@@ -4,7 +4,7 @@
 int OE::MaterialAssetManager::LoadAsset(const std::string& name, AssetType asset)
 {
 	{
-		Asset::MaterialData data;
+		Asset::MaterialData data{};
 		switch (asset.pbr_mat.GetMode())
 		{
 		case Shared::MaterialMode::TEXTURE:

@@ -72,8 +72,7 @@ struct LightPass
 	VkSampler color_sampler;
 	VkSemaphore semaphore;
 
-	std::unique_ptr<Renderer::DescriptorSet> global_set; // set 0
-	std::unique_ptr<Renderer::VulkanUniformBuffer> global_ubo;
+	std::unique_ptr<Renderer::DescriptorSet> global_set; // set 0 (same data but different shader stage)
 };
 
 using VulkanFrameBufferAttachment = VulkanImage;

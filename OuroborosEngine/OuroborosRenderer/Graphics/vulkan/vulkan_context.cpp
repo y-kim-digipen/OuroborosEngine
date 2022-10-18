@@ -200,11 +200,10 @@ namespace Renderer
         vulkan_type.global_pipeline_layout = pipeline_builder.BuildPipeLineLayout(vulkan_type.device.handle, &global_set.layout, 1, 0, 0);
         vulkan_type.current_pipeline_layout = vulkan_type.global_pipeline_layout; 
 
-        vulkan_type.light_pass.global_ubo = std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(ssr_global_data) + 4.0f);
         vulkan_type.light_pass.global_set = std::make_unique<DescriptorSet>();
         vulkan_type.light_pass.global_set->Init(&vulkan_type, 0)
             .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
-            .AddBinding(0, vulkan_type.light_pass.global_ubo.get())
+            .AddBinding(0, global_binding_ubo[0].get())
             .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBinding(1, global_binding_ubo[1].get())
             .Build();
@@ -217,11 +216,6 @@ namespace Renderer
 
         global_binding_ubo[0]->AddData((void*)&global_data, 0, sizeof(global_data));
         global_binding_ubo[1]->AddData((void*)&light_data, 0, sizeof(light_data));
-
-        memcpy_s(&ssr_global_data, sizeof(ssr_global_data), &global_data, sizeof(global_data));
-        ssr_global_data.inv_view = glm::inverse(glm::transpose(global_data.view));
-
-        vulkan_type.light_pass.global_ubo->AddData((void*)&ssr_global_data, 0, sizeof(ssr_global_data));
     }
 
 	// Must be called after init_frame()
@@ -623,7 +617,7 @@ namespace Renderer
 
                 model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
 
-                glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(global_data.view * model));
 
 
                 //TODO : need to change deferred offscreen shader
@@ -1695,8 +1689,8 @@ namespace Renderer
 
         for(uint32_t idx = 0; idx < size; idx++)
         {
-            CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &framebuffer.out_uv_images[idx]);
             CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &framebuffer.out_color_images[idx]);
+            CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &framebuffer.out_uv_images[idx]);
         }
         return 0;
     }

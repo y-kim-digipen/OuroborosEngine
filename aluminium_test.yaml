@@ -1,0 +1,121 @@
+Asset:
+  class OE::ImageAssetManager:
+    ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_basecolor.png:
+      {}
+    ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_metallic.png:
+      {}
+    ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_normal.png:
+      {}
+    ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_roughness.png:
+      {}
+    ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-albedo.png:
+      {}
+    ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-ao.png:
+      {}
+    ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-metal.png:
+      {}
+    ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-normal.png:
+      {}
+    ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-roughness.png:
+      {}
+    images/null.png:
+      {}
+  class OE::MeshAssetManager:
+    ..\OuroborosEngine\model\plane.obj:
+      {}
+    model/default_cube.obj:
+      {}
+  class OE::ShaderAssetManager:
+    shader_lightpass:
+      {}
+  class OE::ScriptAssetManager:
+    {}
+  class OE::MaterialAssetManager:
+    alum:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_basecolor.png
+      normal: ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_normal.png
+      metallic: ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_metallic.png
+      roughness: ..\OuroborosEngine\images\materials\aluminum-scuffed_bl\Aluminum-Scuffed_roughness.png
+      ao: ""
+      emissive: ""
+    bamboo:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-albedo.png
+      normal: ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-normal.png
+      metallic: ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-metal.png
+      roughness: ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-roughness.png
+      ao: ..\OuroborosEngine\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-ao.png
+      emissive: ""
+ECS:
+  0:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        pos: [0, 0, 0]
+        scale: [2, 2, 2]
+        rotation: [1, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\OuroborosEngine\model\plane.obj
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: alum
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+  1:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
+      struct OE::ECS::System<struct BoolWrapperComponent>: no
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        pos: [0, 1.36, 0]
+        scale: [0.1, 0.1, 0.1]
+        rotation: [1, 0, 0]
+      struct MeshComponent:
+        mesh_name: model/default_cube.obj
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: bamboo
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: true
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+      struct LightComponent:
+        init: false
+        data.pos: [0, 1.36, 0]
+        data.cutoff: 0
+        data.diffuse: [1, 1, 1]
+        data.out_cutoff: 0
+        data.dir: [0, 0, 0]
+        data.falloff: 0
+        data.type: 0

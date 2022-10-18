@@ -37,17 +37,15 @@ void main()
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(global_ubo.cam_pos - frag_pos);
+    vec3 V = normalize(-frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
     vec4 uv = vec4(0.0f);
     if(metallic > 0.01f) 
     {
-        vec3 view_normal = normalize(vec3(global_ubo.inv_view * vec4(N, 0.0f)));
-        vec4 view_pos = global_ubo.view * vec4(frag_pos, 1.0f);
+        vec4 view_pos = vec4(frag_pos, 1.0f);
         vec2 tex_size = textureSize(posBuffer, 0).xy;
-
-        //SSR_raycast(uv, view_pos, view_normal, tex_size, vertexUV);
+        //uv = SSR_raycast(uv, view_pos, N, tex_size, vertexUV);
     }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
@@ -58,7 +56,7 @@ void main()
         const vec3 light_dir    = normalize(light.dir);
         const int  light_type   = light.type;
 
-        vec3 L;
+        vec3 L; // light to fragment vector
         float att, d;
 
         if(light_type == 2){
@@ -68,7 +66,7 @@ void main()
         else{
             vec3 relative_vec = light_pos - frag_pos;
             d = length(relative_vec);
-            L = relative_vec / d;
+            L = normalize(relative_vec);
             // att = 1 / (oout.att * oout.att);
         
             att =  CalculateAttenuation(oout.c1, oout.c2, oout.c3, d);
@@ -85,8 +83,8 @@ void main()
 
         float NDF   = DistributionGGX(N, H, roughness);
 
-        vec3 wi = normalize(light_pos - V);
-        vec3 radiance = att * light.diffuse * max(dot(N, wi), 0.f);
+        vec3 wi = normalize(light_pos - frag_pos);
+        vec3 radiance = att * light.diffuse * max(dot(N, L), 0.f);
 
         switch(light_type)
         {

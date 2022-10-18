@@ -64,8 +64,6 @@ Asset:
     model/default_cube.obj:
       {}
   class OE::ShaderAssetManager:
-    shader:
-      {}
     shader_lightpass:
       {}
   class OE::ScriptAssetManager:
