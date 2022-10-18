@@ -1,9 +1,17 @@
 #version 450
 
+layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outUV;
+
+layout(set = 0, binding = 0) uniform global_data {
+    mat4 projection;
+    mat4 view;
+    vec3 cam_pos;
+    mat4 inv_view;
+} global_ubo;
+
 #include "common_light_pass_frag.glsl"
 
-layout(location = 0) out vec4 outColor;
-layout(location = 1) in vec3 cam_pos;
 float test_att = 0.1;
 
 layout(set = 1, binding = 0) uniform Test {
@@ -17,21 +25,28 @@ float CalculateAttenuation(float c1, float c2, float c3, float dist)
 {
     return min(1.f/(c1 + c2 * dist + c3 * dist * dist), 1.f);
 }
+
 void main()
 {
     vec3 Lo = vec3(0);
    
-    vec3 frag_pos = texture(viewPosBuffer, vertexUV).rgb;
+    vec3 frag_pos = texture(posBuffer, vertexUV).rgb;
     vec3 normal = texture(normalBuffer,vertexUV).rgb;
     vec3 albedo = texture(albedoBuffer,vertexUV).rgb;
     float metallic = texture(metalRoughnessAoBuffer, vertexUV).r;
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(cam_pos - frag_pos);
+    vec3 V = normalize(-frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
-
+    vec4 uv = vec4(0.0f);
+    if(metallic > 0.01f) 
+    {
+        vec4 view_pos = vec4(frag_pos, 1.0f);
+        vec2 tex_size = textureSize(posBuffer, 0).xy;
+        //uv = SSR_raycast(uv, view_pos, N, tex_size, vertexUV);
+    }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
     {
@@ -41,7 +56,7 @@ void main()
         const vec3 light_dir    = normalize(light.dir);
         const int  light_type   = light.type;
 
-        vec3 L;
+        vec3 L; // light to fragment vector
         float att, d;
 
         if(light_type == 2){
@@ -51,7 +66,7 @@ void main()
         else{
             vec3 relative_vec = light_pos - frag_pos;
             d = length(relative_vec);
-            L = relative_vec / d;
+            L = normalize(relative_vec);
             // att = 1 / (oout.att * oout.att);
         
             att =  CalculateAttenuation(oout.c1, oout.c2, oout.c3, d);
@@ -68,8 +83,8 @@ void main()
 
         float NDF   = DistributionGGX(N, H, roughness);
 
-        vec3 wi = normalize(light_pos - V);
-        vec3 radiance = att * light.diffuse * max(dot(N, wi), 0.f);
+        vec3 wi = normalize(light_pos - frag_pos);
+        vec3 radiance = att * light.diffuse * max(dot(N, L), 0.f);
 
         switch(light_type)
         {
@@ -134,12 +149,13 @@ void main()
         Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.03) * albedo * ao * 0.1f;
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
-    
-    outColor = vec4(color, 1.0);
+
+    outColor = vec4(color, roughness);
+    outUV = uv;
 }

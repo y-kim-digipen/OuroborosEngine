@@ -32,12 +32,6 @@ namespace Renderer
 	
 	constexpr uint32_t max_num_lights = 20;
 
-	struct GlobalData {
-		glm::mat4 projection;
-		glm::mat4 view;
-		glm::vec3 position;
-	};
-
 	struct LightGlobalData {
 		Asset::LightData lights[max_num_lights];
 		uint32_t num_of_lights;

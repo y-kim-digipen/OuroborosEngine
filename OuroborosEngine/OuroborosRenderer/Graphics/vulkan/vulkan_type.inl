@@ -21,6 +21,8 @@
 namespace Renderer
 {
 	class VulkanShader;
+	class DescriptorSet;
+	class VulkanUniformBuffer;
 }
 
 constexpr int MAX_FRAMES_IN_FLIGHT = 3;
@@ -61,19 +63,21 @@ struct VulkanSwapchain
 };
 
 
-struct ViewPortFramebuffer
+struct LightPass
 {
-	std::vector<VulkanImage> viewport_vulkan_images;
+	std::vector<VulkanImage> out_color_images;
+	std::vector<VulkanImage> out_uv_images;
 	VkRenderPass render_pass;
-	VkPipeline viewport_pipeline;
 	std::vector<VkFramebuffer> frame_buffers;
 	VkSampler color_sampler;
-	VkSemaphore viewport_semaphore;
+	VkSemaphore semaphore;
+
+	std::unique_ptr<Renderer::DescriptorSet> global_set; // set 0 (same data but different shader stage)
 };
 
 using VulkanFrameBufferAttachment = VulkanImage;
 
-struct VulkanDeferredFrameBuffer
+struct DeferredPass
 {
 	VulkanFrameBufferAttachment position;
 	VulkanFrameBufferAttachment normal;
@@ -90,10 +94,21 @@ struct VulkanDeferredFrameBuffer
 	VkSampler color_sampler;
 	VkCommandBuffer off_screen_command_buffer = VK_NULL_HANDLE;
 	VkSemaphore offscreenSemaphore = VK_NULL_HANDLE;
-	VkDescriptorSetLayout layout;
-	VkDescriptorSet descriptor_set;
 	std::shared_ptr<Renderer::VulkanShader> deferred_shader;
 };
+
+struct SsrPass
+{
+	std::vector<VulkanImage> color_images;
+	VkRenderPass render_pass;
+	std::vector<VkFramebuffer> frame_buffers;
+	VkSampler color_sampler; // output color image sampler
+	std::unique_ptr<Renderer::VulkanShader> ssr_shader;
+	std::unique_ptr<Renderer::DescriptorSet> set; // set 1
+	VkSemaphore image_available_semaphores[MAX_FRAMES_IN_FLIGHT];
+	VkSemaphore render_finished_semaphores[MAX_FRAMES_IN_FLIGHT];
+};
+
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphics_family;
@@ -126,8 +141,6 @@ struct VulkanFrameData
 	uint32_t swap_chain_image_index{ 0 };
 };
 
-
-
 struct VulkanType
 {
 	
@@ -149,8 +162,10 @@ struct VulkanType
 
 	VkCommandPool command_pool;
 
-	VulkanDeferredFrameBuffer deferred_frame_buffer;
-	ViewPortFramebuffer viewport_frame_buffer;
+	DeferredPass deferred_pass;
+	LightPass light_pass;
+	SsrPass ssr_pass;
+
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
 	VkPipelineLayout current_pipeline_layout = VK_NULL_HANDLE;
