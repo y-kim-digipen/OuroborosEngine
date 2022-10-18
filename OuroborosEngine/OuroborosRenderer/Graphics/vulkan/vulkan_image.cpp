@@ -10,14 +10,15 @@ namespace Renderer {
         VkImageTiling tiling,
         VkMemoryPropertyFlags memory_flags,
         bool create_view,
-        VkImageAspectFlags aspect_flags
+        VkImageAspectFlags aspect_flags,
+        uint32_t mip_levels
     )
     {
         VkImageCreateInfo create_info{ VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
         create_info.imageType = image_type;
         create_info.format = format;
         create_info.extent = { width, height, 1 };
-        create_info.mipLevels = 4;
+        create_info.mipLevels = mip_levels;
         create_info.arrayLayers = 1;
         create_info.samples = VK_SAMPLE_COUNT_1_BIT;
         create_info.tiling = tiling;

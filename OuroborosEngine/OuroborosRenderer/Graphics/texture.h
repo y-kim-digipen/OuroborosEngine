@@ -29,6 +29,7 @@ namespace Renderer
 		void UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding);
 		void UpdateColorType(int channel);
 		void Cleanup();
+		void GenerateMipMaps(VkImage image, VkFormat image_format, int32_t tex_width, int32_t tex_height, uint32_t mip_levels);
 		VkDescriptorImageInfo GetImageInfo() const;
 	private:
 		VulkanType* vulkan_type = nullptr;

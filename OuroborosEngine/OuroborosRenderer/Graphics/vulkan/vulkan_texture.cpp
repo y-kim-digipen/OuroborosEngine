@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "../texture.h"
 
 #include "vulkan_buffer.h"
@@ -198,6 +200,69 @@ namespace Renderer
 			vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
 		}
 	}
+
+	void VulkanTexture::GenerateMipMaps(VkImage image, VkFormat image_format, int32_t tex_width, int32_t tex_height,
+		uint32_t mip_levels)
+	{
+		VkFormatProperties format_properties;
+		vkGetPhysicalDeviceFormatProperties(vulkan_type->device.physical_device, image_format, &format_properties);
+
+		if(!(format_properties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
+		{
+			throw std::runtime_error("texture image format do not support linear blitting");
+		}
+
+		VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
+		allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocate_info.commandPool = vulkan_type->command_pool;
+		allocate_info.commandBufferCount = 1;
+
+		VkCommandBuffer command_buffer;
+		vkAllocateCommandBuffers(vulkan_type->device.handle, &allocate_info, &command_buffer);
+
+		//Record one time command buffer
+		VkCommandBufferBeginInfo command_buffer_begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+		command_buffer_begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+			vkBeginCommandBuffer(command_buffer, &command_buffer_begin_info);
+
+
+		VkImageMemoryBarrier barrier{};
+		barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		barrier.image = image;
+		barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		barrier.subresourceRange.baseArrayLayer = 0;
+		barrier.subresourceRange.layerCount = 1;
+		barrier.subresourceRange.levelCount = 1;
+		
+		int32_t mip_width = tex_width;
+		int32_t mip_height = tex_height;
+
+		for(uint32_t idx = 1; idx < mip_levels; idx++)
+		{
+			barrier.subresourceRange.baseMipLevel = idx - 1;
+			barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+			barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+			barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+			barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+			VkImageBlit blit{};
+			blit.srcOffsets[0] = { 0,0,0 };
+			blit.srcOffsets[1] = { mip_width,mip_height,1 };
+			blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			blit.srcSubresource.mipLevel = idx - 1;
+			blit.srcSubresource.baseArrayLayer = 0;
+			blit.srcSubresource.layerCount = 1;
+			blit.dstOffsets[0] = { 0,0,0 };
+
+		}
+
+
+	}
+
 	VkDescriptorImageInfo VulkanTexture::GetImageInfo() const
 	{
 		return VkDescriptorImageInfo{

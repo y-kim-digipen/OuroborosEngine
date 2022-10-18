@@ -18,7 +18,8 @@ namespace Renderer {
 		VkImageTiling tiling,
         VkMemoryPropertyFlags memory_flags,
         bool create_view,
-        VkImageAspectFlags aspect_flags
+        VkImageAspectFlags aspect_flags,
+        uint32_t mip_levels
     );
 
 	void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags);

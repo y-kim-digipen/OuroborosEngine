@@ -1001,7 +1001,7 @@ namespace Renderer
             VK_IMAGE_TILING_OPTIMAL,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             true,
-            VK_IMAGE_ASPECT_DEPTH_BIT);
+            VK_IMAGE_ASPECT_DEPTH_BIT, 1);
 
         return 0;
     }
@@ -1461,7 +1461,7 @@ namespace Renderer
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
 
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask);
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
     }
 
     //first rendering
