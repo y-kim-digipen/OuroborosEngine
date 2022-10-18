@@ -600,15 +600,16 @@ namespace Renderer
                 auto* material = front.material;
 
                 //TODO : Draw call
-                glm::mat4 model(1.f);
-                model = glm::translate(model, transform->pos);
-                model = glm::scale(model, transform->scale);
+                //glm::mat4 model(1.f);
+                //model = glm::translate(model, transform->position);
+                //model = glm::scale(model, transform->scale);
 
-                glm::quat rotP = glm::angleAxis(glm::radians(transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-                glm::quat rotY = glm::angleAxis(glm::radians(transform->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-                glm::quat rotR = glm::angleAxis(glm::radians(transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+                //glm::quat rotP = glm::angleAxis(glm::radians(transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+                //glm::quat rotY = glm::angleAxis(glm::radians(transform->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+                //glm::quat rotR = glm::angleAxis(glm::radians(transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-                model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
+                //model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
+                glm::mat4 model = transform->GetMatrix();
 
                 glm::mat3 normal_matrix = glm::transpose(glm::inverse(model));
 

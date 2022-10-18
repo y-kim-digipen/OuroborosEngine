@@ -44,6 +44,7 @@ bool OE::ECS::Hierarchy::SetParent(ecs_ID new_parent_ID)
 		Engine::ecs_manager.GetEntity(parent_ID).hierarchy.child.push_back(this_ID);
 		return true;
 	}
+	return false;
 }
 
 bool OE::ECS::Hierarchy::HasParent() const

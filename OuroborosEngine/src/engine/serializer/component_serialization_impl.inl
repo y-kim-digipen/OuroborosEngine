@@ -2,25 +2,12 @@ template<typename T,
 	std::enable_if_t<std::is_same_v<T, TransformComponent>, void*> = nullptr>
 YAML::Emitter& _serialize(YAML::Emitter& emitter, T& transform, void*)
 {
-	emitter << YAML::Key << "pos" << YAML::Value << transform.pos;
-	emitter << YAML::Key << "scale" << YAML::Value << transform.scale;
-	emitter << YAML::Key << "rotation" << YAML::Value << transform.rotation;
-	return emitter;
-}
-
-template<typename T,
-	std::enable_if_t<std::is_same_v<T, VelocityComponent>, void*> = nullptr>
-YAML::Emitter& _serialize(YAML::Emitter& emitter, T& velocity, void*)
-{
-	emitter << YAML::Key << "vel" << YAML::Value << velocity.vel;
-	return emitter;
-}
-
-template<typename T,
-	std::enable_if_t<std::is_same_v<T, LifeTimeComponent>, void*> = nullptr>
-YAML::Emitter& _serialize(YAML::Emitter& emitter, T& lifetime, void*)
-{
-	emitter << YAML::Key << "life_time" << YAML::Value << lifetime.life_time;
+	glm::vec3 pos = transform.GetPosition();
+	glm::vec3 scale = transform.GetScale();
+	glm::vec3 rotation = transform.GetRotation();
+	emitter << YAML::Key << "position" << YAML::Value << YAML::Flow << YAML::BeginSeq << pos.x << pos.y << pos.z << YAML::EndSeq;
+	emitter << YAML::Key << "scale" << YAML::Value << YAML::Flow << YAML::BeginSeq << scale.x << scale.y << scale.z << YAML::EndSeq;
+	emitter << YAML::Key << "rotation" << YAML::Value << YAML::Flow << YAML::BeginSeq << rotation.x << rotation.y << rotation.z << YAML::EndSeq;
 	return emitter;
 }
 
@@ -59,14 +46,6 @@ YAML::Emitter& _serialize(YAML::Emitter& emitter, T& shader, void*)
 }
 
 template<typename T,
-	std::enable_if_t<std::is_same_v<T, BoolWrapperComponent>, void*> = nullptr>
-YAML::Emitter& _serialize(YAML::Emitter& emitter, T& bool_wrapper, void*)
-{
-	emitter << YAML::Key << "bool_type" << YAML::Value << bool_wrapper.bool_type;
-	return emitter;
-}
-
-template<typename T,
 	std::enable_if_t<std::is_same_v<T, TagComponent>, void*> = nullptr>
 YAML::Emitter& _serialize(YAML::Emitter& emitter, T& tag, void*)
 {
@@ -79,7 +58,7 @@ template<typename T,
 YAML::Emitter& _serialize(YAML::Emitter& emitter, T& light, void*)
 {
 	emitter << YAML::Key << "init" << YAML::Value << false;
-	emitter << YAML::Key << "data.pos" << YAML::Value << light.data.pos;
+	emitter << YAML::Key << "data.position" << YAML::Value << light.data.pos;
 	emitter << YAML::Key << "data.cutoff" << YAML::Value << light.data.cutoff;
 	emitter << YAML::Key << "data.diffuse" << YAML::Value << light.data.diffuse;
 	emitter << YAML::Key << "data.out_cutoff" << YAML::Value << light.data.out_cutoff;

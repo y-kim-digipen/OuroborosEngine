@@ -2,25 +2,17 @@ template<typename T,
 	std::enable_if_t<std::is_same_v<T, TransformComponent>, void*> = nullptr>
 YAML::Node _deserialize(YAML::Node node, T& transform, void*)
 {
-	node["pos"] >> transform.pos;
-	node["scale"] >> transform.scale;
-	node["rotation"] >> transform.rotation;
-	return node;
-}
+	glm::vec3 pos, scale, rot;
+	_deserialize(node["pos"], pos, nullptr);
+	_deserialize(node["scale"], scale, nullptr);
+	_deserialize(node["rotation"], rot, nullptr);
+	//node["position"] >> pos;
+	//node["scale"] >> scale;
+	//node["rotation"] >> rot;
 
-template<typename T,
-	std::enable_if_t<std::is_same_v<T, VelocityComponent>, void*> = nullptr>
-YAML::Node _deserialize(YAML::Node node, T& velocity, void*)
-{
-	node["vel"] >> velocity.vel;
-	return node;
-}
-
-template<typename T,
-	std::enable_if_t<std::is_same_v<T, LifeTimeComponent>, void*> = nullptr>
-YAML::Node _deserialize(YAML::Node node, T& life_time, void*)
-{
-	node["life_time"] >> life_time.life_time;
+	transform.SetPosition(pos);
+	transform.SetScale(scale);
+	transform.SetRotation(rot);
 	return node;
 }
 
@@ -55,14 +47,6 @@ template<typename T,
 YAML::Node _deserialize(YAML::Node node, T& shader, void*)
 {
 	node["name"] >> shader.name;
-	return node;
-}
-
-template<typename T,
-	std::enable_if_t<std::is_same_v<T, BoolWrapperComponent>, void*> = nullptr>
-YAML::Node _deserialize(YAML::Node node, T& bool_wrapper, void*)
-{
-	node["bool_type"] >> bool_wrapper.bool_type;
 	return node;
 }
 

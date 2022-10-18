@@ -101,5 +101,4 @@ YAML::Emitter& operator << (YAML::Emitter& emitter, T& t)
 {
 	return _serialization_impl::_serialize(emitter, t, nullptr);
 }
-
 #endif

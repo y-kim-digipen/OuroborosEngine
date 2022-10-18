@@ -81,7 +81,7 @@ namespace OE
 		private:
 			void DrawMenu();
 			bool HasPanel(const std::string& panel_name);
-			float slider_speed{};
+			float slider_speed;
 
 			std::vector<GUI_Base*> gui_panels;
 			std::queue<GUI_Base*> remove_queue_gui_panels;

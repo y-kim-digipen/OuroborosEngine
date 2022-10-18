@@ -47,41 +47,23 @@ namespace OE
 		TransformComponent& transform_component = OE::Engine::ecs_manager.GetComponent<TransformComponent>(entID);
 		if (ImGui::TreeNode(typeid(TransformComponent).name()))
 		{
-			GUI_Input::DragFloat3("Pos", &transform_component.pos.x);
-			GUI_Input::ImGuiDragDropCopy(transform_component.pos, ImGuiDragDropFlags_SourceAllowNullID);
+			glm::vec3 position = transform_component.GetPosition();
+			if(GUI_Input::DragFloat3("Pos", &position.x))
+			{
+				transform_component.SetPosition(position);
+			}
 
-			GUI_Input::DragFloat3("Scale", &transform_component.scale.x);
-			GUI_Input::ImGuiDragDropCopy(transform_component.scale, ImGuiDragDropFlags_SourceAllowNullID);
+			glm::vec3 rotation = transform_component.GetRotation();
+			if(GUI_Input::DragFloat3("Rot", &rotation.x))
+			{
+				transform_component.SetRotation(rotation);
+			}
+			glm::vec3 scale = transform_component.GetScale();
+			if(GUI_Input::DragFloat3("Scale", &scale.x))
+			{
+				transform_component.SetScale(scale);
+			}
 
-			GUI_Input::DragFloat3("Rot", &transform_component.rotation.x);
-			GUI_Input::ImGuiDragDropCopy(transform_component.rotation, ImGuiDragDropFlags_SourceAllowNullID);
-
-			ImGui::TreePop();
-		}
-	}
-
-	template<>
-	inline void ComponentDrawFunction<VelocityComponent>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		VelocityComponent& velocity_component = OE::Engine::ecs_manager.GetComponent<VelocityComponent>(entID);
-		if (ImGui::TreeNode(typeid(VelocityComponent).name()))
-		{
-			GUI_Input::DragFloat3("Vel", &velocity_component.vel.x);
-			ImGui::TreePop();
-		}
-		GUI_Input::ImGuiDragDropCopy(velocity_component.vel, ImGuiDragDropFlags_SourceAllowNullID);
-	}
-
-	template<>
-	inline void ComponentDrawFunction<LifeTimeComponent>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		LifeTimeComponent& life_time_component = OE::Engine::ecs_manager.GetComponent<LifeTimeComponent>(entID);
-		if (ImGui::TreeNode(typeid(LifeTimeComponent).name()))
-		{
-			GUI_Input::DragFloat("LifeTime", &life_time_component.life_time);
-			GUI_Input::ImGuiDragDropCopy(life_time_component.life_time);
 			ImGui::TreePop();
 		}
 	}
@@ -591,28 +573,13 @@ namespace OE
 		LightComponent& light_component = OE::Engine::ecs_manager.GetComponent<LightComponent>(entID);
 		if (ImGui::TreeNode(typeid(LightComponent).name()))
 		{
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.position), &light_component.data.position.x);
 			ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.dir.x, Engine::gui_manager.GetSliderSpeed());
 			ImGui::ColorEdit3(GET_VARIABLE_NAME(light.diffuse), &light_component.data.diffuse.x, Engine::gui_manager.GetSliderSpeed());
 			ImGui::DragFloat(GET_VARIABLE_NAME(light.inner_cut_off), &light_component.data.cutoff, Engine::gui_manager.GetSliderSpeed());
 			ImGui::DragFloat(GET_VARIABLE_NAME(light.outer_cut_off), &light_component.data.out_cutoff, Engine::gui_manager.GetSliderSpeed());
 			ImGui::DragFloat(GET_VARIABLE_NAME(light.falloff), &light_component.data.falloff, Engine::gui_manager.GetSliderSpeed());
 			ImGui::InputInt(GET_VARIABLE_NAME(light.type), &light_component.data.type, Engine::gui_manager.GetSliderSpeed());
-			ImGui::TreePop();
-		}
-
-	}
-
-	template<>
-	inline void ComponentDrawFunction<BoolWrapperComponent>(ecs_ID entID)
-	{
-		std::string strID = std::to_string(entID);
-		BoolWrapperComponent& bool_wrapper_component = OE::Engine::ecs_manager.GetComponent<BoolWrapperComponent>(entID);
-		if (ImGui::TreeNode(typeid(BoolWrapperComponent).name()))
-		{
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
-			ImGui::Checkbox(GET_VARIABLE_NAME(BoolWrapperComponent::bool_type), &bool_wrapper_component.bool_type);
-
 			ImGui::TreePop();
 		}
 
@@ -671,7 +638,7 @@ namespace OE
 			{
 				script->ChangeScript(script_path);
 			}*/
-			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.pos), &light_component.data.position.x);
+			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.position), &light_component.data.position.x);
 			//ImGui::DragFloat3(GET_VARIABLE_NAME(light.direction), &light_component.data.direction.x);
 			ImGui::TreePop();
 		}

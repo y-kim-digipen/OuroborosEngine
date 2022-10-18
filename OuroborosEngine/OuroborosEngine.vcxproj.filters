@@ -201,6 +201,9 @@
     <ClCompile Include="src\engine\ecs\hierarchy.cpp">
       <Filter>engine\scene\ecs</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ecs\components.cpp">
+      <Filter>engine\scene\ecs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\serializer\assets_deserialization_impl.inl">

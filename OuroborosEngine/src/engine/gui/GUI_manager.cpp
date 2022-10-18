@@ -56,7 +56,7 @@ void OE::GUI::_manager_internal::MenuNode::DrawMenu()
 	}
 }
 
-OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.f)
+OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 {
 	head_menu = new _manager_internal::MenuNode;
 	//std::queue path = { "File", "System" };

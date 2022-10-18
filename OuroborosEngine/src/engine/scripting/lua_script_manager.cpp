@@ -108,27 +108,19 @@ namespace OE
 			state.set("GetECS_Manager", &GetECSManager);
 			state.new_usertype<ECS_Manager>("ECS_Manager",
 				"GetTransformComponent"		, &ECS_Manager::GetComponent<TransformComponent>,
-				"GetVelocityComponent"		, &ECS_Manager::GetComponent<VelocityComponent>,
-				"GetLifetimeComponent"		, &ECS_Manager::GetComponent<LifeTimeComponent>,
 				"GetMeshComponent"			, &ECS_Manager::GetComponent<MeshComponent>, 
-				"GetBoolWrapperComponent"	, &ECS_Manager::GetComponent<BoolWrapperComponent>,
 				"GetShaderComponent"		, &ECS_Manager::GetComponent<ShaderComponent>,
 				"GetMaterialComponent"		, &ECS_Manager::GetComponent<MaterialComponent>,
 				"GetTagComponent"			, &ECS_Manager::GetComponent<TagComponent>,
 				"GetLightComponent"			, &ECS_Manager::GetComponent<LightComponent>,
 				
 				"HasTransformComponent"		, &ECS_Manager::HasComponent<TransformComponent>,
-				"HasVelocityComponent"		, &ECS_Manager::HasComponent<VelocityComponent>,
-				"HasLifetimeComponent"		, &ECS_Manager::HasComponent<LifeTimeComponent>,
 				"HasMeshComponent"			, &ECS_Manager::HasComponent<MeshComponent>,
-				"HasBoolWrapperComponent"	, &ECS_Manager::HasComponent<BoolWrapperComponent>,
 				"HasShaderComponent"		, &ECS_Manager::HasComponent<ShaderComponent>,
 				"HasMaterialComponent"		, &ECS_Manager::HasComponent<MaterialComponent>,
 				"HasTagComponent"			, &ECS_Manager::HasComponent<TagComponent>,
 				"HasLightComponent"			, &ECS_Manager::HasComponent<LightComponent>,
-				
-				"HasPhysicsSystem"			, &ECS_Manager::HasSystem<PhysicsSystem>,
-				"HasTestSystem"				, &ECS_Manager::HasSystem<TestSystem>,
+
 				"HasDrawSystem"				, &ECS_Manager::HasSystem<DrawSystem>,
 				"HasLightSystem"			, &ECS_Manager::HasSystem<LightSystem>,
 				"HasScriptingSystem"		, &ECS_Manager::HasSystem<ScriptingSystem>
@@ -138,23 +130,13 @@ namespace OE
 				, "dt", &OE::Engine::DeltaTime::GetDeltaTime);
 
 			//Components
-			state.new_usertype<TransformComponent>("TransformComponent",
-				sol::constructors<TransformComponent()>()
-				, "pos", &TransformComponent::pos
-				, "scale", &TransformComponent::scale
-				, "rotation", &TransformComponent::rotation
-				);
-
-			state.new_usertype<VelocityComponent>("VelocityComponent",
-				sol::constructors<VelocityComponent()>()
-				, "vel", &VelocityComponent::vel
-				);
-
-			state.new_usertype<LifeTimeComponent>("LifeTimeComponent",
-				sol::constructors<LifeTimeComponent()>()
-				, "life_time", &LifeTimeComponent::life_time
-				);
-
+			//state.new_usertype<TransformComponent>("TransformComponent",
+			//	sol::constructors<TransformComponent()>()
+			//	, "position", &TransformComponent::position
+			//	, "scale", &TransformComponent::scale
+			//	, "rotation", &TransformComponent::rotation
+			//	);
+			
 			state.new_usertype<MeshComponent>("MeshComponent",
 				sol::constructors<MeshComponent()>()
 				, "mesh_name", &MeshComponent::mesh_name
@@ -187,11 +169,6 @@ namespace OE
 			state.new_usertype<ShaderComponent>("ShaderComponent",
 				sol::constructors<ShaderComponent()>()
 				, "name", &ShaderComponent::name
-				);
-
-			state.new_usertype<BoolWrapperComponent>("BoolWrapperComponent",
-				sol::constructors<BoolWrapperComponent()>()
-				, "bool_type", &BoolWrapperComponent::bool_type
 				);
 
 			state.new_usertype<TagComponent>("TagComponent",

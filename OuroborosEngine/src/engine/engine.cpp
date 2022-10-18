@@ -9,24 +9,12 @@ namespace OE
 {
 	void Engine::ECS_TestSetup()
 	{
-		ecs_manager.ForEntitiesMatching<PhysicsSystem>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
-			{
-				std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
-				std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
-				std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
-			});
-
-		ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
-			{
-				std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
-				std::cerr << "Transform: " << transform.pos.x << ", " << transform.pos.y << std::endl;
-				std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
-			});
-
-		ecs_manager.system_storage.RegisterSystemImpl<PhysicsSystem>([](OE::Status status, OE::ecs_ID ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
-			{
-				transform.pos += velocity.vel * dt;
-			});
+		//ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
+		//	{
+		//		std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
+		//		std::cerr << "Transform: " << transform.position.x << ", " << transform.position.y << std::endl;
+		//		std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
+		//	});
 
 		ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::Status status, OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
 			{
@@ -69,8 +57,7 @@ namespace OE
 						material.is_light = true;
 						light.init = true;
 					}
-					light.data.pos = transform.pos;
-					//material.data.diffuse = light.data.diffuse;
+					light.data.pos = transform.GetPosition();
 					context->UpdateLight(ent, &light.data);
 				}
 			});
