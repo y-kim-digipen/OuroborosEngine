@@ -2,8 +2,7 @@
 #define COMPONENTS_H
 #include <glm.hpp>
 #include "../common/assets.h"
-
-struct Component{};
+struct Component {};
 
 struct TestComponent : Component
 {
@@ -13,8 +12,8 @@ struct TestComponent : Component
 struct TransformComponent : Component
 {
 	glm::vec3 pos;
-	glm::vec3 scale= glm::vec3(1.f);
-	glm::vec3 rotation = {1.0f, 0.f,0.f};
+	glm::vec3 scale = glm::vec3(1.f);
+	glm::vec3 rotation = {0.0f, 0.f, 0.f};
 };
 
 struct VelocityComponent : Component

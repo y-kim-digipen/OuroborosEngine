@@ -141,6 +141,9 @@
     <ClInclude Include="src\engine\gui\viewport.h">
       <Filter>engine\gui\panels</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\ecs\hierarchy.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -194,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="src\engine\input\InputManager.cpp">
       <Filter>engine\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ecs\hierarchy.cpp">
+      <Filter>engine\scene\ecs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

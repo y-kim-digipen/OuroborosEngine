@@ -108,6 +108,12 @@ namespace OE
 		auto* context_data = (window->GetWindowData().RenderContextData.get());
 		context_data->material_manager->SetNoneTexture(context_data->texture_manager->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
+
+		ecs_manager.CreateEntity();
+		auto& entity = ecs_manager.CreateEntity();
+		entity.hierarchy.SetParent(0);
+		auto& component = ecs_manager.AddComponent<TransformComponent>(entity.myID);
+		auto owner = ecs_manager.GetComponentOwner(&component);
 	}
 
 	void Engine::Init()

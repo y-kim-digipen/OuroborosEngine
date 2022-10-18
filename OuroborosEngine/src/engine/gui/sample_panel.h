@@ -24,11 +24,7 @@ namespace OE
 			sample_panel2(const std::string& name) : GUI_Base(name, PanelFlags::EXIST_ONE) { open = true; }
 			void Draw() override
 			{
-				ImGui::Begin(name.c_str(), &open);
-				{
-					
-				}
-				ImGui::End();
+				ImGui::ShowDemoWindow();
 				if(open == false)
 				{
 					Engine::gui_manager.RemovePanel(this);

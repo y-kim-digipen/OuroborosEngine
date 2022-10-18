@@ -97,7 +97,7 @@ namespace OE
 			static char buf[BufSize];
 			strcpy_s(buf, tag_component.tag.c_str());
 
-			if (ImGui::InputText(GET_VARIABLE_NAME(life_time_component.life_time), buf, BufSize))
+			if (ImGui::InputText("##Tag", buf, BufSize, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				tag_component.tag = buf;
 			}

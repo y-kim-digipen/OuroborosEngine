@@ -12,6 +12,7 @@
 #include "brigand/adapted/tuple.hpp"
 #include "ecs/component_manager.h"
 #include "ecs/system_manager.h"
+#include "hierarchy.h"
 
 namespace OE
 {
@@ -88,6 +89,8 @@ namespace OE
 				ecs_ID myID{};
 				bool alive = false;
 				Bitset bitset;
+
+				Hierarchy hierarchy;
 			};
 		}
 
@@ -337,12 +340,10 @@ namespace OE
 		{
 		public:
 			using settings = TSettings;
+			using Entity = _types::Entity<settings>;
 		private:
 			using type = Manager<settings>;
 			using SignatureBitsetStorage = typename settings::signature_bitset_storage;
-			//using SystemStorage = typename settings::system_storage;
-			using Entity = _types::Entity<settings>;
-
 			using EntityStorage = std::vector<Entity>;
 			using SystemStatusStorage = std::vector<typename settings::system_status>;
 		public:
@@ -456,6 +457,16 @@ namespace OE
 				entity.bitset[settings::template ComponentBit<T>()] = false;
 
 				component_manager.template GetComponent<T>(entityID);
+			}
+
+			template<typename TComponent>
+			ecs_ID GetComponentOwner(TComponent* p_component)
+			{
+				constexpr size_t component_size = sizeof(TComponent);
+				const char* start_address = (char*)component_manager.template GetComponentVector<TComponent>().data();
+				const char* component_address = (char*)p_component;
+				const size_t address_dist = component_address - start_address;
+				return address_dist / component_size;
 			}
 
 			template<typename TSystem>
