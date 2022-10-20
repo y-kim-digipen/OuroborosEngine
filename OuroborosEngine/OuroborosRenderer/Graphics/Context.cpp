@@ -105,8 +105,9 @@ namespace Renderer
 
 			//global_data.lights[light_map[entity_id]] = *light_component;
 			memcpy_s(&light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
-			        // transform light pos, direction to view space
-            light_data.lights[index].pos = glm::vec3(glm::mat4(global_data.view)* glm::vec4(light_data.lights[index].pos, 1.0f));
+
+			// transform light pos, direction to view space
+			light_data.lights[index].pos = glm::vec3(glm::mat4(global_data.view)* glm::vec4(light_data.lights[index].pos, 1.0f));
             light_data.lights[index].dir = glm::normalize(glm::mat3(global_data.inv_view) * light_data.lights[index].dir);
 		}
 	}

@@ -1,8 +1,4 @@
 const float PI = 3.1415926535897932384626433832795;
-const float step = 0.1;
-const float minRayStep = 0.1;
-const float maxSteps = 30;
-const int numBinarySearchSteps = 5;
 
 // light info (position, direction would be in view space)
 struct Light
@@ -88,18 +84,22 @@ vec4 SSR_raycast(vec4 uv, vec4 frag_pos, vec3 normal, vec2 tex_size, vec2 tex_co
     // how far fragment can reflect
     float max_distance = 15;
     // how many fragments are skipped (0 = no refelection ~ 1)
-    float resolution = 0.3f;
+    float resolution = tex_size.y / tex_size.x; //TODO(Austyn): max(resolution, 1.0f)
     // second pass iteration (ray-marching?)
     int steps = 10;
     // cutoff between what counts as a possible reflection hit
     float thickness = 0.5f;
 
-
     vec3 unit_frag_pos = normalize(frag_pos.xyz); // vector from camera to fragment 
     vec3 pivot = normalize(reflect(unit_frag_pos, normal)); // refelcted vector
-    
+
+    // I think this will check whether reflected vector is towards to camera or not
+    if(dot(unit_frag_pos, pivot) > 0.0f) {
+        return vec4(0.0);
+    }
+
     vec4 geometry_pos = frag_pos;
-    vec4 start_view = vec4(frag_pos.xyz, 1); // point where fragment starts
+    vec4 start_view = frag_pos; // point where fragment starts
     vec4 end_view   = vec4(frag_pos.xyz + (pivot * max_distance), 1); // max point for ray to iterate
     vec4 start_frag = start_view;
     // Project to screen space.
@@ -108,18 +108,22 @@ vec4 SSR_raycast(vec4 uv, vec4 frag_pos, vec3 normal, vec2 tex_size, vec2 tex_co
     start_frag.xyz /= start_frag.w;
     // Convert the screen-space XY coordinates to UV coordinates.
     start_frag.xy = start_frag.xy * 0.5 + 0.5;
+    uv.xy = start_frag.xy;
     // Convert the UV coordinates to fragment/pixel coordnates.
     start_frag.xy *= tex_size;
+    //start_frag.y = tex_size.y - abs(start_frag.y); // convert to vulkan UV coordinate
     vec4 end_frag = end_view;
     end_frag = global_ubo.projection * end_frag;
    	end_frag.xyz /= end_frag.w;
    	end_frag.xy = end_frag.xy * 0.5 + 0.5;
+    end_frag.xy = clamp(end_frag.xy, vec2(0.0f), vec2(1.0f));
    	end_frag.xy *= tex_size;
+    //end_frag.y = tex_size.y - abs(end_frag.y); // convert to vulkan UV coordinate
     vec2 delta_pixel = end_frag.xy - start_frag.xy;
     float use_x = abs(delta_pixel.x) > abs(delta_pixel.y) ? 1 : 0; 
     float delta = max(abs(delta_pixel.y), abs(delta_pixel.x)) * clamp(resolution, 0, 1);
     vec2 increment = delta_pixel / max(delta, 0.001f);
-    
+    //increment *= 2.0f;
     float search0 = 0; // to remember last pos before hit any geometry (help refine hit point)
     float search1 = 0;
     int hit0 = 0; // intersection during first pass
@@ -128,12 +132,18 @@ vec4 SSR_raycast(vec4 uv, vec4 frag_pos, vec3 normal, vec2 tex_size, vec2 tex_co
     float depth = thickness; // view distance difference between the current ray point and scene position (ray & point offset)
     
     vec2 frag  = start_frag.xy; // converted to pixel coord since sampling in view space potentially sample on the same pixels (efficiency)
-    uv.xy = frag / tex_size; // uv coord
+    //uv.xy = frag / tex_size; // uv coord
     // ray marching
+    delta = min(delta, 30.0f); // max iteration
+    float frag_depth = start_frag.z;
     for(int i = 0; i < int(delta); ++i) {
         // first pass (search ray hit to any geometry)
         frag += increment;
         uv.xy = frag / tex_size;
+
+        if(abs(uv.x) > 1.0f || abs(uv.y) > 1.0f)
+            return vec4(0.0f);
+
         geometry_pos = texture(posBuffer, uv.xy);
         search1 = use_x > 0 ? (frag.x - start_frag.x) / delta_pixel.x : (frag.y - start_frag.y) / delta_pixel.y;
         //search1 = mix( (frag.y - startFrag.y) / deltaY, (frag.x - startFrag.x) / deltaX, useX); (same as above)
@@ -169,12 +179,14 @@ vec4 SSR_raycast(vec4 uv, vec4 frag_pos, vec3 normal, vec2 tex_size, vec2 tex_co
             search0 = temp;
         } 
     }
-    float visibility = 0.0f;
-    if(uv.x > 0 && uv.x < 1 && uv.y > 0 && uv.y < 1) {
-        visibility = hit1 * geometry_pos.w * ( 1 - max(dot(-unit_frag_pos, pivot), 0))* ( 1 - clamp( depth / thickness, 0, 1))
-        * ( 1 - clamp( length(geometry_pos - frag_pos) / max_distance, 0, 1));
-    }
-    visibility = clamp(visibility, 0, 1);
-    uv.ba = vec2(visibility);
+
+    //float visibility = 0.0f;
+    //if(uv.x > 0 && uv.x < 1 && uv.y > 0 && uv.y < 1) {
+    //    visibility = hit1 * geometry_pos.w * ( 1 - max(dot(-unit_frag_pos, pivot), 0))* ( 1 - clamp( depth / thickness, 0, 1))
+    //    * ( 1 - clamp( length(geometry_pos - frag_pos) / max_distance, 0, 1));
+    //}
+    //visibility = clamp(visibility, 0, 1);
+    if((hit0 == 0) && (hit1 == 0))
+        return vec4(0.0f);
     return uv;
 }

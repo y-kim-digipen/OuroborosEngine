@@ -56,8 +56,6 @@ Asset:
     model/default_cube.obj:
       {}
   class OE::ShaderAssetManager:
-    shader:
-      {}
     shader_lightpass:
       {}
   class OE::ScriptAssetManager:
@@ -226,7 +224,7 @@ ECS:
       struct MeshComponent:
         mesh_name: ..\OuroborosEngine\model\sphere.obj
       struct ShaderComponent:
-        name: shader
+        name: shader_lightpass
       struct MaterialComponent:
         name: Yoga Mat
         material_data:
