@@ -79,8 +79,8 @@ using VulkanFrameBufferAttachment = VulkanImage;
 
 struct DeferredPass
 {
-	VulkanFrameBufferAttachment position;
-	VulkanFrameBufferAttachment normal;
+	//VulkanFrameBufferAttachment position;
+	VulkanFrameBufferAttachment normal; // Normal + Depth Vector4
 	VulkanFrameBufferAttachment albedo;
 	VulkanFrameBufferAttachment metalic_roughness_ao;
 	VulkanFrameBufferAttachment emissive;

@@ -51,6 +51,7 @@ namespace OE
 					camera.data.projection[1][1] *= -1;
 					camera.data.view = camera.GetCameraMat();
 					camera.data.inv_view = glm::inverse(glm::transpose(camera.data.view));
+					camera.data.inv_proj = glm::inverse(camera.data.projection);
 				
 					//TODO: pass renderer camera data
 					context->global_data = camera.data;
