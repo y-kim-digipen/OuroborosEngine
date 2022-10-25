@@ -9,12 +9,13 @@ namespace OE
 {
 	void Engine::ECS_TestSetup()
 	{
-		//ecs_manager.ForEntitiesMatching<Signature0>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] VelocityComponent& velocity)
-		//	{
-		//		std::cerr << "Function call from entity : " << ent << " dt : " << dt << std::endl;
-		//		std::cerr << "Transform: " << transform.position.x << ", " << transform.position.y << std::endl;
-		//		std::cerr << "Velocity : " << velocity.vel.x << ", " << velocity.vel.y << std::endl;
-		//	});
+		ecs_manager.ForEntitiesMatching<CameraTransformSyncSignature>(1.2f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] CameraComponent& camera_component)
+			{
+				if (transform.IsModified())
+				{
+					camera_component.SyncWithTransformComponent();
+				}
+			});
 
 		ecs_manager.system_storage.RegisterSystemImpl<DrawSystem>([](OE::Status status, OE::ecs_ID ent, float dt, TransformComponent& transform, ShaderComponent& shader, MaterialComponent& material, MeshComponent& mesh)
 			{

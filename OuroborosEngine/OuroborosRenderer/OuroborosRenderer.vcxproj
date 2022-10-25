@@ -60,7 +60,7 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\rttr-0.9.6\include;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -68,8 +68,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(SolutionDir)external\lib\lib_debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GenericCodeGend.lib;glslangd.lib;glslang-default-resource-limitsd.lib;HLSLd.lib;MachineIndependentd.lib;OGLCompilerd.lib;OSDependentd.lib;SPIRVd.lib;SPVRemapperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib_debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ImGui.lib;GenericCodeGend.lib;glslangd.lib;glslang-default-resource-limitsd.lib;HLSLd.lib;MachineIndependentd.lib;OGLCompilerd.lib;OSDependentd.lib;SPIRVd.lib;SPVRemapperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PreBuildEvent>
       <Command>
@@ -78,6 +78,9 @@
     <PostBuildEvent>
       <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -87,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RENDERER</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\rttr-0.9.6\include;$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\lib\vulkan\include;$(SolutionDir)external\lib\glew-2.1.0\include;$(SolutionDir)external\lib\glfw-3.3.7.bin.WIN64\include;$(SolutionDir)external\lib\glslang\include;$(SolutionDir)external\lib\glm;$(SolutionDir)external\lib\imgui-docking;$(SolutionDir)external\lib\;$(SolutionDir)common\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -97,7 +100,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\rttr-0.9.6\lib;$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>GenericCodeGen.lib;glslang.lib;glslang-default-resource-limits.lib;HLSL.lib;MachineIndependent.lib;OGLCompiler.lib;OSDependent.lib;SPIRV.lib;SPVRemapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PreBuildEvent>
@@ -107,16 +110,11 @@
     <PostBuildEvent>
       <Command>xcopy /y /d "$(SolutionDir)external\lib\bin"  "$(TargetDir)"</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imconfig.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imgui.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imgui_internal.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imstb_rectpack.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imstb_textedit.h" />
-    <ClInclude Include="..\external\lib\imgui-docking\imstb_truetype.h" />
     <ClInclude Include="Graphics\camera.h" />
     <ClInclude Include="Graphics\context.h" />
     <ClInclude Include="Graphics\imgui_manager.h" />
@@ -149,13 +147,6 @@
     <ClInclude Include="Graphics\vulkan\vulkan_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\backends\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\imgui.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\imgui_demo.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\imgui_draw.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\imgui_tables.cpp" />
-    <ClCompile Include="..\external\lib\imgui-docking\imgui_widgets.cpp" />
     <ClCompile Include="Graphics\camera.cpp" />
     <ClCompile Include="Graphics\context.cpp" />
     <ClCompile Include="Graphics\imgui_manager.cpp" />

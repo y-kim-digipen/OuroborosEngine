@@ -53,9 +53,6 @@
     <ClInclude Include="src\engine\engine_settings.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\system.h">
-      <Filter>engine\scene\ecs</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\ecs\system_manager.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
@@ -142,6 +139,9 @@
       <Filter>engine\gui\panels</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ecs\hierarchy.h">
+      <Filter>engine\scene\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\system.h">
       <Filter>engine\scene\ecs</Filter>
     </ClInclude>
   </ItemGroup>

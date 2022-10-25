@@ -38,7 +38,6 @@ public:
 	void SetScale(const glm::vec3& new_scale) { scale = new_scale; is_modified = true; }
 private:
 	void CalculateMatrix();
-
 	glm::vec3 position{ 0.f };
 	glm::vec3 euler_rotation{ 0.f };
 	glm::quat rotation{ 1.f, 0.0f, 0.f, 0.f };
@@ -46,6 +45,27 @@ private:
 
 	glm::mat4 transform_matrix{ 0.0f };
 	glm::mat4 local_transform_matrix { 0.0f };
+};
+
+struct CameraComponent : Component
+{
+public:
+	//CameraComponent() = default;
+	//CameraComponent(glm::vec3 eye, glm::vec3 back, glm::vec3 up, float near, float far, float fov = 0);
+	void SyncWithTransformComponent();
+	glm::mat4 GetPerspectiveMatrix();
+	glm::mat4 GetViewAtMatrix();
+	void SetAsMainCamera();
+private:
+	void CalculateMatrix(const glm::vec3& eye, const glm::vec3& right, const glm::vec3& up);
+
+	float fov = glm::pi<float>() * 0.3;
+	float near_plane = 0.1f, far_plane = 50.f;
+	float width = 1600, height = 900;
+
+	glm::mat4 view_matrix{};
+	glm::mat4 perspective_matrix{};
+	bool is_main_camera = false;
 };
 
 struct MeshComponent : Component

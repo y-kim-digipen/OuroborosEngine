@@ -16,17 +16,20 @@ using ComponentList = OE::ECS::TypeList<
 	MaterialComponent,
 	TagComponent,
 	LightComponent,
-	ScriptComponent
+	ScriptComponent,
+	CameraComponent
 >;
+
+using CameraTransformSyncSignature = OE::ECS::types::Signature<TransformComponent, CameraComponent>;
 
 using DrawSystem		= OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
 using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent>;
 using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
-using SystemList = OE::ECS::types::SystemList<DrawSystem, LightSystem, ScriptingSystem>;
+using SystemList		= OE::ECS::types::SystemList<DrawSystem, LightSystem, ScriptingSystem>;
 
 //using MeshDrawSignature = OE::ECS::types::Signature<TransformComponent, MeshComponent, ShaderComponent>;
 
-using SignatureList = OE::ECS::types::SignatureList</*MeshDrawSignature*/>;
+using SignatureList = OE::ECS::types::SignatureList<CameraTransformSyncSignature>;
 
 using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, SystemList>;
 

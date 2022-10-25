@@ -2,12 +2,10 @@
 #include <functional>
 #include <list>
 #include <queue>
-#include <deque>
 #include <map>
 
 #include "base.h"
 #include "gui_definitions.h"
-
 
 namespace OE
 {

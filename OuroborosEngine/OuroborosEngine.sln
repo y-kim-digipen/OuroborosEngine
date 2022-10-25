@@ -9,6 +9,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OuroborosEngine", "Ouroboro
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OuroborosRenderer", "OuroborosRenderer\OuroborosRenderer.vcxproj", "{243CD115-A8E1-4F11-8E96-9422FEB3B60B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FF145790-357B-4C57-9C98-A4564B87B88A} = {FF145790-357B-4C57-9C98-A4564B87B88A}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8106C151-1E1B-402B-BF19-B9B201189DAD}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,20 +19,38 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8106C1
 		common\shared.h = common\shared.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{FF145790-357B-4C57-9C98-A4564B87B88A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{87B15A23-41F9-4F96-8753-59E5A478D157}.Debug|x64.ActiveCfg = Debug|x64
 		{87B15A23-41F9-4F96-8753-59E5A478D157}.Debug|x64.Build.0 = Debug|x64
+		{87B15A23-41F9-4F96-8753-59E5A478D157}.Debug|x86.ActiveCfg = Debug|x64
+		{87B15A23-41F9-4F96-8753-59E5A478D157}.Debug|x86.Build.0 = Debug|x64
 		{87B15A23-41F9-4F96-8753-59E5A478D157}.Release|x64.ActiveCfg = Release|x64
 		{87B15A23-41F9-4F96-8753-59E5A478D157}.Release|x64.Build.0 = Release|x64
+		{87B15A23-41F9-4F96-8753-59E5A478D157}.Release|x86.ActiveCfg = Release|x64
+		{87B15A23-41F9-4F96-8753-59E5A478D157}.Release|x86.Build.0 = Release|x64
 		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Debug|x64.ActiveCfg = Debug|x64
 		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Debug|x64.Build.0 = Debug|x64
+		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Debug|x86.ActiveCfg = Debug|x64
+		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Debug|x86.Build.0 = Debug|x64
 		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Release|x64.ActiveCfg = Release|x64
 		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Release|x64.Build.0 = Release|x64
+		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Release|x86.ActiveCfg = Release|x64
+		{243CD115-A8E1-4F11-8E96-9422FEB3B60B}.Release|x86.Build.0 = Release|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Debug|x64.ActiveCfg = Debug|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Debug|x64.Build.0 = Debug|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Debug|x86.ActiveCfg = Debug|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Release|x64.ActiveCfg = Release|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Release|x64.Build.0 = Release|x64
+		{FF145790-357B-4C57-9C98-A4564B87B88A}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
