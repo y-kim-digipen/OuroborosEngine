@@ -12,7 +12,7 @@
 #include <Window.h>
 //#include "Graphics/shader_manager.h"
 //#include "Graphics/vulkan/vulkan_context.h"
-//#include "Graphics/camera.h"
+
 //#include "Graphics/vulkan/vulkan_material.h"
 //
 //#include "Graphics/Window.h"
@@ -90,7 +90,7 @@ namespace OE
 
 	public: // Modules
 				//todo to be removed
-		//inline static Renderer::Camera camera;
+
 
 		static void InitEssentialAssets();
 		inline static Asset_Manager asset_manager;
