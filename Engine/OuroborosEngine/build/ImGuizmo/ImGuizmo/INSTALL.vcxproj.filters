@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\d75d6a72d821cf534e2a7a6370fca54f\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{78E8FF1D-7A71-3D5F-81A8-1B8026E5BEA5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

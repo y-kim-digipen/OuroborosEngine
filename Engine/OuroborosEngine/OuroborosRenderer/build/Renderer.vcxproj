@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{51E7DEC0-C258-3D6B-9D72-29B08940F27D}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>Renderer</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Renderer.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Renderer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Renderer.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Renderer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Renderer.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Renderer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Renderer.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Renderer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\shared;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\vulkan\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glew-2.1.0\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glm;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\vulkan\include\vulkan;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\..\..\external\glfw\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGui\include\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CMakeSystem.cmake;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CompilerIdC\CMakeCCompilerId.c" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\CMakeFiles\3.22.1\CompilerIdCXX\CMakeCXXCompilerId.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\Context.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\Window.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\camera.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\imgui_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\material_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\mesh.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\mesh_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\opengl\opengl_imgui_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\shader.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\shader_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\SPIRV-Reflect\spirv_reflect.c" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_buffer.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_context.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_descriptor_set.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_image.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_imgui_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_initializers.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_material.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_material_manager.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_mesh.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_pipeline.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_shader.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_texture.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\src\graphics\vulkan\vulkan_texture_manager.cpp" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslAttributes.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslGrammar.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslOpMap.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslParseHelper.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslParseables.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslScanContext.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslTokenStream.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\HLSL\hlslTokens.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\BaseTypes.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\Common.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\ConstantUnion.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\InfoSink.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\InitializeGlobals.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\PoolAlloc.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\ResourceLimits.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\ShHandle.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\SpirvIntrinsics.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\Types.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\arrays.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\glslang_c_interface.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\glslang_c_shader_types.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Include\intermediate.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\Initialize.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\LiveTraverser.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\ParseHelper.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\RemoveTree.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\Scan.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\ScanContext.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\SymbolTable.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\Versions.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\attribute.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\gl_types.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\glslang_tab.cpp.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\iomapper.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\localintermediate.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\parseVersions.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\preprocessor\PpContext.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\preprocessor\PpTokens.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\propagateNoContraction.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\MachineIndependent\reflection.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\Public\ShaderLang.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GLSL.ext.AMD.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GLSL.ext.EXT.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GLSL.ext.KHR.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GLSL.ext.NV.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GLSL.std.450.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\GlslangToSpv.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\Logger.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\NonSemanticDebugPrintf.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\SPVRemapper.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\SpvBuilder.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\SpvTools.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\bitutils.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\disassemble.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\doc.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\hex_float.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\SPIRV\spvIR.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\external\glslang\include\glslang\build_info.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\Context.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\Window.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\camera.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\imgui_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\material.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\material_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\mesh.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\mesh_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\opengl\opengl_imgui_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\shader.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\shader_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\texture.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\texture_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\SPIRV-Reflect\include\spirv\unified1\spirv.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\SPIRV-Reflect\spirv_reflect.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\spirv_helper.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_buffer.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_context.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_descriptor_set.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_image.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_imgui_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_initializers.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_material.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_material_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_mesh.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_pipeline.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_shader.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_texture_manager.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\include\vulkan\vulkan_type.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\build\ZERO_CHECK.vcxproj">
+      <Project>{4FF2E866-CC0D-3A76-9E2C-28D54348A7E1}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosRenderer\ImGuizmo\ImGui\ImGui.vcxproj">
+      <Project>{3B2A5425-48FA-365F-9C66-7E5FBA0BBE1B}</Project>
+      <Name>ImGui</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,7 @@
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/Renderer.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/INSTALL.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/ImGuizmo/ImGui/CMakeFiles/ImGui.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/ImGuizmo/ImGui/CMakeFiles/INSTALL.dir
+C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosRenderer/ImGuizmo/ImGui/CMakeFiles/ALL_BUILD.dir

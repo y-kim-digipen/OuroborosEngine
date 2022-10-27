@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\GraphEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImCurveEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImGradient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImGuizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImSequencer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\GraphEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImCurveEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImGradient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImGuizmo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImSequencer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{D63901CE-BA82-3ABF-92FC-C3FD55538AA0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1AB56451-7D63-3145-9970-428199102F2C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
