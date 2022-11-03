@@ -1,3 +1,0 @@
-[submodule "OuroborosEngine/external/lib/yaml-cpp"]
-	path = OuroborosEngine/external/lib/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp.git
