@@ -57,7 +57,7 @@ namespace Renderer
 				.addressModeU = sampler_address_mode,
 				.addressModeV = sampler_address_mode,
 				.addressModeW = sampler_address_mode,
-				.anisotropyEnable = VK_TRUE,
+				.anisotropyEnable = VK_FALSE,
 				.maxAnisotropy = properties.limits.maxSamplerAnisotropy,
 				.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK,
 				.unnormalizedCoordinates = VK_FALSE,
@@ -69,7 +69,7 @@ namespace Renderer
 			sampler_create_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 			sampler_create_info.minLod = 0.f;
 			sampler_create_info.maxLod = static_cast<float>(mip_levels);
-			sampler_create_info.mipLodBias = 0.f;
+			sampler_create_info.mipLodBias = 1.f;
 
 			vkCreateSampler(vulkan_type->device.handle, &sampler_create_info, nullptr, &sampler_);
 
@@ -81,7 +81,7 @@ namespace Renderer
 				.imageType = VK_IMAGE_TYPE_2D,
 				.format = color_format,
 				.extent = image_extent,
-				.mipLevels = 1,
+				.mipLevels = mip_levels,
 				.arrayLayers = 1,
 				.samples = VK_SAMPLE_COUNT_1_BIT,
 				.tiling = VK_IMAGE_TILING_OPTIMAL,
@@ -102,7 +102,7 @@ namespace Renderer
 				.subresourceRange = {
 					.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
 					.baseMipLevel = 0,
-					.levelCount = 1,
+					.levelCount = mip_levels,
 					.baseArrayLayer = 0,
 					.layerCount = 1,
 				}
@@ -148,65 +148,6 @@ namespace Renderer
 		vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
 
 		GenerateMipMaps(ColorTypeToVulkanFormatType(color_type), width_, height_, mip_levels);
-
-		//VkImageSubresourceRange image_subresource_range
-		//{
-		//	.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-		//	.baseMipLevel = 0,
-		//	.levelCount = 1,
-		//	.baseArrayLayer = 0,
-		//	.layerCount = 1
-		//};
-
-
-		//VkImageMemoryBarrier image_memory_barrier{
-		//	 .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-		//	 .srcAccessMask = 0,
-		//	 .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-		//	 .oldLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-		//	 .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		//	 .image = image_,
-		//	 .subresourceRange = image_subresource_range,
-		//};
-
-		//VkCommandBufferAllocateInfo allocate_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
-		//allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		//allocate_info.commandPool = vulkan_type->command_pool;
-		//allocate_info.commandBufferCount = 1;
-
-		//VkCommandBuffer command_buffer;
-		//vkAllocateCommandBuffers(vulkan_type->device.handle, &allocate_info, &command_buffer);
-
-
-		////Record
-		//VkCommandBufferBeginInfo command_buffer_begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-		//command_buffer_begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-		//	vkBeginCommandBuffer(command_buffer, &command_buffer_begin_info);
-
-		//vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
-
-		//VulkanBuffer::CopyBufferToImage(command_buffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		//	staging_buffer.get(), &image_, image_extent);
-
-
-		//image_memory_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-		//image_memory_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-		//image_memory_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-		//image_memory_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-
-		//vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
-
-		//vkEndCommandBuffer(command_buffer);
-
-		//VkSubmitInfo submit_info{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-		//submit_info.commandBufferCount = 1;
-		//submit_info.pCommandBuffers = &command_buffer;
-
-		//vkQueueSubmit(vulkan_type->device.graphics_queue, 1, &submit_info, VK_NULL_HANDLE);
-		//vkQueueWaitIdle(vulkan_type->device.graphics_queue);
-
-		//vkFreeCommandBuffers(vulkan_type->device.handle, vulkan_type->command_pool, 1, &command_buffer);
 	}
 
 	void VulkanTexture::UpdateToDescripterSet(VkDescriptorSet descriptor_set, int dest_binding)
@@ -368,9 +309,9 @@ namespace Renderer
 			barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 			barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 			barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-			barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+			barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+			vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 
 			VkImageBlit blit{};
 			blit.srcOffsets[0] = { 0,0,0 };
@@ -379,6 +320,7 @@ namespace Renderer
 			blit.srcSubresource.mipLevel = idx - 1;
 			blit.srcSubresource.baseArrayLayer = 0;
 			blit.srcSubresource.layerCount = 1;
+
 			blit.dstOffsets[0] = { 0,0,0 };
 			blit.dstOffsets[1] = {mip_width > 1 ? mip_width/ 2 : 1, mip_height > 1 ? mip_height /2 : 1, 1};
 			blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;

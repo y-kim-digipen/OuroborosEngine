@@ -1679,6 +1679,8 @@ namespace Renderer
     	return 0;
     }
 
+
+
     int CreateDeferredShader()
     {
         ShaderConfig shader_config = { "shader_geometrypass", {Renderer::E_StageType::VERTEX_SHADER,
@@ -1690,9 +1692,7 @@ namespace Renderer
         shader->Init(&shader_config);
 
         return 0;
-         
 	}
-
 
     int CreateDeferredDescriptorSetLayout()
     {
