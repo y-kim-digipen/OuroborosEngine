@@ -27,13 +27,6 @@ target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..
 target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/glm)
 target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/glfw/include)
 
-if (NOT TARGET ImGuizmo)
-    add_subdirectory(
-        ../ImGuizmo/ImGuizmo
-        ${CMAKE_CURRENT_SOURCE_DIR}/build/ImGuizmo/ImGuizmo
-)
-endif()
-
 add_subdirectory(
     OuroborosRenderer
 )
@@ -46,7 +39,6 @@ set(
 target_link_libraries(${PROGRAM_NAME} 
     PRIVATE
     ouroboros::renderer 
-    ImGuizmo
     ImGui
     ${ADDITIONAL_LIBRARIES}
     # ${CMAKE_CURRENT_SOURCE_DIR}/external/yaml-cpp/build/Release/libyaml-cppmd.lib

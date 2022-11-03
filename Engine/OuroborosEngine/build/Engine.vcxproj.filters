@@ -1,243 +1,249 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\image_asset_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\material_asset_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\mesh_asset_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\script_asset_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\shader_asset_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\components.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\components.cpp">
       <Filter>Source Files\src\core\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\hierarchy.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.cpp">
       <Filter>Source Files\src\core\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\engine.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.cpp">
       <Filter>Source Files\src\core</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\GUI_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\asset_browser.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\entities_info.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\file_browser.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\material_configure.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\slider_speed.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\system_configure.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\viewport.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\input\InputManager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.cpp">
+      <Filter>Source Files\src\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.cpp">
       <Filter>Source Files\src\input</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\main.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\main.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\scripting\lua_script_manager.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.cpp">
       <Filter>Source Files\src\scripting</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\scene_serializer.cpp">
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.cpp">
       <Filter>Source Files\src\serializing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\image_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\master_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\master_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\material_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\mesh_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\script_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\asset\shader_asset_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\component_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\component_manager.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\ecs_base.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_base.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\ecs_definitions.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_definitions.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\entity_mananger.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\entity_mananger.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\hierarchy.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\system.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\ecs\system_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system_manager.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\engine.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\engine_definitions.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_definitions.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\core\engine_settings.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_settings.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\GUI_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\asset_browser.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\asset_draw.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_draw.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\base.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\base.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\components_draw.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\components_draw.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\entities_info.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\file_browser.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\gui_definitions.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\material_configure.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gui_definitions.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\sample_panel.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\slider_speed.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\sample_panel.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\system_configure.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\viewport.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\gui\wrapped_functions.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\input\InputManager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\wrapped_functions.h">
+      <Filter>Header Files\src\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.h">
       <Filter>Header Files\src\input</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\scripting\lua_script_manager.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.h">
       <Filter>Header Files\src\scripting</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\scripting\script.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\script.h">
       <Filter>Header Files\src\scripting</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\assets_deserialization_impl.inl">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_deserialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\assets_serialization_impl.inl">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_serialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\component_deserialization_impl.inl">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_deserialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\component_serialization_impl.inl">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_serialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\scene_serializer.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.h">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\src\serializing\shared_serialization_impl.h">
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\shared_serialization_impl.h">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{D63901CE-BA82-3ABF-92FC-C3FD55538AA0}</UniqueIdentifier>
+      <UniqueIdentifier>{127FE75A-E1DA-306D-A631-B3174B065277}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src">
-      <UniqueIdentifier>{6C064603-5A69-3339-A026-D97C56C4980B}</UniqueIdentifier>
+      <UniqueIdentifier>{475001BE-2F68-370F-8425-48A629939715}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\asset">
-      <UniqueIdentifier>{E63AA17F-1AD3-3406-B301-1B8A73CD676C}</UniqueIdentifier>
+      <UniqueIdentifier>{6EE31280-21EF-3362-847B-EA43883FAE06}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\core">
-      <UniqueIdentifier>{16E19843-771F-3C26-8C28-12A748D183EE}</UniqueIdentifier>
+      <UniqueIdentifier>{27A2C77B-2C3D-34FF-8032-296EEBDDC9B3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\core\ecs">
-      <UniqueIdentifier>{F6848981-0A14-33D6-94D5-C9E02E0E2CA4}</UniqueIdentifier>
+      <UniqueIdentifier>{DD8BE726-24E5-3005-95D6-FE620901729A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\gui">
-      <UniqueIdentifier>{657FA8CC-81D6-305E-8CAA-6E580A7050D2}</UniqueIdentifier>
+      <UniqueIdentifier>{F174D081-DF83-35C1-A053-FE6EB10C7D9C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\input">
-      <UniqueIdentifier>{1AE1B619-91CA-3CB0-A660-8297FE555E55}</UniqueIdentifier>
+      <UniqueIdentifier>{D3BA0D8D-CBA5-3DA7-9441-920D520024E2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\scripting">
-      <UniqueIdentifier>{658D7FB3-033A-3A46-A66E-2703CB37F6E8}</UniqueIdentifier>
+      <UniqueIdentifier>{A69DA0BD-7A47-35ED-A85E-59F58D49241A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\serializing">
-      <UniqueIdentifier>{A9625D19-0342-3E78-9235-B58550B9EDEF}</UniqueIdentifier>
+      <UniqueIdentifier>{757D0F3B-BBE8-318C-AB7B-137C15B7F2CE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{1AB56451-7D63-3145-9970-428199102F2C}</UniqueIdentifier>
+      <UniqueIdentifier>{B3914FB4-2942-3081-8F6E-646FB7BAB7B8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src">
-      <UniqueIdentifier>{CD5D25EC-B822-37EB-B908-59E6846CD7BB}</UniqueIdentifier>
+      <UniqueIdentifier>{AD519C02-9745-3CA2-8F23-DE9BFFA9EA3D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\asset">
-      <UniqueIdentifier>{B32B69B9-2720-31B0-B1CA-066FC922E454}</UniqueIdentifier>
+      <UniqueIdentifier>{0D4BD598-D814-3D9C-BD7D-CA3726AAC79D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\core">
-      <UniqueIdentifier>{3C88B930-47BD-3269-BB7A-627E20E58DD0}</UniqueIdentifier>
+      <UniqueIdentifier>{87E99089-F980-3A4D-904B-785821BEDE03}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\core\ecs">
-      <UniqueIdentifier>{2B33C545-0167-35DA-881C-05ADA6206D4B}</UniqueIdentifier>
+      <UniqueIdentifier>{3FD6206F-AB31-385E-939D-E6B2202D4B2D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\gui">
-      <UniqueIdentifier>{DB9777CA-34A2-3982-A46E-3276AB97A1EE}</UniqueIdentifier>
+      <UniqueIdentifier>{E6BC560C-A607-3130-98E0-8859A7BF5419}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\input">
-      <UniqueIdentifier>{A5D1F8DE-7CC0-30AC-9AAD-9F12121154C5}</UniqueIdentifier>
+      <UniqueIdentifier>{3EFF4AE3-3178-32BC-9708-EFF5B6A4B23A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\scripting">
-      <UniqueIdentifier>{61E5FF6A-881C-334E-B605-219107D80806}</UniqueIdentifier>
+      <UniqueIdentifier>{23953BB1-C955-31B9-99DD-39583C3009C2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\serializing">
-      <UniqueIdentifier>{E7D51C89-8CBA-30B8-AB40-42FBD67FB2B4}</UniqueIdentifier>
+      <UniqueIdentifier>{02DD2EDD-6C5F-3507-827E-050E4C7A51CA}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

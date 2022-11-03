@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGui
+# Install script for directory: C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGui
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install/" TYPE DIRECTORY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGui/include")
+  file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install/" TYPE DIRECTORY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGui/include")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -54,7 +54,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
       message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
     endif()
-    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/Debug/ImGui.lib")
+    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/Debug/ImGui.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
     list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
      "C:/Program Files (x86)/Engine/install/ImGui.lib")
@@ -64,7 +64,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
       message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
     endif()
-    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/Release/ImGui.lib")
+    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/Release/ImGui.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
     list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
      "C:/Program Files (x86)/Engine/install/ImGui.lib")
@@ -74,7 +74,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
       message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
     endif()
-    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/MinSizeRel/ImGui.lib")
+    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/MinSizeRel/ImGui.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
     list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
      "C:/Program Files (x86)/Engine/install/ImGui.lib")
@@ -84,7 +84,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
       message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
     endif()
-    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/RelWithDebInfo/ImGui.lib")
+    file(INSTALL DESTINATION "C:/Program Files (x86)/Engine/install" TYPE STATIC_LIBRARY FILES "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/build/ImGuizmo/ImGui/RelWithDebInfo/ImGui.lib")
   endif()
 endif()
 

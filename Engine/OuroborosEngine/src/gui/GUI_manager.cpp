@@ -11,6 +11,7 @@
 #include "material_configure.h"
 #include "viewport.h"
 #include "../core/engine.h"
+#include "gizmo_editor.h"
 
 OE::GUI::_manager_internal::Behavior* OE::GUI::_manager_internal::MenuNode::FindBehavior(
 	const std::string& behavior_name, std::queue<std::string>& categories)
@@ -219,10 +220,12 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 		{
 			created = new ViewPort;
 			AddPanel(created);
+			viewport_panel = static_cast<ViewPort*>(created);
 		}
 		else
 		{
 			RemovePanel(created);
+			viewport_panel = nullptr;
 		}
 	});
 
@@ -230,11 +233,31 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 	{
 		open = !open;
 	});
+
+	RegisterMenuItem({ "ECS", "Edit" }, "Gizmo Editor", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
+	{
+		open = !open;
+		if (open)
+		{
+			if(created == nullptr)
+			{
+				created = new GizmoEditor;
+			}
+			AddPanel(created);
+		}
+		else
+		{
+			created->SetOpen(true);
+		}
+	});
+	//AddPanel(new GizmoEditor);
 }
 
 void OE::GUI::GUI_manager::Update()
 {
-	//ImGuizmo::BeginFrame();
+
+	ImGuizmo::BeginFrame();
+	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 	DrawMenu();
 
 	static bool opt_fullscreen = true;

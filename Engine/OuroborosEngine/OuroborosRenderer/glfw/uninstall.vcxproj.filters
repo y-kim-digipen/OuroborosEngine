@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\18a5b3a5c4be698e796830729a72ac89\uninstall.rule">
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\55c1ad5a4b0df7a856eddf9e87aef1fb\uninstall.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\external\glfw\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\external\glfw\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\uninstall" />
+    <None Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\uninstall" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{78E8FF1D-7A71-3D5F-81A8-1B8026E5BEA5}</UniqueIdentifier>
+      <UniqueIdentifier>{63A9A489-2B1E-3057-8418-1739CE90F608}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

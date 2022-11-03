@@ -42,29 +42,18 @@ ${CMAKE_CURRENT_SOURCE_DIR}/glfw)
 
 if (NOT TARGET ImGui)
     add_subdirectory(
-            ../../ImGuizmo/ImGui
-            ${CMAKE_CURRENT_SOURCE_DIR}/build/ImGuizmo/ImGui
-)
-endif()
-
-if (NOT TARGET ImGuizmo)
-    add_subdirectory(
-            ../../ImGuizmo/ImGuizmo
-            ${CMAKE_CURRENT_SOURCE_DIR}/build/ImGuizmo/ImGuizmo
+            ../../ImGui
+            ${CMAKE_CURRENT_SOURCE_DIR}/build/ImGui
 )
 endif()
 
 target_link_libraries(${LIBRARY_NAME} 
 PUBLIC
     ImGui
-    ImGuizmo
     glfw
     ${ADDITIONAL_LIBRARIES}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/vulkan-1.lib
 )
-
-target_link_libraries(${LIBRARY_NAME} PUBLIC ImGuizmo)
-add_dependencies(${LIBRARY_NAME} ImGuizmo)
 
 install(DIRECTORY       ${CMAKE_CURRENT_SOURCE_DIR}/include
         DESTINATION     ${CMAKE_INSTALL_PREFIX}/install/

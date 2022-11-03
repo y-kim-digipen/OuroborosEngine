@@ -27,8 +27,9 @@ using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
 using SystemList = OE::ECS::types::SystemList<DrawSystem, LightSystem, ScriptingSystem>;
 
 using CameraTransformSyncSignature = OE::ECS::types::Signature<TransformComponent, CameraComponent>;
+using HierarchicalTransformSignature = OE::ECS::types::Signature<TransformComponent>;
 
-using SignatureList = OE::ECS::types::SignatureList<CameraTransformSyncSignature>;
+using SignatureList = OE::ECS::types::SignatureList<CameraTransformSyncSignature, HierarchicalTransformSignature>;
 
 using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, SystemList>;
 

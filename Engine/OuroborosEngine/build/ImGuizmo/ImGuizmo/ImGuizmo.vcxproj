@@ -22,8 +22,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F5B1C990-A58A-3A3E-8DB7-9F0CC8456F40}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{6867A7B4-167D-3FBC-84F7-B9BDB9EDA5DB}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>ImGuizmo</ProjectName>
@@ -59,26 +59,26 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ImGuizmo.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ImGuizmo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ImGuizmo.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ImGuizmo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ImGuizmo.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ImGuizmo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ImGuizmo.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ImGuizmo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -94,10 +94,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -110,7 +110,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -126,10 +126,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -142,7 +142,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -158,10 +158,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -174,7 +174,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -189,10 +189,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include;C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -204,11 +204,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -216,12 +216,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -229,12 +229,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -242,12 +242,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/ImGuizmo/ImGuizmo/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Desktop/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/build/ImGuizmo/ImGuizmo/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -255,27 +255,27 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ImGuizmo\ImGuizmo\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\GraphEditor.cpp" />
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImCurveEdit.cpp" />
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImGradient.cpp" />
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImGuizmo.cpp" />
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\src\ImSequencer.cpp" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\GraphEditor.h" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImCurveEdit.h" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImGradient.h" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImGuizmo.h" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\include\ImSequencer.h" />
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\ImGuizmo\ImGuizmo\example\imgui.h" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\src\GraphEditor.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\src\ImCurveEdit.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\src\ImGradient.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\src\ImGuizmo.cpp" />
+    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\src\ImSequencer.cpp" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include\GraphEditor.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include\ImCurveEdit.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include\ImGradient.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include\ImGuizmo.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\include\ImSequencer.h" />
+    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\ImGuizmo\ImGuizmo\example\imgui.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Desktop\Engine\OuroborosEngine\build\ZERO_CHECK.vcxproj">
-      <Project>{387445E6-12BE-3E6F-B128-CDC766C3CAB0}</Project>
+    <ProjectReference Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\build\ZERO_CHECK.vcxproj">
+      <Project>{D9530CDC-1E73-3987-BE26-7A9A2C327876}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

@@ -30,6 +30,8 @@ namespace OE
 			{
 				return open;
 			}
+
+			void SetOpen(bool status) { open = status; }
 		protected:
 			std::string name;
 			PanelFlag flag;

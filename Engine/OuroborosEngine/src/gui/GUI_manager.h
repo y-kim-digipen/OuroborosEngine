@@ -62,7 +62,7 @@ namespace OE
 			};
 		}
 
-
+		class ViewPort;
 		class GUI_manager
 		{
 			friend class SliderSpeed;
@@ -76,16 +76,33 @@ namespace OE
 
 			_manager_internal::Behavior* GetBehavior(const std::initializer_list<std::string>& categories, const std::string& behavior_name) const;
 			void RunBehavior(const std::initializer_list<std::string>& categories, const std::string& behavior_name) const;
+			template<typename T>
+			std::enable_if_t<std::is_base_of_v<GUI_Base, T>, T>* TryGetPanel();
+			ViewPort* const GetViewportPanel() const { return viewport_panel; }
 		private:
 			void DrawMenu();
 			bool HasPanel(const std::string& panel_name);
 			float slider_speed;
 
+			ViewPort* viewport_panel = nullptr;
 			std::vector<GUI_Base*> gui_panels;
 			std::queue<GUI_Base*> remove_queue_gui_panels;
 			std::queue<GUI_Base*> add_queue_gui_panels;
 
 			_manager_internal::MenuNode* head_menu;
 		};
+
+		template <typename T>
+		std::enable_if_t<std::is_base_of_v<GUI_Base, T>, T>* GUI_manager::TryGetPanel()
+		{
+			for (auto gui_panel : gui_panels)
+			{
+				if(T* panel = dynamic_cast<T*>(gui_panel))
+				{
+					return panel;
+				}
+			}
+			return nullptr;
+		}
 	}
 }

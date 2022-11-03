@@ -24,11 +24,7 @@ public:
 	TransformComponent& operator=(const TransformComponent& other) = default;
 	TransformComponent& operator=(TransformComponent&& other) = default;
 
-	glm::mat4& GetMatrix()
-	{
-		if (is_modified) { CalculateMatrix(); is_modified = false; }
-		return local_transform_matrix;
-	}
+	glm::mat4 GetMatrix();
 
 	const glm::vec3& GetPosition() const { return position; }
 	void SetPosition(const glm::vec3& new_pos) { position = new_pos; is_modified = true; }
@@ -36,12 +32,13 @@ public:
 	void SetRotation(const glm::vec3& new_rot) { euler_rotation = new_rot; is_modified = true; }
 	const glm::vec3& GetScale() const { return scale; }
 	void SetScale(const glm::vec3& new_scale) { scale = new_scale; is_modified = true; }
-	glm::mat4 GetRotationMatrix()
-	{
-		CalculateMatrix();
-		return glm::toMat4(rotation);
-	}
+	void SetParentMatrix(const glm::mat4& matrix) { parent_matrix = matrix; is_modified = true; }
+	const glm::mat4& GetParentMatrix() const { return parent_matrix; }
+	const glm::mat4& GetLocalMatrix() {
+		if (is_modified) { CalculateMatrix(); is_modified = false; } return local_transform_matrix;	}
 private:
+	void HierarchicalParentMatrixSet(uint16_t entityID, const glm::mat4& parent_matrix);
+
 	void CalculateMatrix()
 	{
 		rotation = glm::quat(glm::radians(euler_rotation));
@@ -53,7 +50,7 @@ private:
 	glm::quat rotation{ 1.f, 0.0f, 0.f, 0.f };
 	glm::vec3 scale{ 1.f };
 
-	glm::mat4 transform_matrix{ 0.0f };
+	glm::mat4 parent_matrix{ 1.f };
 	glm::mat4 local_transform_matrix { 0.0f };
 };
 

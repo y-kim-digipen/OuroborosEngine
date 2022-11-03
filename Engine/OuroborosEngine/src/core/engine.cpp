@@ -138,12 +138,23 @@ namespace OE
 			camera.SyncWithTransformComponent();
 		});
 
+
+		//ecs_manager.ForEntitiesMatching<HierarchicalTransformSignature>(0.f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform)
+		//	{
+		//		decltype(ecs_manager)::Entity& entity = ecs_manager.GetEntity(ent);
+		//		if (const bool is_parent = entity.hierarchy.HasParent() == false)
+		//		{
+		//			glm::mat4 identity{ 1.f };
+		//			HierarchicalParentMatrixSet(ent, identity);
+		//		}
+		//	});
+
 		const auto matching_entities = ecs_manager.GetEntitiesMatching<CameraTransformSyncSignature>();
 		if(matching_entities.empty())
 		{
 			const auto entity = ecs_manager.CreateEntity().myID;
 			ecs_manager.AddComponent<TransformComponent>(entity);
-			ecs_manager.GetComponent<TransformComponent>(entity).SetPosition(glm::vec3{ 0.f, 0.f, 0.f });
+			ecs_manager.GetComponent<TransformComponent>(entity).SetPosition(glm::vec3{ 0.f, 0.f, 5.f });
 			ecs_manager.AddComponent<TagComponent>(entity, "Main Camera");
 			auto& camera = ecs_manager.AddComponent<CameraComponent>(entity);
 			camera.SetUsing(true);

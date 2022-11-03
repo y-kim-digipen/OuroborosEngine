@@ -1,5 +1,6 @@
 #include <common/components.h>
 #include "../engine.h"
+
 void CameraComponent::SyncWithTransformComponent()
 {
 	auto& ecs_manager = OE::Engine::GetECSManager();
@@ -27,3 +28,33 @@ void CameraComponent::CalculateMatrices(const glm::vec3& eye, const glm::vec3& f
 	perspective_matrix[1][1] *= -1;
 	view_matrix = glm::lookAt(eye, eye +front, up);
 }
+
+glm::mat4 TransformComponent::GetMatrix()
+{
+	if (is_modified) { 
+		auto owner = OE::Engine::ecs_manager.GetComponentOwner<TransformComponent>(this);
+		auto entity = OE::Engine::ecs_manager.GetEntity(owner);
+		CalculateMatrix(); 
+		is_modified = false; 
+		if (entity.hierarchy.HasParent() == false)
+		{
+			HierarchicalParentMatrixSet(owner, glm::mat4{ 1.f });
+		}
+	}
+	return parent_matrix * local_transform_matrix;
+}
+
+void TransformComponent::HierarchicalParentMatrixSet(uint16_t entityID, const glm::mat4& parent_matrix)
+{
+	decltype(OE::Engine::ecs_manager)::Entity& entity = OE::Engine::ecs_manager.GetEntity(entityID);
+	if (OE::Engine::ecs_manager.HasComponent<TransformComponent>(entityID))
+	{
+		auto& transform_component = OE::Engine::ecs_manager.GetComponent<TransformComponent>(entityID);
+		transform_component.SetParentMatrix(parent_matrix);
+		glm::mat4 this_matrix = transform_component.GetLocalMatrix() * parent_matrix;
+		for (auto childID : entity.hierarchy.GetChild())
+		{
+			HierarchicalParentMatrixSet(childID, this_matrix);
+		}
+	}
+};

@@ -2,6 +2,7 @@
 #include "wrapped_functions.h"
 #include "material_configure.h"
 #include <filesystem>
+#include "gizmo_editor.h"
 namespace OE
 {
 	template<typename TComponent>
@@ -62,6 +63,12 @@ namespace OE
 			if(GUI_Input::DragFloat3("Scale", &scale.x))
 			{
 				transform_component.SetScale(scale);
+			}
+			if(ImGui::Button("Gizmo"))
+			{
+				auto gizmo_editing_panel = Engine::gui_manager.TryGetPanel<OE::GUI::GizmoEditor>();
+				assert(gizmo_editing_panel);
+				gizmo_editing_panel->SetSelectedEntity(entID);
 			}
 
 			ImGui::TreePop();
