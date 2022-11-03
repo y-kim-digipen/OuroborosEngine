@@ -50,7 +50,7 @@ namespace OE
 
 		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
 		{
-			event_functions[type].emplace_back(fn);
+			event_functions[type].push(fn);
 		}
 
 		static auto GetGLFWWindow()
@@ -86,7 +86,7 @@ namespace OE
 		//Modules
 	private:
 		static void ECS_TestSetup();
-		static inline std::array<std::vector<std::function<void(void)>>, COUNT> event_functions;
+		static inline std::array<std::queue<std::function<void(void)>>, COUNT> event_functions;
 
 	public: // Modules
 				//todo to be removed

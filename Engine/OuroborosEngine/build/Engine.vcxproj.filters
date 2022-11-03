@@ -1,249 +1,249 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.cpp">
       <Filter>Source Files\src\asset</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\components.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\components.cpp">
       <Filter>Source Files\src\core\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.cpp">
       <Filter>Source Files\src\core\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.cpp">
       <Filter>Source Files\src\core</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.cpp">
       <Filter>Source Files\src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.cpp">
       <Filter>Source Files\src\input</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\main.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\main.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.cpp">
       <Filter>Source Files\src\scripting</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.cpp">
+    <ClCompile Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.cpp">
       <Filter>Source Files\src\serializing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\image_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\master_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\master_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\material_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\mesh_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\script_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\asset\shader_asset_manager.h">
       <Filter>Header Files\src\asset</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\component_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\component_manager.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_base.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_base.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_definitions.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\ecs_definitions.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\entity_mananger.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\entity_mananger.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\hierarchy.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\ecs\system_manager.h">
       <Filter>Header Files\src\core\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\engine.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_definitions.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_definitions.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_settings.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\core\engine_settings.h">
       <Filter>Header Files\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\GUI_manager.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_browser.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_draw.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\asset_draw.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\base.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\base.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\components_draw.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\components_draw.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\entities_info.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\file_browser.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\gizmo_editor.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\gui_definitions.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\gui_definitions.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\material_configure.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\sample_panel.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\sample_panel.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\slider_speed.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\system_configure.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\viewport.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\gui\wrapped_functions.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\gui\wrapped_functions.h">
       <Filter>Header Files\src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\input\InputManager.h">
       <Filter>Header Files\src\input</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\scripting\lua_script_manager.h">
       <Filter>Header Files\src\scripting</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\scripting\script.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\scripting\script.h">
       <Filter>Header Files\src\scripting</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_deserialization_impl.inl">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_deserialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_serialization_impl.inl">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\assets_serialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_deserialization_impl.inl">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_deserialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_serialization_impl.inl">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\component_serialization_impl.inl">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\scene_serializer.h">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\src\serializing\shared_serialization_impl.h">
+    <ClInclude Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\src\serializing\shared_serialization_impl.h">
       <Filter>Header Files\src\serializing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Yoonki.DESKTOP-BG1GGS4\Documents\OuroborosEngine\Engine\OuroborosEngine\CMakeLists.txt" />
+    <CustomBuild Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{127FE75A-E1DA-306D-A631-B3174B065277}</UniqueIdentifier>
+      <UniqueIdentifier>{3C775A21-65CB-356C-8BF8-1FDB940B9527}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src">
-      <UniqueIdentifier>{475001BE-2F68-370F-8425-48A629939715}</UniqueIdentifier>
+      <UniqueIdentifier>{E87C9461-9A0D-359E-89C6-66C87D14D4A5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\asset">
-      <UniqueIdentifier>{6EE31280-21EF-3362-847B-EA43883FAE06}</UniqueIdentifier>
+      <UniqueIdentifier>{6D2BF28E-4E3C-3F85-AC8D-6AADB3F6BA62}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\core">
-      <UniqueIdentifier>{27A2C77B-2C3D-34FF-8032-296EEBDDC9B3}</UniqueIdentifier>
+      <UniqueIdentifier>{0C7E405C-A301-3265-B708-518B537BF13E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\core\ecs">
-      <UniqueIdentifier>{DD8BE726-24E5-3005-95D6-FE620901729A}</UniqueIdentifier>
+      <UniqueIdentifier>{46FAF324-025A-397C-B7C5-7A73C75C05C5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\gui">
-      <UniqueIdentifier>{F174D081-DF83-35C1-A053-FE6EB10C7D9C}</UniqueIdentifier>
+      <UniqueIdentifier>{808BAF79-EC0F-3840-B188-65E333E1BC45}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\input">
-      <UniqueIdentifier>{D3BA0D8D-CBA5-3DA7-9441-920D520024E2}</UniqueIdentifier>
+      <UniqueIdentifier>{963DE35E-C4E1-364F-B2CF-24FC7DB524B7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\scripting">
-      <UniqueIdentifier>{A69DA0BD-7A47-35ED-A85E-59F58D49241A}</UniqueIdentifier>
+      <UniqueIdentifier>{39110449-0649-3808-B754-C4668260F43F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\serializing">
-      <UniqueIdentifier>{757D0F3B-BBE8-318C-AB7B-137C15B7F2CE}</UniqueIdentifier>
+      <UniqueIdentifier>{4A5FB7FA-980B-368C-9560-664A5E21E687}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{B3914FB4-2942-3081-8F6E-646FB7BAB7B8}</UniqueIdentifier>
+      <UniqueIdentifier>{2C232486-49C6-36E0-8162-B57516145D7F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src">
-      <UniqueIdentifier>{AD519C02-9745-3CA2-8F23-DE9BFFA9EA3D}</UniqueIdentifier>
+      <UniqueIdentifier>{D18A4C89-6E23-34AD-8394-6F5ADBBAE216}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\asset">
-      <UniqueIdentifier>{0D4BD598-D814-3D9C-BD7D-CA3726AAC79D}</UniqueIdentifier>
+      <UniqueIdentifier>{A7E5B71E-309B-3363-8CFD-B5D9F1C17288}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\core">
-      <UniqueIdentifier>{87E99089-F980-3A4D-904B-785821BEDE03}</UniqueIdentifier>
+      <UniqueIdentifier>{8F0C449F-7AAB-3111-9043-C1A79F993E23}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\core\ecs">
-      <UniqueIdentifier>{3FD6206F-AB31-385E-939D-E6B2202D4B2D}</UniqueIdentifier>
+      <UniqueIdentifier>{CEFB4B38-FE50-3612-A701-FD29BAD5BA6D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\gui">
-      <UniqueIdentifier>{E6BC560C-A607-3130-98E0-8859A7BF5419}</UniqueIdentifier>
+      <UniqueIdentifier>{93B6D074-2055-3611-AD6B-B0D3DF205FA4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\input">
-      <UniqueIdentifier>{3EFF4AE3-3178-32BC-9708-EFF5B6A4B23A}</UniqueIdentifier>
+      <UniqueIdentifier>{C1A88163-CF16-32B6-BAE8-DF714D3F0D0E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\scripting">
-      <UniqueIdentifier>{23953BB1-C955-31B9-99DD-39583C3009C2}</UniqueIdentifier>
+      <UniqueIdentifier>{B3FEA6FB-5D7F-3F5D-8198-0C4058800123}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\serializing">
-      <UniqueIdentifier>{02DD2EDD-6C5F-3507-827E-050E4C7A51CA}</UniqueIdentifier>
+      <UniqueIdentifier>{494FEE50-D142-3412-A8F5-16F11213348F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
