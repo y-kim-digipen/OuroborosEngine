@@ -28,4 +28,6 @@ void main()
     albedoBuffer = AlbedoValue();
     emissiveBuffer = EmissiveValue();
     metalRoughnessAoBuffer = vec3(MetalicValue(), RoughnessValue(),AoValue());
+
+
 } 

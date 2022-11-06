@@ -23,4 +23,5 @@ void main()
     vs_out.uv = uv;
     vs_out.non_pure_normal = mat3(object_ubo.model) * normal;
     gl_Position = global_ubo.projection * global_ubo.view * object_ubo.model * vec4(pos, 1.0);
+
 }

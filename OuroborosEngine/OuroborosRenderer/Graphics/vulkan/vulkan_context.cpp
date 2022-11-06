@@ -617,7 +617,7 @@ namespace Renderer
 
                 model = model * glm::mat4_cast(rotR) * glm::mat4_cast(rotY) * glm::mat4_cast(rotP);
 
-                glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(global_data.view * model)));
+                glm::mat3 normal_matrix = glm::transpose(glm::inverse(global_data.view * model));
 
 
                 //TODO : need to change deferred offscreen shader

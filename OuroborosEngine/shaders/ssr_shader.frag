@@ -12,11 +12,6 @@ void main()
     float roughness = color.w;
     color.w = 1.0f;
     vec4 uv = texture(uv_buffer, vertexUV);
-    if(uv.xy == vec2(0, 0) || uv.ba == vec2(0,0)) {
-        outColor = color;
-        return;
-    }
-    
     vec4 reflected_color = vec4(texture(color_buffer, uv.xy).rgb, 1.0f);
 
     outColor = mix(color, reflected_color, roughness);
