@@ -153,17 +153,17 @@ namespace Renderer
             .AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
 
         auto& deferred_framebuffer = vulkan_type.deferred_pass;
-        //VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        lightpass_set_.
-            AddBinding(0, &tex_descriptor_normal).
-            AddBinding(1, &tex_descriptor_albedo).
-            AddBinding(2, &tex_descriptor_emissive).
-            AddBinding(3, &tex_descriptor_metalic_roughness_ao);
+        lightpass_set_.AddBinding(0, &tex_descriptor_position).
+            AddBinding(1, &tex_descriptor_normal).
+            AddBinding(2, &tex_descriptor_albedo).
+            AddBinding(3, &tex_descriptor_emissive).
+            AddBinding(4, &tex_descriptor_metalic_roughness_ao);
         lightpass_set_.Build();
         
         //buildDeferredCommandBuffer();
@@ -421,17 +421,17 @@ namespace Renderer
         LightPassRecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
     
         //descriptorset write
-        //VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        lightpass_set_.
-    	AddBinding(0,&tex_descriptor_normal).
-    	AddBinding(1,&tex_descriptor_albedo).
-    	AddBinding(2,&tex_descriptor_emissive).
-    	AddBinding(3,&tex_descriptor_metalic_roughness_ao);
+        lightpass_set_.AddBinding(0, &tex_descriptor_position).
+    	AddBinding(1,&tex_descriptor_normal).
+    	AddBinding(2,&tex_descriptor_albedo).
+    	AddBinding(3,&tex_descriptor_emissive).
+    	AddBinding(4,&tex_descriptor_metalic_roughness_ao);
 
         shader_manager->GetShader("shader_lightpass")->Bind();
         lightpass_set_.Bind();
@@ -1515,8 +1515,8 @@ namespace Renderer
         vulkan_type.deferred_pass.width = 1600;
         vulkan_type.deferred_pass.height = 900;
 
-        //CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.position); // depth buffer
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.normal); // normal + depth vec4
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.position);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.normal);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.albedo);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.emissive);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_pass.metalic_roughness_ao);
@@ -1550,12 +1550,12 @@ namespace Renderer
             }
         }
 
-        //attachment_descriptions[0].format = vulkan_type.deferred_pass.position.format;
-        attachment_descriptions[0].format = vulkan_type.deferred_pass.normal.format;
-        attachment_descriptions[1].format = vulkan_type.deferred_pass.albedo.format;
-        attachment_descriptions[2].format = vulkan_type.deferred_pass.emissive.format;
-        attachment_descriptions[3].format = vulkan_type.deferred_pass.metalic_roughness_ao.format;
-        attachment_descriptions[4].format = vulkan_type.deferred_pass.depth.format;
+        attachment_descriptions[0].format = vulkan_type.deferred_pass.position.format;
+        attachment_descriptions[1].format = vulkan_type.deferred_pass.normal.format;
+        attachment_descriptions[2].format = vulkan_type.deferred_pass.albedo.format;
+        attachment_descriptions[3].format = vulkan_type.deferred_pass.emissive.format;
+        attachment_descriptions[4].format = vulkan_type.deferred_pass.metalic_roughness_ao.format;
+        attachment_descriptions[5].format = vulkan_type.deferred_pass.depth.format;
 
         std::vector<VkAttachmentReference> color_references;
 
@@ -1606,12 +1606,12 @@ namespace Renderer
 
         auto& deferred_framebuffer = vulkan_type.deferred_pass;
 
-        //attachments[0] = deferred_framebuffer.position.image_view;
-        attachments[0] = deferred_framebuffer.normal.image_view;
-        attachments[1] = deferred_framebuffer.albedo.image_view;
-        attachments[2] = deferred_framebuffer.emissive.image_view;
-        attachments[3] = deferred_framebuffer.metalic_roughness_ao.image_view;
-        attachments[4] = deferred_framebuffer.depth.image_view;
+        attachments[0] = deferred_framebuffer.position.image_view;
+        attachments[1] = deferred_framebuffer.normal.image_view;
+        attachments[2] = deferred_framebuffer.albedo.image_view;
+        attachments[3] = deferred_framebuffer.emissive.image_view;
+        attachments[4] = deferred_framebuffer.metalic_roughness_ao.image_view;
+        attachments[5] = deferred_framebuffer.depth.image_view;
 
         VkFramebufferCreateInfo framebuffer_create_info{};
         framebuffer_create_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

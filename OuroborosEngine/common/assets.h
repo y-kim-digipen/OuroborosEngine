@@ -59,7 +59,6 @@ namespace Asset
         glm::mat4 view;
         glm::vec3 position;
         glm::mat4 inv_view;
-        glm::mat4 inv_proj;
         float padding;
     };
 

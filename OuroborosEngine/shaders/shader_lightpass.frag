@@ -8,7 +8,6 @@ layout(set = 0, binding = 0) uniform global_data {
     mat4 view;
     vec3 cam_pos;
     mat4 inv_view;
-    mat4 inv_proj;
 } global_ubo;
 
 #include "common_light_pass_frag.glsl"
@@ -30,8 +29,8 @@ float CalculateAttenuation(float c1, float c2, float c3, float dist)
 void main()
 {
     vec3 Lo = vec3(0);
-    float depth = texture(normalBuffer, vertexUV).a;
-    vec4 frag_pos = inv_proj * vec4(vertexUV * 2 - 1.0f, depth, 1.0f);
+   
+    vec3 frag_pos = texture(posBuffer, vertexUV).rgb;
     vec3 normal = texture(normalBuffer,vertexUV).rgb;
     vec3 albedo = texture(albedoBuffer,vertexUV).rgb;
     float metallic = texture(metalRoughnessAoBuffer, vertexUV).r;
@@ -45,7 +44,7 @@ void main()
     if(metallic > 0.01f) 
     {
         vec4 view_pos = vec4(frag_pos, 1.0f);
-        vec2 tex_size = textureSize(normalBuffer, 0).xy;
+        vec2 tex_size = textureSize(posBuffer, 0).xy;
         uv = SSR_raycast(uv, view_pos, N, tex_size, vertexUV);
     }
 
