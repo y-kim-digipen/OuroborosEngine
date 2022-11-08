@@ -45,7 +45,7 @@ void main()
     {
         vec4 view_pos = vec4(frag_pos, 1.0f);
         vec2 tex_size = textureSize(posBuffer, 0).xy;
-        //uv = SSR_raycast(uv, view_pos, N, tex_size, vertexUV);
+        //uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
     }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 

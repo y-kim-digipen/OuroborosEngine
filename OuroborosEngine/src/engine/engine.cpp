@@ -47,11 +47,28 @@ namespace OE
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if (ecs_manager.GetEntity(ent).alive)
 				{
-					camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-					camera.data.projection[1][1] *= -1;
+					float aspect_ratio = static_cast<float>(window->GetWidth()) / window->GetHeight();
+					
+					float fov = glm::radians(45.0f);
+					float focal_length = 1 / std::tan(fov * 0.5f);
+					float cam_far = 100.0f;
+					float cam_near = 1.0f;
+					
+					camera.data.projection = glm::mat4(1.0f);
+					camera.data.projection[0][0] = focal_length / aspect_ratio;
+					camera.data.projection[1][1] = -focal_length;
+					camera.data.projection[2][2] = cam_near / (cam_far - cam_near);
+					camera.data.projection[2][3] = -1.0f;
+					camera.data.projection[3][2] = (cam_far * cam_near) / (cam_far - cam_near);
+					camera.data.projection[3][3] = 0.0f;
+					
+					context->global_data = camera.data;
+					//TODO: WHY THIS PROJECTION MATRIX STILL WORKS????
+					//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+					//camera.data.projection[1][1] *= -1;
 					camera.data.view = camera.GetCameraMat();
 					camera.data.inv_view = glm::inverse(glm::transpose(camera.data.view));
-				
+
 					//TODO: pass renderer camera data
 					context->global_data = camera.data;
 					context->UpdateGlobalData();

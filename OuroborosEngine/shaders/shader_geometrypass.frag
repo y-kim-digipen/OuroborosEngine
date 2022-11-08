@@ -19,7 +19,9 @@ void main()
 {   
     vPosBuffer = vs_in.frag_pos;
     //normalBuffer = normalize(vs_in.non_pure_normal);
-    normalBuffer = normalize(vs_in.norm);
+    normalBuffer = vec3(normalize(vs_in.norm));
+    float depth = gl_FragCoord.z;
+
     // if(material.has_normal_texture != 0)
     // {
     //     normalBuffer = getNormalFromMap();
@@ -27,7 +29,7 @@ void main()
 
     albedoBuffer = AlbedoValue();
     emissiveBuffer = EmissiveValue();
-    metalRoughnessAoBuffer = vec3(MetalicValue(), RoughnessValue(),AoValue());
+    metalRoughnessAoBuffer = vec3(MetalicValue(), RoughnessValue(), depth);
 
 
 } 
