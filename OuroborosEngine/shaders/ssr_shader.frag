@@ -14,5 +14,8 @@ void main()
     vec4 uv = texture(uv_buffer, vertexUV);
     vec4 reflected_color = vec4(texture(color_buffer, uv.xy).rgb, 1.0f);
 
-    outColor = mix(color, reflected_color, roughness);
+    if(uv.w == 0)
+        outColor = color;
+    else
+        outColor = mix(color, reflected_color, roughness);
 }

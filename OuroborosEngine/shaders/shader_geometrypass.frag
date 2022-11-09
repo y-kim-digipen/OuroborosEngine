@@ -9,7 +9,7 @@ layout(set = 1, binding = 0) uniform Test {
 } oout;
 
 layout (location=0) out vec3 vPosBuffer;
-layout (location=1) out vec3 normalBuffer;
+layout (location=1) out vec4 normalBuffer;
 layout (location=2) out vec3 albedoBuffer;
 layout (location=3) out vec3 emissiveBuffer;
 layout (location=4) out vec3 metalRoughnessAoBuffer;
@@ -19,8 +19,8 @@ void main()
 {   
     vPosBuffer = vs_in.frag_pos;
     //normalBuffer = normalize(vs_in.non_pure_normal);
-    normalBuffer = vec3(normalize(vs_in.norm));
-    float depth = gl_FragCoord.z;
+    normalBuffer = vec4(normalize(vs_in.norm), gl_FragCoord.z);
+    //float depth = gl_FragCoord.z;
 
     // if(material.has_normal_texture != 0)
     // {
@@ -29,7 +29,7 @@ void main()
 
     albedoBuffer = AlbedoValue();
     emissiveBuffer = EmissiveValue();
-    metalRoughnessAoBuffer = vec3(MetalicValue(), RoughnessValue(), depth);
+    metalRoughnessAoBuffer = vec3(MetalicValue(), RoughnessValue(), AoValue());
 
 
 } 

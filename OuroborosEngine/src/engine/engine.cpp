@@ -52,17 +52,17 @@ namespace OE
 					float fov = glm::radians(45.0f);
 					float focal_length = 1 / std::tan(fov * 0.5f);
 					float cam_far = 100.0f;
-					float cam_near = 1.0f;
+					float cam_near = 0.1f;
 					
 					camera.data.projection = glm::mat4(1.0f);
 					camera.data.projection[0][0] = focal_length / aspect_ratio;
 					camera.data.projection[1][1] = -focal_length;
-					camera.data.projection[2][2] = cam_near / (cam_far - cam_near);
+					camera.data.projection[2][2] = cam_far / (cam_near - cam_far);
 					camera.data.projection[2][3] = -1.0f;
-					camera.data.projection[3][2] = (cam_far * cam_near) / (cam_far - cam_near);
+					camera.data.projection[3][2] = (cam_far * cam_near) / (cam_near - cam_far);
 					camera.data.projection[3][3] = 0.0f;
 					
-					context->global_data = camera.data;
+					//context->global_data = camera.data;
 					//TODO: WHY THIS PROJECTION MATRIX STILL WORKS????
 					//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
 					//camera.data.projection[1][1] *= -1;

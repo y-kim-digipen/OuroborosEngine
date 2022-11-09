@@ -1184,7 +1184,7 @@ namespace Renderer
         };
 
         VkClearValue depth_clear;
-        depth_clear.depthStencil.depth = 0.f;
+        depth_clear.depthStencil.depth = 1.0f;
         depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = {clear_color, depth_clear};
 
@@ -1194,7 +1194,7 @@ namespace Renderer
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-    	VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 1.f, 0.f);
+    	VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.0f, 1.0f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
@@ -1484,7 +1484,7 @@ namespace Renderer
         clear_values[2].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[3].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[4].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-        clear_values[5].depthStencil = { 0.0f, 0 };
+        clear_values[5].depthStencil = { 1.0f, 0 };
 
         VkRenderPassBeginInfo render_pass_begin_info = VulkanInitializer::RenderPassBeginInfo();
         render_pass_begin_info.renderPass  = deferred_pass.render_pass;
@@ -1498,7 +1498,7 @@ namespace Renderer
 
         vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
-        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 1.f, 0.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.0f, 1.0f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
@@ -1852,7 +1852,7 @@ namespace Renderer
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
         VkClearValue depth_clear;
-        depth_clear.depthStencil.depth = 0.f;
+        depth_clear.depthStencil.depth = 1.0f;
         depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = { 
             {{0.0f, 0.0f, 0.0f, 0.f}},
@@ -1866,7 +1866,7 @@ namespace Renderer
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 1.f, 0.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.0f, 1.0f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
@@ -2059,7 +2059,7 @@ namespace Renderer
         render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
 
         VkClearValue depth_clear;
-        depth_clear.depthStencil.depth = 0.f;
+        depth_clear.depthStencil.depth = 1.0f;
         depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = { 
             {{0.0f,0.0f, 0.0f, 1.f}},
@@ -2072,7 +2072,7 @@ namespace Renderer
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 1.f, 0.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.0f, 1.0f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);

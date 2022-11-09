@@ -10,8 +10,6 @@ layout(set = 0, binding = 0) uniform global_data {
     mat4 inv_view;
 } global_ubo;
 
-#include "common_light_pass_frag.glsl"
-
 float test_att = 0.1;
 
 layout(set = 1, binding = 0) uniform Test {
@@ -19,7 +17,13 @@ layout(set = 1, binding = 0) uniform Test {
     float c1;
     float c2;
     float c3;
+    float max_thickness;
+    float max_iteration;
 } oout;
+
+#include "common_light_pass_frag.glsl"
+
+
 
 float CalculateAttenuation(float c1, float c2, float c3, float dist)
 {
@@ -45,7 +49,7 @@ void main()
     {
         vec4 view_pos = vec4(frag_pos, 1.0f);
         vec2 tex_size = textureSize(posBuffer, 0).xy;
-        //uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
+        uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
     }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
