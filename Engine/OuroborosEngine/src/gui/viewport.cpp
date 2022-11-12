@@ -50,8 +50,8 @@ void OE::GUI::ViewPort::draw_internal()
 
 void OE::GUI::ViewPort::draw_gizmo()
 {
-    GizmoEditor* gizmo_editing_config_panel = Engine::gui_manager.TryGetPanel<OE::GUI::GizmoEditor>();
-    const GizmoEditor::GizmoEditingConfig* config = gizmo_editing_config_panel->GetConfig();
+	const GizmoEditor* gizmo_editing_config_panel = Engine::gui_manager.TryGetPanel<OE::GUI::GizmoEditor>();
+    const GizmoEditor::GizmoEditingConfig* config = GizmoEditor::GetConfig();
     if(gizmo_editing_config_panel == nullptr)
     {
         return;

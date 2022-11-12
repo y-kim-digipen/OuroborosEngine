@@ -19,12 +19,12 @@ namespace OE
 			};
 			GizmoEditor() : GUI_Base("Gizmo Editor") {}
 			void Draw() override;
-			void SetSelectedEntity(ecs_ID entityID);
-			ecs_ID GetSelectedEntity() const { return selected_entity; }
-			GizmoEditingConfig* GetConfig() { return &config; }
+			static bool SetSelectedEntity(ecs_ID entityID);
+			static ecs_ID GetSelectedEntity() { return selected_entity; }
+			static GizmoEditingConfig* GetConfig() { return &config; }
 		private:
-			GizmoEditingConfig config;
-			ecs_ID selected_entity = -1;
+			inline static GizmoEditingConfig config;
+			inline static ecs_ID selected_entity = -1;
 		};
 	}
 }
