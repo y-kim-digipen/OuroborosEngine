@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt\"")
+if (NOT EXISTS "E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt\"")
 endif()
 
-file(READ "C:/Users/Yoonki.DESKTOP-BG1GGS4/Documents/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt" files)
+file(READ "E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

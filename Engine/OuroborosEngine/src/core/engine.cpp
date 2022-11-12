@@ -179,11 +179,13 @@ namespace OE
 			}
 		}
 
-		for (auto& event_function : event_functions[EventFunctionType::PRE])
+		while(!event_functions[EventFunctionType::PRE].empty())
 		{
-			event_function();
+			auto& fn = event_functions[EventFunctionType::PRE].front();
+			fn();
+			event_functions[EventFunctionType::PRE].pop();
 		}
-		event_functions[EventFunctionType::PRE].clear();
+
 		auto& scripts_set = lua_script_manager.GetScripts(Script::ScriptType::Normal);
 		for (auto& script : scripts_set)
 		{
@@ -287,39 +289,44 @@ namespace OE
 
 			});
 
-		for (auto& event_function : event_functions[EventFunctionType::ONUPDATE])
+		while (!event_functions[EventFunctionType::ONUPDATE].empty())
 		{
-			event_function();
+			auto& fn = event_functions[EventFunctionType::ONUPDATE].front();
+			fn();
+			event_functions[EventFunctionType::ONUPDATE].pop();
 		}
-		event_functions[EventFunctionType::ONUPDATE].clear();
 	}
 
 	void Engine::PostUpdate()
 	{
-		for (auto& event_function : event_functions[EventFunctionType::POST])
+		while (!event_functions[EventFunctionType::POST].empty())
 		{
-			event_function();
+			auto& fn = event_functions[EventFunctionType::POST].front();
+			fn();
+			event_functions[EventFunctionType::POST].pop();
 		}
-		event_functions[EventFunctionType::POST].clear();
 
 		window->BeginFrame();
 		window->Update();
 		gui_manager.Update();
-		for (const auto& event_function : event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT])
+		while (!event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].empty())
 		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddStartContextEvent(event_function);
+			auto& fn = event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].front();
+			fn();
+			event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].pop();
 		}
-		event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].clear();
-		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME])
+		while (!event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].empty())
 		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddAfterEndDeferredEvent(event_function);
+			auto& fn = event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].front();
+			fn();
+			event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].pop();
 		}
-		event_functions[EventFunctionType::END_OF_RENDERER_END_FRAME].clear();
-		for (const auto& event_function : event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT])
+		while (!event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT].empty())
 		{
-			dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->AddEndContextEvent(event_function);
+			auto& fn = event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT].front();
+			fn();
+			event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT].pop();
 		}
-		event_functions[EventFunctionType::END_OF_RENDERER_CONTEXT].clear();
 
 		dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get())->DrawQueue();
 
