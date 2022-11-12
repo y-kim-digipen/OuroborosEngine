@@ -140,7 +140,7 @@ namespace OE
 		OE::Input::Init();
 		window->vulkan_imgui_manager.Init(GetGLFWWindow());
 
-		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
+		camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 1.0f, 100.0f);
 		camera.data.projection[1][1] *= -1;
 		camera.data.view = camera.GetCameraMat();
 		camera.data.position = glm::vec3(0.f, 0.f, 6.0);
@@ -218,6 +218,14 @@ namespace OE
 			if (Input::GetKeyboardButton(GLFW_KEY_D).IsDown())
 			{
 				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, move_velocity);
+			}
+			if (Input::GetKeyboardButton(GLFW_KEY_Q).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::UP, move_velocity);
+			}
+			if (Input::GetKeyboardButton(GLFW_KEY_R).IsDown())
+			{
+				Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::DOWN, move_velocity);
 			}
 
 			const glm::ivec2 mouse_move = Input::GetMouse().GetCursorMove();

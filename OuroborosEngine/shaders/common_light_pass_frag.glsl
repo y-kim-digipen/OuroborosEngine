@@ -83,66 +83,69 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
     vec4 vs_reflect_vec = vec4(normalize(reflect(vs_cam_to_pos.xyz, normal)), 0.0f);
 
     vec4 vs_reflect_end_pos = view_pos + vs_reflect_vec * 1000;
-    vs_reflect_end_pos /= (vs_reflect_end_pos.z < 0 ? vs_reflect_end_pos.z : 1); // What is this?
+    //if(vs_reflect_end_pos.z > 0)
+    //    return uv;
 
+    vs_reflect_end_pos /= (vs_reflect_end_pos.z > 0 ? vs_reflect_end_pos.z : 1);
     vec4 cs_reflect_end_pos = global_ubo.projection * vec4(vs_reflect_end_pos.xyz, 1.0f);
     cs_reflect_end_pos /= cs_reflect_end_pos.w;
 
     vec4 cs_pos = global_ubo.projection * view_pos;
     cs_pos /= cs_pos.w;
 
-    vec3 ts_pos_test_if_same;
-    ts_pos_test_if_same = vec3(cs_pos.xy * 0.5f + vec2(0.5f), texture(normalBuffer, tex_coord).w);
+    //vec3 ts_pos_test_if_same;
+    //ts_pos_test_if_same = vec3(cs_pos.xy * 0.5f + vec2(0.5f), texture(normalBuffer, tex_coord).w);
     
+    vec3 ts_reflect_dir = normalize(cs_reflect_end_pos.xyz - cs_pos.xyz);
+    ts_reflect_dir.xy *= 0.5f;
+
     vec3 ts_pos = vec3(tex_coord, texture(normalBuffer, tex_coord).w);
     vec3 ts_reflect_end_pos = vec3(cs_reflect_end_pos.xy * 0.5f + vec2(0.5f), cs_reflect_end_pos.z);
 
-    vec3 ts_reflect_dir = normalize(ts_reflect_end_pos - ts_pos);
+    float max_iter_count = (ts_reflect_dir.x >= 0 ? (1 - tex_coord.x) / ts_reflect_dir.x : -tex_coord.x / ts_reflect_dir.x);
+    max_iter_count = min(max_iter_count, (ts_reflect_dir.y >= 0 ? (1 - tex_coord.y) / ts_reflect_dir.y : -tex_coord.y / ts_reflect_dir.y));
+    max_iter_count = min(max_iter_count, (ts_reflect_dir.z >= 0 ? (1 - ts_pos.z) / ts_reflect_dir.z : -ts_pos.z / ts_reflect_dir.z));
 
-    //int max_iter_count = int(ts_reflect_dir.x >= 0 ? (1 - tex_coord.x) / ts_reflect_dir.x : -tex_coord.x / ts_reflect_dir.x);
-    //max_iter_count = min(max_iter_count, int(ts_reflect_dir.y >= 0 ? (1 - tex_coord.y) / ts_reflect_dir.y : -tex_coord.y / ts_reflect_dir.y));
-    //max_iter_count = min(max_iter_count, int(ts_reflect_dir.z >= 0 ? (1 - ts_pos.z) / ts_reflect_dir.z : -ts_pos.z / ts_reflect_dir.z));
+    ts_reflect_end_pos = ts_pos + ts_reflect_dir * max_iter_count;
 
-    //ts_reflect_end_pos = ts_pos + ts_reflect_dir * max_iter_count;
+    //if(ts_reflect_dir.x > 0)
+    //{
+    //    float y = (ts_reflect_dir.y / ts_reflect_dir.x) * (1 - ts_pos.x) + ts_pos.y;
+    //    if(y >= 0 && y <= 1)
+    //    {
+    //        ts_reflect_end_pos.y = y;
+    //        ts_reflect_end_pos.x = 1.0f;
+    //    }
+    //    
+    //} 
+    //else if(ts_reflect_dir.x < 0)
+    //{
+    //    float y = (ts_reflect_dir.y / ts_reflect_dir.x) * -ts_pos.x + ts_pos.y;
+    //    if(y >= 0 && y <= 1)
+    //    {
+    //        ts_reflect_end_pos.y = y;
+    //        ts_reflect_end_pos.x = 0.0f;
+    //    }
+    //}
 
-    if(ts_reflect_dir.x > 0)
-    {
-        float y = (ts_reflect_dir.y / ts_reflect_dir.x) * (1 - ts_pos.x) + ts_pos.y;
-        if(y >= 0 && y <= 1)
-        {
-            ts_reflect_end_pos.y = y;
-            ts_reflect_end_pos.x = 1.0f;
-        }
-        
-    } 
-    else if(ts_reflect_dir.x < 0)
-    {
-        float y = (ts_reflect_dir.y / ts_reflect_dir.x) * -ts_pos.x + ts_pos.y;
-        if(y >= 0 && y <= 1)
-        {
-            ts_reflect_end_pos.y = y;
-            ts_reflect_end_pos.x = 0.0f;
-        }
-    }
-
-    if(ts_reflect_dir.y > 0)
-    {
-        float x = (ts_reflect_dir.x / ts_reflect_dir.y) * (1 - ts_pos.y) + ts_pos.x;
-        if(x >= 0 && x <= 1)
-        {
-            ts_reflect_end_pos.x = x;
-            ts_reflect_end_pos.y = 1.0f;
-        }
-    }
-    else if(ts_reflect_dir.y < 0)
-    {
-        float x = (ts_reflect_dir.x / ts_reflect_dir.y) * -ts_pos.y + ts_pos.x;
-        if(x >= 0 && x <= 1)
-        {
-            ts_reflect_end_pos.x = x;
-            ts_reflect_end_pos.y = 0.0f;
-        }
-    }
+    //if(ts_reflect_dir.y > 0)
+    //{
+    //    float x = (ts_reflect_dir.x / ts_reflect_dir.y) * (1 - ts_pos.y) + ts_pos.x;
+    //    if(x >= 0 && x <= 1)
+    //    {
+    //        ts_reflect_end_pos.x = x;
+    //        ts_reflect_end_pos.y = 1.0f;
+    //    }
+    //}
+    //else if(ts_reflect_dir.y < 0)
+    //{
+    //    float x = (ts_reflect_dir.x / ts_reflect_dir.y) * -ts_pos.y + ts_pos.x;
+    //    if(x >= 0 && x <= 1)
+    //    {
+    //        ts_reflect_end_pos.x = x;
+    //        ts_reflect_end_pos.y = 0.0f;
+    //    }
+    //}
 
     vec3 ts_delta_pos = ts_reflect_end_pos - ts_pos;
     vec2 ss_pos = tex_size * tex_coord;
@@ -150,7 +153,9 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     // not sure what this part do
     vec2 ss_delta_pos = ss_reflect_end_pos - ss_pos;
-    int max_distance = int(max(abs(ss_delta_pos.x), abs(ss_delta_pos.y)));
+    int max_distance = int(max(min(abs(ss_delta_pos.x), abs(ss_delta_pos.y)), oout.min_iteration)); // * clamp(resolution, 0, 1);
+    //ts_delta_pos = vec3(ss_delta_pos, ts_reflect_end_pos.z - ts_delta_pos.z) / max(max_distance, 0.001);
+    //ss_delta_pos /= tex_size;
     ts_delta_pos /= max_distance;
 
     vec4 ts_ray_pos = vec4(ts_pos, 0);
@@ -186,7 +191,6 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
             float thickness = ts_ray_pos0.z - depth0;
             hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 1) : hit_index;
         }
-
 
         ts_ray_pos = ts_ray_pos3;
 

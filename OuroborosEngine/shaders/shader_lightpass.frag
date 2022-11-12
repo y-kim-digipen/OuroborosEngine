@@ -19,6 +19,7 @@ layout(set = 1, binding = 0) uniform Test {
     float c3;
     float max_thickness;
     float max_iteration;
+    float min_iteration;
 } oout;
 
 #include "common_light_pass_frag.glsl"
@@ -50,6 +51,7 @@ void main()
         vec4 view_pos = vec4(frag_pos, 1.0f);
         vec2 tex_size = textureSize(posBuffer, 0).xy;
         uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
+        uv.z = roughness;
     }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
@@ -160,6 +162,6 @@ void main()
 
     color += texture(emissiveBuffer, vertexUV).rgb;
 
-    outColor = vec4(color, roughness);
+    outColor = vec4(color, 1.0f);
     outUV = uv;
 }
