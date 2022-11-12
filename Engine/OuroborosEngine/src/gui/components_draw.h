@@ -67,8 +67,12 @@ namespace OE
 			if(ImGui::Button("Gizmo"))
 			{
 				auto gizmo_editing_panel = Engine::gui_manager.TryGetPanel<OE::GUI::GizmoEditor>();
-				assert(gizmo_editing_panel);
-				gizmo_editing_panel->SetSelectedEntity(entID);
+				if(gizmo_editing_panel == nullptr)
+				{
+					bool always_true = true;
+					Engine::gui_manager.RunBehavior({ "ECS", "Edit" }, "Gizmo Editor");
+				}
+				OE::GUI::GizmoEditor::SetSelectedEntity(entID);
 			}
 
 			ImGui::TreePop();

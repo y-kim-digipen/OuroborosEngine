@@ -69,10 +69,12 @@ void OE::GUI::GizmoEditor::Draw()
     ImGui::End();
 }
 
-void OE::GUI::GizmoEditor::SetSelectedEntity(ecs_ID entityID)
+bool OE::GUI::GizmoEditor::SetSelectedEntity(ecs_ID entityID)
 {
 	if(Engine::ecs_manager.GetEntity(entityID).alive)
 	{
 		selected_entity = entityID;
+        return true;
 	}
+    return false;
 }
