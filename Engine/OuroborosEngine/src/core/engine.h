@@ -48,6 +48,8 @@ namespace OE
 		static void CleanUp(){}
 		static void ShutDown() { window->Shutdown(); }
 
+		static void ChangeWindowSize(uint16_t width, uint16_t height);
+
 		static void RegisterEvent(EventFunctionType type, std::function<void()>&& fn)
 		{
 			event_functions[type].push(fn);

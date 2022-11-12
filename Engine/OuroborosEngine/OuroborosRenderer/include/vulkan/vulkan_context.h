@@ -39,6 +39,8 @@ namespace Renderer {
 		void AddAfterEndDeferredEvent(const EventType& f);
 		void AddEndContextEvent(const EventType& f);
 
+		static void ChangeSceneScreenSize(uint16_t width, uint16_t height);
+		static std::pair<uint16_t, uint16_t> GetSceneScreenSize();
 	private:
 		void CreateSurface();
 		void CreateSwapChain();
@@ -48,6 +50,9 @@ namespace Renderer {
 		std::queue<EventType> start_context_events;
 		std::queue<EventType> end_deferred_endframe_events;
 		std::queue<EventType> end_context_events;
+
+		inline static uint16_t scene_screen_size_width;
+		inline static uint16_t scene_screen_size_height;
 	};
 
 }

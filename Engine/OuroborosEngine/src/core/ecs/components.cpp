@@ -22,9 +22,16 @@ void CameraComponent::SyncWithTransformComponent()
 	CalculateMatrices(eye, front, up);
 }
 
+void CameraComponent::SetCameraSize(uint16_t width, uint16_t height)
+{
+	this->width = width;
+	this->height = height;
+	is_modified = true;
+}
+
 void CameraComponent::CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up)
 {
-	perspective_matrix = glm::perspective(fov, width / height, near_plane, far_plane);
+	perspective_matrix = glm::perspective(fov, static_cast<float>(width) / height, near_plane, far_plane);
 	perspective_matrix[1][1] *= -1;
 	view_matrix = glm::lookAt(eye, eye +front, up);
 }

@@ -112,6 +112,7 @@ namespace Renderer
 
 
 			window_data.window = glfwCreateWindow(window_data.width, window_data.height, window_data.title.c_str(), nullptr, nullptr);
+			
 			window_data.RenderContextData = std::make_shared<VulkanContext>(window_data.window);
 			window_data.RenderContextData->Init(1,2);
 			vulkan_imgui_manager.VulkanInit(dynamic_cast<VulkanContext*>(window_data.RenderContextData.get())->GetVulkanType());

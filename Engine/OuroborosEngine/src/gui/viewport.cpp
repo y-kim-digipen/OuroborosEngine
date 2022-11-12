@@ -14,7 +14,11 @@ void OE::GUI::ViewPort::draw_internal()
 {
     const bool fit_to_frame = OE::Engine::gui_manager.GetBehavior({ "System", "Viewport" }, "Fit to frame")->open;
 
-    ImGui::Begin(name.c_str(), &open/*, ImGuiWindowFlags_::ImGuiWindowFlags_NoMouseInputs*/);
+
+    ImGuiWindowFlags flag = ImGuiActivateFlags_None;
+    flag |= ImGuiWindowFlags_NoScrollbar;
+    flag |= ImGuiWindowFlags_NoScrollWithMouse;
+    ImGui::Begin(name.c_str(), &open, flag);
 
     auto context = Engine::window->GetWindowData().RenderContextData;
     auto& texture_manager = context->texture_manager;
@@ -26,10 +30,7 @@ void OE::GUI::ViewPort::draw_internal()
     item_pos_y = ImGui::GetWindowPos().y;
     if(fit_to_frame)
     {
-        glm::vec2 render_size = { Engine::window->GetWidth(), Engine::window->GetHeight() };
-        float aspect_ratio = render_size.y / render_size.x;
-
-        glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x * aspect_ratio };
+        glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x * target_aspect_ratio };
         item_width_x = target_size.x;
         item_height_y = target_size.y;
 
@@ -40,6 +41,11 @@ void OE::GUI::ViewPort::draw_internal()
         ImGui::Image(*TextureID, viewport_size);
         item_width_x = viewport_size.x;
         item_height_y = viewport_size.y;
+
+        if(abs(static_cast<float>(item_height_y) / item_width_x - target_aspect_ratio) > std::numeric_limits<float>::epsilon())
+        {
+            Engine::ChangeWindowSize(item_width_x, item_height_y);
+        }
     }
 
 
@@ -106,12 +112,19 @@ void OE::GUI::ViewPort::draw_gizmo()
 
 }
 
-std::pair<int, int> OE::GUI::ViewPort::GetViewPortPos() const
+std::pair<uint16_t, uint16_t> OE::GUI::ViewPort::GetViewPortPos()
 {
     return std::make_pair(item_pos_x, item_pos_y);
 }
 
-std::pair<int, int> OE::GUI::ViewPort::GetViewPortSize() const
+std::pair<uint16_t, uint16_t> OE::GUI::ViewPort::GetViewPortSize()
 {
     return std::make_pair(item_width_x, item_height_y);
+}
+
+void OE::GUI::ViewPort::SetTargetRenderSize(uint16_t width, uint16_t height)
+{
+    target_render_width = width;
+    target_render_height = height;
+    target_aspect_ratio = static_cast<float>(target_render_height) / target_render_width;
 }

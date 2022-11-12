@@ -4,6 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 
 #include "engine_settings.h"
+#include "../gui/viewport.h"
 #include "../input/InputManager.h"
 
 namespace OE
@@ -111,6 +112,7 @@ namespace OE
 		
 		//Init window
 		window = std::make_unique<Renderer::Window>(Renderer::WindowProperties("Ouroboros Project"));
+		Renderer::VulkanContext::ChangeSceneScreenSize(1600, 900);
 		window->Init();
 		OE::Input::Init();
 		window->vulkan_imgui_manager.Init(GetGLFWWindow());
@@ -126,6 +128,8 @@ namespace OE
 
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
+
+		
 	}
 
 	void Engine::PreUpdate()
@@ -333,6 +337,17 @@ namespace OE
 		window->EndFrame();
 		Input::Update();
 		delta_timer.PostUpdate();
+	}
+
+	void Engine::ChangeWindowSize(uint16_t width, uint16_t height)
+	{
+		GUI::ViewPort::SetTargetRenderSize(width, height);
+		Engine::ecs_manager.ForEntitiesMatching<CameraTransformSyncSignature>(0.f, [width, height](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform, [[maybe_unused]] CameraComponent& camera)
+			{
+				camera.SetCameraSize(width, height);
+			});
+		RegisterEvent(EventFunctionType::END_OF_RENDERER_END_FRAME, std::bind(&Renderer::VulkanContext::ChangeSceneScreenSize, width, height));
+		//Renderer::VulkanContext::ChangeSceneScreenSize(width, height);
 	}
 
 	CameraComponent& Engine::GetActiveCamera()

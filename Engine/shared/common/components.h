@@ -54,7 +54,7 @@ private:
 	glm::mat4 local_transform_matrix { 0.0f };
 };
 
-struct CameraComponent
+struct CameraComponent : public Component
 {
 public:
 	void SyncWithTransformComponent();
@@ -62,11 +62,12 @@ public:
 	glm::mat4 GetPerspectiveMatrix() const { return perspective_matrix; }
 	bool IsUsing() const { return is_main_camera; }
 	void SetUsing(bool use) { is_main_camera = use; }
+	void SetCameraSize(uint16_t width, uint16_t height);
 private:
 	void CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up);
 	glm::mat4 view_matrix;
 	glm::mat4 perspective_matrix;
-	float width = 1600.f, height = 900.f;
+	uint16_t width = 1600.f, height = 900.f;
 	float near_plane = 0.1f, far_plane = 50.f;
 	float fov = glm::pi<float>() * 0.3f;
 

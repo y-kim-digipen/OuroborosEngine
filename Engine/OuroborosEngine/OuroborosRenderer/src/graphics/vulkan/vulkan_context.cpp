@@ -670,6 +670,17 @@ namespace Renderer
         end_context_events.push(f);
     }
 
+    void VulkanContext::ChangeSceneScreenSize(uint16_t width, uint16_t height)
+    {
+        scene_screen_size_width = width;
+        scene_screen_size_height = height;
+    }
+
+    std::pair<uint16_t, uint16_t> VulkanContext::GetSceneScreenSize()
+    {
+        return std::pair<uint16_t, uint16_t>(scene_screen_size_width, scene_screen_size_height);
+    }
+
 
     int CreateInstance(int major, int minor)
     {
@@ -1461,8 +1472,9 @@ namespace Renderer
         {
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
+        auto [x, y] = VulkanContext::GetSceneScreenSize();
 
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, 1600, 900, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, x, y, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
     }
 
     //first rendering
@@ -1498,11 +1510,12 @@ namespace Renderer
 
         vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
+        auto [x, y] = VulkanContext::GetSceneScreenSize();
 
-        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(x, y, 0.f, 1.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
-        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+        VkRect2D scissor = VulkanInitializer::Rect2D(x, y, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 
@@ -1515,8 +1528,9 @@ namespace Renderer
     int CreateOffScreenFrameBuffer()
     {
         //TODO : Chanage magic numbers
-        vulkan_type.deferred_frame_buffer.width = 1600;
-        vulkan_type.deferred_frame_buffer.height = 900;
+        auto [x, y] = VulkanContext::GetSceneScreenSize();
+        vulkan_type.deferred_frame_buffer.width = x;
+        vulkan_type.deferred_frame_buffer.height = y;
 
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.position);
         CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.normal);
@@ -1865,6 +1879,8 @@ namespace Renderer
             throw std::runtime_error("failed to create render pass!");
         }
 
+
+        auto [x, y] = VulkanContext::GetSceneScreenSize();
         for(int idx = 0; idx < size; ++idx)
         {
             std::array<VkImageView, 2> attachments = {
@@ -1876,8 +1892,8 @@ namespace Renderer
             framebuffer_create_info.renderPass = viewport_framebuffer.render_pass;
             framebuffer_create_info.attachmentCount = static_cast<uint32_t>(attachments.size());
             framebuffer_create_info.pAttachments = attachments.data();
-            framebuffer_create_info.width = 1600 ;
-            framebuffer_create_info.height = 900;
+            framebuffer_create_info.width = x ;
+            framebuffer_create_info.height = y;
             framebuffer_create_info.layers = 1;
 
 
@@ -1915,13 +1931,14 @@ namespace Renderer
 
         //TODO : Depth buffer need to implement
 
+        auto [x, y] = VulkanContext::GetSceneScreenSize();
         VkRenderPassBeginInfo render_pass_info{};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         render_pass_info.renderPass = vulkan_type.viewport_frame_buffer.render_pass;
         render_pass_info.framebuffer = vulkan_type.viewport_frame_buffer.frame_buffers[image_index];
 
         render_pass_info.renderArea.offset = { 0,0 };
-        render_pass_info.renderArea.extent = { 1600, 900 };
+        render_pass_info.renderArea.extent = { x, y };
 
         VkClearValue clear_color = {
             {{0.01f,0.01f, 0.01f, 1.f}}
@@ -1938,10 +1955,10 @@ namespace Renderer
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(x, y, 0.f, 1.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
-        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+        VkRect2D scissor = VulkanInitializer::Rect2D(x, y, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 
