@@ -75,7 +75,7 @@ namespace Renderer
     int CreateDeferredDescriptorSetLayout();
     int CreateDeferredCommandBuffer();
     int CreateDeferredSyncObjects();
-
+    int CleanUpDeferredFramebufferAndRenderPass();
 
     //For Viewport Rendering
     int CreateViewportImage();
@@ -143,6 +143,7 @@ namespace Renderer
         CreateDeferredDescriptorSetLayout();
         CreateDeferredShader();
         SetupDescriptorSet();
+
 
         CreateViewportImage();
         CreateViewportFramebuffer();
@@ -347,6 +348,10 @@ namespace Renderer
         CreateSwapchainImageView();
         CreateRenderPass();
         CreateFrameBuffers();
+        CleanUpDeferredFramebufferAndRenderPass();
+        CreateOffScreenFrameBuffer();
+        CreateViewportImage();
+        CreateViewportFramebuffer();
 
     }
 
@@ -1181,10 +1186,10 @@ namespace Renderer
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-    	VkViewport viewport = VulkanInitializer::ViewPort(1600, 900, 0.f, 1.f);
+    	VkViewport viewport = VulkanInitializer::ViewPort(vulkan_type.swapchain.extent.width, vulkan_type.swapchain.extent.height, 0.f, 1.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
-        VkRect2D scissor = VulkanInitializer::Rect2D(1600, 900, 0, 0);
+        VkRect2D scissor = VulkanInitializer::Rect2D(vulkan_type.swapchain.extent.width, vulkan_type.swapchain.extent.height, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 
@@ -1249,6 +1254,8 @@ namespace Renderer
         {
             vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
         }
+
+   
 
   /*      for (auto& frame : vulkan_type.frame_data)
         {
@@ -1455,7 +1462,7 @@ namespace Renderer
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
 
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, vulkan_type->swapchain.extent.width, vulkan_type->swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, 1600, 900, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
     }
 
     //first rendering
@@ -1729,6 +1736,36 @@ namespace Renderer
         return 0;
     }
 
+    int CleanUpDeferredFramebufferAndRenderPass()
+    {
+        vkDestroyFramebuffer(vulkan_type.device.handle, vulkan_type.deferred_frame_buffer.frame_buffer, nullptr);
+
+        for (auto& framebuffer : vulkan_type.viewport_frame_buffer.frame_buffers)
+        {
+            vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
+        }
+
+
+        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.deferred_frame_buffer.render_pass, nullptr);
+        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.viewport_frame_buffer.render_pass, nullptr);
+
+
+        for(auto& image : vulkan_type.viewport_frame_buffer.viewport_vulkan_images)
+        {
+			DestroyImage(&vulkan_type, &image);
+        }
+
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.metalic_roughness_ao);
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.position);
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.albedo);
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.depth);
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.normal);
+        DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.emissive);
+      
+
+        return 0;
+    }
+
     int CreateViewportImage()
     {
         auto& viewport_framebuffer = vulkan_type.viewport_frame_buffer;
@@ -1839,8 +1876,8 @@ namespace Renderer
             framebuffer_create_info.renderPass = viewport_framebuffer.render_pass;
             framebuffer_create_info.attachmentCount = static_cast<uint32_t>(attachments.size());
             framebuffer_create_info.pAttachments = attachments.data();
-            framebuffer_create_info.width = vulkan_type.swapchain.extent.width;
-            framebuffer_create_info.height = vulkan_type.swapchain.extent.height;
+            framebuffer_create_info.width = 1600 ;
+            framebuffer_create_info.height = 900;
             framebuffer_create_info.layers = 1;
 
 
@@ -1884,7 +1921,7 @@ namespace Renderer
         render_pass_info.framebuffer = vulkan_type.viewport_frame_buffer.frame_buffers[image_index];
 
         render_pass_info.renderArea.offset = { 0,0 };
-        render_pass_info.renderArea.extent = vulkan_type.swapchain.extent;
+        render_pass_info.renderArea.extent = { 1600, 900 };
 
         VkClearValue clear_color = {
             {{0.01f,0.01f, 0.01f, 1.f}}

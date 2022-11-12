@@ -125,10 +125,10 @@ namespace OE
 
 			if (shader_map.contains(shader_component.name)) {
 
-				if (ImGui::Button("Reload"))
+			/*	if (ImGui::Button("Reload"))
 				{
 					Engine::RegisterEvent(Engine::PRE, std::bind(&Renderer::VulkanShader::Reload, shader));
-				}
+				}*/
 
 				for (auto& member_variable : shader->binding_block_members) {
 					bool is_changed = false;
