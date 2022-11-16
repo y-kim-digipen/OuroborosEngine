@@ -41,6 +41,7 @@ namespace Renderer {
 
 		static void ChangeSceneScreenSize(uint16_t width, uint16_t height);
 		static std::pair<uint16_t, uint16_t> GetSceneScreenSize();
+		static std::pair<uint16_t, uint16_t> GetPastSceneScreenSize();
 	private:
 		void CreateSurface();
 		void CreateSwapChain();
@@ -53,6 +54,9 @@ namespace Renderer {
 
 		inline static uint16_t scene_screen_size_width;
 		inline static uint16_t scene_screen_size_height;
+
+		inline static uint16_t past_scene_screen_size_width;
+		inline static uint16_t past_scene_screen_size_height;
 	};
 
 }

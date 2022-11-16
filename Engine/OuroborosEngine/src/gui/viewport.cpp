@@ -30,7 +30,7 @@ void OE::GUI::ViewPort::draw_internal()
     item_pos_y = ImGui::GetWindowPos().y;
     if(fit_to_frame)
     {
-        glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x * target_aspect_ratio };
+        glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x / target_aspect_ratio };
         item_width_x = target_size.x;
         item_height_y = target_size.y;
 
@@ -125,6 +125,6 @@ std::pair<uint16_t, uint16_t> OE::GUI::ViewPort::GetViewPortSize()
 void OE::GUI::ViewPort::SetTargetRenderSize(uint16_t width, uint16_t height)
 {
     target_render_width = width;
-    target_render_height = height;
-    target_aspect_ratio = static_cast<float>(target_render_height) / target_render_width;
+    target_render_height = height; 
+    target_aspect_ratio = static_cast<float>(target_render_width) / target_render_height;
 }

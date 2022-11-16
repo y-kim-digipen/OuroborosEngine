@@ -346,19 +346,76 @@ namespace Renderer
         CleanupSwapChain();
         CreateSwapChain();
         CreateSwapchainImageView();
-        CreateRenderPass();
+        //CreateRenderPass();
         CreateFrameBuffers();
         CleanUpDeferredFramebufferAndRenderPass();
         CreateOffScreenFrameBuffer();
         CreateViewportImage();
         CreateViewportFramebuffer();
+        
 
+        auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
+        VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+        lightpass_set_.AddBinding(0, &tex_descriptor_position).
+            AddBinding(1, &tex_descriptor_normal).
+            AddBinding(2, &tex_descriptor_albedo).
+            AddBinding(3, &tex_descriptor_emissive).
+            AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+        //lightpass_set_.Build();
+        //SetupDescriptorSet();
+        
     }
 
     
 
     int VulkanContext::BeginFrame()
     {
+        if(scene_screen_size_width != past_scene_screen_size_width || scene_screen_size_height != past_scene_screen_size_height )
+        {
+            vkDeviceWaitIdle(vulkan_type.device.handle);
+            CleanUpDeferredFramebufferAndRenderPass();
+
+            CreateOffScreenFrameBuffer();
+            CreateViewportImage();
+            CreateViewportFramebuffer();
+            //SetupDescriptorSet();
+            auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
+            shader->ShutDown();
+            CreateDeferredShader();
+            auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
+            VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        	VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+            std::vector<VkWriteDescriptorSet> write_descriptor_sets;
+        	write_descriptor_sets =
+            {
+                VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,1, &tex_descriptor_position),
+                VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,2, &tex_descriptor_normal),
+                VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,3, &tex_descriptor_albedo),
+                VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,4, &tex_descriptor_emissive),
+                VulkanInitializer::WriteDescriptorSet(deferred_framebuffer.descriptor_set,VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 5, &tex_descriptor_metalic_roughness_ao),
+            };
+
+
+            vkUpdateDescriptorSets(vulkan_type.device.handle, static_cast<uint32_t>(write_descriptor_sets.size()), write_descriptor_sets.data(), 0, nullptr);
+
+            lightpass_set_.AddBinding(0, &tex_descriptor_position).
+                AddBinding(1, &tex_descriptor_normal).
+                AddBinding(2, &tex_descriptor_albedo).
+                AddBinding(3, &tex_descriptor_emissive).
+                AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+            past_scene_screen_size_width = scene_screen_size_width;
+            past_scene_screen_size_height = scene_screen_size_height;
+        }
+
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
         VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
 
@@ -679,6 +736,11 @@ namespace Renderer
     std::pair<uint16_t, uint16_t> VulkanContext::GetSceneScreenSize()
     {
         return std::pair<uint16_t, uint16_t>(scene_screen_size_width, scene_screen_size_height);
+    }
+
+    std::pair<uint16_t, uint16_t> VulkanContext::GetPastSceneScreenSize()
+    {
+        return std::pair<uint16_t, uint16_t>(past_scene_screen_size_width, past_scene_screen_size_height);
     }
 
 
@@ -1273,7 +1335,7 @@ namespace Renderer
             vkFreeCommandBuffers(vulkan_type.device.handle, vulkan_type.command_pool, 1, &frame.command_buffer);
         }*/
 
-        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
+        //vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
 
         DestroyImage(&vulkan_type, &vulkan_type.swapchain.depth_image);
 
@@ -1474,7 +1536,8 @@ namespace Renderer
         }
         auto [x, y] = VulkanContext::GetSceneScreenSize();
 
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, x, y, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
+        auto& swapchain = vulkan_type->swapchain;
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, swapchain.extent.width, swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
     }
 
     //first rendering
@@ -1484,7 +1547,7 @@ namespace Renderer
          auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
 
 
-
+         auto& swapchain_extent = vulkan_type.swapchain.extent;
         VkCommandBufferBeginInfo command_buffer_begin_info = VulkanInitializer::CommandBufferBeginInfo();
         std::array<VkClearValue, 6> clear_values;
         clear_values[0].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
@@ -1499,23 +1562,22 @@ namespace Renderer
         VkRenderPassBeginInfo render_pass_begin_info = VulkanInitializer::RenderPassBeginInfo();
         render_pass_begin_info.renderPass  = deferred_frame_buffer.render_pass;
         render_pass_begin_info.framebuffer = deferred_frame_buffer.frame_buffer;
-        render_pass_begin_info.renderArea.extent.width = deferred_frame_buffer.width;
-        render_pass_begin_info.renderArea.extent.height = deferred_frame_buffer.height;
+        render_pass_begin_info.renderArea.extent.width = swapchain_extent.width;
+        render_pass_begin_info.renderArea.extent.height = swapchain_extent.height;
     	render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
         render_pass_begin_info.pClearValues = clear_values.data();
 
-
-
+     
         VK_CHECK(vkBeginCommandBuffer(frame_data.command_buffer, &command_buffer_begin_info));
 
         vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
-        auto [x, y] = VulkanContext::GetSceneScreenSize();
+        auto [x, y] = VulkanContext::GetPastSceneScreenSize();
 
-        VkViewport viewport = VulkanInitializer::ViewPort(x, y, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(swapchain_extent.width, swapchain_extent.height, 0.f, 1.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
-        VkRect2D scissor = VulkanInitializer::Rect2D(x, y, 0, 0);
+        VkRect2D scissor = VulkanInitializer::Rect2D(swapchain_extent.width, swapchain_extent.height, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 
@@ -1529,6 +1591,8 @@ namespace Renderer
     {
         //TODO : Chanage magic numbers
         auto [x, y] = VulkanContext::GetSceneScreenSize();
+
+        auto& swap_chain_size = vulkan_type.swapchain.extent;
         vulkan_type.deferred_frame_buffer.width = x;
         vulkan_type.deferred_frame_buffer.height = y;
 
@@ -1622,6 +1686,7 @@ namespace Renderer
         std::array<VkImageView, 6> attachments;
 
         auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
+        auto& swapchain = vulkan_type.swapchain;
 
         attachments[0] = deferred_framebuffer.position.image_view;
         attachments[1] = deferred_framebuffer.normal.image_view;
@@ -1636,12 +1701,12 @@ namespace Renderer
         framebuffer_create_info.renderPass      = deferred_framebuffer.render_pass;
         framebuffer_create_info.pAttachments    = attachments.data();
         framebuffer_create_info.attachmentCount = static_cast<uint32_t>(attachments.size());
-        framebuffer_create_info.width           = deferred_framebuffer.width;
-        framebuffer_create_info.height          = deferred_framebuffer.height;
+        framebuffer_create_info.width           = swapchain.extent.width;
+        framebuffer_create_info.height          = swapchain.extent.height;
         framebuffer_create_info.layers          = 1;
 
         VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &deferred_framebuffer.frame_buffer));
-
+        
         VkSamplerCreateInfo sampler_create_info = VulkanInitializer::SamplerCreateInfo();
         sampler_create_info.magFilter = VK_FILTER_NEAREST;
         sampler_create_info.minFilter = VK_FILTER_NEAREST;
@@ -1669,6 +1734,7 @@ namespace Renderer
 
     	auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
 
+        
         VkDescriptorImageInfo tex_descriptor_position             = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_normal               = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_albedo               = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -1762,13 +1828,14 @@ namespace Renderer
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.deferred_frame_buffer.render_pass, nullptr);
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.viewport_frame_buffer.render_pass, nullptr);
+        
 
-
+    	vkDestroySampler(vulkan_type.device.handle, vulkan_type.viewport_frame_buffer.color_sampler, nullptr);
         for(auto& image : vulkan_type.viewport_frame_buffer.viewport_vulkan_images)
         {
 			DestroyImage(&vulkan_type, &image);
         }
-
+        vkDestroySampler(vulkan_type.device.handle, vulkan_type.deferred_frame_buffer.color_sampler, nullptr);
         DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.metalic_roughness_ao);
         DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.position);
         DestroyImage(&vulkan_type, &vulkan_type.deferred_frame_buffer.albedo);
@@ -1879,8 +1946,7 @@ namespace Renderer
             throw std::runtime_error("failed to create render pass!");
         }
 
-
-        auto [x, y] = VulkanContext::GetSceneScreenSize();
+        auto& swapchain = vulkan_type.swapchain;
         for(int idx = 0; idx < size; ++idx)
         {
             std::array<VkImageView, 2> attachments = {
@@ -1892,8 +1958,8 @@ namespace Renderer
             framebuffer_create_info.renderPass = viewport_framebuffer.render_pass;
             framebuffer_create_info.attachmentCount = static_cast<uint32_t>(attachments.size());
             framebuffer_create_info.pAttachments = attachments.data();
-            framebuffer_create_info.width = x ;
-            framebuffer_create_info.height = y;
+            framebuffer_create_info.width = swapchain.extent.width;
+            framebuffer_create_info.height = swapchain.extent.height;
             framebuffer_create_info.layers = 1;
 
 
@@ -1931,14 +1997,18 @@ namespace Renderer
 
         //TODO : Depth buffer need to implement
 
-        auto [x, y] = VulkanContext::GetSceneScreenSize();
+        auto [x, y] = VulkanContext::GetPastSceneScreenSize();
+
+
+
+        auto& swap_chain_size = vulkan_type.swapchain.extent;
         VkRenderPassBeginInfo render_pass_info{};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         render_pass_info.renderPass = vulkan_type.viewport_frame_buffer.render_pass;
         render_pass_info.framebuffer = vulkan_type.viewport_frame_buffer.frame_buffers[image_index];
 
         render_pass_info.renderArea.offset = { 0,0 };
-        render_pass_info.renderArea.extent = { x, y };
+        render_pass_info.renderArea.extent = { swap_chain_size.width, swap_chain_size.height };
 
         VkClearValue clear_color = {
             {{0.01f,0.01f, 0.01f, 1.f}}
@@ -1954,11 +2024,13 @@ namespace Renderer
 
         vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
 
+
+
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        VkViewport viewport = VulkanInitializer::ViewPort(x, y, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(swap_chain_size.width, swap_chain_size.height, 0.f, 1.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
-        VkRect2D scissor = VulkanInitializer::Rect2D(x, y, 0, 0);
+        VkRect2D scissor = VulkanInitializer::Rect2D(swap_chain_size.width, swap_chain_size.height, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
 

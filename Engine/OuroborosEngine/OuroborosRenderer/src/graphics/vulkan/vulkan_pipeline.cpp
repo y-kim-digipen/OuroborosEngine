@@ -17,6 +17,13 @@ namespace Renderer
         color_blend_state_create_info.logicOp           = VK_LOGIC_OP_COPY;
         color_blend_state_create_info.attachmentCount   = color_blend_attachments.size();
         color_blend_state_create_info.pAttachments      = color_blend_attachments.data();
+        VkPipelineDynamicStateCreateInfo dynamic_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO };
+        VkDynamicState dynamic_states[] = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+        };
+        dynamic_state_create_info.dynamicStateCount = sizeof(dynamic_states) / sizeof(VkDynamicState);
+        dynamic_state_create_info.pDynamicStates = dynamic_states;
 
         VkGraphicsPipelineCreateInfo pipeline_create_info{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
         pipeline_create_info.stageCount           = static_cast<uint32_t>(shader_stage_create_infos.size());
@@ -32,7 +39,8 @@ namespace Renderer
         pipeline_create_info.subpass              = 0;
         pipeline_create_info.basePipelineHandle   = VK_NULL_HANDLE;
         pipeline_create_info.pDepthStencilState   = &depth_stencil;
-           
+        pipeline_create_info.pDynamicState        = &dynamic_state_create_info;
+
         VkPipeline new_pipeline;
 
         if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipeline_create_info, nullptr, &new_pipeline) != VK_SUCCESS) 
