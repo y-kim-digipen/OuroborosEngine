@@ -65,15 +65,6 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 view_to_screen(vec3 view_pos, vec2 tex_size) {
-
-    vec4 clip_space = global_ubo.projection * vec4(view_pos, 1.0f);
-    clip_space.xyz /= clip_space.w;
-    vec3 screen_pos = vec3((clip_space.xy * 0.5f + 0.5f) * tex_size, 1.0f);
-    screen_pos.z = texture(posBuffer, screen_pos.xy).z;
-
-    return screen_pos;
-}
 
 // frag pos, normal are on the view space
 vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
@@ -91,7 +82,7 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
     cs_reflect_end_pos /= cs_reflect_end_pos.w;
 
     vec4 cs_pos = global_ubo.projection * view_pos;
-    cs_pos /= cs_pos.w;
+    cs_pos /= cs_pos.w; // REVERSE DEPTH [1:0]
 
     //vec3 ts_pos_test_if_same;
     //ts_pos_test_if_same = vec3(cs_pos.xy * 0.5f + vec2(0.5f), texture(normalBuffer, tex_coord).w);
@@ -99,7 +90,7 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
     vec3 ts_reflect_dir = normalize(cs_reflect_end_pos.xyz - cs_pos.xyz);
     ts_reflect_dir.xy *= 0.5f;
 
-    vec3 ts_pos = vec3(tex_coord, texture(normalBuffer, tex_coord).w);
+    vec3 ts_pos = vec3(cs_pos.xy * vec2(0.5f) + vec2(0.5f), cs_pos.z);
     vec3 ts_reflect_end_pos = vec3(cs_reflect_end_pos.xy * 0.5f + vec2(0.5f), cs_reflect_end_pos.z);
 
     float max_iter_count = (ts_reflect_dir.x >= 0 ? (1 - tex_coord.x) / ts_reflect_dir.x : -tex_coord.x / ts_reflect_dir.x);
@@ -108,54 +99,13 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     ts_reflect_end_pos = ts_pos + ts_reflect_dir * max_iter_count;
 
-    //if(ts_reflect_dir.x > 0)
-    //{
-    //    float y = (ts_reflect_dir.y / ts_reflect_dir.x) * (1 - ts_pos.x) + ts_pos.y;
-    //    if(y >= 0 && y <= 1)
-    //    {
-    //        ts_reflect_end_pos.y = y;
-    //        ts_reflect_end_pos.x = 1.0f;
-    //    }
-    //    
-    //} 
-    //else if(ts_reflect_dir.x < 0)
-    //{
-    //    float y = (ts_reflect_dir.y / ts_reflect_dir.x) * -ts_pos.x + ts_pos.y;
-    //    if(y >= 0 && y <= 1)
-    //    {
-    //        ts_reflect_end_pos.y = y;
-    //        ts_reflect_end_pos.x = 0.0f;
-    //    }
-    //}
-
-    //if(ts_reflect_dir.y > 0)
-    //{
-    //    float x = (ts_reflect_dir.x / ts_reflect_dir.y) * (1 - ts_pos.y) + ts_pos.x;
-    //    if(x >= 0 && x <= 1)
-    //    {
-    //        ts_reflect_end_pos.x = x;
-    //        ts_reflect_end_pos.y = 1.0f;
-    //    }
-    //}
-    //else if(ts_reflect_dir.y < 0)
-    //{
-    //    float x = (ts_reflect_dir.x / ts_reflect_dir.y) * -ts_pos.y + ts_pos.x;
-    //    if(x >= 0 && x <= 1)
-    //    {
-    //        ts_reflect_end_pos.x = x;
-    //        ts_reflect_end_pos.y = 0.0f;
-    //    }
-    //}
-
     vec3 ts_delta_pos = ts_reflect_end_pos - ts_pos;
-    vec2 ss_pos = tex_size * tex_coord;
+    vec2 ss_pos = tex_size * ts_pos.xy;
     vec2 ss_reflect_end_pos = tex_size * ts_reflect_end_pos.xy;
 
     // not sure what this part do
     vec2 ss_delta_pos = ss_reflect_end_pos - ss_pos;
-    int max_distance = int(max(min(abs(ss_delta_pos.x), abs(ss_delta_pos.y)), oout.min_iteration)); // * clamp(resolution, 0, 1);
-    //ts_delta_pos = vec3(ss_delta_pos, ts_reflect_end_pos.z - ts_delta_pos.z) / max(max_distance, 0.001);
-    //ss_delta_pos /= tex_size;
+    int max_distance = int(max(max(abs(ss_delta_pos.x), abs(ss_delta_pos.y)), oout.min_iteration)); // * clamp(resolution, 0, 1);
     ts_delta_pos /= max_distance;
 
     vec4 ts_ray_pos = vec4(ts_pos, 0);
@@ -174,6 +124,9 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
         float depth1 = texture(normalBuffer, ts_ray_pos1.xy).w;
         float depth2 = texture(normalBuffer, ts_ray_pos2.xy).w;
         float depth3 = texture(normalBuffer, ts_ray_pos3.xy).w;
+
+        if(depth0 == 0.0f)
+            break;
 
         {
             float thickness = ts_ray_pos3.z - depth3;

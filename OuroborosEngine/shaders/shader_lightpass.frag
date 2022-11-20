@@ -24,8 +24,6 @@ layout(set = 1, binding = 0) uniform Test {
 
 #include "common_light_pass_frag.glsl"
 
-
-
 float CalculateAttenuation(float c1, float c2, float c3, float dist)
 {
     return min(1.f/(c1 + c2 * dist + c3 * dist * dist), 1.f);

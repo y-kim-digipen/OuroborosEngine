@@ -143,8 +143,8 @@ namespace Renderer
 		info.depthWriteEnable = b_depth_write ? VK_TRUE : VK_FALSE;
 		info.depthCompareOp = b_depth_test ? compare_op : VK_COMPARE_OP_ALWAYS;
 		info.depthBoundsTestEnable = VK_FALSE;
-		info.minDepthBounds = 1.0f; // Optional
-		info.maxDepthBounds = 0.0f; // Optional
+		info.minDepthBounds = 0.0f; // Optional
+		info.maxDepthBounds = 1.0f; // Optional
 		info.stencilTestEnable = VK_FALSE;
 
 		return info;

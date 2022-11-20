@@ -34,50 +34,6 @@ void main()
     else
     {
         result = mix(color, reflected_color, roughness);
-        vec2 tex_size = 1.0f / textureSize(color_buffer, 0).xy;
-
-        {
-            vec2 offset = vec2(-1, 1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(0, 1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(1, 1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(-1, 0) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(1, 0) * tex_size;
-
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(-1, -1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(0, -1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        {
-            vec2 offset = vec2(1, -1) * tex_size;
-            result += get_output_color(vertexUV + offset);
-        }
-
-        result /= 9.0f;
     }
 
     outColor = result;
