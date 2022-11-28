@@ -32,7 +32,7 @@ YAML::Node _deserialize(YAML::Node node, T& material_data, void*)
 	else
 	{
 		Shared::PBR_NONE_TEXTURE& non_texture = *material.pbr_mat.structure.non_texture;
-		node["albedo"] >> non_texture.albedo;
+		//node["albedo"] >> non_texture.albedo;
 		++itr;
 		non_texture.metallic = itr++->second.as<float>();
 		non_texture.roughness = itr++->second.as<float>();

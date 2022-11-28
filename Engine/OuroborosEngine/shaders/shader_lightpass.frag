@@ -1,9 +1,15 @@
 #version 450
 
-#include "common_light_pass_frag.glsl"
-
 layout(location = 0) out vec4 outColor;
-layout(location = 1) in vec3 cam_pos;
+layout(location = 1) out vec4 outUV;
+
+layout(set = 0, binding = 0) uniform global_data {
+    mat4 projection;
+    mat4 view;
+    vec3 cam_pos;
+    mat4 inv_view;
+} global_ubo;
+
 float test_att = 0.1;
 
 layout(set = 1, binding = 0) uniform Test {
@@ -11,12 +17,18 @@ layout(set = 1, binding = 0) uniform Test {
     float c1;
     float c2;
     float c3;
+    float max_thickness;
+    float max_iteration;
+    float min_iteration;
 } oout;
+
+#include "common_light_pass_frag.glsl"
 
 float CalculateAttenuation(float c1, float c2, float c3, float dist)
 {
     return min(1.f/(c1 + c2 * dist + c3 * dist * dist), 1.f);
 }
+
 void main()
 {
     vec3 Lo = vec3(0);
@@ -28,10 +40,17 @@ void main()
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(cam_pos - frag_pos);
+    vec3 V = normalize(frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
-
+    vec4 uv = vec4(0.0f);
+    if(metallic > 0.01f) 
+    {
+        vec4 view_pos = vec4(frag_pos, 1.0f);
+        vec2 tex_size = textureSize(viewPosBuffer, 0).xy;
+        uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
+        uv.z = roughness;
+    }
 
     for(int i = 0; i < light_ubo.num_lights; ++i) 
     {
@@ -41,17 +60,17 @@ void main()
         const vec3 light_dir    = normalize(light.dir);
         const int  light_type   = light.type;
 
-        vec3 L;
+        vec3 L; // light to fragment vector
         float att, d;
 
-        if(light_type == 2){
-            L = -normalize(light_dir);
+        if(light_type == DIRECTIONAL_LIGHT){
+            L = normalize(-light_dir);
             // att = 10;
         }
         else{
             vec3 relative_vec = light_pos - frag_pos;
             d = length(relative_vec);
-            L = relative_vec / d;
+            L = normalize(relative_vec);
             // att = 1 / (oout.att * oout.att);
         
             att =  CalculateAttenuation(oout.c1, oout.c2, oout.c3, d);
@@ -60,24 +79,21 @@ void main()
 
         //Variables for for PBR
         vec3 H  = normalize(L + V);
-        float D = DistributionGGX(N, H, roughness);
-
         vec3 F0 = vec3(0.04f);
         F0      = mix(F0, albedo, metallic);
         vec3 F  = FresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 
         float NDF   = DistributionGGX(N, H, roughness);
 
-        vec3 wi = normalize(light_pos - V);
-        vec3 radiance = att * light.diffuse * max(dot(N, wi), 0.f);
+        vec3 radiance = att * light.diffuse * clamp(dot(N, L), 0.0f, 1.0f);
 
         switch(light_type)
         {
-            case 0: // point light
+            case POINT_LIGHT: // point light
             {
                 break;
             }
-            case 1: // spot light
+            case SPOT_LIGHT: // spot light
             {
                 const float cos_phi             = cos(radians(light.out_cutoff));
                 const float cos_theta           = cos(radians(light.cutoff));
@@ -107,7 +123,7 @@ void main()
                 radiance *= spot_light_effect;
                 break;
             }
-            case 2: // directional light
+            case DIRECTIONAL_LIGHT: // directional light
             {
                 radiance = light.diffuse ;
                 break;
@@ -134,12 +150,13 @@ void main()
         Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.03) * albedo * ao * 0.1f;
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
-    
-    outColor = vec4(color, 1.0);
+
+    outColor = vec4(color, 1.0f);
+    outUV = uv;
 }

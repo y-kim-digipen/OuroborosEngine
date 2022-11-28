@@ -23,7 +23,6 @@ struct Light
 	int light_type;
 };
 
-
 layout(set = 0, binding = 1) uniform light_data {
     Light lights[20];
     int num_lights;
@@ -49,7 +48,6 @@ layout(set = 2, binding = 0) uniform Material
 
 layout(set = 2, binding = 1) uniform sampler2D texture1;
 
-
 vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
 {
     vec3 lightDir = normalize(-lig.direction);
@@ -65,7 +63,6 @@ vec3 DirLight(Light lig, vec3 normal, vec3 fragposition,vec3 viewDir)
     vec3 diffuse  = lig.diffuse * diff * material.diffuse;
     return (ambient + diffuse + specular);
 }
-
 
 void main() 
 {

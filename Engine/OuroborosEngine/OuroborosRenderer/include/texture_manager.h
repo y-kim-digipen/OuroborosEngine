@@ -3,6 +3,8 @@
 #include <string>
 
 #include <common/assets.h>
+#include <memory>
+#include <unordered_map>
 
 namespace Renderer
 {

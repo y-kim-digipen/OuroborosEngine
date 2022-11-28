@@ -33,6 +33,7 @@ namespace Renderer
 		VulkanTextureManager(VulkanType* vulkan_type);
 		int AddTexture(const std::string& name, const Asset::Image& image) override;
 		int DeleteTexture(const std::string& name) override;
+		int Cleanup() override;
 
 		VulkanTextureImguiDescriptorPool vulkan_texture_imgui_descriptor_pool;
 	private:

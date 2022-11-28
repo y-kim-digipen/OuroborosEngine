@@ -32,7 +32,7 @@ namespace Renderer
 	}
 
 
-	int VulkanMeshManager::DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix)
+	int VulkanMeshManager::DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat4& normal_matrix)
 	{
 		if (auto mesh_iter = mesh_map.find(mesh_name); mesh_iter != mesh_map.end())
 		{

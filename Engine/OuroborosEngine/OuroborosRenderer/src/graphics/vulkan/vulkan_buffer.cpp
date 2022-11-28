@@ -18,6 +18,32 @@ namespace Renderer
 
 		
 		VkResult result = vmaCreateBuffer(vulkan_type->allocator, &buffer_create_info, &vma_allocation_create_info, &buffer, &allocation, nullptr);
+
+//Austyn Park (debug memory leak)
+// Must disable VMA_DEBUG_LOG in vk_mem_alloc.h
+#if defined(_DEBUG) 
+		switch (buffer_usage)
+		{
+		case VK_BUFFER_USAGE_TRANSFER_SRC_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, allocation, "transfer_src");
+			break;
+		case VK_BUFFER_USAGE_TRANSFER_DST_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, allocation, "transfer_dst");
+			break;
+		case VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, allocation, "uniform");
+			break;
+		case VK_BUFFER_USAGE_INDEX_BUFFER_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, allocation, "index");
+			break;
+		case VK_BUFFER_USAGE_VERTEX_BUFFER_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, allocation, "vertex");
+			break;
+		default:
+			break;
+		}
+#endif
+
 		if(result != VK_SUCCESS)
 		{
 			//Error handling
@@ -125,6 +151,8 @@ namespace Renderer
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
 		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
+
+		staging_buffer->Cleanup();
 	}
 
 	VulkanVertexBuffer::~VulkanVertexBuffer()
@@ -165,6 +193,7 @@ namespace Renderer
 		staging_buffer->UploadData((int*)vertices.data(), buffer_size);
 
 		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
+		staging_buffer->Cleanup();
 	}
 
 	void VulkanVertexBuffer::Cleanup()
@@ -187,6 +216,7 @@ namespace Renderer
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
 		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
+		staging_buffer->Cleanup();
 	}
 
 	VulkanIndexBuffer::~VulkanIndexBuffer()
@@ -234,6 +264,7 @@ namespace Renderer
 		staging_buffer->UploadData((int*)data.data(), buffer_size);
 
 		buffer->CopyBuffer(vulkan_type->device.graphics_queue, staging_buffer.get(), 0);
+		staging_buffer->Cleanup();
 	}
 
 
@@ -267,6 +298,7 @@ namespace Renderer
 	{
 		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 			if (buffer[i] != nullptr)
+				buffer[i]->Cleanup();
 				buffer[i].reset();
 		}
 	}

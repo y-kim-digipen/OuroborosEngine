@@ -8,7 +8,7 @@ YAML::Emitter& _serialize(YAML::Emitter& emitter, T& material_data, void*)
 	if (!use_texture)
 	{
 		Shared::PBR_NONE_TEXTURE& non_texture = *material_data.pbr_mat.structure.non_texture;
-		emitter << YAML::Key << "albedo" << YAML::Value << non_texture.albedo;
+		//emitter << YAML::Key << "albedo" << YAML::Value << non_texture.albedo;
 		emitter << YAML::Key << "metallic" << YAML::Value << non_texture.metallic;
 		emitter << YAML::Key << "roughness" << YAML::Value << non_texture.roughness;
 		emitter << YAML::Key << "ao" << YAML::Value << non_texture.ao;

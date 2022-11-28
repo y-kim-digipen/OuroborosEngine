@@ -4,6 +4,8 @@
 #include <common/assets.h>
 #include <glm/vec3.hpp>
 #include <array>
+#include <memory>
+
 namespace OE
 {
     namespace GUI

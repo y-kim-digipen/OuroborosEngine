@@ -34,11 +34,27 @@ namespace OE
 					Asset::CameraData camera_data;
 					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(&main_camera)).GetPosition();
 					camera_data.view = main_camera.GetViewMatrix();
+					camera_data.inv_view = glm::inverse(glm::transpose(camera_data.view));
 					camera_data.projection = main_camera.GetPerspectiveMatrix();
-					//camera.data.projection = glm::perspective(glm::radians(45.0f), static_cast<float>(window->GetWidth()) / window->GetHeight(), 0.1f, 100.0f);
-					//camera.data.projection[1][1] *= -1;
-					//camera.data.view = camera.GetCameraMat();
-				
+
+					glm::vec4 world_pos = glm::vec4(0.0f, 0.0f, 4.9f, 1.0f);
+					world_pos = camera_data.view* world_pos;
+					world_pos = camera_data.projection * world_pos;
+					world_pos /= world_pos.w;
+
+					glm::vec4 world_pos2 = glm::vec4(0.0f, 0.0f, -45.0f, 1.0f);
+					world_pos2 = camera_data.view * world_pos2;
+					world_pos2 = camera_data.projection * world_pos2;
+					world_pos2 /= world_pos2.w;
+
+					glm::vec4 view_pos = glm::vec4(0.0f, 0.0f, -50.f, 1.0f);
+					view_pos = camera_data.projection * view_pos;
+					view_pos /= view_pos.w;
+
+					view_pos = glm::vec4(0.0f, 0.0f, -0.1f, 1.0f);
+					view_pos = camera_data.projection * view_pos;
+					view_pos /= view_pos.w;
+
 					//TODO: pass renderer camera data
 					context->global_data = camera_data;
 

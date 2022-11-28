@@ -101,8 +101,13 @@ namespace Renderer
 	{
 		if (auto iter = light_map.find(entity_id); iter != light_map.end())
 		{
+			uint32_t index = light_map[entity_id];
+
 			//global_data.lights[light_map[entity_id]] = *light_component;
-			memcpy_s(&light_data.lights[light_map[entity_id]], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			memcpy_s(&light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			// transform light pos, direction to view space
+			light_data.lights[index].pos = glm::vec3(global_data.view * glm::vec4(light_data.lights[index].pos, 1.0f));
+			light_data.lights[index].dir = glm::normalize(global_data.inv_view * glm::vec4(light_data.lights[index].dir, 0.0f));
 		}
 	}
 

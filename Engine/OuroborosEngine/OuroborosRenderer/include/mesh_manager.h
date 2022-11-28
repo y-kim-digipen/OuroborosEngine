@@ -19,7 +19,7 @@ namespace Renderer
 		VulkanMeshManager(VulkanType* vulkan_type);
 		VulkanMeshManager(const VulkanMeshManager& mesh_manager) = delete;
 		int CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh);
-		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat3& normal_matrix) ;
+		int DrawMesh(const std::string& mesh_name, const glm::mat4& model, const glm::mat4& normal_matrix) ;
 		int DeleteMeshData(const std::string& mesh_name);
 		void Cleanup();
 	private:

@@ -15,6 +15,8 @@ namespace Renderer {
 
 	VulkanMaterialManager::~VulkanMaterialManager()
 	{
+		//TODO(Austyn): might need this? 
+		//m_non_texture->Cleanup();
 	}
 
 

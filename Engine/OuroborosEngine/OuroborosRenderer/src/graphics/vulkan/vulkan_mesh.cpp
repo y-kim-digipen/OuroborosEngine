@@ -7,8 +7,7 @@ namespace Renderer {
 
     struct ModelConstant {
       glm::mat4 model;
-      glm::mat3 normal_matrix;
-      glm::vec3 padding;
+      glm::mat4 normal_matrix;
     };
 
     VulkanMesh::VulkanMesh(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
@@ -29,13 +28,14 @@ namespace Renderer {
         return true;
     }
 
-    void VulkanMesh::Draw(const glm::mat4& model, const glm::mat3& normal_matrix)
+    void VulkanMesh::Draw(const glm::mat4& model, const glm::mat4& normal_matrix)
     {
         VkCommandBuffer& command_buffer = vulkan_type->frame_data[vulkan_type->current_frame].command_buffer;
-        //VkCommandBuffer& command_buffer = vulkan_type->deferred_frame_buffer.off_screen_command_buffer;
+        //VkCommandBuffer& command_buffer = vulkan_type->deferred_pass.off_screen_command_buffer;
 
         ModelConstant model_constant{ model, normal_matrix };
-
+        size_t pushconstant_size = sizeof(model_constant);
+        
         vkCmdPushConstants(command_buffer, vulkan_type->current_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(model_constant), &model_constant);
 
         p_index_buffer->Bind();

@@ -13,7 +13,8 @@
 #include "mesh.h"
 #include "mesh_manager.h"
 #include "shader_manager.h"
-#include "texture_manager.h"
+//#include "texture_manager.h"
+#include "vulkan/vulkan_texture_manager.h"
 #include "vulkan/vulkan_material_manager.h"
 #include "vulkan/vulkan_descriptor_set.h"
 
@@ -31,12 +32,6 @@ namespace Renderer
 	class VulkanUniformBuffer;
 	
 	constexpr uint32_t max_num_lights = 20;
-
-	struct GlobalData {
-		glm::mat4 projection;
-		glm::mat4 view;
-		glm::vec3 position;
-	};
 
 	struct LightGlobalData {
 		Asset::LightData lights[max_num_lights];
@@ -77,7 +72,7 @@ namespace Renderer
 		LightGlobalData light_data;
 		std::unique_ptr<VulkanShaderManager> shader_manager;
 		std::unique_ptr<VulkanMaterialManager> material_manager;
-		std::unique_ptr<TextureManager> texture_manager;
+		std::unique_ptr<VulkanTextureManager> texture_manager;
 		
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
 		void RemoveLight(uint32_t entity_id);

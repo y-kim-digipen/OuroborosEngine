@@ -46,7 +46,6 @@ namespace Renderer {
 		void CreateSurface();
 		void CreateSwapChain();
 		void RecreateSwapChain();
-		DescriptorSet lightpass_set_;
 
 		std::queue<EventType> start_context_events;
 		std::queue<EventType> end_deferred_endframe_events;

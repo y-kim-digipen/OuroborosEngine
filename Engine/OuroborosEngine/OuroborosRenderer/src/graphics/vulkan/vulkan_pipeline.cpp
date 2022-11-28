@@ -17,6 +17,7 @@ namespace Renderer
         color_blend_state_create_info.logicOp           = VK_LOGIC_OP_COPY;
         color_blend_state_create_info.attachmentCount   = color_blend_attachments.size();
         color_blend_state_create_info.pAttachments      = color_blend_attachments.data();
+
         VkPipelineDynamicStateCreateInfo dynamic_state_create_info{ VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO };
         VkDynamicState dynamic_states[] = {
             VK_DYNAMIC_STATE_VIEWPORT,

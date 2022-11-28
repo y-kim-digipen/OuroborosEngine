@@ -31,8 +31,19 @@ void CameraComponent::SetCameraSize(uint16_t width, uint16_t height)
 
 void CameraComponent::CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up)
 {
-	perspective_matrix = glm::perspective(fov, static_cast<float>(width) / height , near_plane, far_plane);
-	perspective_matrix[1][1] *= -1;
+	float aspect_ratio = static_cast<float>(width) / height;
+	float focal_length = 1 / std::tan(fov * 0.5f);
+
+	perspective_matrix = glm::mat4(1.0f);
+	perspective_matrix[0][0] = focal_length / aspect_ratio;
+	perspective_matrix[1][1] = -focal_length;
+	perspective_matrix[2][2] = near_plane / (far_plane - near_plane);
+	perspective_matrix[2][3] = -1.0f;
+	perspective_matrix[3][2] = (far_plane * near_plane) / (far_plane - near_plane);
+	perspective_matrix[3][3] = 0.0f;
+
+	//perspective_matrix = glm::perspective(fov, static_cast<float>(width) / height , far_plane, near_plane);
+	//perspective_matrix[1][1] *= -1;
 	view_matrix = glm::lookAt(eye, eye +front, up);
 }
 

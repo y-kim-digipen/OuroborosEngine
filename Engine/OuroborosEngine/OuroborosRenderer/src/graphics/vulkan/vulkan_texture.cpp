@@ -92,6 +92,7 @@ namespace Renderer
 			VmaAllocationCreateInfo image_allocation_info{ .usage = VMA_MEMORY_USAGE_GPU_ONLY };
 
 			VK_CHECK(vmaCreateImage(vulkan_type->allocator, &image_create_info, &image_allocation_info, &image_, &allocation_, nullptr));
+			vmaSetAllocationName(vulkan_type->allocator, allocation_, "image");
 
 			VkImageViewCreateInfo image_view_create_info
 			{
@@ -185,9 +186,9 @@ namespace Renderer
 	void VulkanTexture::Cleanup()
 	{
 		if (vulkan_type->device.handle != VK_NULL_HANDLE) {
-			vkDestroySampler(vulkan_type->device.handle, sampler_, nullptr);
-			vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
 			vkDestroyImageView(vulkan_type->device.handle, image_view_, nullptr);
+			vmaDestroyImage(vulkan_type->allocator, image_, allocation_);
+			vkDestroySampler(vulkan_type->device.handle, sampler_, nullptr);
 		}
 	}
 
