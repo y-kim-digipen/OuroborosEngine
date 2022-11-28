@@ -312,10 +312,10 @@ namespace Renderer {
 
 	void VulkanShader::ShutDown()
 	{
-		default_texture.reset();
+		default_texture->Cleanup();
 
 		for (auto& ubo : uniform_buffer_objects) {
-			ubo.second.reset();
+			ubo.second->Cleanup();
 		}
 
 		shader_set.Cleanup();
@@ -323,8 +323,10 @@ namespace Renderer {
 		push_constant_ranges.clear();
 
 		for (uint32_t i = 0; i < max_set_count; ++i) {
-			vkDestroyDescriptorSetLayout(device->handle, descriptor_set_layouts[i], nullptr);
-			descriptor_set_layouts[i] = VK_NULL_HANDLE;
+			if (descriptor_set_layouts[i] != VK_NULL_HANDLE) {
+				vkDestroyDescriptorSetLayout(device->handle, descriptor_set_layouts[i], nullptr);
+				descriptor_set_layouts[i] = VK_NULL_HANDLE;
+			}
 		}
 
 		if (pipeline_layout != VK_NULL_HANDLE)

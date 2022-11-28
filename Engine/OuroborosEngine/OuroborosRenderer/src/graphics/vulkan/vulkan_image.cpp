@@ -34,6 +34,25 @@ namespace Renderer {
 
         VK_CHECK(vmaCreateImage(vulkan_type->allocator, &create_info, &alloc_create_info, &out_image->image, &out_image->allocation, 0));
 
+#if defined(_DEBUG) 
+		switch (usage_flags)
+		{
+		case VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, out_image->allocation, "color + sample");
+			break;
+		case VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, out_image->allocation, "depth");
+            break;
+        case VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT:
+			vmaSetAllocationName(vulkan_type->allocator, out_image->allocation, "depth + sample");
+            break;
+		default:
+			break;
+		}
+#endif
+
+
+
         if (create_view) {
             CreateImageView(vulkan_type, out_image, format, aspect_flags);
         }
@@ -59,10 +78,12 @@ namespace Renderer {
     void DestroyImage(VulkanType* vulkan_type, VulkanImage* image)
     {
         if (image->image != VK_NULL_HANDLE) {
-            if (image->image_view != VK_NULL_HANDLE)
+            if (image->image_view != VK_NULL_HANDLE) {
                 vkDestroyImageView(vulkan_type->device.handle, image->image_view, 0);
-
+                image->image_view = VK_NULL_HANDLE;
+            }
             vmaDestroyImage(vulkan_type->allocator, image->image, image->allocation);
+            image->image = VK_NULL_HANDLE;
         }
     }
 }

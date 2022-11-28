@@ -234,7 +234,6 @@ namespace Renderer
 
 		// delete global data
         global_set.Cleanup();
-        lightpass_set_.Cleanup();
         for (auto& global_ubo : global_binding_ubo) {
             global_ubo->Cleanup();
         }
@@ -262,7 +261,27 @@ namespace Renderer
         }
 
         {
+            auto& ssr_pass = vulkan_type.ssr_pass;
+            auto& vk_device = vulkan_type.device.handle;
+            uint32_t image_count = ssr_pass.frame_buffers.size();
+
+            for (uint32_t i = 0; i < image_count; ++i)
+            {
+                DestroyImage(&vulkan_type, &ssr_pass.color_images[i]);
+                vkDestroyFramebuffer(vk_device, ssr_pass.frame_buffers[i], nullptr);
+                vkDestroySemaphore(vk_device, ssr_pass.image_available_semaphores[i], nullptr);
+                vkDestroySemaphore(vk_device, ssr_pass.render_finished_semaphores[i], nullptr);
+            }
+
+            vkDestroyRenderPass(vk_device, ssr_pass.render_pass, nullptr);
+            vkDestroySampler(vk_device, ssr_pass.color_sampler, nullptr);
+            ssr_pass.ssr_shader->ShutDown();
+            ssr_pass.set->Cleanup();
+        }
+
+        {
             auto& lightpass = vulkan_type.light_pass;
+			lightpass_set_.Cleanup();
             uint32_t image_count = lightpass.out_color_images.size();
 
             for (uint32_t i = 0; i < image_count; ++i)

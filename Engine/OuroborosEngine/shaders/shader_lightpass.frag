@@ -125,7 +125,7 @@ void main()
             }
             case DIRECTIONAL_LIGHT: // directional light
             {
-                radiance = light.diffuse ;
+                radiance = light.diffuse;
                 break;
             }
         }
@@ -154,6 +154,7 @@ void main()
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
+    color = clamp(color, vec3(0.0f), vec3(1.0f));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
 
