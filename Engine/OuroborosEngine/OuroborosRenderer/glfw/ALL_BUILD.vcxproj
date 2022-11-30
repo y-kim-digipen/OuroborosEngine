@@ -22,8 +22,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EF996731-634E-3FD6-8A57-A4C2FFC36342}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{2EF242B9-96EA-3E31-804D-B28DB7CFE7A3}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>ALL_BUILD</ProjectName>
@@ -105,11 +105,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMakeLists.txt">
+    <CustomBuild Include="E:\summer2022\OuroborosEngine\Engine\external\glfw\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/summer2022/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/summer2022/OuroborosEngine/Engine/OuroborosEngine -BE:/summer2022/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -117,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\CMakeDependentOption.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.c.in;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckLibraryExists.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindDoxygen.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindThreads.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.c.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/summer2022/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/summer2022/OuroborosEngine/Engine/OuroborosEngine -BE:/summer2022/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -130,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\CMakeDependentOption.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.c.in;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckLibraryExists.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindDoxygen.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindThreads.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.c.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/summer2022/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/summer2022/OuroborosEngine/Engine/OuroborosEngine -BE:/summer2022/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -143,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\CMakeDependentOption.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.c.in;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckLibraryExists.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindDoxygen.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindThreads.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.c.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/summer2022/OuroborosEngine/Engine/external/glfw/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-D:\CMAKE\bin\cmake.exe -SC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine -BC:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file C:/Users/82106/Desktop/2022-Fall/GAM450/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/summer2022/OuroborosEngine/Engine/OuroborosEngine -BE:/summer2022/OuroborosEngine/Engine/OuroborosEngine/build --check-stamp-file E:/summer2022/OuroborosEngine/Engine/OuroborosEngine/OuroborosRenderer/glfw/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -156,22 +156,22 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;D:\CMAKE\share\cmake-3.22\Modules\CMakeDependentOption.cmake;D:\CMAKE\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.c.in;D:\CMAKE\share\cmake-3.22\Modules\CheckIncludeFile.cmake;D:\CMAKE\share\cmake-3.22\Modules\CheckLibraryExists.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindDoxygen.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\CMAKE\share\cmake-3.22\Modules\FindThreads.cmake;D:\CMAKE\share\cmake-3.22\Modules\GNUInstallDirs.cmake;D:\CMAKE\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;D:\CMAKE\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.c.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\WriteBasicConfigVersionFile.cmake;E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\build\CMakeFiles\cmake.verify_globs;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\cmake_uninstall.cmake.in;E:\summer2022\OuroborosEngine\Engine\external\glfw\CMake\glfw3Config.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\build\ZERO_CHECK.vcxproj">
-      <Project>{F28F3131-AE2B-3FE4-9C06-146F4DE42C01}</Project>
+    <ProjectReference Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\build\ZERO_CHECK.vcxproj">
+      <Project>{BB9CCA9A-A7D0-3A68-BD59-DC8A21045517}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\src\glfw.vcxproj">
-      <Project>{B4B1AD10-D43F-33E8-B807-FEAF90B611D1}</Project>
+    <ProjectReference Include="E:\summer2022\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\src\glfw.vcxproj">
+      <Project>{904CFC52-C9EF-3521-B97B-CDE0C07F0333}</Project>
       <Name>glfw</Name>
     </ProjectReference>
   </ItemGroup>

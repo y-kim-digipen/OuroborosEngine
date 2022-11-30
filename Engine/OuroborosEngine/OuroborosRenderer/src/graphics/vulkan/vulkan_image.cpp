@@ -12,6 +12,7 @@ namespace Renderer {
         bool create_view,
         VkImageAspectFlags aspect_flags,
         uint32_t mip_levels
+        ,uint32_t layer_count
     )
     {
         VkImageCreateInfo create_info{ VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
@@ -19,7 +20,7 @@ namespace Renderer {
         create_info.format = format;
         create_info.extent = { width, height, 1 };
         create_info.mipLevels = mip_levels;
-        create_info.arrayLayers = 1;
+        create_info.arrayLayers = layer_count;
         create_info.samples = VK_SAMPLE_COUNT_1_BIT;
         create_info.tiling = tiling;
         create_info.usage = usage_flags;
@@ -54,21 +55,21 @@ namespace Renderer {
 
 
         if (create_view) {
-            CreateImageView(vulkan_type, out_image, format, aspect_flags);
+            CreateImageView(vulkan_type, out_image, format, aspect_flags, layer_count);
         }
     }
 
-    void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags)
+    void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags, uint32_t layer_count)
     {
         VkImageViewCreateInfo create_info{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
         create_info.image = out_image->image;
-        create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        create_info.viewType = (layer_count == 1) ? VK_IMAGE_VIEW_TYPE_2D : VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         create_info.format = format;
         create_info.subresourceRange.aspectMask = aspect_flags;
         create_info.subresourceRange.baseMipLevel = 0;
         create_info.subresourceRange.levelCount = 1;
         create_info.subresourceRange.baseArrayLayer = 0;
-        create_info.subresourceRange.layerCount = 1;
+        create_info.subresourceRange.layerCount = layer_count;
         //VkComponentMapping         components;
        // VkImageSubresourceRange    subresourceRange;
 
