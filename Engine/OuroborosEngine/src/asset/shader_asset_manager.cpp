@@ -18,6 +18,7 @@ int OE::ShaderAssetManager::LoadAsset(const std::string& file_name)
             Renderer::E_StageType::FRAGMENT_SHADER
         },
         2
+        ,true
     };
 
     (Engine().Get().window.get()->GetWindowData().RenderContextData.get())->shader_manager->AddShader(&shader_config);

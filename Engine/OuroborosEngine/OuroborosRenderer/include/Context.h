@@ -59,6 +59,8 @@ namespace Renderer
 		void SwapBuffer();
 		virtual void Shutdown() = 0;
 		virtual int BeginFrame();
+		
+
 		virtual int DeferredEndFrame();
 		virtual int EndFrame();
 		

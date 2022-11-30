@@ -25,6 +25,15 @@ namespace Renderer
 		static VkRect2D Rect2D(int32_t width, int32_t height, int32_t offsetX, int32_t offsetY);
 	};
 
+	struct VulkanAttachmentCreateInfo
+	{
+		uint32_t width, height;
+		uint32_t layerCount;
+		VkFormat format;
+		VkImageUsageFlags usage;
+		VkSampleCountFlagBits imageSampleCount = VK_SAMPLE_COUNT_1_BIT;
+	};
+
 }
 
 

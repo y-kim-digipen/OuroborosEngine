@@ -70,8 +70,25 @@ struct ViewPortFramebuffer
 	VkSampler color_sampler;
 	VkSemaphore viewport_semaphore;
 };
-
 using VulkanFrameBufferAttachment = VulkanImage;
+
+
+
+
+struct ShadowFrameBuffer
+{
+	VulkanFrameBufferAttachment shadow_map;
+	VkRenderPass render_pass;
+	VkPipeline shadow_pipeline;
+	VkFramebuffer frame_buffer;
+	VkSampler sampler;
+	VkSemaphore semaphore;
+	int32_t width;
+	int32_t height;
+	int32_t light_count = 1;
+};
+
+
 
 struct VulkanDeferredFrameBuffer
 {
@@ -151,6 +168,7 @@ struct VulkanType
 
 	VulkanDeferredFrameBuffer deferred_frame_buffer;
 	ViewPortFramebuffer viewport_frame_buffer;
+	ShadowFrameBuffer shadow_frame_buffer;
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;
 	VkPipelineLayout current_pipeline_layout = VK_NULL_HANDLE;

@@ -19,10 +19,11 @@ namespace Renderer {
         VkMemoryPropertyFlags memory_flags,
         bool create_view,
         VkImageAspectFlags aspect_flags,
-        uint32_t mip_levels
+        uint32_t mip_levels,
+        uint32_t layer_count = 1
     );
 
-    void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags);
+    void CreateImageView(VulkanType* vulkan_type, VulkanImage* out_image, VkFormat format, VkImageAspectFlags aspect_flags, uint32_t layer_count);
     void DestroyImage(VulkanType* vulkan_type, VulkanImage* image);
 }
 #endif // !VULKAN_IMAGE_H

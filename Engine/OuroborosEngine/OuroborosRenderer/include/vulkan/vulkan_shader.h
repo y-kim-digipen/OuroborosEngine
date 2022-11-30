@@ -23,6 +23,12 @@ namespace Renderer {
 		MAX_VALUE
 	};
 
+	enum E_ShaderPass {
+		DEFERRED_PASS,
+		LIGHT_PASS,
+		SSR_PASS
+	};
+
 	struct ShaderStage {
 		E_StageType type = MAX_VALUE;
 	};
@@ -31,6 +37,9 @@ namespace Renderer {
 		const char* name;
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
+		bool use_built_in_quad;
+		//TODO: renderpass
+		//E_ShaderPass pass_type; 
 
 		void operator=(const ShaderConfig& config);
 	};
@@ -56,7 +65,7 @@ namespace Renderer {
 		const char* texture_name = "";
 	};
 
-	class VulkanShader 
+	class VulkanShader
 	{
 	public:
 		VulkanShader() = delete;
@@ -66,12 +75,10 @@ namespace Renderer {
 		VulkanShader(VulkanType* vulkan_type);
 		~VulkanShader();
 
-		void Init(ShaderConfig* config);
-		void LightPassInit(ShaderConfig* config);
+		void Init(ShaderConfig* config, VkRenderPass renderpass = VK_NULL_HANDLE);
 		//lightpass
 		void Bind();
 		//geometrypass
-		void BindDeferred();
 		void ShutDown();
 		void Reload();
 
@@ -102,8 +109,8 @@ namespace Renderer {
 		std::shared_ptr<VulkanTexture> GetTextureVariable(const std::string& name, uint32_t binding_num = -1);
 
 		DescriptorSet shader_set; // set num 1
-		std::map<uint32_t ,std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo
-		std::map<uint32_t ,std::shared_ptr<VulkanTexture>> uniform_texture_objects;
+		std::map<uint32_t, std::unique_ptr<VulkanUniformBuffer>> uniform_buffer_objects; // binding block ubo
+		std::map<uint32_t, std::shared_ptr<VulkanTexture>> uniform_texture_objects;
 		//bool reload_next_frame;
 
 		ShaderConfig config;
@@ -111,13 +118,13 @@ namespace Renderer {
 		VkPipeline pipeline;
 
 		//VkDescriptorSet descriptor_sets[max_set_count];
-		
+
 		// first = binding_num, second = member_data
 		std::map<std::string, BindingBlockMemberData> binding_block_members;
 
 	private:
 
-		int CreateShaderModule(VkShaderModule* out_shader_module,  const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);
+		int CreateShaderModule(VkShaderModule* out_shader_module, const char* file_name, VkShaderStageFlagBits shader_type, std::vector<VkPushConstantRange>& push_constant_ranges, std::array < std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding>, 4>& layout_bindings_set);
 
 		VulkanDevice* device;
 		VulkanType* vulkan_type;
@@ -125,7 +132,11 @@ namespace Renderer {
 		VkDescriptorSetLayout descriptor_set_layouts[max_set_count];
 		std::unordered_map<std::string, DescriptorSetBindingData> descriptor_data;
 		std::vector<VkPushConstantRange> push_constant_ranges;
+		std::vector<VkVertexInputAttributeDescription> input_attribute_descriptions;
+		std::vector<VkPipelineColorBlendAttachmentState> pipeline_color_blend_attachments;
 		std::shared_ptr<VulkanTexture> default_texture;
+
+		bool use_shader_set = false;
 	};
 }
 #endif // !VULKAN_SHADER_H

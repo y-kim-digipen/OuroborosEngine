@@ -7,7 +7,8 @@
 void OE::GUI::ViewPort::Draw()
 {
     auto fn = std::bind(&ViewPort::draw_internal, this);
-	Engine::RegisterEvent(Engine::EventFunctionType::END_OF_RENDERER_END_FRAME, fn);
+    dynamic_cast<Renderer::VulkanContext*>(Engine::window->GetWindowData().RenderContextData.get())->AddAfterEndDeferredEvent(fn);
+	//Engine::RegisterEvent(Engine::EventFunctionType::END_OF_RENDERER_CONTEXT, fn);
 }
 
 void OE::GUI::ViewPort::draw_internal()

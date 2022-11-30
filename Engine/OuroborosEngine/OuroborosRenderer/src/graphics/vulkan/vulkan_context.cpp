@@ -67,7 +67,7 @@ namespace Renderer
     VkFormat FindDepthFormat();
 
     //For Deferred rendering
-    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment);
+    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment,int32_t width, int32_t height, int32_t layer_count = 1);
     int buildDeferredCommandBuffer();
     int CreateOffScreenFrameBuffer();
     int SetupDescriptorSet();
@@ -82,6 +82,9 @@ namespace Renderer
     int CreateViewportFramebuffer();
     void ViewportRecordCommandBuffer(VkCommandBuffer command_buffer, uint32_t image_index);
 
+
+    int CreateShadowMapFrameBuffer();
+    
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -153,6 +156,7 @@ namespace Renderer
             .AddBindingLayout(2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBindingLayout(3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
+
 
         auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
         VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -384,9 +388,9 @@ namespace Renderer
             CreateViewportImage();
             CreateViewportFramebuffer();
             //SetupDescriptorSet();
-            auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
+          /*  auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
             shader->ShutDown();
-            CreateDeferredShader();
+            CreateDeferredShader();*/
             auto& deferred_framebuffer = vulkan_type.deferred_frame_buffer;
             VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -487,7 +491,7 @@ namespace Renderer
     	AddBinding(4,&tex_descriptor_metalic_roughness_ao);
 
         
-        shader_manager->GetShader("shader_lightpass")->BindDeferred();
+        shader_manager->GetShader("shader_lightpass")->Bind();
         lightpass_set_.Bind();
         global_set.Bind();
 
@@ -1513,7 +1517,7 @@ namespace Renderer
     }
 
     //deferred rendering
-    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment)
+    void CreateFrameAttachment(VulkanType* vulkan_type, VkFormat format, VkImageUsageFlagBits usage, VulkanFrameBufferAttachment* attachment, int32_t width, int32_t height, int32_t layer_count)
     {
         VkImageAspectFlags aspect_mask = 0;
         VkImageLayout image_layout;
@@ -1534,10 +1538,8 @@ namespace Renderer
         {
             std::runtime_error("Error frame buffer attachment aspect mask error!");
         }
-        auto [x, y] = VulkanContext::GetSceneScreenSize();
-
-        auto& swapchain = vulkan_type->swapchain;
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, swapchain.extent.width, swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
+  
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, width, height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1, layer_count);
     }
 
     //first rendering
@@ -1555,7 +1557,7 @@ namespace Renderer
         clear_values[2].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[3].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
         clear_values[4].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-        clear_values[5].depthStencil = { 1.0f, 0 };
+        clear_values[5].depthStencil = { 0.0f, 0 };
 
 
  
@@ -1574,7 +1576,7 @@ namespace Renderer
 
         auto [x, y] = VulkanContext::GetPastSceneScreenSize();
 
-        VkViewport viewport = VulkanInitializer::ViewPort(swapchain_extent.width, swapchain_extent.height, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(swapchain_extent.width, swapchain_extent.height, 1.f, 0.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(swapchain_extent.width, swapchain_extent.height, 0, 0);
@@ -1596,18 +1598,18 @@ namespace Renderer
         vulkan_type.deferred_frame_buffer.width = x;
         vulkan_type.deferred_frame_buffer.height = y;
 
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.position);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.normal);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.albedo);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.emissive);
-        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.metalic_roughness_ao);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.position,swap_chain_size.width,swap_chain_size.height);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.normal, swap_chain_size.width, swap_chain_size.height);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.albedo, swap_chain_size.width, swap_chain_size.height);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.emissive, swap_chain_size.width, swap_chain_size.height);
+        CreateFrameAttachment(&vulkan_type, VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.metalic_roughness_ao, swap_chain_size.width, swap_chain_size.height);
 
      
         VkFormat attachment_depth_format;
         VkBool32 valid_depth_format = VulkanInitializer::GetSupportedDepthFormat(vulkan_type.device.physical_device, &attachment_depth_format);
         assert(valid_depth_format);
 
-        CreateFrameAttachment(&vulkan_type, attachment_depth_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.depth);
+        CreateFrameAttachment(&vulkan_type, attachment_depth_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &vulkan_type.deferred_frame_buffer.depth, swap_chain_size.width, swap_chain_size.height);
 
     	std::array<VkAttachmentDescription, 6> attachment_descriptions = {};
 
@@ -1768,7 +1770,7 @@ namespace Renderer
 
         auto& shader = vulkan_type.deferred_frame_buffer.deferred_shader;
         shader = std::make_shared<VulkanShader>(&vulkan_type);
-        shader->Init(&shader_config);
+        shader->Init(&shader_config,vulkan_type.deferred_frame_buffer.render_pass);
 
         return 0;
          
@@ -1857,7 +1859,7 @@ namespace Renderer
 
         for(uint32_t idx = 0; idx < size; idx++)
         {
-            CreateFrameAttachment(&vulkan_type, VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &viewport_framebuffer.viewport_vulkan_images[idx]);
+            CreateFrameAttachment(&vulkan_type, VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &viewport_framebuffer.viewport_vulkan_images[idx], swapchain.extent.width, swapchain.extent.height);
         }
         return 0;
     }
@@ -2015,7 +2017,7 @@ namespace Renderer
         };
 
         VkClearValue depth_clear;
-        depth_clear.depthStencil.depth = 1.f;
+        depth_clear.depthStencil.depth = 0.f;
         depth_clear.depthStencil.stencil = 0;
         VkClearValue clear_values[] = { clear_color, depth_clear };
 
@@ -2027,15 +2029,120 @@ namespace Renderer
 
 
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
-        VkViewport viewport = VulkanInitializer::ViewPort(swap_chain_size.width, swap_chain_size.height, 0.f, 1.f);
+        VkViewport viewport = VulkanInitializer::ViewPort(swap_chain_size.width, swap_chain_size.height, 1.f, 0.f);
         vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor = VulkanInitializer::Rect2D(swap_chain_size.width, swap_chain_size.height, 0, 0);
 
         vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
-
-
     }
 
+    int CreateShadowMapFrameBuffer()
+    {
+        auto& shadow_frame_buffer = vulkan_type.shadow_frame_buffer;
+
+        shadow_frame_buffer.width = 1048;
+        shadow_frame_buffer.height = 1048;
+
+        VkFormat shadow_map_format;
+        VkBool32 valid_shadow_map_format = VulkanInitializer::GetSupportedDepthFormat(vulkan_type.device.physical_device, &shadow_map_format);
+        assert(valid_shadow_map_format);
+
+
+        //layout light setup
+        Renderer::VulkanAttachmentCreateInfo attachment_create_info{};
+        attachment_create_info.format     = shadow_map_format;
+        attachment_create_info.width      = shadow_frame_buffer.width;
+        attachment_create_info.height     = shadow_frame_buffer.height;
+        //TODO : need to update the light_count
+        attachment_create_info.layerCount = shadow_frame_buffer.light_count;
+        attachment_create_info.usage      = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+
+        
+        CreateFrameAttachment(&vulkan_type, shadow_map_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &shadow_frame_buffer.shadow_map, attachment_create_info.width, attachment_create_info.height, attachment_create_info.layerCount);
+
+
+        VkAttachmentDescription description {};
+        description.samples = attachment_create_info.imageSampleCount;
+        description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        description.storeOp = (attachment_create_info.usage & VK_IMAGE_USAGE_SAMPLED_BIT) ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        description.format = attachment_create_info.format;
+        description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+
+
+        //Create shadow sampler
+        VkSamplerCreateInfo samplerInfo = VulkanInitializer::SamplerCreateInfo();
+        samplerInfo.magFilter = VK_FILTER_LINEAR;
+        samplerInfo.minFilter = VK_FILTER_LINEAR;
+        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.mipLodBias = 0.0f;
+        samplerInfo.maxAnisotropy = 1.0f;
+        samplerInfo.minLod = 0.0f;
+        samplerInfo.maxLod = 1.0f;
+        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+
+        VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &samplerInfo, nullptr, &shadow_frame_buffer.sampler));
+
+        
+        std::vector<VkAttachmentReference> color_references;
+        VkAttachmentReference depth_reference = {};
+
+        depth_reference.attachment = 0;
+        depth_reference.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+    	VkSubpassDescription subpass{};
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpass.pDepthStencilAttachment = &depth_reference;
+
+
+        std::array<VkSubpassDependency, 2> dependencies;
+
+        dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependencies[0].dstSubpass = 0;
+        dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+        dependencies[1].srcSubpass = 0;
+        dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+        dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+        // Create render pass
+        VkRenderPassCreateInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassInfo.pAttachments = &description;
+        renderPassInfo.attachmentCount = 1;
+        renderPassInfo.subpassCount = 1;
+        renderPassInfo.pSubpasses = &subpass;
+        renderPassInfo.dependencyCount = 2;
+        renderPassInfo.pDependencies = dependencies.data();
+        VK_CHECK(vkCreateRenderPass(vulkan_type.device.handle, &renderPassInfo, nullptr, &vulkan_type.shadow_frame_buffer.render_pass));
+
+        VkFramebufferCreateInfo framebuffer_create_info = {};
+        framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebuffer_create_info.renderPass = shadow_frame_buffer.render_pass;
+        framebuffer_create_info.pAttachments = &shadow_frame_buffer.shadow_map.image_view;
+        framebuffer_create_info.attachmentCount = 1;
+        framebuffer_create_info.width = shadow_frame_buffer.width;
+        framebuffer_create_info.height = shadow_frame_buffer.height;
+        //max layout is light count
+        framebuffer_create_info.layers = attachment_create_info.layerCount;
+        VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &shadow_frame_buffer.frame_buffer));
+
+        return 0;
+
+    }
 }
 

@@ -10,12 +10,28 @@
 
 namespace Renderer {
 	struct Vertex {
-		glm::vec3 position;
+		glm::vec3 pos;
 		glm::vec3 normal;
 		glm::vec2 uv;
 
 		bool operator==(const Vertex& other) const {
-			return position == other.position && normal == other.normal && uv == other.uv;
+			return pos == other.pos && normal == other.normal && uv == other.uv;
+		}
+		static size_t offset(const char* member) {
+
+			size_t offset = 0;
+
+			if (strcmp(member, "normal") == 0) {
+				offset = offsetof(Vertex, normal);
+			}
+			else if (strcmp(member, "pos") == 0) {
+				offset = offsetof(Vertex, pos);
+			}
+			else if (strcmp(member, "uv") == 0) {
+				offset = offsetof(Vertex, uv);
+			}
+
+			return offset;
 		}
 	};
 
