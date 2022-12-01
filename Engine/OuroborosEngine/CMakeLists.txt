@@ -43,6 +43,7 @@ target_link_libraries(${PROGRAM_NAME}
     PRIVATE
     ouroboros::renderer 
     ImGui
+    assimp
     ${ADDITIONAL_LIBRARIES}
     # ${CMAKE_CURRENT_SOURCE_DIR}/external/yaml-cpp/build/Release/libyaml-cppmd.lib
 )
