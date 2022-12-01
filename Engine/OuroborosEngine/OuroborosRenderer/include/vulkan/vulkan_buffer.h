@@ -2,10 +2,10 @@
 #define VULKAN_BUFFER_H
 #include <map>
 #include <memory>
+#include <vector>
 
 #include "vulkan_type.inl"
-
-#include "../mesh.h"
+#include "mesh.h"
 
 namespace Renderer
 {
