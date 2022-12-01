@@ -70,6 +70,10 @@ void OE::GUI::ViewPort::draw_gizmo()
 
     auto& transform_component = Engine::GetECSManager().GetComponent<TransformComponent>(selected_entity);
     auto active_camera = Engine::Get().GetActiveCamera();
+    if(active_camera == nullptr)
+    {
+        return;
+    }
     glm::mat4 mat = transform_component.GetMatrix();
 
     ImGuiIO& io = ImGui::GetIO();
@@ -91,11 +95,11 @@ void OE::GUI::ViewPort::draw_gizmo()
     ImGuizmo::SetOrthographic(false);
     ImGuizmo::SetDrawlist();
 
-    glm::mat4 perspective_mat = active_camera.GetPerspectiveMatrix();
+    glm::mat4 perspective_mat = active_camera->GetPerspectiveMatrix();
     perspective_mat[1][1] *= -1;
     glm::mat4 identity{ 1.f };
-    ImGuizmo::DrawGrid(&active_camera.GetViewMatrix()[0][0], &perspective_mat[0][0], &identity[0] [0], 10.f);
-    ImGuizmo::Manipulate(&active_camera.GetViewMatrix()[0][0], &perspective_mat[0][0], 
+    ImGuizmo::DrawGrid(&active_camera->GetViewMatrix()[0][0], &perspective_mat[0][0], &identity[0] [0], 10.f);
+    ImGuizmo::Manipulate(&active_camera->GetViewMatrix()[0][0], &perspective_mat[0][0], 
         config->operation, config->mode, &mat[0][0], nullptr, config->do_snap ? &config->snap_amount : nullptr);
 
     glm::vec3 translate;

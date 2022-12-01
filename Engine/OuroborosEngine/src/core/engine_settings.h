@@ -26,10 +26,11 @@ using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformC
 using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
 using SystemList = OE::ECS::types::SystemList<DrawSystem, LightSystem, ScriptingSystem>;
 
+using HasCameraComponentSignature = OE::ECS::types::Signature<CameraComponent>;
 using CameraTransformSyncSignature = OE::ECS::types::Signature<TransformComponent, CameraComponent>;
 using HierarchicalTransformSignature = OE::ECS::types::Signature<TransformComponent>;
 
-using SignatureList = OE::ECS::types::SignatureList<CameraTransformSyncSignature, HierarchicalTransformSignature>;
+using SignatureList = OE::ECS::types::SignatureList<CameraTransformSyncSignature, HierarchicalTransformSignature, HasCameraComponentSignature>;
 
 using OESettings = OE::ECS::_impl::Settings<ComponentList, SignatureList, SystemList>;
 

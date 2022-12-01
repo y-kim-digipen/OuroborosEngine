@@ -1,7 +1,7 @@
 #include "lua_script_manager.h"
 #include "../core/engine_settings.h"
 #include "../core/engine.h"
-
+#include "../../src/input/InputManager.h"
 namespace OE
 {
 	namespace Script
@@ -108,6 +108,7 @@ namespace OE
 			state.set("GetECS_Manager", &GetECSManager);
 			state.new_usertype<ECS_Manager>("ECS_Manager",
 				"GetTransformComponent"		, &ECS_Manager::GetComponent<TransformComponent>,
+				"GetCameraComponent"		, &ECS_Manager::GetComponent<CameraComponent>,
 				"GetMeshComponent"			, &ECS_Manager::GetComponent<MeshComponent>, 
 				"GetShaderComponent"		, &ECS_Manager::GetComponent<ShaderComponent>,
 				"GetMaterialComponent"		, &ECS_Manager::GetComponent<MaterialComponent>,
@@ -115,6 +116,7 @@ namespace OE
 				"GetLightComponent"			, &ECS_Manager::GetComponent<LightComponent>,
 				
 				"HasTransformComponent"		, &ECS_Manager::HasComponent<TransformComponent>,
+				"HasCameraComponent", & ECS_Manager::HasComponent<CameraComponent>,
 				"HasMeshComponent"			, &ECS_Manager::HasComponent<MeshComponent>,
 				"HasShaderComponent"		, &ECS_Manager::HasComponent<ShaderComponent>,
 				"HasMaterialComponent"		, &ECS_Manager::HasComponent<MaterialComponent>,
@@ -130,16 +132,29 @@ namespace OE
 				, "dt", &OE::Engine::DeltaTime::GetDeltaTime);
 
 			//Components
-			//state.new_usertype<TransformComponent>("TransformComponent",
-			//	sol::constructors<TransformComponent()>()
-			//	, "position", &TransformComponent::position
-			//	, "scale", &TransformComponent::scale
-			//	, "rotation", &TransformComponent::rotation
-			//	);
+			state.new_usertype<TransformComponent>("TransformComponent",
+				sol::constructors<TransformComponent()>()
+				, "GetPosition",	&TransformComponent::GetPosition
+				, "GetScale",		&TransformComponent::GetScale
+				, "GetRotation",	&TransformComponent::GetRotation
+				, "SetPosition",	&TransformComponent::SetPosition
+				, "SetScale",		&TransformComponent::SetScale
+				, "SetRotation",	&TransformComponent::SetRotation
+
+				);
 			
 			state.new_usertype<MeshComponent>("MeshComponent",
 				sol::constructors<MeshComponent()>()
 				, "mesh_name", &MeshComponent::mesh_name
+				);
+
+			state.new_usertype<CameraComponent>("MeshComponent",
+				sol::constructors<CameraComponent()>()
+				, "IsUsing", &CameraComponent::IsUsing
+				, "SetUsing", &CameraComponent::SetUsing
+				, "GetUpVector", &CameraComponent::GetUpVector
+				, "GetRightVector", &CameraComponent::GetRightVector
+				, "GetFrontVector", &CameraComponent::GetFrontVector
 				);
 
 			state.new_usertype<Asset::MaterialData>("MaterialData",
@@ -192,6 +207,60 @@ namespace OE
 				, "init", &LightComponent::init
 				, "data", &LightComponent::data
 				);
+
+			//Input
+
+			static auto IsKeyboardButtonDown = [](int32_t key)
+			{
+				return OE::Input::GetKeyboardButton(key).IsDown();
+			};
+			static auto IsKeyboardButtonPressed = [](int32_t key)
+			{
+				return OE::Input::GetKeyboardButton(key).IsPressed();
+			};
+			static auto IsKeyboardButtonReleased= [](int32_t key)
+			{
+				return OE::Input::GetKeyboardButton(key).IsReleased();
+			};
+			static auto IsMouseButtonDown = [](int32_t key)
+			{
+				return OE::Input::GetMouseButton(key).IsDown();
+			};
+			static auto IsMouseButtonPressed = [](int32_t key)
+			{
+				return OE::Input::GetMouseButton(key).IsPressed();
+			};
+			static auto IsMouseButtonReleased = [](int32_t key)
+			{
+				return OE::Input::GetMouseButton(key).IsReleased();
+			};
+			static auto GetMouseMoveX = []()
+			{
+				return OE::Input::GetMouse().GetCursorMove().x;
+			};
+			static auto GetMouseMoveY = []()
+			{
+				return OE::Input::GetMouse().GetCursorMove().y;
+			};
+			static auto GetMouseX = []()
+			{
+				return OE::Input::GetMouse().GetCursorPos().x;
+			};
+			static auto GetMouseY = []()
+			{
+				return OE::Input::GetMouse().GetCursorPos().y;
+			};
+
+			state.set("IsKeyboardButtonDown",		&IsKeyboardButtonDown);
+			state.set("IsKeyboardButtonReleased",	&IsKeyboardButtonPressed);
+			state.set("IsKeyboardButtonPressed",	&IsKeyboardButtonReleased);
+			state.set("IsMouseButtonDown",		 &IsMouseButtonDown);
+			state.set("IsMouseButtonReleased	", &IsMouseButtonPressed);
+			state.set("IsMouseButtonPressed"	, &IsMouseButtonReleased);
+			state.set("GetMouseMoveX", &GetMouseMoveX);
+			state.set("GetMouseMoveY", &GetMouseMoveY);
+			state.set("GetMouseX", &GetMouseX);
+			state.set("GetMouseY", &GetMouseY);
 		}
 
 		void LuaScriptManager::RegisterGlobalFunction(sol::state& state)

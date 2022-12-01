@@ -19,6 +19,11 @@ void CameraComponent::SyncWithTransformComponent()
 	front = rotating_matrix * front;
 	glm::vec3 right = glm::normalize(glm::cross(front, rotating_matrix * glm::vec3{0, 1, 0}));
 	glm::vec3 up = glm::cross(right, front);
+
+	this->front = front;
+	this->right = right;
+	this->up = up;
+
 	CalculateMatrices(eye, front, up);
 }
 
@@ -44,7 +49,7 @@ void CameraComponent::CalculateMatrices(const glm::vec3& eye, const glm::vec3& f
 
 	//perspective_matrix = glm::perspective(fov, static_cast<float>(width) / height , far_plane, near_plane);
 	//perspective_matrix[1][1] *= -1;
-	view_matrix = glm::lookAt(eye, eye +front, up);
+	view_matrix = glm::lookAt(eye, eye + front, up);
 }
 
 glm::mat4 TransformComponent::GetMatrix()

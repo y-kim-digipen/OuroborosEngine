@@ -63,6 +63,10 @@ public:
 	bool IsUsing() const { return is_main_camera; }
 	void SetUsing(bool use) { is_main_camera = use; }
 	void SetCameraSize(uint16_t width, uint16_t height);
+
+	glm::vec3 GetUpVector() const { return up; };
+	glm::vec3 GetFrontVector() const { return right; };
+	glm::vec3 GetRightVector() const { return front; };
 private:
 	void CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up);
 	glm::mat4 view_matrix;
@@ -70,6 +74,8 @@ private:
 	uint16_t width = 1600.f, height = 900.f;
 	float near_plane = 0.1f, far_plane = 50.f;
 	float fov = glm::pi<float>() * 0.3f;
+
+	glm::vec3 up, right, front;
 
 	bool is_main_camera = false;
 };

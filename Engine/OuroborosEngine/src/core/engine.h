@@ -20,7 +20,7 @@
 
 #include "../gui/GUI_manager.h"
 #include "../scripting/lua_script_manager.h"
-#include "../serializing//scene_serializer.h"
+#include "../serializing/scene_serializer.h"
 
 //#include "debug/profiler.h"
 
@@ -65,7 +65,7 @@ namespace OE
 			return ecs_manager;
 		}
 
-		static CameraComponent& GetActiveCamera();
+		static CameraComponent* GetActiveCamera();
 
 		class DeltaTime
 		{

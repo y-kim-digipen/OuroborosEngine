@@ -1,5 +1,7 @@
 Asset:
   class OE::ImageAssetManager:
+    images/null.png:
+      {}
     images\gameboy_textures\mat_default_AO.jpeg:
       {}
     images\gameboy_textures\mat_default_albedo.jpeg:
@@ -44,18 +46,21 @@ Asset:
       {}
     images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png:
       {}
-    images/null.png:
-      {}
   class OE::MeshAssetManager:
+    model/default_cube.obj:
+      {}
     model\GAMEBOY.obj:
       {}
     model\plane.obj:
       {}
     model\sphere.obj:
       {}
-    model/default_cube.obj:
+  class OE::ShaderAssetManager:
+    shader_lightpass:
       {}
   class OE::ScriptAssetManager:
+    ..\scripts\camera_control.clua:
+      {}
     scripts\light_rotate.clua:
       {}
   class OE::MaterialAssetManager:
@@ -79,12 +84,6 @@ Asset:
       roughness: images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png
       ao: images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
       emissive: ""
-    PlaneMaterial:
-      use_texture: false
-      albedo: [0, 0, 0]
-      metallic: 0
-      roughness: 0
-      ao: 0
     Tile:
       use_texture: true
       is_smoothness: false
@@ -108,14 +107,12 @@ Asset:
 ECS:
   0:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [0, -1, 0]
+        position: [0, -1, 0]
         scale: [10, 10, 10]
         rotation: [0, 0, 0]
       struct MeshComponent:
@@ -139,14 +136,12 @@ ECS:
         tag: Plane
   1:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [0, 0, 0]
+        position: [0, 0, 0]
         scale: [10, 10, 10]
         rotation: [1, 0, 0]
       struct MeshComponent:
@@ -168,14 +163,12 @@ ECS:
         texture_roughness_name: ""
   2:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: no
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
       struct OE::ECS::System<struct ScriptComponent>: no
     Component:
       struct TransformComponent:
-        pos: [-1.999951, 2, 0.01395325]
+        position: [-1.999951, 2, 0.01395325]
         scale: [1, 1, 1]
         rotation: [1, 0, 0]
       struct MeshComponent:
@@ -197,7 +190,7 @@ ECS:
         texture_roughness_name: ""
       struct LightComponent:
         init: false
-        data.pos: [-1.999951, 2, 0.01395325]
+        data.position: [-1.999951, 2, 0.01395325]
         data.cutoff: 40
         data.diffuse: [0.8529412, 0.5059112, 0.5059112]
         data.out_cutoff: 20
@@ -208,14 +201,12 @@ ECS:
         name: scripts\light_rotate.clua
   3:
     System:
-      struct OE::ECS::System<struct TransformComponent,struct VelocityComponent>: yes
-      struct OE::ECS::System<struct BoolWrapperComponent>: no
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        pos: [2, 0, 0]
+        position: [2, 0, 0]
         scale: [0.5, 0.5, 0.5]
         rotation: [0, 0, 0]
       struct MeshComponent:
@@ -235,3 +226,53 @@ ECS:
         texture_ao_name: ""
         texture_emissive_name: ""
         texture_roughness_name: ""
+  4:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      {}
+  5:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 0]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+  6:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: yes
+    Component:
+      struct TransformComponent:
+        position: [-3.249579, 4.184552, 10.14085]
+        scale: [1, 1, 1]
+        rotation: [-15.6, -2.7, 0]
+      struct TagComponent:
+        tag: Main Camera
+      struct ScriptComponent:
+        name: ..\scripts\camera_control.clua
+      struct CameraComponent:
+        {}
+  7:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      {}
+  8:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 0]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]

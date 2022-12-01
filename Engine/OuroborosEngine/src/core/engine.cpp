@@ -30,12 +30,29 @@ namespace OE
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if (ecs_manager.GetEntity(ent).alive)
 				{
-					CameraComponent& main_camera = GetActiveCamera();
+					CameraComponent* main_camera = GetActiveCamera();
+					if(main_camera == nullptr)
+					{
+						auto ents = ecs_manager.GetEntitiesMatching<CameraTransformSyncSignature>();
+						if(ents.empty())
+						{
+							auto ent = ecs_manager.CreateEntity();
+							ecs_manager.AddComponent<CameraComponent>(ent.myID);
+							ecs_manager.AddComponent<TransformComponent>(ent.myID);
+							ecs_manager.GetComponent<CameraComponent>(ent.myID).SetUsing(true);
+						}
+						else
+						{
+							ecs_manager.GetComponent<CameraComponent>(ents.front()).SetUsing(true);
+						}
+						main_camera = GetActiveCamera();
+						/*return;*/
+					}
 					Asset::CameraData camera_data;
-					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(&main_camera)).GetPosition();
-					camera_data.view = main_camera.GetViewMatrix();
+					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(main_camera)).GetPosition();
+					camera_data.view = main_camera->GetViewMatrix();
 					camera_data.inv_view = glm::inverse(glm::transpose(camera_data.view));
-					camera_data.projection = main_camera.GetPerspectiveMatrix();
+					camera_data.projection = main_camera->GetPerspectiveMatrix();
 
 					glm::vec4 world_pos = glm::vec4(0.0f, 0.0f, 4.9f, 1.0f);
 					world_pos = camera_data.view* world_pos;
@@ -366,7 +383,7 @@ namespace OE
 		//Renderer::VulkanContext::ChangeSceneScreenSize(width, height);
 	}
 
-	CameraComponent& Engine::GetActiveCamera()
+	CameraComponent* Engine::GetActiveCamera()
 	{
 		ecs_ID main_camera_owner = -1;
 		Engine::ecs_manager.ForEntitiesMatching<CameraTransformSyncSignature>(0.f,
@@ -377,7 +394,11 @@ namespace OE
 					main_camera_owner = ent;
 				}
 			});
-		return Engine::ecs_manager.GetComponent<CameraComponent>(main_camera_owner);
+		if(main_camera_owner == -1)
+		{
+			return nullptr;
+		}
+		return &Engine::ecs_manager.GetComponent<CameraComponent>(main_camera_owner);
 	}
 
 	void Engine::DeltaTime::Init()

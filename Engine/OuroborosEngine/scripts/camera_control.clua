@@ -1,0 +1,118 @@
+movespeed = 0.3
+pers_move_speed = 0.3
+fast_move_multuplier = 3
+left_move_button = 87
+right_move_button = 83
+forward_move_button = 65
+back_move_button = 68
+fast_move_button = 340
+right_mouse_button = 1
+
+function Init(ent_ID, dt)
+    ecs_manager = GetECS_Manager()
+end
+
+function Update(ent_ID, dt)
+    local has_transform_component = ecs_manager:HasTransformComponent(ent_ID)
+    local has_camera_component    = ecs_manager:HasCameraComponent(ent_ID)
+    if has_transform_component == false then
+        print("Does not have required component")
+        return
+    end
+
+    if has_camera_component == false then
+        print("Does not have required component")
+        return
+    end
+
+
+    local camera_component = ecs_manager:GetCameraComponent(ent_ID)
+
+    local is_main_camera = camera_component:IsUsing()
+    if is_main_camera == false then
+        print("Camera does not set to main camera, terminate script")
+        return
+    end
+
+    move_enabled = IsMouseButtonDown(right_mouse_button)
+    if move_enabled then
+        local transform_component = ecs_manager:GetTransformComponent(ent_ID)
+        local position = transform_component:GetPosition()
+        local rotation = transform_component:GetRotation()
+
+        local using_movespeed = movespeed
+
+        local move = vec3.new()
+
+        local moved = false
+
+        if IsKeyboardButtonDown(fast_move_button) then
+            using_movespeed = using_movespeed * fast_move_multuplier
+        end
+
+        if IsKeyboardButtonDown(right_move_button) then
+            local right_vector = camera_component:GetRightVector()
+            move.x = move.x - right_vector.x * using_movespeed
+            move.y = move.y - right_vector.y * using_movespeed
+            move.z = move.z - right_vector.z * using_movespeed
+            moved = true
+        end
+
+        if IsKeyboardButtonDown(left_move_button) then
+            local right_vector = camera_component:GetRightVector()
+            move.x = move.x + right_vector.x * using_movespeed
+            move.y = move.y + right_vector.y * using_movespeed
+            move.z = move.z + right_vector.z * using_movespeed
+            moved = true
+        end
+
+        if IsKeyboardButtonDown(forward_move_button) then
+            local forward_vector = camera_component:GetFrontVector()
+            move.x = move.x - forward_vector.x * using_movespeed
+            move.y = move.y - forward_vector.y * using_movespeed
+            move.z = move.z - forward_vector.z * using_movespeed
+            moved = true
+        end
+
+        if IsKeyboardButtonDown(back_move_button) then
+            local forward_vector = camera_component:GetFrontVector()
+            move.x = move.x + forward_vector.x * using_movespeed
+            move.y = move.y + forward_vector.y * using_movespeed
+            move.z = move.z + forward_vector.z * using_movespeed
+            moved = true
+        end
+
+        local mouse_move_x = GetMouseMoveX()
+        local mouse_move_y = GetMouseMoveY()
+
+        local rot_add = vec3.new()
+        if mouse_move_x ~= 0 then
+            moved = true
+            rot_add.y = rot_add.y + mouse_move_x * pers_move_speed
+        end
+
+        if mouse_move_y ~= 0 then
+            moved = true
+            rot_add.x = rot_add.x - mouse_move_y * pers_move_speed
+        end
+
+        if moved == true then
+            local new_position = vec3.new()
+            new_position.x = position.x + move.x
+            new_position.y = position.y + move.y
+            new_position.z = position.z + move.z
+            transform_component:SetPosition(new_position)
+
+            local new_rotation = vec3.new()
+            new_rotation.x = rotation.x + rot_add.x
+            new_rotation.y = rotation.y + rot_add.y
+            new_rotation.z = rotation.z + rot_add.z
+
+            transform_component:SetRotation(new_rotation)
+        end
+    end
+end
+
+function CleanUp(ent_ID, dt)
+
+end
