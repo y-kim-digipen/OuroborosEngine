@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 #include <glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
@@ -10,6 +11,15 @@ namespace Asset
     struct Asset
     {
     };
+
+	struct MeshPayload
+	{
+		uint64_t vertex_offset;
+		uint64_t vertex_using_count;
+		uint64_t index_offset;
+		uint64_t index_using_count;
+	};
+
     struct Mesh : Asset
     {
         struct Vertex
@@ -26,6 +36,8 @@ namespace Asset
     
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
+
+		std::map<std::string, MeshPayload> payload_datas;
 
         inline static std::list<std::string> supported_formats { ".obj" };
     };
