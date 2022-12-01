@@ -36,7 +36,6 @@ namespace Asset
     
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
-
 		std::map<std::string, MeshPayload> payload_datas;
 
         inline static std::list<std::string> supported_formats { ".obj" };
