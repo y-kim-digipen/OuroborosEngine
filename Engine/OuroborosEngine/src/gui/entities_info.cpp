@@ -130,6 +130,11 @@ void OE::GUI::EntitesInfo::Draw()
 	
 	ImGui::EndChild();
 	ImGui::End();
+
+	if (open == false)
+	{
+		Engine::gui_manager.RunBehavior(name);
+	}
 }
 
 void OE::GUI::EntitesInfo::DrawSingleEntity(ecs_ID entityID)

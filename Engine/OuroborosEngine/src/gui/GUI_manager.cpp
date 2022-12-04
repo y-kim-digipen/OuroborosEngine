@@ -37,6 +37,28 @@ OE::GUI::_manager_internal::Behavior* OE::GUI::_manager_internal::MenuNode::Find
 	}
 }
 
+OE::GUI::_manager_internal::Behavior* OE::GUI::_manager_internal::MenuNode::FindBehavior(
+	const std::string& behavior_name)
+{
+	for (auto &behavior : behaviors)
+	{
+		if(behavior.first == behavior_name)
+		{
+			return &behavior.second;
+		}
+	}
+	for (auto& child : child_nodes)
+	{
+		auto res = child.second->FindBehavior(behavior_name);
+		if(res)
+		{
+			return res;
+		}
+	}
+	return nullptr;
+	//return &behaviors.at(behavior_name);
+}
+
 void OE::GUI::_manager_internal::MenuNode::DrawMenu()
 {
 	for (const auto& [key, node] : child_nodes)
@@ -64,52 +86,52 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 {
 	head_menu = new _manager_internal::MenuNode;
 	//std::queue path = { "File", "System" };
-	RegisterMenuItem({ "System", "Tests" }, "ImGuiDemo", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
-	{
-		open = !open;
-		if(open)
-		{
-			created = new sample_panel;
-			AddPanel(created);
-		}
-		else
-		{
-			RemovePanel(created);
-		}
-	});
-	RegisterMenuItem({ "System", "Tests" }, "TestWindow", [this](bool& open)
-		{
-			//static std::vector<GUI_Base*> bases;
-			//GUI_Base* bases_created
-			static const std::string base_name = "Sample Window ";
-			constexpr int MAX_SAME_ITEMS = 10;
-			static bool slots[MAX_SAME_ITEMS] = { false };
+	//RegisterMenuItem({ "System", "Tests" }, "ImGuiDemo", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
+	//{
+	//	open = !open;
+	//	if(open)
+	//	{
+	//		created = new sample_panel;
+	//		AddPanel(created);
+	//	}
+	//	else
+	//	{
+	//		RemovePanel(created);
+	//	}
+	//});
+	//RegisterMenuItem({ "System", "Tests" }, "TestWindow", [this](bool& open)
+	//	{
+	//		//static std::vector<GUI_Base*> bases;
+	//		//GUI_Base* bases_created
+	//		static const std::string base_name = "Sample Window ";
+	//		constexpr int MAX_SAME_ITEMS = 10;
+	//		static bool slots[MAX_SAME_ITEMS] = { false };
 
-			int i = 0;
+	//		int i = 0;
 
-			for( i = 0; i < MAX_SAME_ITEMS; ++i)
-			{
-				if(HasPanel(base_name + std::to_string(i)))
-				{
-					slots[i] = true;
-				}
-				else
-				{
-					slots[i] = false;
-				}
-			}
+	//		for( i = 0; i < MAX_SAME_ITEMS; ++i)
+	//		{
+	//			if(HasPanel(base_name + std::to_string(i)))
+	//			{
+	//				slots[i] = true;
+	//			}
+	//			else
+	//			{
+	//				slots[i] = false;
+	//			}
+	//		}
 
-			for (i = 0; i < MAX_SAME_ITEMS; ++i)
-			{
-				if(slots[i] == false)
-				{
-					slots[i] = true;
-					break;
-				}
-			}
+	//		for (i = 0; i < MAX_SAME_ITEMS; ++i)
+	//		{
+	//			if(slots[i] == false)
+	//			{
+	//				slots[i] = true;
+	//				break;
+	//			}
+	//		}
 
-			AddPanel(new sample_panel2(base_name + std::to_string(i)));
-		});
+	//		AddPanel(new sample_panel2(base_name + std::to_string(i)));
+	//	});
 
 	RegisterMenuItem({ "ECS" }, "Entities", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
 	{
@@ -229,10 +251,10 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 		}
 	});
 
-	RegisterMenuItem({ "System", "Viewport" }, "Fit to frame", [this](bool& open) mutable
-	{
-		open = !open;
-	});
+	//RegisterMenuItem({ "System", "Viewport" }, "Fit to frame", [this](bool& open) mutable
+	//{
+	//	open = !open;
+	//});
 
 	RegisterMenuItem({ "ECS", "Edit" }, "Gizmo Editor", [this, created = static_cast<GUI_Base*>(nullptr)](bool& open) mutable
 	{
@@ -242,12 +264,13 @@ OE::GUI::GUI_manager::GUI_manager() : slider_speed(0.01f)
 			if(created == nullptr)
 			{
 				created = new GizmoEditor;
+				AddPanel(created);
 			}
-			AddPanel(created);
+			created->SetOpen(true);
 		}
 		else
 		{
-			created->SetOpen(true);
+			created->SetOpen(false);
 		}
 	});
 	//AddPanel(new GizmoEditor);
@@ -376,6 +399,18 @@ void OE::GUI::GUI_manager::RunBehavior(const std::initializer_list<std::string>&
 	else
 	{
 		assert(false);
+	}
+}
+
+void OE::GUI::GUI_manager::RunBehavior(const std::string& behavior_name) const
+{
+	if(head_menu)
+	{
+		auto res = head_menu->FindBehavior(behavior_name);
+		if (res)
+			(*res)();
+		//else
+			//assert(false);
 	}
 }
 

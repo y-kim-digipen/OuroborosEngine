@@ -131,6 +131,11 @@ namespace OE
 				OE::Engine::scene_serializer.SerializeScene(path.string());
 			}
 			ImGui::End();
+
+			if (open == false)
+			{
+				Engine::gui_manager.RunBehavior(name);
+			}
 		}
 	}
 }

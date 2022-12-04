@@ -47,6 +47,11 @@ namespace OE
 			//	Engine::GetRenderWindow()->vulkan_imgui_manager.GetPanels()["System"]["AssetManager"].second = true;
 			//}
 			ImGui::End();
+
+			if (open == false)
+			{
+				Engine::gui_manager.RunBehavior(name);
+			}
 		}
 	}
 }

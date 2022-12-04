@@ -66,6 +66,10 @@ OE::GUI::MaterialConfigure::MaterialConfigure(const std::string& title, const st
 void OE::GUI::MaterialConfigure::Draw()
 {
 	draw_internal();
+	if (open == false)
+	{
+		Engine::gui_manager.RunBehavior(name);
+	}
 }
 
 void OE::GUI::MaterialConfigure::draw_internal()

@@ -121,6 +121,11 @@ namespace OE
 				ImGui::EndTabBar();
 			}
 			ImGui::End();
+
+			if (open == false)
+			{
+				Engine::gui_manager.RunBehavior("Systems");
+			}
 		}
 	}
 }
