@@ -28,7 +28,7 @@ namespace Renderer {
         
         vkCmdPushConstants(command_buffer, vulkan_type->current_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(model_constant), &model_constant);
 
-        BindModel(parent_model, 0, 0);
+        BindModel(parent_model);
 
         vkCmdDrawIndexed(command_buffer, index_count, 1, index_offset, 0, 0);
     }
