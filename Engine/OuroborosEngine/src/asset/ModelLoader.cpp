@@ -55,18 +55,21 @@ namespace yk_ModelLoader
 		ReserveMeshSpace(scene, result);
 		//LOG("\t", "Num meshes :", numMeshesInScene);
 		result->_numMeshes = numMeshesInScene;
+		uint32_t prevIndexOffset = 0;
 
 		for (uint32_t i = 0; i < numMeshesInScene; ++i)
 		{
-			if (ProcessSingleMesh(scene->mMeshes[i], result, i) == false)
+			if (ProcessSingleMesh(scene->mMeshes[i], result, i, prevIndexOffset) == false)
 			{
 				return false;
 			}
+
+			prevIndexOffset += scene->mMeshes[i]->mNumVertices;
 		}
 		return true;
 	}
 
-	bool ModelLoader::ProcessSingleMesh(const aiMesh* mesh, ModelLoadResult* result, uint32_t meshIndex)
+	bool ModelLoader::ProcessSingleMesh(const aiMesh* mesh, ModelLoadResult* result, uint32_t meshIndex, uint32_t prevIndexOffset)
 	{
 		//LOG("Processing mesh :", mesh->mName.C_Str());
 		const uint32_t numVertices = mesh->mNumVertices;
@@ -135,7 +138,7 @@ namespace yk_ModelLoader
 			assert(indicesInFace == 3);
 			for (uint8_t j = 0; j < indicesInFace; ++j)
 			{
-				processingMesh._indices[result->_numIndices + i * 3 + j] = face.mIndices[j];
+				processingMesh._indices[result->_numIndices + i * 3 + j] = face.mIndices[j] + prevIndexOffset;
 			}
 		}
 

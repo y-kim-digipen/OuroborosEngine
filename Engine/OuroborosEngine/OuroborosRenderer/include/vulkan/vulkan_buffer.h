@@ -49,7 +49,7 @@ namespace Renderer
 	public:
 		VulkanVertexBuffer(VulkanType* vulkan_type,const std::vector<Vertex>& vertices);
 		~VulkanVertexBuffer();
-		void Bind() const;
+		void Bind(uint64_t vertex_offset = 0) const;
 		void UnBind() const{};
 		void AddData(const std::vector<Vertex>& vertices);
 		void Cleanup();
@@ -68,7 +68,7 @@ namespace Renderer
 	public:
 		VulkanIndexBuffer(VulkanType* vulkan_type , const std::vector<uint32_t>& data);
 		~VulkanIndexBuffer();
-		void Bind() const;
+		void Bind(uint64_t offset = 0) const;
 		void UnBind() const {}
 		void Cleanup();
 

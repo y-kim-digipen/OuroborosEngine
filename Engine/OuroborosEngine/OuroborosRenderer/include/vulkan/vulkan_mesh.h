@@ -23,6 +23,7 @@ namespace Renderer {
 		VulkanType* vulkan_type;
 		Model* parent_model;
 		uint64_t vertex_offset;
+		uint64_t vertex_count;
 		uint64_t index_offset;
 		uint64_t index_count;
 	};
