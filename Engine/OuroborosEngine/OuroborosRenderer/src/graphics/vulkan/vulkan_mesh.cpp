@@ -30,6 +30,6 @@ namespace Renderer {
 
         BindModel(parent_model);
 
-        vkCmdDrawIndexed(command_buffer, index_count, 1, index_offset, vertex_offset, 0);
+        vkCmdDrawIndexed(command_buffer, index_count, 1, index_offset, 0, 0);
     }
 }

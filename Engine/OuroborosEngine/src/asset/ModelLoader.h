@@ -80,7 +80,7 @@ namespace yk_ModelLoader
 		static bool Import(const char* path, ModelLoadResult* result);
 	private:
 		static bool ProcessMeshes(const aiScene* scene, ModelLoadResult* result);
-		static bool ProcessSingleMesh(const aiMesh* mesh, ModelLoadResult* result, uint32_t meshIndex);
+		static bool ProcessSingleMesh(const aiMesh* mesh, ModelLoadResult* result, uint32_t meshIndex, uint32_t prevIndexOffset);
 		static void ReserveMeshSpace(const aiScene* scene, ModelLoadResult* result);
 
 		static bool ProcessTextures(const aiScene* scene, ModelLoadResult* result);
