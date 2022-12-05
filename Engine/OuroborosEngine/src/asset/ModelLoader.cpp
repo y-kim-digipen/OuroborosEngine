@@ -125,7 +125,7 @@ namespace yk_ModelLoader
 			for (uint32_t i = 0; i < numVertices; ++i)
 			{
 				const aiVector3D& aiVertexUV = mesh->mTextureCoords[0][i];
-				processingMesh._vertexTexCoords[result->_numVertices + i] = aiVector2ToGlmVec2(aiVector2D{ aiVertexUV.x, aiVertexUV.y });
+				processingMesh._vertexTexCoords[result->_numVertices + i] = aiVector2ToGlmVec2(aiVector2D{ aiVertexUV.x, -aiVertexUV.y });
 			}
 		}
 

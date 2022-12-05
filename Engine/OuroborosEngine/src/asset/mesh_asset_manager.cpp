@@ -75,77 +75,12 @@ namespace OE
         //mesh
         //assets[file_path] = std::make_pair(true, mesh);
 
-        for(const auto& payload : mesh.payload_datas)
-        {
-	        assets[payload.first] = std::make_pair(true, mesh);
-        }
+        //for(const auto& payload : mesh.payload_datas)
+        //{
+	        assets[file_path] = std::make_pair(true, mesh);
+        //}
 
         vulkan_mesh_manager->CopyAssetData(file_path.c_str(), mesh);
-        //tinyobj::attrib_t attrib;
-        //std::vector<tinyobj::shape_t> shapes;
-        //std::vector<tinyobj::material_t> materials;
-        //std::string warn, err;
-        //if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, file_path.c_str()))
-        //{
-        //    //throw std::runtime_error(warn + err);
-        //    std::cerr << "Failed to load asset " + file_path << std::endl;
-        //    if (!warn.empty())
-        //    {
-
-        //        std::cerr << warn << std::endl;
-        //    }
-        //    if (!err.empty())
-        //    {
-
-        //        std::cerr << err << std::endl;
-        //    }
-        //    return 1;
-        //}
-
-        //std::unordered_map<Asset::Mesh::Vertex, uint32_t> uniqueVertices{};
-
-        //for (const auto& shape : shapes)
-        //{
-        //    for (const auto& index : shape.mesh.indices)
-        //    {
-        //        Asset::Mesh::Vertex vertex{};
-
-        //        vertex.position = {
-        //            attrib.vertices[3 * index.vertex_index + 0],
-        //            attrib.vertices[3 * index.vertex_index + 1],
-        //            attrib.vertices[3 * index.vertex_index + 2]
-        //        };
-
-        //        if (!attrib.texcoords.empty())
-        //            vertex.uv = {
-        //                attrib.texcoords[2 * index.texcoord_index + 0],
-        //                1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-        //        };
-
-        //        if (!attrib.normals.empty())
-        //            vertex.normal = {
-        //                attrib.normals[3 * index.normal_index + 0],
-        //                attrib.normals[3 * index.normal_index + 1],
-        //                attrib.normals[3 * index.normal_index + 2],
-        //        };
-
-
-
-        //        //vertex.color = { 1.0f, 1.0f, 1.0f };
-
-        //        if (uniqueVertices.count(vertex) == 0) {
-        //            uniqueVertices[vertex] = static_cast<uint32_t>(mesh.vertices.size());
-        //            mesh.vertices.push_back(vertex);
-        //        }
-        //        mesh.indices.push_back(uniqueVertices[vertex]);
-        //    }
-        //}
-        //assets[file_path] = std::make_pair(true, mesh);
-        //auto& vulkan_mesh_manager
-		      //                  = static_cast<Renderer::VulkanContext*>
-		      //                  (Engine().Get().window->GetWindowData().RenderContextData.get())
-		      //                  ->mesh_manager;
-        //vulkan_mesh_manager->CopyAssetData(file_path.c_str(), mesh);
         return 0;
     }
 

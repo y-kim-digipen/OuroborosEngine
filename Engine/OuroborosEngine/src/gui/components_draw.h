@@ -23,15 +23,19 @@ namespace OE
 		{
 			if (ImGui::BeginCombo("Meshes", mesh_component.mesh_name.c_str()))
 			{
-				for (const auto& key : mesh_map | std::views::keys)
+				for (const auto& [key, val] :mesh_map)
 				{
-					const bool selected = mesh_component.mesh_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
+					auto mesh = val.second;
+					for(const auto& key: mesh.payload_datas)
 					{
-						mesh_component.mesh_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
+						const bool selected = mesh_component.mesh_name == key.first;
+						if (ImGui::Selectable(key.first.c_str(), selected))
+						{
+							mesh_component.mesh_name = key.first;
+						}
+						if (selected) {
+							ImGui::SetItemDefaultFocus();
+						}
 					}
 				}
 				ImGui::EndCombo();

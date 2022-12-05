@@ -130,11 +130,11 @@ namespace OE
 		context_data->material_manager->SetNoneTexture(context_data->texture_manager->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
 
-		ecs_manager.CreateEntity();
-		auto& entity = ecs_manager.CreateEntity();
-		entity.hierarchy.SetParent(0);
-		auto& component = ecs_manager.AddComponent<TransformComponent>(entity.myID);
-		auto owner = ecs_manager.GetComponentOwner(&component);
+		//ecs_manager.CreateEntity();
+		//auto& entity = ecs_manager.CreateEntity();
+		//entity.hierarchy.SetParent(0);
+		//auto& component = ecs_manager.AddComponent<TransformComponent>(entity.myID);
+		//auto owner = ecs_manager.GetComponentOwner(&component);
 	}
 
 	void Engine::Init()
@@ -162,6 +162,27 @@ namespace OE
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
+		//Load sponza
+		//asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/Sponza.fbx");
+		//auto& raw_data = asset_manager.GetManager<MeshAssetManager>().GetAssetRawData();
+		//for(const auto& data : raw_data)
+		//{
+		//	if(data.first == "model/Sponza.fbx")
+		//	{
+		//		for(const auto& payload : data.second.second.payload_datas)
+		//		{
+		//			auto entID = ecs_manager.CreateEntity().myID;
+		//			ecs_manager.AddComponent<TransformComponent>(entID);
+		//			ecs_manager.AddComponent<ShaderComponent>(entID);
+		//			ecs_manager.AddComponent<TagComponent>(entID, payload.first);
+		//			ecs_manager.AddComponent<MaterialComponent>(entID);
+		//			auto& comp = ecs_manager.AddComponent<MeshComponent>(entID);
+		//			ecs_manager.AddSystem<DrawSystem>(entID);
+		//			comp.mesh_name = payload.first;
+		//		}
+		//	}
+
+		//}
 		
 	}
 
