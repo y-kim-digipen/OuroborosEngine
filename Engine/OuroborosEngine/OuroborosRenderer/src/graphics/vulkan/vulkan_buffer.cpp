@@ -162,13 +162,12 @@ namespace Renderer
 		buffer = nullptr;
 	}
 
-	void VulkanVertexBuffer::Bind() const
+	void VulkanVertexBuffer::Bind(uint64_t vertex_offset) const
 	{
 		if(buffer != nullptr)
 		{
-			VkDeviceSize offset = 0;
 			auto& frame = vulkan_type->frame_data[vulkan_type->current_frame];
-			vkCmdBindVertexBuffers(frame.command_buffer, 0, 1, &buffer->buffer, &offset);
+			vkCmdBindVertexBuffers(frame.command_buffer, 0, 1, &buffer->buffer, &vertex_offset);
 		}
 	}
 
@@ -225,13 +224,12 @@ namespace Renderer
 		buffer = nullptr;
 	}
 
-	void VulkanIndexBuffer::Bind() const
+	void VulkanIndexBuffer::Bind(uint64_t offset) const
 	{
 		if(buffer != nullptr)
 		{
-			VkDeviceSize offset = 0;
 			auto& frame = vulkan_type->frame_data[vulkan_type->current_frame];
-			vkCmdBindIndexBuffer(frame.command_buffer, buffer->buffer, offset, VK_INDEX_TYPE_UINT32);
+			vkCmdBindIndexBuffer(frame.command_buffer, buffer->buffer, 0, VK_INDEX_TYPE_UINT32);
 		}
 	}
 

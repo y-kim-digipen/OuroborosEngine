@@ -1,0 +1,129 @@
+Asset:
+  class OE::ImageAssetManager:
+    ..\images\gameboy_textures\mat_default_AO.jpeg:
+      {}
+    ..\images\gameboy_textures\mat_default_albedo.jpeg:
+      {}
+    ..\images\gameboy_textures\mat_default_emissive.jpeg:
+      {}
+    ..\images\gameboy_textures\mat_default_metallic.jpeg:
+      {}
+    ..\images\gameboy_textures\mat_default_normal.png:
+      {}
+    ..\images\gameboy_textures\mat_default_roughness.jpeg:
+      {}
+    images/null.png:
+      {}
+  class OE::MeshAssetManager:
+    ..\model\GAMEBOY.obj|Box_low_Mesh.001:
+      {}
+    ..\model\GAMEBOY.obj|Button_low_Mesh.004:
+      {}
+    ..\model\GAMEBOY.obj|Cartridge_low001_Mesh.006:
+      {}
+    ..\model\GAMEBOY.obj|Cyl_1_low_Mesh.002:
+      {}
+    ..\model\GAMEBOY.obj|Cyl_2_low_Mesh.003:
+      {}
+    ..\model\GAMEBOY.obj|Object001_Mesh.007:
+      {}
+    ..\model\GAMEBOY.obj|Open_low_Mesh.005:
+      {}
+    ..\model\GAMEBOY.obj|game_low_Mesh:
+      {}
+    ..\model\GAMEBOY.obj|whole:
+      {}
+    model/default_cube.obj|whole:
+      {}
+  class OE::ShaderAssetManager:
+    shader_lightpass:
+      {}
+  class OE::ScriptAssetManager:
+    {}
+  class OE::MaterialAssetManager:
+    GameBoyMat:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\images\gameboy_textures\mat_default_albedo.jpeg
+      normal: ..\images\gameboy_textures\mat_default_normal.png
+      metallic: ..\images\gameboy_textures\mat_default_metallic.jpeg
+      roughness: ..\images\gameboy_textures\mat_default_roughness.jpeg
+      ao: ..\images\gameboy_textures\mat_default_AO.jpeg
+      emissive: ..\images\gameboy_textures\mat_default_emissive.jpeg
+ECS:
+  0:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0.369, 1.821255, 0]
+        scale: [1, 1, 1]
+        rotation: [0, -0, 0]
+      struct MeshComponent:
+        mesh_name: ..\model\GAMEBOY.obj|whole
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: material
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+  1:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0.3, 1.44, 5]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+      struct TagComponent:
+        tag: Main Camera
+      struct CameraComponent:
+        {}
+  2:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [1.324916, 0.7539799, 0]
+        scale: [1, 1, 1]
+        rotation: [0, -0, 0]
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: GameBoyMat
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: true
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+      struct LightComponent:
+        init: false
+        data.position: [1.324916, 0.7539799, 0]
+        data.cutoff: 0
+        data.diffuse: [1, 1, 1]
+        data.out_cutoff: 0
+        data.dir: [1, 0, 0]
+        data.falloff: 0
+        data.type: 1

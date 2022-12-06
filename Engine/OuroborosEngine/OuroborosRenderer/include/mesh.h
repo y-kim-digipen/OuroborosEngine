@@ -1,6 +1,8 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <memory>
+
 #include <vector>
 #include <vec3.hpp>
 #include <vec2.hpp>
@@ -8,7 +10,13 @@
 //#include "assets.h"
 #include <common/assets.h>
 
+struct VulkanType;
+
 namespace Renderer {
+	class VulkanMesh;
+	class VulkanVertexBuffer;
+	class VulkanIndexBuffer;
+
 	struct Vertex {
 		glm::vec3 pos;
 		glm::vec3 normal;
@@ -41,12 +49,24 @@ namespace Renderer {
 		Mesh() = default;
 		virtual ~Mesh() =default;
 		
-		virtual bool CopyAssetData(const Asset::Mesh& mesh_name);
 		virtual void Draw(const glm::mat4& model, const glm::mat4& normal_matrix) {}
 	protected:
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
 	};
+
+	struct Model {
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
+		std::unique_ptr<VulkanVertexBuffer> p_vertex_buffer;
+		std::unique_ptr<VulkanIndexBuffer> p_index_buffer;
+		
+		std::vector<std::unique_ptr<VulkanMesh>> mesh_list;
+	};
+
+	bool InitModel(VulkanType* vulkan_type, Model* out_model, const Asset::Mesh& mesh);
+	bool BindModel(Model* model);
+	void CleanupModel(Model* model);
 };
 #endif // !MESH_H
 

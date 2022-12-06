@@ -11,22 +11,12 @@ namespace Renderer {
       glm::mat4 normal_matrix;
     };
 
-    VulkanMesh::VulkanMesh(VulkanType* vulkan_type) : vulkan_type(vulkan_type)
+    VulkanMesh::VulkanMesh(VulkanType* vulkan_type, Model* parent_model, uint64_t vertex_offset, uint64_t index_offset, uint64_t index_count)
+        : vulkan_type(vulkan_type), parent_model(parent_model), vertex_offset(vertex_offset), index_offset(index_offset), index_count(index_count)
     {
     }
     VulkanMesh::~VulkanMesh()
     { 
-    }
-
-    bool VulkanMesh::CopyAssetData(const Asset::Mesh& mesh)
-    {
-        if (!Mesh::CopyAssetData(mesh))
-            return false;
-
-        p_vertex_buffer = std::make_unique<VulkanVertexBuffer>(vulkan_type,vertices);
-        p_index_buffer = std::make_unique<VulkanIndexBuffer>(vulkan_type,indices);
-
-        return true;
     }
 
     void VulkanMesh::Draw(const glm::mat4& model, const glm::mat4& normal_matrix)
@@ -40,9 +30,8 @@ namespace Renderer {
         //if(vulkan_type->current_pipeline_layout != vulkan_type->shadow_pass.shadow_shader->pipeline_layout)
         vkCmdPushConstants(command_buffer, vulkan_type->current_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(model_constant), &model_constant);
 
-        p_index_buffer->Bind();
-        p_vertex_buffer->Bind();
+        BindModel(parent_model);
 
-        vkCmdDrawIndexed(command_buffer, indices.size(), 1, 0, 0, 0);
+        vkCmdDrawIndexed(command_buffer, index_count, 1, index_offset, 0, 0);
     }
 }

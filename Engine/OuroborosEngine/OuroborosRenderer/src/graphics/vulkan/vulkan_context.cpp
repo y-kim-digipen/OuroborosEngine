@@ -946,8 +946,8 @@ namespace Renderer
             }
         }
 
-        instance_create_info.enabledLayerCount = required_layer_count;
-        instance_create_info.ppEnabledLayerNames = required_layer_names;
+        //instance_create_info.enabledLayerCount = required_layer_count;
+        //instance_create_info.ppEnabledLayerNames = required_layer_names;
 #endif //_DEBUG
 
         //TODO: this should be formatted as a function of inside the platform

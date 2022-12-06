@@ -152,6 +152,7 @@ namespace OE
 					state = State::Invalid;
 					sol::error err = func(args...);
 					error_what = err.what();
+					std::cout << error_what << std::endl;
 					break;
 				}
 				break;

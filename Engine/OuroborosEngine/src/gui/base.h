@@ -31,6 +31,8 @@ namespace OE
 				return open;
 			}
 
+			void RemovePanel();
+
 			void SetOpen(bool status) { open = status; }
 		protected:
 			std::string name;

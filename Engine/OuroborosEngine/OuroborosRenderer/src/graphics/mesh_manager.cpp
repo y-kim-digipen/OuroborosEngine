@@ -1,6 +1,7 @@
 #include "mesh_manager.h"
 
 #include <iostream>
+#include <memory>
 
 #include "vulkan/vulkan_mesh.h"
 #include "mesh.h"
@@ -13,21 +14,40 @@ namespace Renderer
 
 	}
 
-	int VulkanMeshManager::CopyAssetData(const std::string&& mesh_name, const Asset::Mesh& mesh)
+	int VulkanMeshManager::CopyAssetData(const std::string&& model_name, const Asset::Mesh& mesh)
 	{
-		if (mesh_map.find(mesh_name) != mesh_map.end()) 
+		if (model_list.find(model_name) != model_list.end()) 
 		{
-			std::cout << mesh_name << " already exists\n";
+			std::cout << model_name << " already exists\n";
 			return -1;
 		}
 
-		mesh_map[mesh_name] = std::make_unique<VulkanMesh>(vulkan_type);
-		if (!mesh_map[mesh_name]->CopyAssetData(mesh)) 
-		{
-			std::cout << mesh_name << " loading failed\n";
+		// INSERT NEW MODEL
+		model_list[model_name] = (new Model());
+		Model* model = model_list[model_name];
+
+		if (InitModel(vulkan_type, model, mesh) == false) {
+			std::cout << model_name << " loading failed\n";
 			return -1;
 		}
 
+        uint32_t submesh_count = mesh.payload_datas.size();
+
+        for (const auto& mesh_payload : mesh.payload_datas) {
+            model->mesh_list.push_back(
+                std::make_unique<VulkanMesh>(
+                    vulkan_type,
+                    model,
+                    mesh_payload.second.vertex_offset,
+                    mesh_payload.second.index_offset,
+                    mesh_payload.second.index_using_count
+                    )
+            );
+
+			// INSERT SUBMESH TO MESH_MAP
+			mesh_map[mesh_payload.first] = model->mesh_list.back().get();
+        }
+		
 		return 0;
 	}
 
@@ -40,32 +60,26 @@ namespace Renderer
 		}
 		else
 		{
-			std::cout << mesh_name << " (mesh) is doesn't exist!" << std::endl;
-			//throw std::runtime_error(mesh_name + "(mesh) is doesn't exist!");
-			//int result = AddMesh(mesh_name);
-			//if (result == 0)
-			//{
-			//	mesh_map.find(mesh_name)->second->Draw(model, normal_matrix);
-			//}
+			std::cout << mesh_name << " doesn't exist!" << std::endl;
 			return -1;
 		}
 
 		return 0;
 	}
 
-	int VulkanMeshManager::DeleteMeshData(const std::string& mesh_name)
+	int VulkanMeshManager::DeleteMeshData(const std::string& model_name)
 	{
-		if(auto iter = mesh_map.find(mesh_name); iter != mesh_map.end())
+		if(auto iter = model_list.find(model_name); iter != model_list.end())
 		{
-			iter->second.reset();
-			//TODO(Austyn): erase vulkan_mesh
-			//mesh_map[mesh_name]
-			mesh_map.erase(iter);
+			CleanupModel(iter->second);
+			delete iter->second;
+			iter->second = nullptr;
+			model_list.erase(iter);
 			return 0;
 		}
 		else
 		{
-			std::cout << mesh_name << "doesn't exist!" << std::endl;
+			std::cout << model_name << "doesn't exist!" << std::endl;
 		}
 
 		return 0;
@@ -73,6 +87,11 @@ namespace Renderer
 
 	void VulkanMeshManager::Cleanup()
 	{
-		mesh_map.clear();
+		for (auto& model : model_list) {
+
+			CleanupModel(model.second);
+			delete model.second;
+			model.second = nullptr;
+		}
 	}
 }

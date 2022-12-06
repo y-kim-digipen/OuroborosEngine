@@ -2,142 +2,26 @@ Asset:
   class OE::ImageAssetManager:
     images/null.png:
       {}
-    images\gameboy_textures\mat_default_AO.jpeg:
-      {}
-    images\gameboy_textures\mat_default_albedo.jpeg:
-      {}
-    images\gameboy_textures\mat_default_emissive.jpeg:
-      {}
-    images\gameboy_textures\mat_default_metallic.jpeg:
-      {}
-    images\gameboy_textures\mat_default_normal.png:
-      {}
-    images\gameboy_textures\mat_default_roughness.jpeg:
-      {}
-    images\materials\base-white-tile-bl\base-white-tile_albedo.png:
-      {}
-    images\materials\base-white-tile-bl\base-white-tile_ao.png:
-      {}
-    images\materials\base-white-tile-bl\base-white-tile_metallic.png:
-      {}
-    images\materials\base-white-tile-bl\base-white-tile_normal-ogl.png:
-      {}
-    images\materials\base-white-tile-bl\base-white-tile_roughness.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png:
-      {}
-    images\materials\gray-granite-flecks-bl\gray-granite-flecks-preview.jpg:
-      {}
-    images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Metallic.png:
-      {}
-    images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Normal-ogl.png:
-      {}
-    images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Roughness.png:
-      {}
-    images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png:
-      {}
-    images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png:
-      {}
   class OE::MeshAssetManager:
-    model/default_cube.obj:
-      {}
-    model\GAMEBOY.obj:
-      {}
-    model\plane.obj:
-      {}
-    model\sphere.obj:
-      {}
   class OE::ShaderAssetManager:
     shader_lightpass:
       {}
   class OE::ScriptAssetManager:
-    scripts\light_rotate.clua:
+    ..\scripts\camera_control.clua:
       {}
   class OE::MaterialAssetManager:
-    Gameboy Material:
+    test_mat:
       use_texture: true
       is_smoothness: false
       use_combined_metallic_roughness: false
-      albedo: images\gameboy_textures\mat_default_albedo.jpeg
-      normal: images\gameboy_textures\mat_default_normal.png
-      metallic: images\gameboy_textures\mat_default_metallic.jpeg
-      roughness: images\gameboy_textures\mat_default_roughness.jpeg
-      ao: images\gameboy_textures\mat_default_AO.jpeg
-      emissive: ""
-    Gray Granite:
-      use_texture: true
-      is_smoothness: false
-      use_combined_metallic_roughness: false
-      albedo: images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
-      normal: images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png
-      metallic: images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png
-      roughness: images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png
-      ao: images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
-      emissive: ""
-    PlaneMaterial:
-      use_texture: false
-      metallic: 0
-      roughness: 0
-      ao: 0
-    Tile:
-      use_texture: true
-      is_smoothness: false
-      use_combined_metallic_roughness: false
-      albedo: images\materials\base-white-tile-bl\base-white-tile_albedo.png
-      normal: images\materials\base-white-tile-bl\base-white-tile_normal-ogl.png
-      metallic: images\materials\base-white-tile-bl\base-white-tile_metallic.png
-      roughness: images\materials\base-white-tile-bl\base-white-tile_roughness.png
-      ao: images\materials\base-white-tile-bl\base-white-tile_ao.png
-      emissive: ""
-    Yoga Mat:
-      use_texture: true
-      is_smoothness: false
-      use_combined_metallic_roughness: false
-      albedo: images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-albedo.png
-      normal: images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Normal-ogl.png
-      metallic: images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Metallic.png
-      roughness: images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-Roughness.png
-      ao: images\materials\yoga-mat-wavy-pattern1-bl\yoga-mat-wavy-pattern1-ao.png
-      emissive: ""
+      albedo: images/null.png
+      normal: images/null.png
+      metallic: images/null.png
+      roughness: images/null.png
+      ao: images/null.png
+      emissive: images/null.png
 ECS:
   0:
-    System:
-      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
-      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
-      struct OE::ECS::System<struct ScriptComponent>: yes
-    Component:
-      struct TransformComponent:
-        position: [0, -1, 0]
-        scale: [10, 10, 10]
-        rotation: [0, 0, 0]
-      struct MeshComponent:
-        mesh_name: model\plane.obj
-      struct ShaderComponent:
-        name: shader_lightpass
-      struct MaterialComponent:
-        name: Tile
-        material_data:
-          {}
-        flag: false
-        is_save: false
-        is_light: false
-        texture_albedo_name: ""
-        texture_normal_name: ""
-        texture_metalroughness_name: ""
-        texture_ao_name: ""
-        texture_emissive_name: ""
-        texture_roughness_name: ""
-      struct TagComponent:
-        tag: Plane
-  1:
     System:
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
@@ -147,11 +31,11 @@ ECS:
         position: [0, 0, 0]
         scale: [1, 1, 1]
         rotation: [0, 0, 0]
-  2:
+  1:
     System:
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
       struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
-      struct OE::ECS::System<struct ScriptComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
         position: [0, 0, 5]
@@ -159,8 +43,44 @@ ECS:
         rotation: [0, 0, 0]
       struct TagComponent:
         tag: Main Camera
+      struct ScriptComponent:
+        name: ..\scripts\camera_control.clua
       struct CameraComponent:
         {}
+  2:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: yes
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 0]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: test_mat
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: true
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+      struct LightComponent:
+        init: false
+        data.position: [0, 0, 0]
+        data.cutoff: 0
+        data.diffuse: [1, 1, 1]
+        data.out_cutoff: 0
+        data.dir: [0, -1, 0]
+        data.falloff: 0
+        data.type: 2
   3:
     System:
       struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
@@ -172,11 +92,11 @@ ECS:
         scale: [1, 1, 1]
         rotation: [0, 0, 0]
       struct MeshComponent:
-        mesh_name: model\sphere.obj
+        mesh_name: ""
       struct ShaderComponent:
         name: shader_lightpass
       struct MaterialComponent:
-        name: Gray Granite
+        name: test_mat
         material_data:
           {}
         flag: false

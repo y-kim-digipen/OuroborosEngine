@@ -92,6 +92,27 @@ namespace OE
 	}
 
 	template<>
+	inline void AssetImGuiImpl<Asset::Mesh>(const Asset::Mesh& mesh)
+	{
+		for (const auto& data : mesh.payload_datas)
+		{
+			const std::string name = data.first;
+			ImGui::Text(name.c_str());
+		}
+		//ImGui::TextWrapped("Width : %d", image.width); ImGui::SameLine();
+		//ImGui::TextWrapped("Height : %d", image.height);
+
+		//const auto& texture_manager = Engine::Get().window->GetWindowData().RenderContextData->texture_manager;
+
+		//if (auto texture = texture_manager->GetTexture(image.filename); texture)
+		//{
+		//	const auto* TextureID = dynamic_cast<Renderer::VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+		//	dynamic_cast<Renderer::VulkanTexture*>(texture.get())->UpdateToDescripterSet(*TextureID, 0);
+		//	ImGui::Image(*TextureID, ImVec2(100, 100));
+		//}
+	}
+
+	template<>
 	inline void AssetImGuiImpl<Asset::Script>(const Asset::Script& script)
 	{
 		const std::filesystem::path script_path(script.path);

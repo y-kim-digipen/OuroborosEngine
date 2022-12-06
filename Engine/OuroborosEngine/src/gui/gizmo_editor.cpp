@@ -30,43 +30,57 @@ void OE::GUI::GizmoEditor::Draw()
         ImGui::SetNextWindowViewport(viewport->ID);
         window_flags |= ImGuiWindowFlags_NoMove;
     }
-    ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-    if (ImGui::Begin("Gizmo editor", &open, window_flags))
-    {
-        ImGui::Text("Selected Entity %s", (selected_entity < 0 ? "None" : std::to_string(selected_entity).c_str()));
-        ImGui::Separator();
-        if(ImGui::RadioButton("Translate", config.operation == ImGuizmo::TRANSLATE))
-			config.operation = ImGuizmo::TRANSLATE;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("Rotate", config.operation == ImGuizmo::ROTATE))
-			config.operation = ImGuizmo::ROTATE;
-        ImGui::SameLine();
-    	if (ImGui::RadioButton("Scale", config.operation == ImGuizmo::SCALE))
-			config.operation = ImGuizmo::SCALE;
-        ImGui::Separator();
-        if (ImGui::RadioButton("World", config.mode == ImGuizmo::WORLD))
-			config.mode = ImGuizmo::WORLD;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("Local", config.mode == ImGuizmo::LOCAL))
-			config.mode = ImGuizmo::LOCAL;
-        ImGui::Separator();
-        if (ImGui::RadioButton("Snap", config.do_snap))
-			config.do_snap = true;
-        ImGui::SameLine();
-        ImGui::InputFloat("##Snap value", &config.snap_amount);
+    static bool old_open = open;
 
-        if (ImGui::BeginPopupContextWindow())
+    if(open)
+    {
+        ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+        if (ImGui::Begin("Gizmo editor", &open, window_flags))
         {
-            if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
-            if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
-            if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
-            if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
-            if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
-            if (open && ImGui::MenuItem("Close")) open = false;
-            ImGui::EndPopup();
+            ImGui::Text("Selected Entity %s", (selected_entity < 0 ? "None" : std::to_string(selected_entity).c_str()));
+            ImGui::Separator();
+            if (ImGui::RadioButton("Translate", config.operation == ImGuizmo::TRANSLATE))
+                config.operation = ImGuizmo::TRANSLATE;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Rotate", config.operation == ImGuizmo::ROTATE))
+                config.operation = ImGuizmo::ROTATE;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Scale", config.operation == ImGuizmo::SCALE))
+                config.operation = ImGuizmo::SCALE;
+            ImGui::Separator();
+            if (ImGui::RadioButton("World", config.mode == ImGuizmo::WORLD))
+                config.mode = ImGuizmo::WORLD;
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Local", config.mode == ImGuizmo::LOCAL))
+                config.mode = ImGuizmo::LOCAL;
+            ImGui::Separator();
+            if (ImGui::RadioButton("Snap", config.do_snap))
+                config.do_snap = true;
+            ImGui::SameLine();
+            ImGui::InputFloat("##Snap value", &config.snap_amount);
+
+            if (ImGui::BeginPopupContextWindow())
+            {
+                if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
+                if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
+                if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
+                if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
+                if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+                if (open && ImGui::MenuItem("Close")) open = false;
+                ImGui::EndPopup();
+            }
         }
+
+        ImGui::End();
     }
-    ImGui::End();
+
+
+    if (old_open != open && open == false)
+    {
+        Engine::gui_manager.RunBehavior(name);
+    }
+
+    old_open = open;
 }
 
 bool OE::GUI::GizmoEditor::SetSelectedEntity(ecs_ID entityID)

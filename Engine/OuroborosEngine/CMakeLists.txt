@@ -26,10 +26,13 @@ target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..
 target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/glew-2.1.0/include)
 target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/glm)
 target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/glfw/include)
+target_include_directories(${PROGRAM_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/include)
 
 add_subdirectory(
     OuroborosRenderer
 )
+
+add_subdirectory(external/assimp)
 
 set(
     ADDITIONAL_LIBRARIES 
@@ -40,11 +43,12 @@ target_link_libraries(${PROGRAM_NAME}
     PRIVATE
     ouroboros::renderer 
     ImGui
+    assimp
     ${ADDITIONAL_LIBRARIES}
     # ${CMAKE_CURRENT_SOURCE_DIR}/external/yaml-cpp/build/Release/libyaml-cppmd.lib
 )
 
-add_dependencies(${PROGRAM_NAME} ouroboros::renderer) #ImGuizmo)
+add_dependencies(${PROGRAM_NAME} ouroboros::renderer assimp) #ImGuizmo)
 
 foreach(FILE ${SOURCES}) 
     # Get the directory of the source file

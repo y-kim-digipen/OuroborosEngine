@@ -15,7 +15,7 @@ namespace OE
 			static std::string directory_path = "..\\";
 
 			static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
-			static std::vector<bool> row_selected(50);
+			static std::vector<bool> row_selected(200);
 			if (ImGui::BeginTable("", 2, flags))
 			{
 				ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
@@ -131,6 +131,11 @@ namespace OE
 				OE::Engine::scene_serializer.SerializeScene(path.string());
 			}
 			ImGui::End();
+
+			if (open == false)
+			{
+				Engine::gui_manager.RunBehavior(name);
+			}
 		}
 	}
 }

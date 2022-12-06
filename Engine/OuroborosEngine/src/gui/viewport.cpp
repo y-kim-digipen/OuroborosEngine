@@ -12,7 +12,7 @@ void OE::GUI::ViewPort::Draw()
 
 void OE::GUI::ViewPort::draw_internal()
 {
-    const bool fit_to_frame = OE::Engine::gui_manager.GetBehavior({ "System", "Viewport" }, "Fit to frame")->open;
+    //const bool fit_to_frame = OE::Engine::gui_manager.GetBehavior({ "System", "Viewport" }, "Fit to frame")->open;
 
 
     ImGuiWindowFlags flag = ImGuiActivateFlags_None;
@@ -28,16 +28,16 @@ void OE::GUI::ViewPort::draw_internal()
     ImVec2 viewport_size = ImGui::GetWindowSize();
     item_pos_x = ImGui::GetWindowPos().x;
     item_pos_y = ImGui::GetWindowPos().y;
-    if(fit_to_frame)
-    {
-        glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x / target_aspect_ratio };
-        item_width_x = target_size.x;
-        item_height_y = target_size.y;
+    //if(fit_to_frame)
+    //{
+    //    glm::ivec2 target_size = glm::vec2{ viewport_size.x, viewport_size.x / target_aspect_ratio };
+    //    item_width_x = target_size.x;
+    //    item_height_y = target_size.y;
 
-        ImGui::Image(*TextureID, ImVec2{static_cast<float>(target_size.x), static_cast<float>(target_size.y)});
-    }
-    else
-    {
+    //    ImGui::Image(*TextureID, ImVec2{static_cast<float>(target_size.x), static_cast<float>(target_size.y)});
+    //}
+    //else
+    //{
         ImGui::Image(*TextureID, viewport_size);
         item_width_x = viewport_size.x;
         item_height_y = viewport_size.y;
@@ -46,12 +46,17 @@ void OE::GUI::ViewPort::draw_internal()
         {
             Engine::ChangeWindowSize(item_width_x, item_height_y);
         }
-    }
+    //}
 
 
     draw_gizmo();
 
     ImGui::End();
+
+    if (open == false)
+    {
+        Engine::gui_manager.RunBehavior("Enable");
+    }
 }
 
 void OE::GUI::ViewPort::draw_gizmo()
@@ -70,6 +75,10 @@ void OE::GUI::ViewPort::draw_gizmo()
 
     auto& transform_component = Engine::GetECSManager().GetComponent<TransformComponent>(selected_entity);
     auto active_camera = Engine::Get().GetActiveCamera();
+    if(active_camera == nullptr)
+    {
+        return;
+    }
     glm::mat4 mat = transform_component.GetMatrix();
 
     ImGuiIO& io = ImGui::GetIO();
@@ -91,11 +100,11 @@ void OE::GUI::ViewPort::draw_gizmo()
     ImGuizmo::SetOrthographic(false);
     ImGuizmo::SetDrawlist();
 
-    glm::mat4 perspective_mat = active_camera.GetPerspectiveMatrix();
+    glm::mat4 perspective_mat = active_camera->GetPerspectiveMatrix();
     perspective_mat[1][1] *= -1;
     glm::mat4 identity{ 1.f };
-    ImGuizmo::DrawGrid(&active_camera.GetViewMatrix()[0][0], &perspective_mat[0][0], &identity[0] [0], 10.f);
-    ImGuizmo::Manipulate(&active_camera.GetViewMatrix()[0][0], &perspective_mat[0][0], 
+    ImGuizmo::DrawGrid(&active_camera->GetViewMatrix()[0][0], &perspective_mat[0][0], &identity[0] [0], 10.f);
+    ImGuizmo::Manipulate(&active_camera->GetViewMatrix()[0][0], &perspective_mat[0][0], 
         config->operation, config->mode, &mat[0][0], nullptr, config->do_snap ? &config->snap_amount : nullptr);
 
     glm::vec3 translate;

@@ -30,13 +30,30 @@ namespace OE
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if (ecs_manager.GetEntity(ent).alive)
 				{
-					CameraComponent& main_camera = GetActiveCamera();
+					CameraComponent* main_camera = GetActiveCamera();
+					if(main_camera == nullptr)
+					{
+						auto ents = ecs_manager.GetEntitiesMatching<CameraTransformSyncSignature>();
+						if(ents.empty())
+						{
+							auto ent = ecs_manager.CreateEntity();
+							ecs_manager.AddComponent<CameraComponent>(ent.myID);
+							ecs_manager.AddComponent<TransformComponent>(ent.myID);
+							ecs_manager.GetComponent<CameraComponent>(ent.myID).SetUsing(true);
+						}
+						else
+						{
+							ecs_manager.GetComponent<CameraComponent>(ents.front()).SetUsing(true);
+						}
+						main_camera = GetActiveCamera();
+						/*return;*/
+					}
 					Asset::CameraData camera_data;
-					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(&main_camera)).GetPosition();
-					camera_data.view = main_camera.GetViewMatrix();
+					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(main_camera)).GetPosition();
+					camera_data.view = main_camera->GetViewMatrix();
 					camera_data.inv_view = glm::inverse(camera_data.view);
 					
-					camera_data.projection = main_camera.GetPerspectiveMatrix();
+					camera_data.projection = main_camera->GetPerspectiveMatrix();
 
 
 
@@ -122,11 +139,11 @@ namespace OE
 		context_data->material_manager->SetNoneTexture(context_data->texture_manager->GetTexture("images/null.png"));
 		context_data->material_manager->AddMaterial("material", Asset::MaterialData());
 
-		ecs_manager.CreateEntity();
-		auto& entity = ecs_manager.CreateEntity();
-		entity.hierarchy.SetParent(0);
-		auto& component = ecs_manager.AddComponent<TransformComponent>(entity.myID);
-		auto owner = ecs_manager.GetComponentOwner(&component);
+		//ecs_manager.CreateEntity();
+		//auto& entity = ecs_manager.CreateEntity();
+		//entity.hierarchy.SetParent(0);
+		//auto& component = ecs_manager.AddComponent<TransformComponent>(entity.myID);
+		//auto owner = ecs_manager.GetComponentOwner(&component);
 	}
 
 	void Engine::Init()
@@ -154,6 +171,27 @@ namespace OE
 
 		window->GetWindowData().RenderContextData->InitGlobalData();
 
+		//Load sponza
+		//asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/Sponza.fbx");
+		//auto& raw_data = asset_manager.GetManager<MeshAssetManager>().GetAssetRawData();
+		//for(const auto& data : raw_data)
+		//{
+		//	if(data.first == "model/Sponza.fbx")
+		//	{
+		//		for(const auto& payload : data.second.second.payload_datas)
+		//		{
+		//			auto entID = ecs_manager.CreateEntity().myID;
+		//			ecs_manager.AddComponent<TransformComponent>(entID);
+		//			ecs_manager.AddComponent<ShaderComponent>(entID);
+		//			ecs_manager.AddComponent<TagComponent>(entID, payload.first);
+		//			ecs_manager.AddComponent<MaterialComponent>(entID);
+		//			auto& comp = ecs_manager.AddComponent<MeshComponent>(entID);
+		//			ecs_manager.AddSystem<DrawSystem>(entID);
+		//			comp.mesh_name = payload.first;
+		//		}
+		//	}
+
+		//}
 		
 	}
 
@@ -168,15 +206,15 @@ namespace OE
 		});
 
 
-		//ecs_manager.ForEntitiesMatching<HierarchicalTransformSignature>(0.f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform)
-		//	{
-		//		decltype(ecs_manager)::Entity& entity = ecs_manager.GetEntity(ent);
-		//		if (const bool is_parent = entity.hierarchy.HasParent() == false)
-		//		{
-		//			glm::mat4 identity{ 1.f };
-		//			HierarchicalParentMatrixSet(ent, identity);
-		//		}
-		//	});
+		ecs_manager.ForEntitiesMatching<HierarchicalTransformSignature>(0.f, [](OE::Status status, auto& ent, float dt, [[maybe_unused]] TransformComponent& transform)
+			{
+				decltype(ecs_manager)::Entity& entity = ecs_manager.GetEntity(ent);
+				if (const bool is_parent = entity.hierarchy.HasParent() == false)
+				{
+					glm::mat4 identity{ 1.f };
+					transform.HierarchicalParentMatrixSet(ent, identity);
+				}
+			});
 
 		const auto matching_entities = ecs_manager.GetEntitiesMatching<CameraTransformSyncSignature>();
 		if(matching_entities.empty())
@@ -255,26 +293,6 @@ namespace OE
 			{
 				move_velocity *= fast_move_factor;
 			}
-
-			//if (Input::GetKeyboardButton(GLFW_KEY_W).IsDown())
-			//{
-			//	Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::FORWARD, move_velocity);
-			//}
-			//if (Input::GetKeyboardButton(GLFW_KEY_S).IsDown())
-			//{
-			//	Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::BACKWARD, move_velocity);
-			//}
-			//if (Input::GetKeyboardButton(GLFW_KEY_A).IsDown())
-			//{
-			//	Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::LEFT, move_velocity);
-			//}
-			//if (Input::GetKeyboardButton(GLFW_KEY_D).IsDown())
-			//{
-			//	Engine::camera.KeyboardInput(Renderer::Camera_MoveTo::RIGHT, move_velocity);
-			//}
-
-			//const glm::ivec2 mouse_move = Input::GetMouse().GetCursorMove();
-			//Engine::camera.MouseInput(-mouse_move.x, -mouse_move.y, mouse_move_velocity);
 		}
 		
 		float dt = OE::Engine::DeltaTime::GetDeltaTime();
@@ -338,7 +356,7 @@ namespace OE
 		window->BeginFrame();
 		window->Update();
 	
-		{
+	/*	{
 			 auto* renderer = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 			;
 ;			auto& textureID = *dynamic_cast<Renderer::VulkanTextureManager*>(renderer->texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
@@ -359,7 +377,7 @@ namespace OE
 
 			vkUpdateDescriptorSets(renderer->GetVulkanType()->device.handle, 1, &descriptor_set_write, 0, nullptr);
 			ImGui::Image(textureID, ImVec2{ static_cast<float>(300), static_cast<float>(300) });
-		}
+		}*/
 		gui_manager.Update();
 		while (!event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].empty())
 		{
@@ -398,7 +416,7 @@ namespace OE
 		//Renderer::VulkanContext::ChangeSceneScreenSize(width, height);
 	}
 
-	CameraComponent& Engine::GetActiveCamera()
+	CameraComponent* Engine::GetActiveCamera()
 	{
 		ecs_ID main_camera_owner = -1;
 		Engine::ecs_manager.ForEntitiesMatching<CameraTransformSyncSignature>(0.f,
@@ -409,7 +427,11 @@ namespace OE
 					main_camera_owner = ent;
 				}
 			});
-		return Engine::ecs_manager.GetComponent<CameraComponent>(main_camera_owner);
+		if(main_camera_owner == -1)
+		{
+			return nullptr;
+		}
+		return &Engine::ecs_manager.GetComponent<CameraComponent>(main_camera_owner);
 	}
 
 	void Engine::DeltaTime::Init()

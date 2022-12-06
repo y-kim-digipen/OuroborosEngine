@@ -23,15 +23,19 @@ namespace OE
 		{
 			if (ImGui::BeginCombo("Meshes", mesh_component.mesh_name.c_str()))
 			{
-				for (const auto& key : mesh_map | std::views::keys)
+				for (const auto& [key, val] :mesh_map)
 				{
-					const bool selected = mesh_component.mesh_name == key;
-					if (ImGui::Selectable(key.c_str(), selected))
+					auto mesh = val.second;
+					for(const auto& key: mesh.payload_datas)
 					{
-						mesh_component.mesh_name = key;
-					}
-					if (selected) {
-						ImGui::SetItemDefaultFocus();
+						const bool selected = mesh_component.mesh_name == key.first;
+						if (ImGui::Selectable(key.first.c_str(), selected))
+						{
+							mesh_component.mesh_name = key.first;
+						}
+						if (selected) {
+							ImGui::SetItemDefaultFocus();
+						}
 					}
 				}
 				ImGui::EndCombo();
@@ -654,5 +658,39 @@ namespace OE
 			ImGui::TreePop();
 		}
 
+	}
+
+	template<>
+	inline void ComponentDrawFunction<CameraComponent>(ecs_ID entID)
+	{
+		std::string strID = std::to_string(entID);
+		CameraComponent& camera_component = OE::Engine::ecs_manager.GetComponent<CameraComponent>(entID);
+
+		bool is_main_camera = camera_component.IsUsing();
+		if (ImGui::TreeNode(typeid(CameraComponent).name()))
+		{
+			if(ImGui::RadioButton("Set main cam", is_main_camera))
+			{
+				int32_t num_cam_in_Scene = 0;
+				OE::Engine::ecs_manager.ForEntitiesMatching<HasCameraComponentSignature>(0.f,
+					[&num_cam_in_Scene](OE::Status status, auto& ent, float dt, [[maybe_unused]] CameraComponent& camera)
+					{
+						if (camera.IsUsing())
+							num_cam_in_Scene++;
+					});
+
+				if(num_cam_in_Scene != 0 && !is_main_camera)
+				{
+					OE::Engine::ecs_manager.ForEntitiesMatching<HasCameraComponentSignature>(0.f,
+						[](OE::Status status, auto& ent, float dt, [[maybe_unused]] CameraComponent& camera)
+						{
+							camera.SetUsing(false);
+						});
+					//std::cout << ">>" << std::endl;
+					camera_component.SetUsing(!is_main_camera);
+				}
+			}
+			ImGui::TreePop();
+		}
 	}
 }

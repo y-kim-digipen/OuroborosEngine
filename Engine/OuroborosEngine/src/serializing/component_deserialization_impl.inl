@@ -3,7 +3,7 @@ template<typename T,
 YAML::Node _deserialize(YAML::Node node, T& transform, void*)
 {
 	glm::vec3 pos, scale, rot;
-	_deserialize(node["pos"], pos, nullptr);
+	_deserialize(node["position"], pos, nullptr);
 	_deserialize(node["scale"], scale, nullptr);
 	_deserialize(node["rotation"], rot, nullptr);
 	//node["position"] >> pos;
@@ -63,7 +63,7 @@ template<typename T,
 YAML::Node _deserialize(YAML::Node node, T& light, void*)
 {
 	node["init"] >> light.init;
-	node["data.pos"] >> light.data.pos;
+	node["data.position"] >> light.data.pos;
 	node["data.cutoff"] >> light.data.cutoff;
 	node["data.diffuse"] >> light.data.diffuse;
 	node["data.out_cutoff"] >> light.data.out_cutoff;
