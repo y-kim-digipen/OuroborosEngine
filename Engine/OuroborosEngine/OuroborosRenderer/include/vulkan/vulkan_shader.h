@@ -20,6 +20,7 @@ namespace Renderer {
 	enum E_StageType {
 		VERTEX_SHADER,
 		FRAGMENT_SHADER,
+		GEOMETRY_SHADER,
 		MAX_VALUE
 	};
 
@@ -38,6 +39,7 @@ namespace Renderer {
 		ShaderStage stages[MAX_VALUE];
 		uint32_t stage_count;
 		bool use_built_in_quad;
+		bool depth_bias_enable = false;
 		//TODO: renderpass
 		//E_ShaderPass pass_type; 
 		 

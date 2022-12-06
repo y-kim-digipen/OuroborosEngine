@@ -11,6 +11,7 @@ struct Light
     vec3 diffuse;
     float out_cutoff;
     vec3 dir;
+    mat4 view_matrix;
     float falloff;
     int type; // 0 = point, 1 = spot, 2 = directional
 };
@@ -20,11 +21,15 @@ layout(set = 0, binding = 1) uniform light_data {
     int num_lights;
 } light_ubo;
 
+#define SHADOW_FACTOR 0.25
+#define AMBIENT_LIGHT 0.1
+
 layout(set = 2, binding = 0) uniform sampler2D viewPosBuffer;
 layout(set = 2, binding = 1) uniform sampler2D normalBuffer;
 layout(set = 2, binding = 2) uniform sampler2D albedoBuffer;
 layout(set = 2, binding = 3) uniform sampler2D emissiveBuffer;
 layout(set = 2, binding = 4) uniform sampler2D metalRoughnessAoBuffer;
+layout(set = 2, binding = 5) uniform sampler2DArray shadowmap;
 
 layout(location = 0) in vec2 vertexUV;
 
@@ -160,3 +165,45 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     return uv;
 } 
+
+float textureProj(vec4 P, float layer, vec2 offset)
+{
+	float shadow = 1.0;
+	vec4 shadowCoord = P / P.w;
+	shadowCoord.st = shadowCoord.st * 0.5 + 0.5;
+	
+	if (shadowCoord.z < -1.0 && shadowCoord.z > 1.0) 
+	{
+		float dist = texture(shadowmap, vec3(shadowCoord.st + offset, layer)).r;
+		if (shadowCoord.w > 0.0 && dist > shadowCoord.z) 
+		{
+			shadow = SHADOW_FACTOR;
+		}
+	}
+	return shadow;
+}
+
+float filterPCF(vec4 sc, float layer)
+{
+	ivec2 texDim = textureSize(shadowmap, 0).xy;
+	float scale = 1.5;
+	float dx = scale * 1.0 / float(texDim.x);
+	float dy = scale * 1.0 / float(texDim.y);
+
+	float shadowFactor = 0.0;
+	int count = 0;
+	int range = 2;
+	
+	for (int x = -range; x <= range; x++)
+	{
+		for (int y = -range; y <= range; y++)
+		{
+			shadowFactor += textureProj(sc, layer, vec2(dx*x, dy*y));
+			count++;
+		}
+	
+	}
+	return shadowFactor / count;
+}
+
+

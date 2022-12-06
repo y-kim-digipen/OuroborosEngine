@@ -19,13 +19,14 @@ namespace Renderer {
 		void InitGlobalData() override;
 		void UpdateGlobalData() override;
 		void BindGlobalData() override;
-
+		
 		void Shutdown() override;
 
 		int BeginFrame() override;
 		int DeferredEndFrame() override;
 		int EndFrame() override;
 
+		void ShadowBeginFrame();
 
 		void UpdateViewportDescriptorSet(VkDescriptorSet descriptor_set, int dest_binding);
 
@@ -38,7 +39,7 @@ namespace Renderer {
 		void AddStartContextEvent(const EventType& f);
 		void AddAfterEndDeferredEvent(const EventType& f);
 		void AddEndContextEvent(const EventType& f);
-
+		
 		static void ChangeSceneScreenSize(uint16_t width, uint16_t height);
 		static std::pair<uint16_t, uint16_t> GetSceneScreenSize();
 		static std::pair<uint16_t, uint16_t> GetPastSceneScreenSize();
@@ -56,6 +57,8 @@ namespace Renderer {
 
 		inline static uint16_t past_scene_screen_size_width;
 		inline static uint16_t past_scene_screen_size_height;
+
+		int past_light_count = 1;
 	};
 
 }

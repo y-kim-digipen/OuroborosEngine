@@ -31,6 +31,8 @@ struct VulkanDevice
 {
 	VkPhysicalDevice physical_device;
 	VkPhysicalDeviceProperties properties;
+	VkPhysicalDeviceFeatures features;
+
 	VkDevice handle;
 	VkQueue graphics_queue;
 	VkQueue present_queue;
@@ -76,6 +78,31 @@ struct LightPass
 };
 
 using VulkanFrameBufferAttachment = VulkanImage;
+
+
+struct ShadowPass
+{
+	VulkanFrameBufferAttachment shadow_map;
+	VkRenderPass render_pass;
+	VkFramebuffer frame_buffer;
+	VkSemaphore semaphore;
+	VkSampler sampler;
+	int32_t width;
+	int32_t height;
+	int32_t light_count = 3;
+	VkSemaphore shadow_semaphore = VK_NULL_HANDLE;
+	float zNear = 0.1f;
+	float zFar = 64.0f;
+	float lightFOV = 120.f;
+
+
+	float depthBiasConstant = 4.45f;
+	float depthBiasSlope = 3.75f;
+
+
+	std::shared_ptr<Renderer::VulkanShader> shadow_shader;
+	std::unique_ptr<Renderer::DescriptorSet> global_set; // set 0 (same data but different shader stage)
+};
 
 struct DeferredPass
 {
@@ -165,6 +192,7 @@ struct VulkanType
 	DeferredPass deferred_pass;
 	LightPass light_pass;
 	SsrPass ssr_pass;
+	ShadowPass shadow_pass;
 
 	//TODO: temp global pipeline layout
 	VkPipelineLayout global_pipeline_layout;

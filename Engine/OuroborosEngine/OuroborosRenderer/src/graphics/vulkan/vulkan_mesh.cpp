@@ -2,6 +2,7 @@
 
 #include "vulkan_type.inl"
 #include "vulkan_buffer.h"
+#include "vulkan_shader.h"
 
 namespace Renderer {
 
@@ -35,7 +36,8 @@ namespace Renderer {
 
         ModelConstant model_constant{ model, normal_matrix };
         size_t pushconstant_size = sizeof(model_constant);
-        
+
+        //if(vulkan_type->current_pipeline_layout != vulkan_type->shadow_pass.shadow_shader->pipeline_layout)
         vkCmdPushConstants(command_buffer, vulkan_type->current_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(model_constant), &model_constant);
 
         p_index_buffer->Bind();

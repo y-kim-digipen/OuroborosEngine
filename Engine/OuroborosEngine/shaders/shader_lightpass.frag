@@ -6,8 +6,8 @@ layout(location = 1) out vec4 outUV;
 layout(set = 0, binding = 0) uniform global_data {
     mat4 projection;
     mat4 view;
-    vec3 cam_pos;
     mat4 inv_view;
+    vec3 cam_pos;
 } global_ubo;
 
 float test_att = 0.1;
@@ -29,6 +29,18 @@ float CalculateAttenuation(float c1, float c2, float c3, float dist)
     return min(1.f/(c1 + c2 * dist + c3 * dist * dist), 1.f);
 }
 
+
+vec3 shadow(vec3 fragcolor, vec3 fragpos) {
+	for(int i = 0; i < light_ubo.num_lights; ++i)
+	{
+        vec4 world_pos = vec4(fragpos,1.0);
+		vec4 shadowClip	= light_ubo.lights[i].view_matrix *global_ubo.inv_view * world_pos;
+		float shadowFactor= filterPCF(shadowClip, i);
+		fragcolor *= shadowFactor;
+	}
+	return fragcolor;
+}
+
 void main()
 {
     vec3 Lo = vec3(0);
@@ -40,7 +52,7 @@ void main()
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(frag_pos);
+    vec3 V = normalize(-frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
     vec4 uv = vec4(0.0f);
@@ -100,7 +112,7 @@ void main()
                 
                 float spot_light_effect   = 0.f;
 
-                const float L_dot_D             = dot(L, light_dir);
+                const float L_dot_D             = dot(L, -light_dir);
 
                 if(L_dot_D < cos_phi) {
                     spot_light_effect = 0.f;
@@ -157,6 +169,8 @@ void main()
     color = clamp(color, vec3(0.0f), vec3(1.0f));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
+    
+    color = shadow(color, frag_pos);
 
     outColor = vec4(color, 1.0f);
     outUV = uv;

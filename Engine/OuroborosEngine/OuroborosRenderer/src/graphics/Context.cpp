@@ -97,7 +97,7 @@ namespace Renderer
 		--light_data.num_of_lights;
 	}
 
-	void Context::UpdateLight(uint32_t entity_id, Asset::LightData* light_component)
+	void Context::UpdateLight(uint32_t entity_id, Asset::LightData* light_component, LightComponent* light_component2)
 	{
 		if (auto iter = light_map.find(entity_id); iter != light_map.end())
 		{
@@ -105,9 +105,19 @@ namespace Renderer
 
 			//global_data.lights[light_map[entity_id]] = *light_component;
 			memcpy_s(&light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+			memcpy_s(&shadow_light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
+
+
+
+
 			// transform light pos, direction to view space
+			shadow_data.mvp[index] = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
+
+			light_data.lights[index].view_matrix = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
 			light_data.lights[index].pos = glm::vec3(global_data.view * glm::vec4(light_data.lights[index].pos, 1.0f));
-			light_data.lights[index].dir = glm::normalize(global_data.inv_view * glm::vec4(light_data.lights[index].dir, 0.0f));
+			light_data.lights[index].dir = glm::normalize(glm::mat3(global_data.view) * light_data.lights[index].dir);
+
+
 		}
 	}
 

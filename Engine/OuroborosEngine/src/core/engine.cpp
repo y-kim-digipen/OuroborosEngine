@@ -34,26 +34,11 @@ namespace OE
 					Asset::CameraData camera_data;
 					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(&main_camera)).GetPosition();
 					camera_data.view = main_camera.GetViewMatrix();
-					camera_data.inv_view = glm::inverse(glm::transpose(camera_data.view));
+					camera_data.inv_view = glm::inverse(camera_data.view);
+					
 					camera_data.projection = main_camera.GetPerspectiveMatrix();
 
-					glm::vec4 world_pos = glm::vec4(0.0f, 0.0f, 4.9f, 1.0f);
-					world_pos = camera_data.view* world_pos;
-					world_pos = camera_data.projection * world_pos;
-					world_pos /= world_pos.w;
 
-					glm::vec4 world_pos2 = glm::vec4(0.0f, 0.0f, -45.0f, 1.0f);
-					world_pos2 = camera_data.view * world_pos2;
-					world_pos2 = camera_data.projection * world_pos2;
-					world_pos2 /= world_pos2.w;
-
-					glm::vec4 view_pos = glm::vec4(0.0f, 0.0f, -50.f, 1.0f);
-					view_pos = camera_data.projection * view_pos;
-					view_pos /= view_pos.w;
-
-					view_pos = glm::vec4(0.0f, 0.0f, -0.1f, 1.0f);
-					view_pos = camera_data.projection * view_pos;
-					view_pos /= view_pos.w;
 
 					//TODO: pass renderer camera data
 					context->global_data = camera_data;
@@ -68,15 +53,39 @@ namespace OE
 				auto* context = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
 				if(ecs_manager.GetEntity(ent).alive)
 				{
-					if(light.init == false)
+					if(status == Status::INIT)
+					{
+						context->AddLight(ent, &light.data);
+						if (light.init == false)
+						{
+							material.is_light = true;
+							light.init = true;
+						}
+					}
+				/*	if(light.init == false)
 					{
 						context->AddLight(ent, &light.data);
 						material.is_light = true;
 						light.init = true;
+					}*/
+					if(status == Status::UPDATE)
+					{
+						light.SyncWithTransformComponent();
+						light.data.pos = transform.GetPosition();
+						light.data.dir = light.GetDirection();
+						context->UpdateLight(ent, &light.data, &light);
 					}
-					light.data.pos = transform.GetPosition();
-					context->UpdateLight(ent, &light.data);
+					
 				}
+
+				if(status == Status::CLEANUP || !ecs_manager.GetEntity(ent).alive)
+				{
+					bool a = ecs_manager.GetEntity(ent).alive;
+					context->RemoveLight(ent);
+				}
+
+			
+				
 			});
 
 		ecs_manager.system_storage.RegisterSystemImpl<ScriptingSystem>([](OE::Status status, OE::ecs_ID ent, float dt, ScriptComponent& script_component)
@@ -328,6 +337,29 @@ namespace OE
 
 		window->BeginFrame();
 		window->Update();
+	
+		{
+			 auto* renderer = dynamic_cast<Renderer::VulkanContext*>(window->GetWindowData().RenderContextData.get());
+			;
+;			auto& textureID = *dynamic_cast<Renderer::VulkanTextureManager*>(renderer->texture_manager.get())->vulkan_texture_imgui_descriptor_pool.GetImGuiTextureID();
+			VkDescriptorImageInfo image_buffer_info
+			{
+					.sampler = renderer->GetVulkanType()->shadow_pass.sampler,
+					.imageView = renderer->GetVulkanType()->shadow_pass.shadow_map.image_view,
+					.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			};
+
+			VkWriteDescriptorSet descriptor_set_write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+			descriptor_set_write.dstSet = textureID;
+			descriptor_set_write.dstBinding = 0;
+			descriptor_set_write.dstArrayElement = 0;
+			descriptor_set_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			descriptor_set_write.descriptorCount = 1;
+			descriptor_set_write.pImageInfo = &image_buffer_info;
+
+			vkUpdateDescriptorSets(renderer->GetVulkanType()->device.handle, 1, &descriptor_set_write, 0, nullptr);
+			ImGui::Image(textureID, ImVec2{ static_cast<float>(300), static_cast<float>(300) });
+		}
 		gui_manager.Update();
 		while (!event_functions[EventFunctionType::START_OF_RENDERER_CONTEXT].empty())
 		{

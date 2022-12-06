@@ -55,9 +55,8 @@ namespace Asset
     {
         glm::mat4 projection;
         glm::mat4 view;
-        glm::vec3 position;
         glm::mat4 inv_view;
-        float padding;
+        alignas(16) glm::vec3 position;
     };
 
     struct Material : Asset
@@ -101,9 +100,16 @@ namespace Asset
 		float cutoff;
         alignas(16)   glm::vec3 diffuse;
 		float out_cutoff;
-        alignas(16) 	glm::vec3 dir;
+        alignas(16) 	glm::vec3 dir={0,-1,0};
+        alignas(16) glm::mat4 view_matrix = glm::mat4(1.f);
         float falloff;
         int type; // 0 = point, 1 = spot, 2 = directional
+
+    };
+
+    struct LightShadowData : Asset
+    {
+        glm::mat4 mvp[20];
     };
 }
 

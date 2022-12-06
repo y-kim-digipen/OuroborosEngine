@@ -124,6 +124,20 @@ namespace Renderer {
 					return;
 				}
 			}
+			else if (config->stages[i].type == GEOMETRY_SHADER)
+			{
+				shader_name.append(".geom");
+				if(!CreateShaderModule(&shader_module, shader_name.c_str(), VK_SHADER_STAGE_GEOMETRY_BIT, push_constant_ranges, layout_bindings_set))
+				{
+					shader_stage_create_info.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
+					shader_stage_create_info.module = shader_module;
+					shader_stage_create_info.pName = "main";
+				}
+				else
+				{
+					return;
+				}
+			}
 
 			shader_stage_create_infos.push_back(shader_stage_create_info);
 		}
@@ -240,7 +254,7 @@ namespace Renderer {
 
 		if (input_attribute_descriptions.size() > 0)
 		{
-			input_attribute_descriptions[0].binding = 0;
+			/*input_attribute_descriptions[0].binding = 0;
 			input_attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 			input_attribute_descriptions[0].location = 0;
 			input_attribute_descriptions[0].offset = offsetof(Vertex, pos);
@@ -253,25 +267,21 @@ namespace Renderer {
 			input_attribute_descriptions[2].binding = 0;
 			input_attribute_descriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
 			input_attribute_descriptions[2].location = 2;
-			input_attribute_descriptions[2].offset = offsetof(Vertex, uv);
+			input_attribute_descriptions[2].offset = offsetof(Vertex, uv);*/
 
 			pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
 			pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
 			pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
 			pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
 
-			pipeline_vertex_input_state_create_info.pVertexAttributeDescriptions = input_attribute_descriptions.data();
-			pipeline_vertex_input_state_create_info.pVertexBindingDescriptions = &input_binding_description;
-			pipeline_vertex_input_state_create_info.vertexBindingDescriptionCount = 1;
-			pipeline_vertex_input_state_create_info.vertexAttributeDescriptionCount = input_attribute_descriptions.size();
 		}
 
 		pipeline_builder.vertex_input_info = pipeline_vertex_input_state_create_info;
 		pipeline_builder.multisampling =  VulkanInitializer_pipeline::PipelineMultisampleStateCreateInfo();
 		if (!config->use_built_in_quad)
-			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT);
+			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, config->depth_bias_enable);
 		else
-			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT);
+			pipeline_builder.rasterizer = VulkanInitializer_pipeline::PipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT, config->depth_bias_enable);
 		pipeline_builder.depth_stencil = VulkanInitializer_pipeline::DepthStencilCreateInfo(true, true, VK_COMPARE_OP_GREATER_OR_EQUAL);
 
 		pipeline_builder.viewport = { .x = 0.f, .y = 0.f, .width = static_cast<float>(vulkan_type->swapchain.extent.width)
@@ -286,7 +296,7 @@ namespace Renderer {
 		else
 			pipeline = pipeline_builder.BuildPipeLine(device->handle, vulkan_type->light_pass.render_pass, shader_stage_create_infos);
 
-		for (uint32_t i = 0; i < E_StageType::MAX_VALUE; ++i) {
+		for (uint32_t i = 0; i < shader_stage_create_infos.size(); ++i) {
 			if (shader_stage_create_infos[i].module != VK_NULL_HANDLE)
 				vkDestroyShaderModule(device->handle, shader_stage_create_infos[i].module, 0);
 		}

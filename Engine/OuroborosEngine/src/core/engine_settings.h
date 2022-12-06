@@ -22,7 +22,7 @@ using ComponentList = OE::ECS::TypeList<
 >;
 
 using DrawSystem		= OE::ECS::System<TransformComponent, ShaderComponent, MaterialComponent, MeshComponent>;
-using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent>;
+using LightSystem		= OE::ECS::System<ShaderComponent, LightComponent, TransformComponent, MaterialComponent >;
 using ScriptingSystem	= OE::ECS::System<ScriptComponent>;
 using SystemList = OE::ECS::types::SystemList<DrawSystem, LightSystem, ScriptingSystem>;
 

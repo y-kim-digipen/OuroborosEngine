@@ -35,7 +35,7 @@ namespace Renderer
 
 	struct LightGlobalData {
 		Asset::LightData lights[max_num_lights];
-		uint32_t num_of_lights;
+		uint32_t num_of_lights =1;
 	};
 
 	class Context
@@ -70,15 +70,19 @@ namespace Renderer
 		virtual void DrawQueue() {};
 		Asset::CameraData global_data;
 		LightGlobalData light_data;
+		LightGlobalData shadow_light_data;
+		Asset::LightShadowData shadow_data;
+
 		std::unique_ptr<VulkanShaderManager> shader_manager;
 		std::unique_ptr<VulkanMaterialManager> material_manager;
 		std::unique_ptr<VulkanTextureManager> texture_manager;
 		
 		int AddLight(uint32_t entity_id, Asset::LightData* light_component);
 		void RemoveLight(uint32_t entity_id);
-		void UpdateLight(uint32_t entity_id, Asset::LightData* light_component);
+		void UpdateLight(uint32_t entity_id, Asset::LightData* light_component, LightComponent* light_component2);
 	protected:
 		std::queue<DrawData> draw_queue;
+		std::queue<DrawData> shader_draw_queue;
 		GLFWwindow* window;
 		
 		// global data ( scene data )

@@ -4,6 +4,15 @@
 
 namespace Renderer
 {
+	struct VulkanAttachmentCreateInfo
+	{
+		uint32_t width, height;
+		uint32_t layer_count;
+		VkFormat format;
+		VkImageUsageFlags usage;
+		VkSampleCountFlagBits image_sample_count = VK_SAMPLE_COUNT_1_BIT;
+	};
+
 	class VulkanInitializer
 	{
 	public:
@@ -24,14 +33,7 @@ namespace Renderer
 		static VkViewport ViewPort(float width, float height, float min_depth, float max_depth);
 		static VkRect2D Rect2D(int32_t width, int32_t height, int32_t offsetX, int32_t offsetY);
 
-		struct VulkanAttachmentCreateInfo
-		{
-			uint32_t width, height;
-			uint32_t layer_count;
-			VkFormat format;
-			VkImageUsageFlags usage;
-			VkSampleCountFlagBits image_sample_count = VK_SAMPLE_COUNT_1_BIT;
-		};
+		
 	};
 
 }

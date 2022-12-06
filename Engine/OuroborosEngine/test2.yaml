@@ -1,0 +1,145 @@
+Asset:
+  class OE::ImageAssetManager:
+    ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-albedo.png:
+      {}
+    ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-ao.png:
+      {}
+    ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-metal.png:
+      {}
+    ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-normal.png:
+      {}
+    ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-roughness.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png:
+      {}
+    ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-preview.jpg:
+      {}
+    images/null.png:
+      {}
+  class OE::MeshAssetManager:
+    ..\model\plane.obj:
+      {}
+    ..\model\sphere.obj:
+      {}
+    model/default_cube.obj:
+      {}
+  class OE::ShaderAssetManager:
+    shader_lightpass:
+      {}
+  class OE::ScriptAssetManager:
+    {}
+  class OE::MaterialAssetManager:
+    abc:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-albedo.png
+      normal: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Normal-ogl.png
+      metallic: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Metallic.png
+      roughness: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-Roughness.png
+      ao: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
+      emissive: ""
+    abcd:
+      use_texture: true
+      is_smoothness: false
+      use_combined_metallic_roughness: false
+      albedo: ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-albedo.png
+      normal: ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-normal.png
+      metallic: ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-metal.png
+      roughness: ..\images\materials\bamboo-wood-semigloss-bl\bamboo-wood-semigloss-roughness.png
+      ao: ..\images\materials\gray-granite-flecks-bl\gray-granite-flecks-ao.png
+      emissive: ""
+ECS:
+  0:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      {}
+  1:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 0]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+  2:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: no
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 5]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+      struct TagComponent:
+        tag: Main Camera
+      struct CameraComponent:
+        {}
+  3:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0, 0, 0]
+        scale: [1, 1, 1]
+        rotation: [0, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\model\sphere.obj
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: abc
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""
+  4:
+    System:
+      struct OE::ECS::System<struct TransformComponent,struct ShaderComponent,struct MaterialComponent,struct MeshComponent>: yes
+      struct OE::ECS::System<struct ShaderComponent,struct LightComponent,struct TransformComponent,struct MaterialComponent>: no
+      struct OE::ECS::System<struct ScriptComponent>: no
+    Component:
+      struct TransformComponent:
+        position: [0.52, -1.91, 0]
+        scale: [10, 10, 10]
+        rotation: [0, 0, 0]
+      struct MeshComponent:
+        mesh_name: ..\model\plane.obj
+      struct ShaderComponent:
+        name: shader_lightpass
+      struct MaterialComponent:
+        name: abcd
+        material_data:
+          {}
+        flag: false
+        is_save: false
+        is_light: false
+        texture_albedo_name: ""
+        texture_normal_name: ""
+        texture_metalroughness_name: ""
+        texture_ao_name: ""
+        texture_emissive_name: ""
+        texture_roughness_name: ""

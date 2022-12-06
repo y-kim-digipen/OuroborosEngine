@@ -63,6 +63,7 @@ public:
 	bool IsUsing() const { return is_main_camera; }
 	void SetUsing(bool use) { is_main_camera = use; }
 	void SetCameraSize(uint16_t width, uint16_t height);
+	glm::vec3 GetDirection() const;
 private:
 	void CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up);
 	glm::mat4 view_matrix;
@@ -70,6 +71,7 @@ private:
 	uint16_t width = 1600.f, height = 900.f;
 	float near_plane = 0.1f, far_plane = 50.f;
 	float fov = glm::pi<float>() * 0.3f;
+	glm::vec3 direction;
 
 	bool is_main_camera = false;
 };
@@ -117,6 +119,21 @@ struct LightComponent : Component
 {
 	bool init = false;
 	Asset::LightData data;
+public:
+	void SyncWithTransformComponent();
+	glm::mat4 GetViewMatrix() const { return view_matrix; }
+	glm::mat4 GetPerspectiveMatrix() const { return perspective_matrix; }
+	void SetCameraSize(uint16_t width, uint16_t height);
+	glm::vec3 GetDirection() const;
+private:
+	void CalculateMatrices(const glm::vec3& eye, const glm::vec3& front, const glm::vec3& up);
+	glm::mat4 view_matrix;
+	glm::mat4 perspective_matrix;
+	uint16_t width = 2048.f, height = 2048.f;
+	float near_plane = 0.1f, far_plane = 64.f;
+	float fov = 104.f;
+	glm::vec3 direction;
+
 };
 
 struct ScriptComponent : Component

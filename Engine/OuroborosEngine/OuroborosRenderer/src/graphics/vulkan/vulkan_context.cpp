@@ -90,6 +90,8 @@ namespace Renderer
 
 
     int CreateShadowMapFrameBuffer();
+    void CreateShadowMapShader();
+    void ShadowRecordCommandBuffer();
 
     static VKAPI_ATTR VkBool32 debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
@@ -144,6 +146,10 @@ namespace Renderer
         CreateCommandBuffer();
         CreateSyncObjects();
         CreateDescriptorPool();
+
+        //Shadow
+        CreateShadowMapFrameBuffer();
+        CreateShadowMapShader();
         //deferred
         CreateOffScreenFrameBuffer();
         CreateDeferredSyncObjects();
@@ -157,8 +163,8 @@ namespace Renderer
             .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBindingLayout(2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBindingLayout(3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
-            .AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
-
+            .AddBindingLayout(4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+            .AddBindingLayout(5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT);
 		SetupDescriptorSet();
         
         //buildDeferredCommandBuffer();
@@ -170,6 +176,7 @@ namespace Renderer
         );
 
         CreateSSRSyncObjects();
+
     }
 
     // Must be called after vulkan_context.init()
@@ -179,10 +186,11 @@ namespace Renderer
           
         Vulkan_PipelineBuilder pipeline_builder;
 
-        const uint32_t binding_count = 2;
+        const uint32_t binding_count = 3;
 
         global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(global_data))); // camera data in binding slot 0
         global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 1, sizeof(light_data))); // light data in binding slot 1
+        global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 1, sizeof(shadow_data))); //light shadow data in binding slot 2
 
         global_set.Init(&vulkan_type, 0)
             .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT).AddBinding(0, global_binding_ubo[0].get())
@@ -200,6 +208,12 @@ namespace Renderer
             .AddBindingLayout(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .AddBinding(1, global_binding_ubo[1].get())
             .Build();
+
+        vulkan_type.shadow_pass.global_set = std::make_unique<DescriptorSet>();
+        vulkan_type.shadow_pass.global_set->Init(&vulkan_type, 0)
+            .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_GEOMETRY_BIT)
+            .AddBinding(0, global_binding_ubo[2].get())
+            .Build();
     }
 
     void VulkanContext::UpdateGlobalData()
@@ -208,6 +222,7 @@ namespace Renderer
 
         global_binding_ubo[0]->AddData((void*)&global_data, 0, sizeof(global_data));
         global_binding_ubo[1]->AddData((void*)&light_data, 0, sizeof(light_data));
+        global_binding_ubo[2]->AddData((void*)&shadow_data, 0, sizeof(shadow_data));
     }
 
 	// Must be called after init_frame()
@@ -297,6 +312,21 @@ namespace Renderer
             vkDestroyRenderPass(vulkan_type.device.handle, lightpass.render_pass, nullptr);
             vkDestroySampler(vulkan_type.device.handle, lightpass.color_sampler, nullptr);
             vkDestroySemaphore(vulkan_type.device.handle, lightpass.semaphore, nullptr);
+        }
+
+        {
+            auto& shadowpass = vulkan_type.shadow_pass;
+            shadowpass.global_set->Cleanup();
+            auto& shadow_pass = vulkan_type.shadow_pass;
+
+            DestroyImage(&vulkan_type, &shadow_pass.shadow_map);
+            vkDestroyFramebuffer(vulkan_type.device.handle, shadow_pass.frame_buffer, nullptr);
+
+            vkDestroyRenderPass(vulkan_type.device.handle, shadow_pass.render_pass, nullptr);
+            vkDestroySampler(vulkan_type.device.handle, shadow_pass.sampler, nullptr);
+            vkDestroySemaphore(vulkan_type.device.handle, shadow_pass.semaphore, nullptr);
+            shadow_pass.shadow_shader->ShutDown();
+
         }
 
         vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.render_pass, nullptr);
@@ -410,7 +440,10 @@ namespace Renderer
         CreateSwapchainImageView();
         //CreateRenderPass();
         CreateFrameBuffers();
+
         CleanUpDeferredFramebufferAndRenderPass();
+        CreateShadowMapFrameBuffer();
+
         CreateOffScreenFrameBuffer();
         //CreateViewportImage();
         //CreateViewportFramebuffer();
@@ -420,18 +453,20 @@ namespace Renderer
         CreateLightPassFramebuffer();
         CreateSSRFrameBuffer();
 
+
         auto& deferred_framebuffer = vulkan_type.deferred_pass;
         VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
+        VkDescriptorImageInfo tex_descriptor_shadow_map = VulkanInitializer::DescriptorImageInfo(vulkan_type.shadow_pass.sampler, vulkan_type.shadow_pass.shadow_map.image_view, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         lightpass_set_.AddBinding(0, &tex_descriptor_position).
             AddBinding(1, &tex_descriptor_normal).
             AddBinding(2, &tex_descriptor_albedo).
             AddBinding(3, &tex_descriptor_emissive).
             AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+        lightpass_set_.AddBinding(5, &tex_descriptor_shadow_map);
         //lightpass_set_.Build();
         //SetupDescriptorSet();
         
@@ -439,39 +474,7 @@ namespace Renderer
 
     int VulkanContext::BeginFrame()
     {
-        
-     /*   if(scene_screen_size_width != past_scene_screen_size_width || scene_screen_size_height != past_scene_screen_size_height )
-        {
-            vkDeviceWaitIdle(vulkan_type.device.handle);
-            CleanUpDeferredFramebufferAndRenderPass();
-
-            CreateOffScreenFrameBuffer();
-            CreateLightPassImage();
-            CreateLightPassFramebuffer();
-            CreateSSRFrameBuffer();
-            SetupDescriptorSet();
-
-            auto& shader = vulkan_type.deferred_pass.deferred_shader;
-            shader->ShutDown();
-            CreateDeferredShader();
-            auto& deferred_framebuffer = vulkan_type.deferred_pass;
-            VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            VkDescriptorImageInfo tex_descriptor_normal = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.normal.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-            lightpass_set_.AddBinding(0, &tex_descriptor_position).
-                AddBinding(1, &tex_descriptor_normal).
-                AddBinding(2, &tex_descriptor_albedo).
-                AddBinding(3, &tex_descriptor_emissive).
-                AddBinding(4, &tex_descriptor_metalic_roughness_ao);
-            lightpass_set_.Build();
-
-            past_scene_screen_size_width = scene_screen_size_width;
-            past_scene_screen_size_height = scene_screen_size_height;
-        }*/
-        
+    
         auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
         VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
 
@@ -480,6 +483,37 @@ namespace Renderer
         VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
      
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+
+        ShadowBeginFrame();
+
+        
+        auto& semaphore = frame_data.semaphore;
+        auto& shadow_semaphore = vulkan_type.shadow_pass.semaphore;
+        VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+
+        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+        submit.pWaitDstStageMask = &wait_stage;
+
+        //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
+        submit.waitSemaphoreCount = 1;
+        submit.pWaitSemaphores = &semaphore.image_available_semaphore;
+
+        submit.signalSemaphoreCount = 1;
+        submit.pSignalSemaphores = &shadow_semaphore;
+
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &frame_data.command_buffer;
+
+        VkResult b = vkQueueSubmit(vulkan_type.device.graphics_queue, 1, &submit, frame_data.semaphore.in_flight_fence);
+        VkResult  a = vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX);
+      
+        //VK_CHECK(vkWaitForFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence, VK_TRUE, UINT64_MAX));
+        VK_CHECK(vkResetFences(vulkan_type.device.handle, 1, &frame_data.semaphore.in_flight_fence));
+
+        VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
+
+      
         //RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
         buildDeferredCommandBuffer();
 
@@ -503,6 +537,7 @@ namespace Renderer
 
         auto& semaphore = frame_data.semaphore;
         auto& offscreen_semaphore = vulkan_type.deferred_pass.offscreenSemaphore;
+        auto& shadow_semaphore = vulkan_type.shadow_pass.semaphore;
         VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
 
         VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -511,7 +546,7 @@ namespace Renderer
 
         //TODO :CHECK IS IT right pWaitsemaphore = image_available_semaphore
         submit.waitSemaphoreCount = 1;
-        submit.pWaitSemaphores = &semaphore.image_available_semaphore;
+        submit.pWaitSemaphores = &shadow_semaphore;
 
         submit.signalSemaphoreCount = 1;
         submit.pSignalSemaphores = &offscreen_semaphore;
@@ -532,13 +567,14 @@ namespace Renderer
         VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_shadow_map = VulkanInitializer::DescriptorImageInfo(vulkan_type.shadow_pass.sampler, vulkan_type.shadow_pass.shadow_map.image_view, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
 
         lightpass_set_.AddBinding(0, &tex_descriptor_position).
-    	AddBinding(1,&tex_descriptor_normal).
-    	AddBinding(2,&tex_descriptor_albedo).
-    	AddBinding(3,&tex_descriptor_emissive).
-    	AddBinding(4,&tex_descriptor_metalic_roughness_ao);
-
+            AddBinding(1, &tex_descriptor_normal).
+            AddBinding(2, &tex_descriptor_albedo).
+            AddBinding(3, &tex_descriptor_emissive).
+            AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+            lightpass_set_.AddBinding(5, &tex_descriptor_shadow_map);
         
         shader_manager->GetShader("shader_lightpass")->Bind();
         lightpass_set_.Bind();
@@ -666,10 +702,86 @@ namespace Renderer
 
         vulkan_type.current_frame = (vulkan_type.current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 
+
+
         dynamic_cast<VulkanTextureManager*>(texture_manager.get())->vulkan_texture_imgui_descriptor_pool.ResetCount();
+
+        /*if (vulkan_type.shadow_pass.light_count != light_data.num_of_lights)
+        {
+            vulkan_type.shadow_pass.light_count = light_data.num_of_lights;
+            RecreateSwapChain();
+        }*/
+
         return  0;
     }
 
+    void VulkanContext::ShadowBeginFrame()
+    {
+
+        auto& vulkan_swapchain = vulkan_type.swapchain;
+           // for (uint32_t i = 0; i < 3; i++)
+           // {
+           //     // mvp from light's pov (for shadows)
+           //     //glm::mat4 shadowProj = glm::perspective(glm::radians(vulkan_type.shadow_pass.lightFOV), 1.0f, vulkan_type.shadow_pass.zNear, vulkan_type.shadow_pass.zFar);
+
+
+           // 	float aspect_ratio = static_cast<float>(2048) / 2048;
+           //     float focal_length = 1 / std::tan(glm::radians(vulkan_type.shadow_pass.lightFOV) * 0.5f);
+           //     glm::mat4 shadowProj;
+
+           //     shadowProj = glm::mat4(1.0f);
+           //     shadowProj[0][0] = focal_length / aspect_ratio;
+           //     shadowProj[1][1] = -focal_length;
+           //     shadowProj[2][2] = vulkan_type.shadow_pass.zNear / (vulkan_type.shadow_pass.zFar - vulkan_type.shadow_pass.zNear);
+           //     shadowProj[2][3] = -1.0f;
+           //     shadowProj[3][2] = (vulkan_type.shadow_pass.zFar * vulkan_type.shadow_pass.zNear) / (vulkan_type.shadow_pass.zFar - vulkan_type.shadow_pass.zNear);
+           //     shadowProj[3][3] = 0.0f;
+
+
+           //     //perspective_matrix = glm::perspective(fov, static_cast<float>(width) / height , far_plane, near_plane);
+           ///*     shadowProj[1][1] *= -1;*/
+
+           // 
+           //    
+           //     glm::mat4 shadowView = glm::lookAt(shadow_light_data.lights[i].pos, shadow_light_data.lights[i].pos+ shadow_light_data.lights[i].dir, glm::vec3(0.0f, 1.0f, 0.0f));
+           //     //glm::mat4 shadowView = glm::lookAt({ 0,2,0 }, {0,-1,4}, glm::vec3(0.0f, 1.0f, 0.0f));
+           //     //glm::mat4 shadowView = glm::lookAt({ 0,0,5 }, { 0,0,4 }, glm::vec3(0.0f, 1.0f, 0.0f));
+           //  
+
+           //     shadow_data.mvp[i] = shadowProj *shadowView;
+           //     shadow_light_data.lights[i].view_matrix = shadow_data.mvp[i];
+           //     light_data.lights[i].view_matrix = shadow_data.mvp[i];
+           // }
+
+            ShadowRecordCommandBuffer();
+            shader_draw_queue = draw_queue;
+
+            if (!shader_draw_queue.empty())
+                while (!shader_draw_queue.empty())
+                {
+                    const auto& front = shader_draw_queue.front();
+
+                    auto* transform = front.transform;
+                    auto* mesh = front.mesh;
+
+                    glm::mat4 model = transform->GetMatrix();
+                    glm::mat4 normal_matrix = glm::transpose(glm::inverse(global_data.view * model));
+
+                    vulkan_type.shadow_pass.shadow_shader->Bind();
+                    vulkan_type.shadow_pass.global_set->Bind();
+
+                    //TODO: Maybe later, material update should be in update and sorted function
+                    //TODO: Bind Object Descriptor set 3 in future
+                    if (mesh->mesh_name.size() != 0) {
+                        mesh_manager->DrawMesh(mesh->mesh_name.c_str(), model, normal_matrix); // Draw Object
+                    }
+                    shader_draw_queue.pop();
+                }
+
+            vkCmdEndRenderPass(vulkan_type.frame_data[vulkan_type.current_frame].command_buffer);
+            vkEndCommandBuffer(vulkan_type.frame_data[vulkan_type.current_frame].command_buffer);
+    }
+    
     void VulkanContext::UpdateViewportDescriptorSet(VkDescriptorSet descriptor_set, int dest_binding)
     {
         VkDescriptorImageInfo image_buffer_info
@@ -933,7 +1045,8 @@ namespace Renderer
             VK_VERSION_PATCH(physical_properties.apiVersion));
 
         vulkan_type.device.physical_device = physical_device;
-
+        vkGetPhysicalDeviceFeatures(vulkan_type.device.physical_device, &vulkan_type.device.features);
+        
         vkGetPhysicalDeviceProperties(vulkan_type.device.physical_device, &vulkan_type.device.properties);
 
         return 0;
@@ -1035,6 +1148,26 @@ namespace Renderer
         }
         VkPhysicalDeviceFeatures device_features{};
 
+        if (vulkan_type.device.features.geometryShader) {
+            device_features.geometryShader = VK_TRUE;
+        }
+        else {
+           
+        }
+        // Enable anisotropic filtering if supported
+        if (vulkan_type.device.features.samplerAnisotropy) {
+            device_features.samplerAnisotropy = VK_TRUE;
+        }
+        // Enable texture compression
+        if (vulkan_type.device.features.textureCompressionBC) {
+            device_features.textureCompressionBC = VK_TRUE;
+        }
+        else if (vulkan_type.device.features.textureCompressionASTC_LDR) {
+            device_features.textureCompressionASTC_LDR = VK_TRUE;
+        }
+        else if (vulkan_type.device.features.textureCompressionETC2) {
+            device_features.textureCompressionETC2 = VK_TRUE;
+        }
         VkDeviceCreateInfo create_info{};
         create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
@@ -1578,7 +1711,7 @@ namespace Renderer
         auto [x, y] = VulkanContext::GetSceneScreenSize();
 
         auto& swapchain = vulkan_type->swapchain;
-        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, swapchain.extent.width, swapchain.extent.height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1);
+        CreateImage(vulkan_type, attachment, VK_IMAGE_TYPE_2D, width, height, attachment->format, usage | VK_IMAGE_USAGE_SAMPLED_BIT, VK_IMAGE_TILING_OPTIMAL, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, true, aspect_mask,1, layer_count);
     }
 
     //first rendering
@@ -1609,6 +1742,11 @@ namespace Renderer
         VK_CHECK(vkBeginCommandBuffer(frame_data.command_buffer, &command_buffer_begin_info));
 
         vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdSetDepthBias(
+            frame_data.command_buffer,
+            0,
+            0.0f,
+            0);
 
         auto [x, y] = VulkanContext::GetPastSceneScreenSize();
 
@@ -1769,12 +1907,14 @@ namespace Renderer
         VkDescriptorImageInfo tex_descriptor_albedo = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.albedo.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_emissive = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.emissive.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo tex_descriptor_metalic_roughness_ao = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.metalic_roughness_ao.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
+        VkDescriptorImageInfo tex_descriptor_shadow_map = VulkanInitializer::DescriptorImageInfo(vulkan_type.shadow_pass.sampler, vulkan_type.shadow_pass.shadow_map.image_view, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
         lightpass_set_.AddBinding(0, &tex_descriptor_position).
             AddBinding(1, &tex_descriptor_normal).
             AddBinding(2, &tex_descriptor_albedo).
             AddBinding(3, &tex_descriptor_emissive).
             AddBinding(4, &tex_descriptor_metalic_roughness_ao);
+
+        lightpass_set_.AddBinding(5, &tex_descriptor_shadow_map);
         lightpass_set_.Build();
 
         return 0;
@@ -1810,14 +1950,17 @@ namespace Renderer
     int CreateDeferredSyncObjects()
     {
         VkSemaphoreCreateInfo semaphore_create_info = VulkanInitializer::SemaphoreCreateInfo();
+        
         VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.deferred_pass.offscreenSemaphore));
         VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.light_pass.semaphore));
+        VK_CHECK(vkCreateSemaphore(vulkan_type.device.handle, &semaphore_create_info, nullptr, &vulkan_type.shadow_pass.semaphore));
         return 0;
     }
 
     int CleanUpDeferredFramebufferAndRenderPass()
     {
         vkDestroyFramebuffer(vulkan_type.device.handle, vulkan_type.deferred_pass.frame_buffer, nullptr);
+
 
         for (auto& framebuffer : vulkan_type.light_pass.frame_buffers)
         {
@@ -1830,9 +1973,14 @@ namespace Renderer
         
 
     	vkDestroySampler(vulkan_type.device.handle, vulkan_type.light_pass.color_sampler, nullptr);
-        for(auto& image : vulkan_type.light_pass.out_color_images)
+        auto& lightpass = vulkan_type.light_pass;
+    	uint32_t image_count = lightpass.out_color_images.size();
+
+        for (uint32_t i = 0; i < image_count; ++i)
         {
-			DestroyImage(&vulkan_type, &image);
+            DestroyImage(&vulkan_type, &lightpass.out_color_images[i]);
+            DestroyImage(&vulkan_type, &lightpass.out_uv_images[i]);
+            vkDestroyFramebuffer(vulkan_type.device.handle, lightpass.frame_buffers[i], nullptr);
         }
         vkDestroySampler(vulkan_type.device.handle, vulkan_type.deferred_pass.color_sampler, nullptr);
 
@@ -1847,9 +1995,9 @@ namespace Renderer
 
         auto& ssr_pass = vulkan_type.ssr_pass;
         auto& vk_device = vulkan_type.device.handle;
-        uint32_t image_count = ssr_pass.frame_buffers.size();
+       
 
-        for (uint32_t i = 0; i < image_count; ++i)
+        for (uint32_t i = 0; i < ssr_pass.frame_buffers.size(); ++i)
         {
             DestroyImage(&vulkan_type, &ssr_pass.color_images[i]);
             vkDestroyFramebuffer(vk_device, ssr_pass.frame_buffers[i], nullptr);
@@ -1857,6 +2005,15 @@ namespace Renderer
 
         vkDestroyRenderPass(vk_device, ssr_pass.render_pass, nullptr);
         vkDestroySampler(vk_device, ssr_pass.color_sampler, nullptr);
+
+
+        auto& shadow_pass = vulkan_type.shadow_pass;
+
+        DestroyImage(&vulkan_type, &shadow_pass.shadow_map);
+        vkDestroyFramebuffer(vk_device, shadow_pass.frame_buffer, nullptr);
+
+        vkDestroyRenderPass(vk_device, shadow_pass.render_pass, nullptr);
+        vkDestroySampler(vk_device, shadow_pass.sampler, nullptr);
         return 0;
     }
 
@@ -2262,112 +2419,174 @@ namespace Renderer
     }
 
 
-    //int CreateShadowMapFrameBuffer()
-    //{
-    //    auto& shadow_frame_buffer = vulkan_type.shadow_frame_buffer;
+    int CreateShadowMapFrameBuffer()
+    {
+        auto& shadow_pass = vulkan_type.shadow_pass;
+        auto& swap_chain = vulkan_type.swapchain;
+        shadow_pass.width = 2048;
+        shadow_pass.height = 2048;
 
-    //    shadow_frame_buffer.width = 1048;
-    //    shadow_frame_buffer.height = 1048;
+        VkFormat shadow_map_format;
+        VkBool32 valid_shadow_map_format = VulkanInitializer::GetSupportedDepthFormat(vulkan_type.device.physical_device, &shadow_map_format);
+        assert(valid_shadow_map_format);
 
-    //    VkFormat shadow_map_format;
-    //    VkBool32 valid_shadow_map_format = VulkanInitializer::GetSupportedDepthFormat(vulkan_type.device.physical_device, &shadow_map_format);
-    //    assert(valid_shadow_map_format);
+        //layout light setup
+        Renderer::VulkanAttachmentCreateInfo attachment_create_info{};
+        attachment_create_info.format = shadow_map_format;
+        attachment_create_info.width = shadow_pass.width;
+        attachment_create_info.height = shadow_pass.height;
+        //TODO : need to update the light_count
+        attachment_create_info.layer_count = 3;
+        attachment_create_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 
+        CreateFrameAttachment(&vulkan_type, shadow_map_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &shadow_pass.shadow_map, attachment_create_info.width, attachment_create_info.height, attachment_create_info.layer_count);
 
-    //    //layout light setup
-    //    Renderer::VulkanAttachmentCreateInfo attachment_create_info{};
-    //    attachment_create_info.format = shadow_map_format;
-    //    attachment_create_info.width = shadow_frame_buffer.width;
-    //    attachment_create_info.height = shadow_frame_buffer.height;
-    //    //TODO : need to update the light_count
-    //    attachment_create_info.layerCount = shadow_frame_buffer.light_count;
-    //    attachment_create_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-
-
-    //    CreateFrameAttachment(&vulkan_type, shadow_map_format, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, &shadow_frame_buffer.shadow_map, attachment_create_info.width, attachment_create_info.height, attachment_create_info.layerCount);
-
-
-    //    VkAttachmentDescription description{};
-    //    description.samples = attachment_create_info.imageSampleCount;
-    //    description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    //    description.storeOp = (attachment_create_info.usage & VK_IMAGE_USAGE_SAMPLED_BIT) ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    //    description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    //    description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    //    description.format = attachment_create_info.format;
-    //    description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    //    description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+        VkAttachmentDescription description{};
+        description.samples = attachment_create_info.image_sample_count;
+        description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        description.storeOp = (attachment_create_info.usage & VK_IMAGE_USAGE_SAMPLED_BIT) ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        description.format = attachment_create_info.format;
+        description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 
 
-    //    //Create shadow sampler
-    //    VkSamplerCreateInfo samplerInfo = VulkanInitializer::SamplerCreateInfo();
-    //    samplerInfo.magFilter = VK_FILTER_LINEAR;
-    //    samplerInfo.minFilter = VK_FILTER_LINEAR;
-    //    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-    //    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    //    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    //    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    //    samplerInfo.mipLodBias = 0.0f;
-    //    samplerInfo.maxAnisotropy = 1.0f;
-    //    samplerInfo.minLod = 0.0f;
-    //    samplerInfo.maxLod = 1.0f;
-    //    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+        //Create shadow sampler
+        VkSamplerCreateInfo samplerInfo = VulkanInitializer::SamplerCreateInfo();
+        samplerInfo.magFilter = VK_FILTER_LINEAR;
+        samplerInfo.minFilter = VK_FILTER_LINEAR;
+        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.mipLodBias = 0.0f;
+        samplerInfo.maxAnisotropy = 1.0f;
+        samplerInfo.minLod = 0.0f;
+        samplerInfo.maxLod = 1.0f;
+        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
 
-    //    VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &samplerInfo, nullptr, &shadow_frame_buffer.sampler));
-
-
-    //    std::vector<VkAttachmentReference> color_references;
-    //    VkAttachmentReference depth_reference = {};
-
-    //    depth_reference.attachment = 0;
-    //    depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-    //    VkSubpassDescription subpass{};
-    //    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    //    subpass.pDepthStencilAttachment = &depth_reference;
+        VK_CHECK(vkCreateSampler(vulkan_type.device.handle, &samplerInfo, nullptr, &shadow_pass.sampler));
 
 
-    //    std::array<VkSubpassDependency, 2> dependencies;
+        std::vector<VkAttachmentReference> color_references;
+        VkAttachmentReference depth_reference = {};
 
-    //    dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-    //    dependencies[0].dstSubpass = 0;
-    //    dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-    //    dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    //    dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-    //    dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    //    dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+        depth_reference.attachment = 0;
+        depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-    //    dependencies[1].srcSubpass = 0;
-    //    dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-    //    dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    //    dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-    //    dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    //    dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-    //    dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+        VkSubpassDescription subpass{};
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpass.pDepthStencilAttachment = &depth_reference;
 
-    //    // Create render pass
-    //    VkRenderPassCreateInfo renderPassInfo = {};
-    //    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    //    renderPassInfo.pAttachments = &description;
-    //    renderPassInfo.attachmentCount = 1;
-    //    renderPassInfo.subpassCount = 1;
-    //    renderPassInfo.pSubpasses = &subpass;
-    //    renderPassInfo.dependencyCount = 2;
-    //    renderPassInfo.pDependencies = dependencies.data();
-    //    VK_CHECK(vkCreateRenderPass(vulkan_type.device.handle, &renderPassInfo, nullptr, &vulkan_type.shadow_frame_buffer.render_pass));
 
-    //    VkFramebufferCreateInfo framebuffer_create_info = {};
-    //    framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    //    framebuffer_create_info.renderPass = shadow_frame_buffer.render_pass;
-    //    framebuffer_create_info.pAttachments = &shadow_frame_buffer.shadow_map.image_view;
-    //    framebuffer_create_info.attachmentCount = 1;
-    //    framebuffer_create_info.width = shadow_frame_buffer.width;
-    //    framebuffer_create_info.height = shadow_frame_buffer.height;
-    //    //max layout is light count
-    //    framebuffer_create_info.layers = attachment_create_info.layerCount;
-    //    VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &shadow_frame_buffer.frame_buffer));
+        std::array<VkSubpassDependency, 2> dependencies;
 
-    //    return 0;
+        dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependencies[0].dstSubpass = 0;
+        dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
-    //}
+        dependencies[1].srcSubpass = 0;
+        dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+        dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+        // Create render pass
+        VkRenderPassCreateInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassInfo.pAttachments = &description;
+        renderPassInfo.attachmentCount = 1;
+        renderPassInfo.subpassCount = 1;
+        renderPassInfo.pSubpasses = &subpass;
+        renderPassInfo.dependencyCount = 2;
+        renderPassInfo.pDependencies = dependencies.data();
+        VK_CHECK(vkCreateRenderPass(vulkan_type.device.handle, &renderPassInfo, nullptr, &vulkan_type.shadow_pass.render_pass));
+
+        VkFramebufferCreateInfo framebuffer_create_info = {};
+        framebuffer_create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebuffer_create_info.renderPass = shadow_pass.render_pass;
+        framebuffer_create_info.pAttachments = &shadow_pass.shadow_map.image_view;
+        framebuffer_create_info.attachmentCount = 1;
+        framebuffer_create_info.width = shadow_pass.width;
+        framebuffer_create_info.height = shadow_pass.height;
+        //max layout is light count
+        framebuffer_create_info.layers = attachment_create_info.layer_count;
+        VK_CHECK(vkCreateFramebuffer(vulkan_type.device.handle, &framebuffer_create_info, nullptr, &shadow_pass.frame_buffer));
+
+        return 0;
+
+    }
+
+    void CreateShadowMapShader()
+    {
+        ShaderConfig shader_config = { "shader_shadowpass", {Renderer::E_StageType::VERTEX_SHADER,
+                       Renderer::E_StageType::GEOMETRY_SHADER }, 2, false , true};
+
+        auto& shader = vulkan_type.shadow_pass.shadow_shader;
+        shader = std::make_shared<VulkanShader>(&vulkan_type);
+        shader->Init(&shader_config, vulkan_type.shadow_pass.render_pass);
+
+    }
+
+    void ShadowRecordCommandBuffer()
+    {
+        VkCommandBufferBeginInfo command_buffer_begin_info = VulkanInitializer::CommandBufferBeginInfo();
+    
+        VkRenderPassBeginInfo render_pass_begin_info = VulkanInitializer::RenderPassBeginInfo();
+        std::array<VkClearValue, 1> clearValues = {};
+        VkViewport viewport;
+        VkRect2D scissor;
+
+ 
+
+        auto& shadow_pass = vulkan_type.shadow_pass;
+        auto& frame_data = vulkan_type.frame_data[vulkan_type.current_frame];
+
+
+        clearValues[0].depthStencil = { 0.0f, 0 };
+
+        render_pass_begin_info.renderPass = shadow_pass.render_pass;
+        render_pass_begin_info.framebuffer = shadow_pass.frame_buffer;
+        render_pass_begin_info.renderArea.extent.width = shadow_pass.width;
+        render_pass_begin_info.renderArea.extent.height = shadow_pass.height;
+        render_pass_begin_info.clearValueCount = 1;
+        render_pass_begin_info.pClearValues = clearValues.data();
+
+        VK_CHECK(vkBeginCommandBuffer(frame_data.command_buffer, &command_buffer_begin_info));
+        vkCmdSetDepthBias(
+            frame_data.command_buffer,
+            shadow_pass.depthBiasConstant,
+            0.0f,
+            shadow_pass.depthBiasSlope);
+
+        vkCmdBeginRenderPass(frame_data.command_buffer, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+
+
+        viewport = VulkanInitializer::ViewPort(shadow_pass.width, shadow_pass.height, 0.0f, 1.0f);
+        vkCmdSetViewport(frame_data.command_buffer, 0, 1, &viewport);
+
+        scissor = VulkanInitializer::Rect2D(shadow_pass.width, shadow_pass.height, 0, 0);
+        vkCmdSetScissor(frame_data.command_buffer, 0, 1, &scissor);
+
+        // Set depth bias (aka "Polygon offset")
+
+       
+        //draw
+
+
+
+
+   
+       
+    }
+
+
 }
 
