@@ -8,6 +8,8 @@ layout(set = 1, binding = 0) uniform Test {
     float att;
 } oout;
 
+
+
 layout (location=0) out vec3 vPosBuffer;
 layout (location=1) out vec4 normalBuffer;
 layout (location=2) out vec3 albedoBuffer;

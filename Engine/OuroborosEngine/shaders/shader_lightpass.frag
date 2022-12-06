@@ -34,7 +34,7 @@ vec3 shadow(vec3 fragcolor, vec3 fragpos) {
 	for(int i = 0; i < light_ubo.num_lights; ++i)
 	{
         vec4 world_pos = vec4(fragpos,1.0);
-		vec4 shadowClip	= light_ubo.lights[i].view_matrix *global_ubo.inv_view * world_pos;
+		vec4 shadowClip	= light_ubo.lights[i].view_matrix * world_pos;
 		float shadowFactor= filterPCF(shadowClip, i);
 		fragcolor *= shadowFactor;
 	}
@@ -43,10 +43,9 @@ vec3 shadow(vec3 fragcolor, vec3 fragpos) {
 
 void main()
 {
-    vec3 Lo = vec3(0);
+     vec3 Lo = vec3(0);
    
-    vec3 frag_pos = texture(viewPosBuffer, vertexUV).rgb;
-    vec3 normal = texture(normalBuffer,vertexUV).rgb;
+    vec3 frag_pos = texture(positionBuffer, vertexUV).rgb;
     vec3 albedo = texture(albedoBuffer,vertexUV).rgb;
     float metallic = texture(metalRoughnessAoBuffer, vertexUV).r;
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
@@ -59,7 +58,7 @@ void main()
     if(metallic > 0.01f) 
     {
         vec4 view_pos = vec4(frag_pos, 1.0f);
-        vec2 tex_size = textureSize(viewPosBuffer, 0).xy;
+        vec2 tex_size = textureSize(positionBuffer, 0).xy;
         uv = SSR_raycast(view_pos, N, tex_size, vertexUV);
         uv.z = roughness;
     }
@@ -112,7 +111,7 @@ void main()
                 
                 float spot_light_effect   = 0.f;
 
-                const float L_dot_D             = dot(L, -light_dir);
+                const float L_dot_D             = clamp(dot(L, -light_dir), 0.0f, 1.0f);
 
                 if(L_dot_D < cos_phi) {
                     spot_light_effect = 0.f;
@@ -144,15 +143,12 @@ void main()
 
         radiance *= max(1.f, oout.att);
 
-        float NdotL = dot(N, L);
+        float NdotL = clamp(dot(N, L), 0.0f, 1.0f);
         float G = GeometrySmith(N, V, L, roughness);
 
         vec3 num = NDF * G * F;
-        float denom = 4.f * max((dot(N, V)), 0.f) * max(NdotL, 0.f) + 0.0001;
+        float denom = 4.f * clamp(dot(N, V), 0.0f,  1.0f) * NdotL + 0.0001;
         vec3 specular = num / denom;
-
-        // outColor = vec4(specular, 1.f );
-        // return;
 
         vec3 Ks = F;
         vec3 Kd = vec3(1.f) - Ks;
@@ -162,15 +158,18 @@ void main()
         Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao * 0.1f;
+    // Lo /= light_ubo.num_lights;
+
+    vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
     color = clamp(color, vec3(0.0f), vec3(1.0f));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
+
     
-    color = shadow(color, frag_pos);
+    // color = shadow(color, frag_pos);
 
     outColor = vec4(color, 1.0f);
     outUV = uv;

@@ -47,6 +47,7 @@ layout(location = 0) in VS_IN
     vec2 uv;
     vec3 non_pure_normal;
     mat3 TBN;
+    mat3 normal_matrix;
 } vs_in;
 mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
 {
@@ -85,6 +86,7 @@ vec4 getNormalFromMap()
     vec3 tangentNormal = texture(normal_texture, vs_in.uv).rgb;
     tangentNormal = tangentNormal * 2.0 - 1.0;   
     tangentNormal = normalize(vs_in.TBN * tangentNormal); 
+    // tangentNormal = vs_in.normal_matrix * tangentNormal;
 
     return vec4(tangentNormal,gl_FragCoord.z);
 

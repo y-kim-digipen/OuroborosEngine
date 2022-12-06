@@ -24,7 +24,7 @@ layout(set = 0, binding = 1) uniform light_data {
 #define SHADOW_FACTOR 0.25
 #define AMBIENT_LIGHT 0.1
 
-layout(set = 2, binding = 0) uniform sampler2D viewPosBuffer;
+layout(set = 2, binding = 0) uniform sampler2D positionBuffer;
 layout(set = 2, binding = 1) uniform sampler2D normalBuffer;
 layout(set = 2, binding = 2) uniform sampler2D albedoBuffer;
 layout(set = 2, binding = 3) uniform sampler2D emissiveBuffer;
