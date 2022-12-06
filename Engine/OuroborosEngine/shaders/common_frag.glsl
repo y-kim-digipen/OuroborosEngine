@@ -46,6 +46,7 @@ layout(location = 0) in VS_IN
     vec3 cam_pos;
     vec2 uv;
     vec3 non_pure_normal;
+    mat3 TBN;
 } vs_in;
 mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
 {
@@ -66,7 +67,7 @@ mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
     return mat3( T * invmax, B * invmax, N );
 }
 
-vec3 getNormalFromMap()
+vec4 getNormalFromMap()
 {
     // vec3 tangentNormal = texture(normal_texture,  vs_in.uv).xyz * 2.0 - 1.0;
 
@@ -81,11 +82,12 @@ vec3 getNormalFromMap()
     // mat3 TBN = mat3(T, B, N);
 
     // return normalize( tangentNormal);
+    vec3 tangentNormal = texture(normal_texture, vs_in.uv).rgb;
+    tangentNormal = tangentNormal * 2.0 - 1.0;   
+    tangentNormal = normalize(vs_in.TBN * tangentNormal); 
 
-    vec3 map = texture(normal_texture, vs_in.uv).xyz;
-    map = map * 255.f/127.f - 128.f/127.f;
-    mat3 TBN = cotangent_frame(normalize(vs_in.non_pure_normal), -vs_in.cam_pos,vs_in.uv);
-    return normalize(TBN *map);
+    return vec4(tangentNormal,gl_FragCoord.z);
+
 }
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)

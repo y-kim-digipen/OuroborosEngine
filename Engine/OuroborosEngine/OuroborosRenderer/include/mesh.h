@@ -21,9 +21,11 @@ namespace Renderer {
 		glm::vec3 pos;
 		glm::vec3 normal;
 		glm::vec2 uv;
+		glm::vec3 tangent;
+		glm::vec3 bitangent;
 
 		bool operator==(const Vertex& other) const {
-			return pos == other.pos && normal == other.normal && uv == other.uv;
+			return pos == other.pos && normal == other.normal && uv == other.uv && other.tangent == tangent && other.bitangent == bitangent;
 		}
 
 		static size_t offset(const char* member) {
@@ -38,6 +40,14 @@ namespace Renderer {
 			}
 			else if (strcmp(member, "uv") == 0) {
 				offset = offsetof(Vertex, uv);
+			}
+			else if (strcmp(member, "tangent") == 0)
+			{
+				offset = offsetof(Vertex, tangent);
+			}
+			else if (strcmp(member, "bitangent") ==0)
+			{
+				offset = offsetof(Vertex, bitangent);
 			}
 
 			return offset;

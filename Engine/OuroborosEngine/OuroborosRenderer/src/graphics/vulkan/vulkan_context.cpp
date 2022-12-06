@@ -451,7 +451,11 @@ namespace Renderer
 
         CreateLightPassImage();
         CreateLightPassFramebuffer();
+
         CreateSSRFrameBuffer();
+
+
+
 
 
         auto& deferred_framebuffer = vulkan_type.deferred_pass;
@@ -467,6 +471,20 @@ namespace Renderer
             AddBinding(3, &tex_descriptor_emissive).
             AddBinding(4, &tex_descriptor_metalic_roughness_ao);
         lightpass_set_.AddBinding(5, &tex_descriptor_shadow_map);
+
+
+        auto& light_pass = vulkan_type.light_pass;
+        VkDescriptorImageInfo tex_descriptor_out_color = VulkanInitializer::DescriptorImageInfo(light_pass.color_sampler, light_pass.out_color_images[vulkan_type.current_frame].image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        VkDescriptorImageInfo tex_descriptor_out_uv = VulkanInitializer::DescriptorImageInfo(light_pass.color_sampler, light_pass.out_uv_images[vulkan_type.current_frame].image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+
+        auto& ssr_pass = vulkan_type.ssr_pass;
+
+        ssr_pass.set->AddBinding(0, &tex_descriptor_out_color)
+            .AddBinding(1, &tex_descriptor_out_uv)
+            .Build();
+
+
         //lightpass_set_.Build();
         //SetupDescriptorSet();
         
@@ -946,8 +964,8 @@ namespace Renderer
             }
         }
 
-        //instance_create_info.enabledLayerCount = required_layer_count;
-        //instance_create_info.ppEnabledLayerNames = required_layer_names;
+        instance_create_info.enabledLayerCount = required_layer_count;
+        instance_create_info.ppEnabledLayerNames = required_layer_names;
 #endif //_DEBUG
 
         //TODO: this should be formatted as a function of inside the platform
@@ -974,17 +992,16 @@ namespace Renderer
             | VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
         debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT
             | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
-        //debugCreateInfo.pfnUserCallback = (PFN_vkDebugUtilsMessengerCallbackEXT)debugCallback;
+        debugCreateInfo.pfnUserCallback = (PFN_vkDebugUtilsMessengerCallbackEXT)debugCallback;
         debugCreateInfo.pUserData = 0;
         ;
         //vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger);
 
-
         //because of the static library
-        PFN_vkCreateDebugUtilsMessengerEXT myvkCreateDebugUtilsMessengerEXT = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(vulkan_type.instance, "vkCreateDebugUtilsMessengerEXT"));
+  /*      PFN_vkCreateDebugUtilsMessengerEXT myvkCreateDebugUtilsMessengerEXT = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(vulkan_type.instance, "vkCreateDebugUtilsMessengerEXT"));
 
 
-        //VK_CHECK(myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
+        VK_CHECK(myvkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));*/
         //VK_CHECK(vkCreateDebugUtilsMessengerEXT(vulkan_type.instance, &debugCreateInfo, nullptr, &vulkan_type.debug_messenger));
     }
 #endif
@@ -1959,61 +1976,60 @@ namespace Renderer
 
     int CleanUpDeferredFramebufferAndRenderPass()
     {
-        vkDestroyFramebuffer(vulkan_type.device.handle, vulkan_type.deferred_pass.frame_buffer, nullptr);
-
-
-        for (auto& framebuffer : vulkan_type.light_pass.frame_buffers)
+        //deferred
         {
-            vkDestroyFramebuffer(vulkan_type.device.handle, framebuffer, nullptr);
+            vkDestroyFramebuffer(vulkan_type.device.handle, vulkan_type.deferred_pass.frame_buffer, nullptr);
+            vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.deferred_pass.render_pass, nullptr);
         }
 
-
-        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.deferred_pass.render_pass, nullptr);
-        vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.light_pass.render_pass, nullptr);
-        
-
-    	vkDestroySampler(vulkan_type.device.handle, vulkan_type.light_pass.color_sampler, nullptr);
-        auto& lightpass = vulkan_type.light_pass;
-    	uint32_t image_count = lightpass.out_color_images.size();
-
-        for (uint32_t i = 0; i < image_count; ++i)
+ 
+        //light pass
         {
-            DestroyImage(&vulkan_type, &lightpass.out_color_images[i]);
-            DestroyImage(&vulkan_type, &lightpass.out_uv_images[i]);
-            vkDestroyFramebuffer(vulkan_type.device.handle, lightpass.frame_buffers[i], nullptr);
-        }
-        vkDestroySampler(vulkan_type.device.handle, vulkan_type.deferred_pass.color_sampler, nullptr);
+            vkDestroySampler(vulkan_type.device.handle, vulkan_type.light_pass.color_sampler, nullptr);
+            auto& lightpass = vulkan_type.light_pass;
+            uint32_t image_count = lightpass.out_color_images.size();
+            vkDestroyRenderPass(vulkan_type.device.handle, vulkan_type.light_pass.render_pass, nullptr);
 
-    	DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.metalic_roughness_ao);
-        DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.position);
-        DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.albedo);
-        DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.depth);
-        DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.normal);
-        DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.emissive);
+            for (uint32_t i = 0; i < image_count; ++i)
+            {
+                DestroyImage(&vulkan_type, &lightpass.out_color_images[i]);
+                DestroyImage(&vulkan_type, &lightpass.out_uv_images[i]);
+                vkDestroyFramebuffer(vulkan_type.device.handle, lightpass.frame_buffers[i], nullptr);
+            }
 
+            vkDestroySampler(vulkan_type.device.handle, vulkan_type.deferred_pass.color_sampler, nullptr);
 
-
-        auto& ssr_pass = vulkan_type.ssr_pass;
-        auto& vk_device = vulkan_type.device.handle;
-       
-
-        for (uint32_t i = 0; i < ssr_pass.frame_buffers.size(); ++i)
-        {
-            DestroyImage(&vulkan_type, &ssr_pass.color_images[i]);
-            vkDestroyFramebuffer(vk_device, ssr_pass.frame_buffers[i], nullptr);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.metalic_roughness_ao);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.position);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.albedo);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.depth);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.normal);
+            DestroyImage(&vulkan_type, &vulkan_type.deferred_pass.emissive);
         }
 
-        vkDestroyRenderPass(vk_device, ssr_pass.render_pass, nullptr);
-        vkDestroySampler(vk_device, ssr_pass.color_sampler, nullptr);
+            auto& vk_device = vulkan_type.device.handle;
+		//ssr pass
+        {
+            auto& ssr_pass = vulkan_type.ssr_pass;
+            for (uint32_t i = 0; i < ssr_pass.frame_buffers.size(); ++i)
+            {
+                DestroyImage(&vulkan_type, &ssr_pass.color_images[i]);
+                vkDestroyFramebuffer(vk_device, ssr_pass.frame_buffers[i], nullptr);
+            }
+            vkDestroyRenderPass(vk_device, ssr_pass.render_pass, nullptr);
+            vkDestroySampler(vk_device, ssr_pass.color_sampler, nullptr);
+        }
 
+        //shadow pass
+        {
+            auto& shadow_pass = vulkan_type.shadow_pass;
 
-        auto& shadow_pass = vulkan_type.shadow_pass;
+            DestroyImage(&vulkan_type, &shadow_pass.shadow_map);
+            vkDestroyFramebuffer(vk_device, shadow_pass.frame_buffer, nullptr);
 
-        DestroyImage(&vulkan_type, &shadow_pass.shadow_map);
-        vkDestroyFramebuffer(vk_device, shadow_pass.frame_buffer, nullptr);
-
-        vkDestroyRenderPass(vk_device, shadow_pass.render_pass, nullptr);
-        vkDestroySampler(vk_device, shadow_pass.sampler, nullptr);
+            vkDestroyRenderPass(vk_device, shadow_pass.render_pass, nullptr);
+            vkDestroySampler(vk_device, shadow_pass.sampler, nullptr);
+        }
         return 0;
     }
 

@@ -27,10 +27,12 @@ namespace Asset
             glm::vec3 position;
             glm::vec3 normal;
             glm::vec2 uv;
-    
+            glm::vec3 tangent;
+            glm::vec3 bitangent;
+
             bool operator==(const Mesh::Vertex& other) const
             {
-                return position == other.position && normal == other.normal && uv == other.uv;
+                return position == other.position && normal == other.normal && uv == other.uv && tangent == other.tangent && other.bitangent == bitangent;
             }
         };
     

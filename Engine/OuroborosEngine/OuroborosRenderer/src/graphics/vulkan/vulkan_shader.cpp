@@ -371,6 +371,7 @@ namespace Renderer {
 
 		if (!SpirvHelper::GLSLtoSPV(shader_type, pshader, shader_binary_code)) {
 			std::cout << "Failed to convert GLSL to Spriv\n";
+			std::cout << file_name << std::endl;
 			return -1;
 		}
 

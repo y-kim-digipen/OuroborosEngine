@@ -129,6 +129,15 @@ namespace yk_ModelLoader
 			}
 		}
 
+		if (mesh->HasTangentsAndBitangents())
+		{
+			for (uint32_t i = 0; i < numVertices; ++i)
+			{
+				processingMesh._vertexTangents[result->_numVertices + i] = aiVector3ToGlmVec3(mesh->mTangents[i]);
+				processingMesh._vertexBitangents[result->_numVertices + i] = aiVector3ToGlmVec3(mesh->mBitangents[i]);
+			}
+		}
+
 		//Process indices
 		//processingMesh._indices.resize()
 		for (uint32_t i = 0; i < numFaces; ++i)
@@ -168,6 +177,11 @@ namespace yk_ModelLoader
 		result->_mesh->_vertexPositions.resize(numVertices);
 		if (result->_isUsingNormal)
 			result->_mesh->_vertexNormals.resize(numVertices);
+		if(result->_isUsingTangent)
+		{
+			result->_mesh->_vertexTangents.resize(numVertices);
+			result->_mesh->_vertexBitangents.resize(numVertices);
+		}
 		if (result->_isUsingUV)
 			result->_mesh->_vertexTexCoords.resize(numVertices);
 		//if (result->_isUsingTangent)

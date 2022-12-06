@@ -172,7 +172,7 @@ float textureProj(vec4 P, float layer, vec2 offset)
 	vec4 shadowCoord = P / P.w;
 	shadowCoord.st = shadowCoord.st * 0.5 + 0.5;
 	
-	if (shadowCoord.z < -1.0 && shadowCoord.z > 1.0) 
+	if (shadowCoord.z > -1.0 && shadowCoord.z < 1.0) 
 	{
 		float dist = texture(shadowmap, vec3(shadowCoord.st + offset, layer)).r;
 		if (shadowCoord.w > 0.0 && dist > shadowCoord.z) 

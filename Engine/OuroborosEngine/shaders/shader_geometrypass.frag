@@ -20,10 +20,10 @@ void main()
     vPosBuffer = vs_in.frag_pos;
     //normalBuffer = normalize(vs_in.non_pure_normal);
     normalBuffer = vec4(normalize(vs_in.norm), gl_FragCoord.z);
-    // if(material.has_normal_texture != 0)
-    // {
-    //     normalBuffer = getNormalFromMap();
-    // }
+    if(material.has_normal_texture != 0)
+    {
+        normalBuffer = getNormalFromMap();
+    }
 
     albedoBuffer = AlbedoValue();
     emissiveBuffer = EmissiveValue();

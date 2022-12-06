@@ -38,6 +38,8 @@ namespace yk_ModelLoader
 		std::string					_name;
 		std::vector<glm::vec3>		_vertexPositions;
 		std::vector<glm::vec3>		_vertexNormals;
+		std::vector<glm::vec3>		_vertexTangents;
+		std::vector<glm::vec3>		_vertexBitangents;
 		std::vector<glm::vec2>		_vertexTexCoords;
 		std::vector<uint32_t>		_indices;
 
