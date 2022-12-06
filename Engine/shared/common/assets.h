@@ -66,9 +66,8 @@ namespace Asset
     {
         glm::mat4 projection;
         glm::mat4 view;
+		glm::mat4 inv_view;
         glm::vec3 position;
-        glm::mat4 inv_view;
-        float padding;
     };
 
     struct Material : Asset

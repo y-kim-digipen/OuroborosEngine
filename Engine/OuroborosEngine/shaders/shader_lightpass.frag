@@ -6,20 +6,15 @@ layout(location = 1) out vec4 outUV;
 layout(set = 0, binding = 0) uniform global_data {
     mat4 projection;
     mat4 view;
-    vec3 cam_pos;
     mat4 inv_view;
+    vec3 cam_pos;
 } global_ubo;
-
-float test_att = 0.1;
 
 layout(set = 1, binding = 0) uniform Test {
     float att;
     float c1;
     float c2;
     float c3;
-    float max_thickness;
-    float max_iteration;
-    float min_iteration;
 } oout;
 
 #include "common_light_pass_frag.glsl"
@@ -34,13 +29,12 @@ void main()
     vec3 Lo = vec3(0);
    
     vec3 frag_pos = texture(viewPosBuffer, vertexUV).rgb;
-    vec3 normal = texture(normalBuffer,vertexUV).rgb;
     vec3 albedo = texture(albedoBuffer,vertexUV).rgb;
     float metallic = texture(metalRoughnessAoBuffer, vertexUV).r;
     float ao = texture(metalRoughnessAoBuffer, vertexUV).b;
     float roughness = texture(metalRoughnessAoBuffer, vertexUV).g;
       
-    vec3 V = normalize(frag_pos);
+    vec3 V = normalize(-frag_pos);
     vec3 N = texture(normalBuffer,vertexUV).rgb;
     
     vec4 uv = vec4(0.0f);
@@ -100,7 +94,7 @@ void main()
                 
                 float spot_light_effect   = 0.f;
 
-                const float L_dot_D             = dot(L, light_dir);
+                const float L_dot_D             = clamp(dot(L, -light_dir), 0.0f, 1.0f);
 
                 if(L_dot_D < cos_phi) {
                     spot_light_effect = 0.f;
@@ -132,15 +126,12 @@ void main()
 
         radiance *= max(1.f, oout.att);
 
-        float NdotL = dot(N, L);
+        float NdotL = clamp(dot(N, L), 0.0f, 1.0f);
         float G = GeometrySmith(N, V, L, roughness);
 
         vec3 num = NDF * G * F;
-        float denom = 4.f * max((dot(N, V)), 0.f) * max(NdotL, 0.f) + 0.0001;
+        float denom = 4.f * clamp(dot(N, V), 0.0f,  1.0f) * NdotL + 0.0001;
         vec3 specular = num / denom;
-
-        // outColor = vec4(specular, 1.f );
-        // return;
 
         vec3 Ks = F;
         vec3 Kd = vec3(1.f) - Ks;
@@ -150,7 +141,9 @@ void main()
         Lo += (Kd * albedo / PI + specular) * radiance * NdotL;
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao * 0.1f;
+    Lo /= light_ubo.num_lights;
+
+    vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));

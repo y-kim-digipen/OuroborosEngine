@@ -3,6 +3,8 @@ const float PI = 3.1415926535897932384626433832795;
 #define POINT_LIGHT 0
 #define SPOT_LIGHT 1
 #define DIRECTIONAL_LIGHT 2
+#define MAX_THICKNESS 0.00001f
+#define MAX_ITERATION 10000
 
 struct Light
 {
@@ -107,15 +109,16 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     // not sure what this part do
     vec2 ss_delta_pos = ss_reflect_end_pos - ss_pos;
-    int max_distance = int(max(max(abs(ss_delta_pos.x), abs(ss_delta_pos.y)), oout.min_iteration)); // * clamp(resolution, 0, 1);
-    ts_delta_pos /= max_distance;
+    float flt_max_distance = max(abs(ss_delta_pos.x), abs(ss_delta_pos.y));
+    int max_distance = int(flt_max_distance);
+    ts_delta_pos /= flt_max_distance;
 
     vec4 ts_ray_pos = vec4(ts_pos, 0);
     vec4 ts_ray_dir = vec4(ts_delta_pos, 0);
 
     int hit_index = -1;
 
-    for(int i = 0; i < max_distance && i < oout.max_iteration; i += 4)
+    for(int i = 0; i < max_distance && i < MAX_ITERATION; i += 4)
     {
         vec4 ts_ray_pos0 = ts_ray_pos + ts_ray_dir;
         vec4 ts_ray_pos1 = ts_ray_pos + ts_ray_dir * 2;
@@ -132,19 +135,19 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
         {
             float thickness = ts_ray_pos3.z - depth3;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 4) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 4) : hit_index;
         }
         {
             float thickness = ts_ray_pos2.z - depth2;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 3) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 3) : hit_index;
         }
         {
             float thickness = ts_ray_pos1.z - depth1;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 2) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 2) : hit_index;
         }
         {
             float thickness = ts_ray_pos0.z - depth0;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 1) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 1) : hit_index;
         }
 
         ts_ray_pos = ts_ray_pos3;
