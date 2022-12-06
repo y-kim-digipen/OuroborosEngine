@@ -169,7 +169,6 @@ namespace Renderer
         
         //buildDeferredCommandBuffer();
         CreateSSRFrameBuffer();
-
         CreateSSRShader(
             &vulkan_type.light_pass.out_color_images[0], vulkan_type.light_pass.color_sampler,
             &vulkan_type.light_pass.out_uv_images[0], vulkan_type.light_pass.color_sampler
@@ -190,7 +189,7 @@ namespace Renderer
 
         global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(global_data))); // camera data in binding slot 0
         global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 1, sizeof(light_data))); // light data in binding slot 1
-        global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 1, sizeof(shadow_data))); //light shadow data in binding slot 2
+        global_binding_ubo.push_back(std::make_unique<VulkanUniformBuffer>(&vulkan_type, 0, sizeof(shadow_data))); //light shadow data in binding slot 2
 
         global_set.Init(&vulkan_type, 0)
             .AddBindingLayout(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT).AddBinding(0, global_binding_ubo[0].get())
@@ -315,9 +314,8 @@ namespace Renderer
         }
 
         {
-            auto& shadowpass = vulkan_type.shadow_pass;
-            shadowpass.global_set->Cleanup();
             auto& shadow_pass = vulkan_type.shadow_pass;
+            shadow_pass.global_set->Cleanup();
 
             DestroyImage(&vulkan_type, &shadow_pass.shadow_map);
             vkDestroyFramebuffer(vulkan_type.device.handle, shadow_pass.frame_buffer, nullptr);
@@ -448,15 +446,10 @@ namespace Renderer
         //CreateViewportImage();
         //CreateViewportFramebuffer();
 
-
         CreateLightPassImage();
         CreateLightPassFramebuffer();
 
         CreateSSRFrameBuffer();
-
-
-
-
 
         auto& deferred_framebuffer = vulkan_type.deferred_pass;
         VkDescriptorImageInfo tex_descriptor_position = VulkanInitializer::DescriptorImageInfo(deferred_framebuffer.color_sampler, deferred_framebuffer.position.image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -481,13 +474,7 @@ namespace Renderer
         auto& ssr_pass = vulkan_type.ssr_pass;
 
         ssr_pass.set->AddBinding(0, &tex_descriptor_out_color)
-            .AddBinding(1, &tex_descriptor_out_uv)
-            .Build();
-
-
-        //lightpass_set_.Build();
-        //SetupDescriptorSet();
-        
+            .AddBinding(1, &tex_descriptor_out_uv);
     }
 
     int VulkanContext::BeginFrame()
@@ -531,7 +518,6 @@ namespace Renderer
 
         VK_CHECK(vkResetCommandBuffer(frame_data.command_buffer, 0));
 
-      
         //RecordCommandBuffer(frame_data.command_buffer, frame_data.swap_chain_image_index);
         buildDeferredCommandBuffer();
 
@@ -557,7 +543,6 @@ namespace Renderer
         auto& offscreen_semaphore = vulkan_type.deferred_pass.offscreenSemaphore;
         auto& shadow_semaphore = vulkan_type.shadow_pass.semaphore;
         VkSubmitInfo submit{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-
         VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
         submit.pWaitDstStageMask = &wait_stage;
@@ -636,11 +621,10 @@ namespace Renderer
         VkDescriptorImageInfo lightpass_color_image_info = VulkanInitializer::DescriptorImageInfo(light_pass.color_sampler, light_pass.out_color_images[vulkan_type.current_frame].image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         VkDescriptorImageInfo lightpass_uv_image_info = VulkanInitializer::DescriptorImageInfo(light_pass.color_sampler, light_pass.out_uv_images[vulkan_type.current_frame].image_view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        ssr_pass.set->AddBinding(0, &lightpass_color_image_info)
-            .AddBinding(1, &lightpass_uv_image_info);
-
         ssr_pass.ssr_shader->Bind();
-        ssr_pass.set->Bind();
+        ssr_pass.set->AddBinding(0, &lightpass_color_image_info)
+            .AddBinding(1, &lightpass_uv_image_info)
+            .Bind();
 
         vkCmdDraw(frame_data.command_buffer, 3, 1, 0, 0);
         vkCmdEndRenderPass(frame_data.command_buffer);
@@ -840,7 +824,7 @@ namespace Renderer
                 auto* material = front.material;
 
                 glm::mat4 model = transform->GetMatrix();
-                glm::mat4 normal_matrix = glm::transpose(glm::inverse(global_data.view * model));
+                glm::mat4 normal_matrix = glm::transpose(glm::inverse(model));
 
 
                 //TODO : need to change deferred offscreen shader

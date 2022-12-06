@@ -107,17 +107,12 @@ namespace Renderer
 			memcpy_s(&light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 			memcpy_s(&shadow_light_data.lights[index], sizeof(Asset::LightData), light_component, sizeof(Asset::LightData));
 
-
-
-
 			// transform light pos, direction to view space
 			shadow_data.mvp[index] = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
 
 			light_data.lights[index].view_matrix = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
-			light_data.lights[index].pos = glm::vec3(global_data.view * glm::vec4(light_data.lights[index].pos, 1.0f));
-			light_data.lights[index].dir = glm::normalize(glm::mat3(global_data.view) * light_data.lights[index].dir);
-
-
+			light_data.lights[index].pos = light_data.lights[index].pos;
+			light_data.lights[index].dir = light_data.lights[index].dir;
 		}
 	}
 
