@@ -10,16 +10,11 @@ layout(set = 0, binding = 0) uniform global_data {
     vec3 cam_pos;
 } global_ubo;
 
-float test_att = 0.1;
-
 layout(set = 1, binding = 0) uniform Test {
     float att;
     float c1;
     float c2;
     float c3;
-    float max_thickness;
-    float max_iteration;
-    float min_iteration;
 } oout;
 
 #include "common_light_pass_frag.glsl"
@@ -76,14 +71,13 @@ void main()
 
         if(light_type == DIRECTIONAL_LIGHT){
             L = normalize(-light_dir);
-            // att = 10;
+            att = 1;
         }
         else{
             vec3 relative_vec = light_pos - frag_pos;
             d = length(relative_vec);
             L = normalize(relative_vec);
             // att = 1 / (oout.att * oout.att);
-        
             att =  CalculateAttenuation(oout.c1, oout.c2, oout.c3, d);
         }
 
@@ -141,7 +135,7 @@ void main()
             }
         }
 
-        radiance *= max(1.f, oout.att);
+        //radiance *= max(1.f, oout.att);
 
         float NdotL = clamp(dot(N, L), 0.0f, 1.0f);
         float G = GeometrySmith(N, V, L, roughness);
@@ -164,7 +158,7 @@ void main()
     vec3 color = ambient + Lo;
     color = color /  (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
-    color = clamp(color, vec3(0.0f), vec3(1.0f));
+    //color = clamp(color, vec3(0.0f), vec3(1.0f));
 
     color += texture(emissiveBuffer, vertexUV).rgb;
 

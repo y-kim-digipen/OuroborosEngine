@@ -45,10 +45,9 @@ layout(location = 0) in VS_IN
     vec3 frag_pos;
     vec3 cam_pos;
     vec2 uv;
-    vec3 non_pure_normal;
     mat3 TBN;
-    mat3 normal_matrix;
 } vs_in;
+
 mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
 {
     // get edge vectors of the pixel triangle
@@ -68,28 +67,12 @@ mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
     return mat3( T * invmax, B * invmax, N );
 }
 
-vec4 getNormalFromMap()
+vec3 getNormalFromMap()
 {
-    // vec3 tangentNormal = texture(normal_texture,  vs_in.uv).xyz * 2.0 - 1.0;
+    vec3 local_normal = 2 * texture(normal_texture, vs_in.uv).xyz - 1.0f;
+    vec3 normal = normalize(vs_in.TBN * local_normal);
 
-    // vec3 Q1  = dFdx(vs_in.frag_pos);
-    // vec3 Q2  = dFdy(vs_in.frag_pos);
-    // vec2 st1 = dFdx(vs_in.uv);
-    // vec2 st2 = dFdy(vs_in.uv);
-
-    // vec3 N   = normalize(vs_in.non_pure_normal);
-    // vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    // vec3 B  = -normalize(cross(N, T));
-    // mat3 TBN = mat3(T, B, N);
-
-    // return normalize( tangentNormal);
-    vec3 tangentNormal = texture(normal_texture, vs_in.uv).rgb;
-    tangentNormal = tangentNormal * 2.0 - 1.0;   
-    tangentNormal = normalize(vs_in.TBN * tangentNormal); 
-    // tangentNormal = vs_in.normal_matrix * tangentNormal;
-
-    return vec4(tangentNormal,gl_FragCoord.z);
-
+    return local_normal;
 }
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)

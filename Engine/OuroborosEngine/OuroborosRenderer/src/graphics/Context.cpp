@@ -111,11 +111,11 @@ namespace Renderer
 			shadow_data.mvp[index] = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
 
 			light_data.lights[index].view_matrix = light_component2->GetPerspectiveMatrix() * light_component2->GetViewMatrix();
-			light_data.lights[index].pos = light_data.lights[index].pos;
-			light_data.lights[index].dir = light_data.lights[index].dir;
+			light_data.lights[index].pos = glm::vec3(global_data.view * glm::vec4(light_data.lights[index].pos, 1.0f));
+			glm::mat3 invt_view = glm::transpose(glm::inverse(global_data.view));
+			light_data.lights[index].dir = glm::normalize(invt_view * light_data.lights[index].dir);
 		}
 	}
-
 
 	Context::~Context()
 	{

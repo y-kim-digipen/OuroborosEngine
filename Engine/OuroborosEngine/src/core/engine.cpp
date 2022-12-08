@@ -52,10 +52,7 @@ namespace OE
 					camera_data.position = ecs_manager.GetComponent<TransformComponent>(ecs_manager.GetComponentOwner(main_camera)).GetPosition();
 					camera_data.view = main_camera->GetViewMatrix();
 					camera_data.inv_view = glm::inverse(camera_data.view);
-					
 					camera_data.projection = main_camera->GetPerspectiveMatrix();
-
-
 
 					//TODO: pass renderer camera data
 					context->global_data = camera_data;
@@ -132,7 +129,6 @@ namespace OE
 
 	void Engine::InitEssentialAssets()
 	{
-		asset_manager.GetManager<MeshAssetManager>().LoadAsset("model/default_cube.obj");
 		asset_manager.GetManager<ImageAssetManager>().LoadAsset("images/null.png");
 		asset_manager.GetManager<ShaderAssetManager>().LoadAsset("shader_lightpass");
 		auto* context_data = (window->GetWindowData().RenderContextData.get());

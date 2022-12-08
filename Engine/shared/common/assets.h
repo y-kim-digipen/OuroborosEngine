@@ -28,11 +28,10 @@ namespace Asset
             glm::vec3 normal;
             glm::vec2 uv;
             glm::vec3 tangent;
-            glm::vec3 bitangent;
-
+    
             bool operator==(const Mesh::Vertex& other) const
             {
-                return position == other.position && normal == other.normal && uv == other.uv && tangent == other.tangent && other.bitangent == bitangent;
+                return position == other.position && normal == other.normal && uv == other.uv && tangent == other.tangent;
             }
         };
     
@@ -68,8 +67,8 @@ namespace Asset
     {
         glm::mat4 projection;
         glm::mat4 view;
-        glm::mat4 inv_view;
-        alignas(16) glm::vec3 position;
+		glm::mat4 inv_view;
+        glm::vec3 position;
     };
 
     struct Material : Asset

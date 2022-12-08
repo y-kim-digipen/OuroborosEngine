@@ -3,6 +3,8 @@ const float PI = 3.1415926535897932384626433832795;
 #define POINT_LIGHT 0
 #define SPOT_LIGHT 1
 #define DIRECTIONAL_LIGHT 2
+#define MAX_THICKNESS 0.00001f
+#define MAX_ITERATION 10000
 
 struct Light
 {
@@ -73,6 +75,8 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+precision highp float;
+
 // frag pos, normal are on the view space
 vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
     vec4 uv = vec4(0.0f);
@@ -90,9 +94,6 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     vec4 cs_pos = global_ubo.projection * view_pos;
     cs_pos /= cs_pos.w; // REVERSE DEPTH [1:0]
-
-    //vec3 ts_pos_test_if_same;
-    //ts_pos_test_if_same = vec3(cs_pos.xy * 0.5f + vec2(0.5f), texture(normalBuffer, tex_coord).w);
     
     vec3 ts_reflect_dir = normalize(cs_reflect_end_pos.xyz - cs_pos.xyz);
     ts_reflect_dir.xy *= 0.5f;
@@ -112,16 +113,25 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
 
     // not sure what this part do
     vec2 ss_delta_pos = ss_reflect_end_pos - ss_pos;
-    int max_distance = int(max(max(abs(ss_delta_pos.x), abs(ss_delta_pos.y)), oout.min_iteration)); // * clamp(resolution, 0, 1);
-    ts_delta_pos /= max_distance;
+    float flt_max_dist = max(abs(ss_delta_pos.x), abs(ss_delta_pos.y));
+    int max_distance = int(flt_max_dist);
+
+    ts_delta_pos /= flt_max_dist;
 
     vec4 ts_ray_pos = vec4(ts_pos, 0);
     vec4 ts_ray_dir = vec4(ts_delta_pos, 0);
 
     int hit_index = -1;
+    float min_thickness = 1.0f;
+    int min_thickness_hit_index = -1;
+    vec2 ts_min_thickness_ray_pos = vec2(0, 0);
 
-    for(int i = 0; i < max_distance && i < oout.max_iteration; i += 4)
+    for(int i = 0; i < max_distance && i < MAX_ITERATION; i += 4)
     {
+        if(ts_ray_pos.x < 0.0f || ts_ray_pos.y < 0.0f) {
+            break;
+        }
+
         vec4 ts_ray_pos0 = ts_ray_pos + ts_ray_dir;
         vec4 ts_ray_pos1 = ts_ray_pos + ts_ray_dir * 2;
         vec4 ts_ray_pos2 = ts_ray_pos + ts_ray_dir * 3;
@@ -132,24 +142,41 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
         float depth2 = texture(normalBuffer, ts_ray_pos2.xy).w;
         float depth3 = texture(normalBuffer, ts_ray_pos3.xy).w;
 
-        if(depth0 == 0.0f)
-            break;
-
         {
             float thickness = ts_ray_pos3.z - depth3;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 4) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 4) : hit_index;
+
+            if(min_thickness > abs(thickness)) {
+                min_thickness = thickness;
+                ts_min_thickness_ray_pos = ts_ray_pos3.xy;
+            }
         }
         {
             float thickness = ts_ray_pos2.z - depth2;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 3) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 3) : hit_index;
+
+            if(min_thickness > abs(thickness)) {
+                min_thickness = thickness;
+                ts_min_thickness_ray_pos = ts_ray_pos3.xy;
+            }
         }
         {
             float thickness = ts_ray_pos1.z - depth1;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 2) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 2) : hit_index;
+
+            if(min_thickness > abs(thickness)) {
+                min_thickness = thickness;
+                ts_min_thickness_ray_pos = ts_ray_pos3.xy;
+            }
         }
         {
             float thickness = ts_ray_pos0.z - depth0;
-            hit_index = (thickness >= 0 && thickness < oout.max_thickness) ? (i + 1) : hit_index;
+            hit_index = (thickness >= 0 && thickness < MAX_THICKNESS) ? (i + 1) : hit_index;
+
+            if(min_thickness > abs(thickness)) {
+                min_thickness = thickness;
+                ts_min_thickness_ray_pos = ts_ray_pos3.xy;
+            }
         }
 
         ts_ray_pos = ts_ray_pos3;
@@ -161,6 +188,11 @@ vec4 SSR_raycast(vec4 view_pos, vec3 normal, vec2 tex_size, vec2 tex_coord) {
     {
         uv.w = 1.0f;
         uv.xy = ts_pos.xy + ts_ray_dir.xy * hit_index;
+    }
+
+    if(min_thickness < 0.00016f) {
+        uv.w = 1.0f;
+        uv.xy = ts_min_thickness_ray_pos;
     }
 
     return uv;

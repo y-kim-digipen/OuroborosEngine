@@ -18,7 +18,6 @@ namespace Renderer {
             vertex.normal = element.normal;
             vertex.uv = element.uv;
             vertex.tangent = element.tangent;
-            vertex.bitangent = element.bitangent;
             out_model->vertices.push_back(vertex);
         }
 		out_model->indices = mesh.indices;
