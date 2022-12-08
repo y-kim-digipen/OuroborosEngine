@@ -17,6 +17,8 @@ namespace Renderer {
 	        vertex.pos = element.position;
             vertex.normal = element.normal;
             vertex.uv = element.uv;
+            vertex.tangent = element.tangent;
+
             out_model->vertices.push_back(vertex);
         }
 		out_model->indices = mesh.indices;

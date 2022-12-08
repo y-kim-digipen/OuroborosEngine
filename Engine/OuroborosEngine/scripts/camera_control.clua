@@ -1,4 +1,4 @@
-movespeed = 10
+movespeed = 1
 pers_move_speed = 0.3
 fast_move_multuplier = 3
 left_move_button = 87

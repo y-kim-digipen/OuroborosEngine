@@ -61,7 +61,7 @@
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\src\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">glfw.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">glfw3</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">glfw3d</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\82106\Desktop\2022-Fall\GAM450\OuroborosEngine\Engine\OuroborosEngine\OuroborosRenderer\glfw\src\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">glfw.dir\Release\</IntDir>

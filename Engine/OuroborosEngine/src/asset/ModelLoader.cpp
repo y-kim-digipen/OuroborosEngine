@@ -56,7 +56,7 @@ namespace yk_ModelLoader
 		//LOG("\t", "Num meshes :", numMeshesInScene);
 		result->_numMeshes = numMeshesInScene;
 		uint32_t prevIndexOffset = 0;
-
+		
 		for (uint32_t i = 0; i < numMeshesInScene; ++i)
 		{
 			if (ProcessSingleMesh(scene->mMeshes[i], result, i, prevIndexOffset) == false)
@@ -136,10 +136,47 @@ namespace yk_ModelLoader
 			const aiFace& face = mesh->mFaces[i];
 			const uint32_t indicesInFace = face.mNumIndices;
 			assert(indicesInFace == 3);
+
 			for (uint8_t j = 0; j < indicesInFace; ++j)
 			{
 				processingMesh._indices[result->_numIndices + i * 3 + j] = face.mIndices[j] + prevIndexOffset;
 			}
+			
+			uint32_t index0 = face.mIndices[0] + prevIndexOffset;
+			uint32_t index1 = face.mIndices[1] + prevIndexOffset;
+			uint32_t index2 = face.mIndices[2] + prevIndexOffset;
+
+			// Tangent vector creation code
+			glm::vec3 v0 = processingMesh._vertexPositions[index0];
+			glm::vec3 v1 = processingMesh._vertexPositions[index1];
+			glm::vec3 v2 = processingMesh._vertexPositions[index2];
+
+			glm::vec3 edge1 = v1 - v0;
+			glm::vec3 edge2 = v2 - v0;
+
+			float deltaU1 = processingMesh._vertexTexCoords[index1].x - processingMesh._vertexTexCoords[index0].x;
+			float deltaV1 = processingMesh._vertexTexCoords[index1].y - processingMesh._vertexTexCoords[index0].y;
+
+			float deltaU2 = processingMesh._vertexTexCoords[index2].x - processingMesh._vertexTexCoords[index0].x;
+			float deltaV2 = processingMesh._vertexTexCoords[index2].y - processingMesh._vertexTexCoords[index0].y;
+
+			float dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+			float fc = 1.0f / dividend;
+
+			glm::vec3 tangent = {
+				(fc * (deltaV2 * edge1.x - deltaV1 * edge2.x)),
+				(fc * (deltaV2 * edge1.y - deltaV1 * edge2.y)),
+				(fc * (deltaV2 * edge1.z - deltaV1 * edge2.z))
+			};
+
+			tangent = glm::normalize(tangent);
+			
+			//float sx = deltaU1, sy = deltaU2;
+			//float tx = deltaV1, ty = deltaV2;
+			//float handedness = ((tx * sy - ty * sx) < 0.0f) ? -1.0f : 1.0f;
+			processingMesh._vertexTangents[index0] = tangent;
+			processingMesh._vertexTangents[index1] = tangent;
+			processingMesh._vertexTangents[index2] = tangent;
 		}
 
 		result->_numVertices += numVertices;
@@ -170,6 +207,8 @@ namespace yk_ModelLoader
 			result->_mesh->_vertexNormals.resize(numVertices);
 		if (result->_isUsingUV)
 			result->_mesh->_vertexTexCoords.resize(numVertices);
+			
+		result->_mesh->_vertexTangents.resize(numVertices);
 		//if (result->_isUsingTangent)
 			result->_mesh->_indices.resize(numIndices);
 	}

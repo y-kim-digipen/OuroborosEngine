@@ -72,7 +72,7 @@ private:
 	glm::mat4 view_matrix;
 	glm::mat4 perspective_matrix;
 	uint16_t width = 1600.f, height = 900.f;
-	float near_plane = 0.1f, far_plane = 2500.f;
+	float near_plane = 0.1f, far_plane = 100.f;
 	float fov = glm::pi<float>() * 0.3f;
 
 	glm::vec3 up, right, front;

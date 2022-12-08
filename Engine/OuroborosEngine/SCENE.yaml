@@ -431,7 +431,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_00
@@ -460,7 +460,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_01
@@ -489,7 +489,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_03
@@ -518,7 +518,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_05
@@ -547,7 +547,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_06
@@ -576,7 +576,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_07
@@ -605,7 +605,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_08
@@ -634,7 +634,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_09
@@ -663,7 +663,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_10
@@ -692,7 +692,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_100
@@ -721,7 +721,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_101
@@ -750,7 +750,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_102
@@ -779,7 +779,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_103
@@ -808,7 +808,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_104
@@ -837,7 +837,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_105
@@ -866,7 +866,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_106
@@ -895,7 +895,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_107
@@ -924,7 +924,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_108
@@ -953,7 +953,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_109
@@ -982,7 +982,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_11
@@ -1011,7 +1011,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_110
@@ -1040,7 +1040,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_111
@@ -1069,7 +1069,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_112
@@ -1098,7 +1098,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_113
@@ -1127,7 +1127,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_114
@@ -1156,7 +1156,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_115
@@ -1185,7 +1185,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_116
@@ -1214,7 +1214,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_117
@@ -1243,7 +1243,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_118
@@ -1272,7 +1272,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_119
@@ -1301,7 +1301,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_12
@@ -1330,7 +1330,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_120
@@ -1359,7 +1359,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_121
@@ -1388,7 +1388,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_122
@@ -1417,7 +1417,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_123
@@ -1446,7 +1446,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_124
@@ -1475,7 +1475,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_125
@@ -1504,7 +1504,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_126
@@ -1533,7 +1533,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_127
@@ -1562,7 +1562,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_128
@@ -1591,7 +1591,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_129
@@ -1620,7 +1620,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_13
@@ -1649,7 +1649,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_130
@@ -1678,7 +1678,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_131
@@ -1707,7 +1707,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_132
@@ -1736,7 +1736,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_133
@@ -1765,7 +1765,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_134
@@ -1794,7 +1794,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_135
@@ -1823,7 +1823,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_136
@@ -1852,7 +1852,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_137
@@ -1881,7 +1881,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_138
@@ -1910,7 +1910,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_139
@@ -1939,7 +1939,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_14
@@ -1968,7 +1968,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_140
@@ -1997,7 +1997,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_141
@@ -2026,7 +2026,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_142
@@ -2055,7 +2055,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_143
@@ -2084,7 +2084,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_144
@@ -2113,7 +2113,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_145
@@ -2142,7 +2142,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_146
@@ -2171,7 +2171,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_147
@@ -2200,7 +2200,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_148
@@ -2229,7 +2229,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_149
@@ -2258,7 +2258,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_15
@@ -2287,7 +2287,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_150
@@ -2316,7 +2316,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_151
@@ -2345,7 +2345,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_152
@@ -2374,7 +2374,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_153
@@ -2403,7 +2403,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_154
@@ -2432,7 +2432,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_155
@@ -2461,7 +2461,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_156
@@ -2490,7 +2490,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_157
@@ -2519,7 +2519,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_158
@@ -2548,7 +2548,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_159
@@ -2577,7 +2577,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_16
@@ -2606,7 +2606,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_160
@@ -2635,7 +2635,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_161
@@ -2664,7 +2664,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_162
@@ -2693,7 +2693,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_163
@@ -2722,7 +2722,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_164
@@ -2751,7 +2751,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_165
@@ -2780,7 +2780,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_166
@@ -2809,7 +2809,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_167
@@ -2838,7 +2838,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_168
@@ -2867,7 +2867,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_169
@@ -2896,7 +2896,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_17
@@ -2925,7 +2925,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_170
@@ -2954,7 +2954,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_171
@@ -2983,7 +2983,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_172
@@ -3012,7 +3012,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_173
@@ -3041,7 +3041,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_174
@@ -3070,7 +3070,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_175
@@ -3099,7 +3099,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_176
@@ -3128,7 +3128,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_177
@@ -3157,7 +3157,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_178
@@ -3186,7 +3186,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_179
@@ -3215,7 +3215,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_18
@@ -3244,7 +3244,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_180
@@ -3273,7 +3273,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_181
@@ -3302,7 +3302,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_182
@@ -3331,7 +3331,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_183
@@ -3360,7 +3360,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_184
@@ -3389,7 +3389,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_185
@@ -3418,7 +3418,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_186
@@ -3447,7 +3447,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_187
@@ -3476,7 +3476,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_188
@@ -3505,7 +3505,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_189
@@ -3534,7 +3534,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_19
@@ -3563,7 +3563,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_190
@@ -3592,7 +3592,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_191
@@ -3621,7 +3621,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_192
@@ -3650,7 +3650,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_193
@@ -3679,7 +3679,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_194
@@ -3708,7 +3708,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_195
@@ -3737,7 +3737,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_196
@@ -3766,7 +3766,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_197
@@ -3795,7 +3795,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_198
@@ -3824,7 +3824,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_199
@@ -3853,7 +3853,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_20
@@ -3882,7 +3882,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_200
@@ -3911,7 +3911,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_201
@@ -3940,7 +3940,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_202
@@ -3969,7 +3969,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_203
@@ -3998,7 +3998,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_204
@@ -4027,7 +4027,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_205
@@ -4056,7 +4056,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_206
@@ -4085,7 +4085,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_207
@@ -4114,7 +4114,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_208
@@ -4143,7 +4143,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_209
@@ -4172,7 +4172,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_21
@@ -4201,7 +4201,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_210
@@ -4230,7 +4230,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_211
@@ -4259,7 +4259,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_212
@@ -4288,7 +4288,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_213
@@ -4317,7 +4317,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_214
@@ -4346,7 +4346,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_215
@@ -4375,7 +4375,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_216
@@ -4404,7 +4404,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_217
@@ -4433,7 +4433,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_218
@@ -4462,7 +4462,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_219
@@ -4491,7 +4491,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_22
@@ -4520,7 +4520,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_220
@@ -4549,7 +4549,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_221
@@ -4578,7 +4578,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_222
@@ -4607,7 +4607,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_223
@@ -4636,7 +4636,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_224
@@ -4665,7 +4665,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_225
@@ -4694,7 +4694,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_226
@@ -4723,7 +4723,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_227
@@ -4752,7 +4752,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_228
@@ -4781,7 +4781,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_229
@@ -4810,7 +4810,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_23
@@ -4839,7 +4839,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_230
@@ -4868,7 +4868,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_231
@@ -4897,7 +4897,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_232
@@ -4926,7 +4926,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_233
@@ -4955,7 +4955,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_234
@@ -4984,7 +4984,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_235
@@ -5013,7 +5013,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_236
@@ -5042,7 +5042,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_237
@@ -5071,7 +5071,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_238
@@ -5100,7 +5100,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_239
@@ -5129,7 +5129,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_24
@@ -5158,7 +5158,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_240
@@ -5187,7 +5187,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_241
@@ -5216,7 +5216,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_242
@@ -5245,7 +5245,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_243
@@ -5274,7 +5274,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_244
@@ -5303,7 +5303,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_245
@@ -5332,7 +5332,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_246
@@ -5361,7 +5361,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_247
@@ -5390,7 +5390,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_248
@@ -5419,7 +5419,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_249
@@ -5448,7 +5448,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_25
@@ -5477,7 +5477,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_250
@@ -5506,7 +5506,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_251
@@ -5535,7 +5535,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_252
@@ -5564,7 +5564,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_253
@@ -5593,7 +5593,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_254
@@ -5622,7 +5622,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_255
@@ -5651,7 +5651,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_256
@@ -5680,7 +5680,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_257
@@ -5709,7 +5709,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_258
@@ -5738,7 +5738,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_259
@@ -5767,7 +5767,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_26
@@ -5796,7 +5796,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_260
@@ -5825,7 +5825,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_261
@@ -5854,7 +5854,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_262
@@ -5883,7 +5883,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_263
@@ -5912,7 +5912,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_264
@@ -5941,7 +5941,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_265
@@ -5970,7 +5970,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_266
@@ -5999,7 +5999,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_267
@@ -6028,7 +6028,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_268
@@ -6057,7 +6057,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_269
@@ -6086,7 +6086,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_27
@@ -6115,7 +6115,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_270
@@ -6144,7 +6144,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_271
@@ -6173,7 +6173,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_272
@@ -6202,7 +6202,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_273
@@ -6231,7 +6231,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_274
@@ -6260,7 +6260,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_275
@@ -6289,7 +6289,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_276
@@ -6318,7 +6318,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_277
@@ -6347,7 +6347,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_278
@@ -6376,7 +6376,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_279
@@ -6405,7 +6405,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_28
@@ -6434,7 +6434,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_280
@@ -6463,7 +6463,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_281
@@ -6492,7 +6492,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_282
@@ -6521,7 +6521,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_283
@@ -6550,7 +6550,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_284
@@ -6579,7 +6579,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_285
@@ -6608,7 +6608,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_286
@@ -6637,7 +6637,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_287
@@ -6666,7 +6666,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_288
@@ -6695,7 +6695,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_289
@@ -6724,7 +6724,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_29
@@ -6753,7 +6753,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_290
@@ -6782,7 +6782,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_291
@@ -6811,7 +6811,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_292
@@ -6840,7 +6840,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_293
@@ -6869,7 +6869,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_294
@@ -6898,7 +6898,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_295
@@ -6927,7 +6927,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_296
@@ -6956,7 +6956,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_297
@@ -6985,7 +6985,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_298
@@ -7014,7 +7014,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_299
@@ -7043,7 +7043,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_30
@@ -7072,7 +7072,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_300
@@ -7101,7 +7101,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_301
@@ -7130,7 +7130,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_302
@@ -7159,7 +7159,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_303
@@ -7188,7 +7188,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_304
@@ -7217,7 +7217,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_305
@@ -7246,7 +7246,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_306
@@ -7275,7 +7275,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_307
@@ -7304,7 +7304,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_308
@@ -7333,7 +7333,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_309
@@ -7362,7 +7362,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_31
@@ -7391,7 +7391,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_310
@@ -7420,7 +7420,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_311
@@ -7449,7 +7449,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_312
@@ -7478,7 +7478,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_313
@@ -7507,7 +7507,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_314
@@ -7536,7 +7536,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_315
@@ -7565,7 +7565,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_316
@@ -7594,7 +7594,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_317
@@ -7623,7 +7623,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_318
@@ -7652,7 +7652,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_319
@@ -7681,7 +7681,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_32
@@ -7710,7 +7710,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_320
@@ -7739,7 +7739,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_321
@@ -7768,7 +7768,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_322
@@ -7797,7 +7797,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_323
@@ -7826,7 +7826,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_324
@@ -7855,7 +7855,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_325
@@ -7884,7 +7884,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_326
@@ -7913,7 +7913,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_327
@@ -7942,7 +7942,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_328
@@ -7971,7 +7971,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_329
@@ -8000,7 +8000,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_33
@@ -8029,7 +8029,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_330
@@ -8058,7 +8058,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_331
@@ -8087,7 +8087,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_332
@@ -8116,7 +8116,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_333
@@ -8145,7 +8145,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_334
@@ -8174,7 +8174,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_335
@@ -8203,7 +8203,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_336
@@ -8232,7 +8232,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_337
@@ -8261,7 +8261,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_338
@@ -8290,7 +8290,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_339
@@ -8319,7 +8319,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_34
@@ -8348,7 +8348,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_340
@@ -8377,7 +8377,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_341
@@ -8406,7 +8406,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_342
@@ -8435,7 +8435,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_343
@@ -8464,7 +8464,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_344
@@ -8493,7 +8493,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_345
@@ -8522,7 +8522,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_346
@@ -8551,7 +8551,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_347
@@ -8580,7 +8580,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_348
@@ -8609,7 +8609,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_349
@@ -8638,7 +8638,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_35
@@ -8667,7 +8667,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_350
@@ -8696,7 +8696,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_351
@@ -8725,7 +8725,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_352
@@ -8754,7 +8754,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_353
@@ -8783,7 +8783,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_354
@@ -8812,7 +8812,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_355
@@ -8841,7 +8841,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_356
@@ -8870,7 +8870,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_357
@@ -8899,7 +8899,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_358
@@ -8928,7 +8928,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_359
@@ -8957,7 +8957,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_36
@@ -8986,7 +8986,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_360
@@ -9015,7 +9015,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_361
@@ -9044,7 +9044,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_362
@@ -9073,7 +9073,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_363
@@ -9102,7 +9102,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_364
@@ -9131,7 +9131,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_365
@@ -9160,7 +9160,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_366
@@ -9189,7 +9189,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_367
@@ -9218,7 +9218,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_368
@@ -9247,7 +9247,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_369
@@ -9276,7 +9276,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_37
@@ -9305,7 +9305,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_370
@@ -9334,7 +9334,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_371
@@ -9363,7 +9363,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_372
@@ -9392,7 +9392,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_373
@@ -9421,7 +9421,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_374
@@ -9450,7 +9450,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_375
@@ -9479,7 +9479,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_376
@@ -9508,7 +9508,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_377
@@ -9537,7 +9537,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_378
@@ -9566,7 +9566,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_379
@@ -9595,7 +9595,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_38
@@ -9624,7 +9624,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_380
@@ -9653,7 +9653,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_381
@@ -9682,7 +9682,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_382
@@ -9711,7 +9711,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_39
@@ -9740,7 +9740,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_40
@@ -9769,7 +9769,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_41
@@ -9798,7 +9798,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_42
@@ -9827,7 +9827,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_43
@@ -9856,7 +9856,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_44
@@ -9885,7 +9885,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_45
@@ -9914,7 +9914,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_46
@@ -9943,7 +9943,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_47
@@ -9972,7 +9972,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_48
@@ -10001,7 +10001,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_49
@@ -10030,7 +10030,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_50
@@ -10059,7 +10059,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_51
@@ -10088,7 +10088,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_52
@@ -10117,7 +10117,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_53
@@ -10146,7 +10146,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_54
@@ -10175,7 +10175,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_55
@@ -10204,7 +10204,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_56
@@ -10233,7 +10233,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_57
@@ -10262,7 +10262,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_58
@@ -10291,7 +10291,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_59
@@ -10320,7 +10320,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_60
@@ -10349,7 +10349,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_61
@@ -10378,7 +10378,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_62
@@ -10407,7 +10407,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_63
@@ -10436,7 +10436,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_64
@@ -10465,7 +10465,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_65
@@ -10494,7 +10494,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_66
@@ -10523,7 +10523,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_67
@@ -10552,7 +10552,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_68
@@ -10581,7 +10581,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_69
@@ -10610,7 +10610,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_70
@@ -10639,7 +10639,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_71
@@ -10668,7 +10668,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_72
@@ -10697,7 +10697,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_73
@@ -10726,7 +10726,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_74
@@ -10755,7 +10755,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_75
@@ -10784,7 +10784,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_76
@@ -10813,7 +10813,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_77
@@ -10842,7 +10842,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_78
@@ -10871,7 +10871,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_79
@@ -10900,7 +10900,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_80
@@ -10929,7 +10929,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_81
@@ -10958,7 +10958,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_82
@@ -10987,7 +10987,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_83
@@ -11016,7 +11016,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_84
@@ -11045,7 +11045,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_85
@@ -11074,7 +11074,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_86
@@ -11103,7 +11103,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_87
@@ -11132,7 +11132,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_88
@@ -11161,7 +11161,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_89
@@ -11190,7 +11190,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_90
@@ -11219,7 +11219,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_91
@@ -11248,7 +11248,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_92
@@ -11277,7 +11277,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_93
@@ -11306,7 +11306,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_94
@@ -11335,7 +11335,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_95
@@ -11364,7 +11364,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_96
@@ -11393,7 +11393,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_97
@@ -11422,7 +11422,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_98
@@ -11451,7 +11451,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|sponza:sponza_99
@@ -11480,7 +11480,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: model/Sponza.fbx|whole
@@ -11508,9 +11508,9 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: yes
     Component:
       struct TransformComponent:
-        position: [-269.7574, 121.6694, -5.639039]
-        scale: [2.3, 1, 1]
-        rotation: [-1.779717, 3871.311, 1.24]
+        position: [0, 3.475578, 0]
+        scale: [1, 1, 1]
+        rotation: [-19.77972, 3349.31, 1.24]
       struct MeshComponent:
         mesh_name: ""
       struct ShaderComponent:
@@ -11542,7 +11542,7 @@ ECS:
     Component:
       struct TransformComponent:
         position: [0, 0, 0]
-        scale: [1, 1, 1]
+        scale: [0.01, 0.01, 0.01]
         rotation: [0, 0, 0]
       struct ShaderComponent:
         name: shader_lightpass
@@ -11577,8 +11577,8 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: no
     Component:
       struct TransformComponent:
-        position: [0, 100, 0]
-        scale: [100, 100, 100]
+        position: [0, 0, 0]
+        scale: [2, 2, 2]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: ..\model\bulb.obj|whole
@@ -11601,7 +11601,7 @@ ECS:
         tag: Point Light
       struct LightComponent:
         init: false
-        data.position: [0, 100, 0]
+        data.position: [0, 0, 0]
         data.cutoff: 0
         data.diffuse: [1, 1, 1]
         data.out_cutoff: 0
@@ -11615,8 +11615,8 @@ ECS:
       struct OE::ECS::System<struct ScriptComponent>: no
     Component:
       struct TransformComponent:
-        position: [100, 1, 100]
-        scale: [100, 100, 100]
+        position: [0, 0, 0]
+        scale: [10, 10, 10]
         rotation: [0, 0, 0]
       struct MeshComponent:
         mesh_name: ..\model\plane.obj|whole
