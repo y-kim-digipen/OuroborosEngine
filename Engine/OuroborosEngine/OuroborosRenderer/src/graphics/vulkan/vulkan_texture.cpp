@@ -69,7 +69,7 @@ namespace Renderer
 			sampler_create_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 			sampler_create_info.minLod = 0.f;
 			sampler_create_info.maxLod = static_cast<float>(mip_levels);
-			sampler_create_info.mipLodBias = 0.2f;
+			sampler_create_info.mipLodBias = 0.1f;
 
 			vkCreateSampler(vulkan_type->device.handle, &sampler_create_info, nullptr, &sampler_);
 
