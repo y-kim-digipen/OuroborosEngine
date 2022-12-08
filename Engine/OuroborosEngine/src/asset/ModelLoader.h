@@ -41,7 +41,6 @@ namespace yk_ModelLoader
 		std::vector<glm::vec3>		_vertexTangents;
 		std::vector<glm::vec3>		_vertexBitangents;
 		std::vector<glm::vec2>		_vertexTexCoords;
-		std::vector<glm::vec3>		_vertexTangents;
 		std::vector<uint32_t>		_indices;
 
 		std::vector<MeshEntryPoint> _meshEntryPoints;

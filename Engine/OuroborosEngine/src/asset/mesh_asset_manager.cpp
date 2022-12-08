@@ -41,8 +41,7 @@ namespace OE
             v.normal = result._mesh->_vertexNormals[i];
             v.uv = result._mesh->_vertexTexCoords[i];
             v.tangent = result._mesh->_vertexTangents[i];
-            v.bitangent = result._mesh->_vertexBitangents[i];
-
+          
             vertices[i] = v;
         }
         mesh.indices = result._mesh->_indices;
